@@ -1,0 +1,88 @@
+# ==============================================================================
+#  NewConstuc.FIRM - Caddy Web Server Configuration (Laravel 10)
+# ==============================================================================
+#
+#  Quick Start:
+#    1. Start PHP FastCGI (Windows):  php-cgi.exe -b 127.0.0.1:9000
+#       Start PHP-FPM (Linux):        sudo systemctl start php8.1-fpm
+#    2. Run Caddy:                   caddy run --config Caddyfile
+#
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. Local Development Server (HTTP on Port 8000)
+# ------------------------------------------------------------------------------
+:8000, http://localhost:8000, http://127.0.0.1:8000 {
+	# Set public document root for Laravel
+	root * ./public
+
+	# Enable high-performance compression
+	encode zstd gzip
+
+	# Security Headers
+	header {
+		X-Frame-Options "SAMEORIGIN"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "camera=(), microphone=(), geolocation=()"
+		-Server
+	}
+
+	# Deny access to sensitive files and directories
+	@blocked {
+		path */.*
+		path /composer.*
+		path /package.*
+		path /artisan
+		path /storage/logs/*
+		path /database/*
+		path /config/*
+		path /app/*
+		path /bootstrap/*
+		path /routes/*
+	}
+	respond @blocked 404
+
+	# Route all dynamic PHP requests through FastCGI
+	# On Windows: php-cgi listening on 127.0.0.1:9000
+	# On Linux: unix//run/php/php8.1-fpm.sock
+	php_fastcgi 127.0.0.1:9000
+
+	# Serve static assets (CSS, JS, images, fonts, uploads)
+	file_server
+
+	# Static asset caching headers
+	@static {
+		file
+		path *.css *.js *.ico *.png *.jpg *.jpeg *.gif *.svg *.woff *.woff2 *.ttf *.eot *.webp
+	}
+	header @static Cache-Control "public, max-age=31536000, immutable"
+}
+
+# ------------------------------------------------------------------------------
+# 2. Local HTTPS Server (Optional: Automatic Local TLS on https://localhost:8443)
+# ------------------------------------------------------------------------------
+# https://localhost:8443 {
+#     tls internal
+#     root * ./public
+#     encode zstd gzip
+#
+#     php_fastcgi 127.0.0.1:9000
+#     file_server
+# }
+
+# ------------------------------------------------------------------------------
+# 3. Production Deployment Example (Automatic Free SSL via Let's Encrypt / ZeroSSL)
+# ------------------------------------------------------------------------------
+# your-domain.com {
+#     root * /var/www/NewConstuc.FIRM/public
+#     encode zstd gzip
+#
+#     # Linux PHP-FPM socket
+#     php_fastcgi unix//run/php/php8.1-fpm.sock
+#     file_server
+#
+#     log {
+#         output file /var/log/caddy/newconstuc_access.log
+#     }
+# }

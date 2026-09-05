@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: newconstuc-caddy:latest
+    container_name: newconstuc_firm_caddy
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - APP_KEY=base64:PpYtcYJglb5PToxUuyeZ6y/H75Z7KXgF3PtpNibxc50=
+      - APP_URL=http://localhost:8000
+      - DB_CONNECTION=sqlite
+    volumes:
+      - ./storage:/app/storage
+      - ./database:/app/database

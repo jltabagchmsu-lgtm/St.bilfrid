@@ -1,0 +1,73 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class AuthController extends Controller
+{
+    /**
+     * Show the admin login form.
+     */
+    public function showLoginForm()
+    {
+        if (Auth::check()) {
+            $user = Auth::user();
+            if ($user->role === 'roofing_transfer') {
+                return redirect()->route('roofing.index');
+            } elseif ($user->role === 'windows_doors_transfer') {
+                return redirect()->route('windowsDoors.index');
+            }
+            return redirect()->route('dashboard');
+        }
+
+        return view('auth.login');
+    }
+
+    /**
+     * Handle the login submission.
+     */
+    public function login(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
+
+        $remember = $request->boolean('remember');
+
+        if (Auth::attempt($credentials, $remember)) {
+            $request->session()->regenerate();
+            $user = Auth::user();
+
+            if ($user->role === 'roofing_transfer') {
+                return redirect()->route('roofing.index')
+                    ->with('success', 'Welcome, ' . $user->name . '! Signed in to Roofing Materials Transfer Station.');
+            } elseif ($user->role === 'windows_doors_transfer') {
+                return redirect()->route('windowsDoors.index')
+                    ->with('success', 'Welcome, ' . $user->name . '! Signed in to Windows & Doors Materials Transfer Station.');
+            }
+
+            return redirect()->intended(route('dashboard'))
+                ->with('success', 'Welcome back, ' . $user->name . '! Access granted to Master Control.');
+        }
+
+        return back()->withErrors([
+            'email' => 'Invalid credentials. Please verify your department email and password.',
+        ])->onlyInput('email');
+    }
+
+    /**
+     * Log out the admin user.
+     */
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login')->with('success', 'You have been safely logged out of the system.');
+    }
+}
