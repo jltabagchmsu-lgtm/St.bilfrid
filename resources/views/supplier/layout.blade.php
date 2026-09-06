@@ -113,6 +113,41 @@
             color: #38bdf8;
             border-color: rgba(56, 189, 248, 0.4);
         }
+
+        .btn-topbar-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            padding: 7px 14px;
+            border-radius: var(--radius-md);
+            font-size: 0.825rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+            flex-shrink: 0;
+        }
+
+        .btn-topbar-back:hover {
+            background: rgba(239, 68, 68, 0.12);
+            border-color: rgba(239, 68, 68, 0.35);
+            color: #fca5a5;
+            transform: translateX(-3px);
+        }
+
+        .btn-topbar-back svg {
+            color: currentColor;
+            transition: transform 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .btn-topbar-back:hover svg {
+            transform: scale(1.1);
+        }
     </style>
     @stack('styles')
 </head>
@@ -204,18 +239,30 @@
 
         <!-- Top Header Bar -->
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color);">
-            <div>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--text-primary);">@yield('page_title', 'Supplier Portal')</h2>
-                    @if(Auth::user()->supplier)
-                        <span class="pill-badge {{ Auth::user()->supplier->category === 'Windows & Doors' ? 'supplier-badge-wndr' : (Auth::user()->supplier->category === 'Structural & Masonry' ? 'supplier-badge-strc' : 'supplier-badge-roof') }}">
-                            {{ Auth::user()->supplier->category }} Partner
-                        </span>
-                    @endif
+            <div style="display: flex; align-items: center; gap: 16px;">
+                @if(!request()->routeIs('supplier.dashboard'))
+                    <button type="button" onclick="navigateSupplierBack()" class="btn-topbar-back" title="Back to Supplier Dashboard">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 8 8 12 12 16"></polyline>
+                            <line x1="16" y1="12" x2="8" y2="12"></line>
+                        </svg>
+                        <span>Back</span>
+                    </button>
+                @endif
+                <div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--text-primary);">@yield('page_title', 'Supplier Portal')</h2>
+                        @if(Auth::user()->supplier)
+                            <span class="pill-badge {{ Auth::user()->supplier->category === 'Windows & Doors' ? 'supplier-badge-wndr' : (Auth::user()->supplier->category === 'Structural & Masonry' ? 'supplier-badge-strc' : 'supplier-badge-roof') }}">
+                                {{ Auth::user()->supplier->category }} Partner
+                            </span>
+                        @endif
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
+                        @yield('page_subtitle', 'Manage product offerings, pricing, and fulfill client purchase orders.')
+                    </p>
                 </div>
-                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
-                    @yield('page_subtitle', 'Manage product offerings, pricing, and fulfill client purchase orders.')
-                </p>
             </div>
 
             <div style="display: flex; align-items: center; gap: 16px;">
@@ -358,6 +405,14 @@
                 event.target.classList.remove('active');
             }
         };
+
+        function navigateSupplierBack() {
+            if (window.history.length > 1 && document.referrer && document.referrer.indexOf(window.location.host) !== -1) {
+                window.history.back();
+            } else {
+                window.location.href = "{{ route('supplier.dashboard') }}";
+            }
+        }
     </script>
     @stack('scripts')
 </body>

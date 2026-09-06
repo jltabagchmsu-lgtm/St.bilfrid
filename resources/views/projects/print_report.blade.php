@@ -326,12 +326,27 @@
 <body>
 
     <div class="print-actions">
-        <a href="{{ route('projects.show', $project->id) }}" class="btn-back">&larr; Return to Master View</a>
+        <a href="{{ route('projects.show', $project->id) }}" class="btn-back" onclick="navigateBack(event)">&larr; Return to Master View</a>
         <button class="btn-print" onclick="window.print()">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
             Print Official Report (PDF / Hardcopy)
         </button>
     </div>
+
+    <script>
+        function navigateBack(e) {
+            if (window.history.length > 1 && document.referrer && document.referrer.indexOf(window.location.host) !== -1) {
+                e.preventDefault();
+                window.history.back();
+                return;
+            }
+            if (window.opener && !window.opener.closed) {
+                e.preventDefault();
+                window.close();
+                return;
+            }
+        }
+    </script>
 
     <div class="report-page">
         <!-- Letterhead Header -->

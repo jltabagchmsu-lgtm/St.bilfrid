@@ -247,6 +247,16 @@
     <div class="app-content">
         <header class="top-navbar">
             <div style="display: flex; align-items: center; gap: 14px;">
+                @if(!request()->is('/') && !request()->is('home'))
+                    <button type="button" onclick="navigateAppBack()" class="btn-topbar-back" title="Go back">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 8 8 12 12 16"></polyline>
+                            <line x1="16" y1="12" x2="8" y2="12"></line>
+                        </svg>
+                        <span>Back</span>
+                    </button>
+                @endif
                 <h2 class="page-title">@yield('page_title', 'Dashboard')</h2>
                 @if(Auth::check() && Auth::user()->isRoofingOfficer())
                     <span class="admin-badge-top" style="background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.4); color: #fca5a5;">Roofing Specialist</span>
@@ -283,6 +293,14 @@
             const el = document.getElementById(id);
             if (el) {
                 el.classList.toggle('open');
+            }
+        }
+
+        function navigateAppBack() {
+            if (window.history.length > 1 && document.referrer && document.referrer.indexOf(window.location.host) !== -1) {
+                window.history.back();
+            } else {
+                window.location.href = '/';
             }
         }
     </script>
