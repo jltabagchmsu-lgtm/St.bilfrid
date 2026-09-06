@@ -23,93 +23,99 @@
     </div>
 
     <!-- 6 KPI Cards Grid -->
-    <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px;">
+    <div class="supplier-kpi-grid">
         <!-- 1. Total Materials -->
-        <div class="stat-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 16px;">
-            <div style="display: flex; align-items: center; justify-content: space-between;">
-                <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Total Materials</span>
-                <div style="width: 28px; height: 28px; border-radius: 6px; background: rgba(56, 189, 248, 0.1); display: grid; place-items: center; color: #38bdf8;">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+        <div class="supplier-kpi-card" style="--card-accent: linear-gradient(90deg, #38bdf8, #0284c7);">
+            <div class="supplier-kpi-header">
+                <span class="supplier-kpi-label">Total Materials</span>
+                <div class="supplier-kpi-icon" style="background: rgba(56, 189, 248, 0.12); color: #38bdf8; border-color: rgba(56, 189, 248, 0.25);">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
                 </div>
             </div>
-            <div style="font-size: 1.6rem; font-weight: 800; color: var(--text-primary); margin-top: 8px;">
+            <div class="supplier-kpi-val" style="color: #38bdf8;">
                 {{ number_format($totalMaterials) }}
             </div>
-            <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 2px;">
+            <div class="supplier-kpi-sub">
                 Cataloged offerings
             </div>
         </div>
 
         <!-- 2. Available Materials -->
-        <div class="stat-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 16px;">
-            <div style="display: flex; align-items: center; justify-content: space-between;">
-                <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Available</span>
-                <div style="width: 28px; height: 28px; border-radius: 6px; background: rgba(16, 185, 129, 0.1); display: grid; place-items: center; color: #10b981;">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        <div class="supplier-kpi-card" style="--card-accent: linear-gradient(90deg, #10b981, #059669);">
+            <div class="supplier-kpi-header">
+                <span class="supplier-kpi-label">Available</span>
+                <div class="supplier-kpi-icon" style="background: rgba(16, 185, 129, 0.12); color: #10b981; border-color: rgba(16, 185, 129, 0.25);">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
                 </div>
             </div>
-            <div style="font-size: 1.6rem; font-weight: 800; color: #10b981; margin-top: 8px;">
+            <div class="supplier-kpi-val" style="color: #10b981;">
                 {{ number_format($availableMaterials) }}
             </div>
-            <div style="font-size: 0.7rem; color: #10b981; margin-top: 2px;">
+            <div class="supplier-kpi-sub" style="color: #10b981;">
                 Ready for order
             </div>
         </div>
 
         <!-- 3. Unavailable Materials -->
-        <div class="stat-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 16px;">
-            <div style="display: flex; align-items: center; justify-content: space-between;">
-                <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Unavailable</span>
-                <div style="width: 28px; height: 28px; border-radius: 6px; background: rgba(148, 163, 184, 0.1); display: grid; place-items: center; color: #94a3b8;">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
+        <div class="supplier-kpi-card" style="--card-accent: linear-gradient(90deg, #94a3b8, #64748b);">
+            <div class="supplier-kpi-header">
+                <span class="supplier-kpi-label">Unavailable</span>
+                <div class="supplier-kpi-icon" style="background: rgba(148, 163, 184, 0.12); color: #94a3b8; border-color: rgba(148, 163, 184, 0.25);">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
                 </div>
             </div>
-            <div style="font-size: 1.6rem; font-weight: 800; color: #94a3b8; margin-top: 8px;">
+            <div class="supplier-kpi-val" style="color: #94a3b8;">
                 {{ number_format($unavailableMaterials) }}
             </div>
-            <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 2px;">
+            <div class="supplier-kpi-sub">
                 Suspended / off-catalog
             </div>
         </div>
 
         <!-- 4. Pending Orders -->
-        <div class="stat-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 16px;">
-            <div style="display: flex; align-items: center; justify-content: space-between;">
-                <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Pending Orders</span>
-                <span class="pill-badge" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; padding: 2px 6px; font-size: 0.65rem;">New</span>
+        <div class="supplier-kpi-card" style="--card-accent: linear-gradient(90deg, #f59e0b, #d97706);">
+            <div class="supplier-kpi-header">
+                <span class="supplier-kpi-label">Pending Orders</span>
+                <div class="supplier-kpi-icon" style="background: rgba(245, 158, 11, 0.12); color: #f59e0b; border-color: rgba(245, 158, 11, 0.25);">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                </div>
             </div>
-            <div style="font-size: 1.6rem; font-weight: 800; color: #f59e0b; margin-top: 8px;">
+            <div class="supplier-kpi-val" style="color: #f59e0b;">
                 {{ number_format($pendingOrders) }}
             </div>
-            <div style="font-size: 0.7rem; color: var(--text-secondary); margin-top: 2px;">
+            <div class="supplier-kpi-sub">
                 Awaiting confirmation
             </div>
         </div>
 
         <!-- 5. Active Orders -->
-        <div class="stat-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 16px;">
-            <div style="display: flex; align-items: center; justify-content: space-between;">
-                <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Active Orders</span>
-                <span class="pill-badge" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; padding: 2px 6px; font-size: 0.65rem;">In Progress</span>
+        <div class="supplier-kpi-card" style="--card-accent: linear-gradient(90deg, #38bdf8, #818cf8);">
+            <div class="supplier-kpi-header">
+                <span class="supplier-kpi-label">Active Orders</span>
+                <div class="supplier-kpi-icon" style="background: rgba(56, 189, 248, 0.12); color: #38bdf8; border-color: rgba(56, 189, 248, 0.25);">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                </div>
             </div>
-            <div style="font-size: 1.6rem; font-weight: 800; color: #38bdf8; margin-top: 8px;">
+            <div class="supplier-kpi-val" style="color: #38bdf8;">
                 {{ number_format($activeOrders) }}
             </div>
-            <div style="font-size: 0.7rem; color: var(--text-secondary); margin-top: 2px;">
+            <div class="supplier-kpi-sub">
                 Processing & dispatch
             </div>
         </div>
 
         <!-- 6. Completed Orders -->
-        <div class="stat-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 16px;">
-            <div style="display: flex; align-items: center; justify-content: space-between;">
-                <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Completed</span>
-                <span class="pill-badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 2px 6px; font-size: 0.65rem;">Delivered</span>
+        <div class="supplier-kpi-card" style="--card-accent: linear-gradient(90deg, #22c55e, #16a34a);">
+            <div class="supplier-kpi-header">
+                <span class="supplier-kpi-label">Completed</span>
+                <div class="supplier-kpi-icon" style="background: rgba(34, 197, 94, 0.12); color: #22c55e; border-color: rgba(34, 197, 94, 0.25);">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                </div>
             </div>
-            <div style="font-size: 1.6rem; font-weight: 800; color: #10b981; margin-top: 8px;">
+            <div class="supplier-kpi-val" style="color: #22c55e;">
                 {{ number_format($completedOrders) }}
             </div>
-            <div style="font-size: 0.7rem; color: var(--text-secondary); margin-top: 2px;">
+            <div class="supplier-kpi-sub">
                 Fulfilled requests
             </div>
         </div>
