@@ -1,12 +1,12 @@
-<div style="overflow-x: auto;">
-    <table class="data-table" style="margin-bottom: 0; font-size: 0.85rem; width: 100%; border-collapse: separate; border-spacing: 0;">
+<div style="overflow-x: auto; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: var(--radius-sm); background: rgba(15, 23, 42, 0.6);">
+    <table class="data-table" style="margin-bottom: 0; font-size: 0.85rem; width: 100%; border-collapse: collapse;">
         <thead>
-            <tr>
-                <th style="width: 60px; text-align: center;">Done</th>
-                <th style="min-width: 280px;">{{ $tradeName ?? 'Task Description' }}</th>
-                <th style="min-width: 280px;">Aligned Construction Materials</th>
-                <th style="width: 170px; text-align: center;">Task Status</th>
-                <th style="width: 90px; text-align: right;">Action</th>
+            <tr style="background: rgba(15, 23, 42, 0.95); border-bottom: 2px solid {{ $tradeColor ?? 'rgba(56, 189, 248, 0.4)' }};">
+                <th style="width: 60px; text-align: center; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 11px 8px; font-weight: 700; color: #94a3b8; font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase;">Done</th>
+                <th style="min-width: 250px; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 11px 14px; font-weight: 700; color: {{ $tradeColor ?? '#f8fafc' }}; font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase;">{{ $tradeName ?? 'Task Description' }}</th>
+                <th style="min-width: 380px; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 11px 14px; font-weight: 700; color: #94a3b8; font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase;">Aligned Construction Materials & Cost Breakdown</th>
+                <th style="width: 160px; text-align: center; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 11px 8px; font-weight: 700; color: #94a3b8; font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase;">Task Status</th>
+                <th style="width: 95px; text-align: center; padding: 11px 8px; font-weight: 700; color: #94a3b8; font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase;">Action</th>
             </tr>
         </thead>
         <tbody>
@@ -15,12 +15,12 @@
                     $isDone = $task->status === 'completed' || $task->progress >= 100;
                     $taskMats = $task->taskMaterials;
                 @endphp
-                <tr id="task-row-{{ $task->id }}" class="checklist-task-row" data-task-id="{{ $task->id }}" data-status="{{ $task->status }}" style="{{ $isDone ? 'background: rgba(16, 185, 129, 0.05);' : '' }}; transition: background 0.3s ease;">
+                <tr id="task-row-{{ $task->id }}" class="checklist-task-row" data-task-id="{{ $task->id }}" data-status="{{ $task->status }}" style="{{ $isDone ? 'background: rgba(16, 185, 129, 0.05);' : '' }}; border-bottom: 1px solid rgba(255, 255, 255, 0.08); transition: background 0.3s ease;">
                     
                     <!-- 1. Done Checkbox (Irreversible Completion Rule) -->
-                    <td style="text-align: center; vertical-align: middle;" class="cell-done">
+                    <td style="text-align: center; vertical-align: middle; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 10px 8px;" class="cell-done">
                         @if($isDone)
-                            <span class="locked-done-badge" title="Irreversible Completion: This task is completed and permanently locked." style="display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 6px; background: rgba(16, 185, 129, 0.2); border: 1.5px solid #10b981; color: #10b981; font-weight: 900; font-size: 0.75rem; cursor: not-allowed;">
+                            <span class="locked-done-badge" title="Irreversible Completion: This task is completed and permanently locked." style="display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 6px; background: rgba(16, 185, 129, 0.2); border: 1.5px solid #10b981; color: #10b981; font-weight: 900; font-size: 0.75rem; cursor: not-allowed;">
                                 OK
                             </span>
                         @else
@@ -29,7 +29,7 @@
                     </td>
 
                     <!-- 2. Task Description & Lead -->
-                    <td class="cell-description" style="vertical-align: middle;">
+                    <td class="cell-description" style="vertical-align: middle; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 12px 14px;">
                         <strong class="task-title-text" style="color: {{ $isDone ? '#94a3b8' : '#f8fafc' }}; font-size: 0.925rem; {{ $isDone ? 'text-decoration: line-through;' : '' }}">
                             {{ $task->task_name }}
                         </strong>
@@ -40,28 +40,34 @@
                         @endif
                     </td>
 
-                    <!-- 3. Strictly Aligned Construction Materials -->
-                    <td class="cell-materials" style="vertical-align: middle;">
-                        <div style="display: flex; flex-direction: column; gap: 4px;">
-                            @forelse($taskMats as $mat)
-                                <div style="display: inline-flex; align-items: center; justify-content: space-between; gap: 8px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); padding: 3px 8px; border-radius: 4px; font-size: 0.75rem;">
-                                    <span style="color: #cbd5e1; font-weight: 500;">
-                                        {{ $mat->material_name }}
-                                    </span>
-                                    <span style="font-family: var(--font-mono); font-weight: 700; color: {{ $isDone ? '#10b981' : '#38bdf8' }}; white-space: nowrap;">
-                                        {{ number_format($mat->quantity) }} {{ $mat->unit }} (₱{{ number_format($mat->total_cost, 2) }})
-                                    </span>
-                                </div>
-                            @empty
-                                <span style="font-size: 0.75rem; color: var(--text-muted); font-style: italic;">
-                                    Direct trade labor & inspection activity
-                                </span>
-                            @endforelse
-                        </div>
+                    <!-- 3. Strictly Aligned Construction Materials Table with Guiding Lines -->
+                    <td class="cell-materials" style="vertical-align: middle; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 12px;">
+                        @if($taskMats->count() > 0)
+                            <div style="background: rgba(10, 16, 30, 0.75); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 6px; overflow: hidden;">
+                                <table style="width: 100%; border-collapse: collapse; font-size: 0.75rem;">
+                                    <tbody>
+                                        @foreach($taskMats as $mIndex => $mat)
+                                            <tr style="{{ !$loop->last ? 'border-bottom: 1px solid rgba(255, 255, 255, 0.07);' : '' }}">
+                                                <td style="padding: 6px 10px; color: #cbd5e1; font-weight: 500; border-right: 1px solid rgba(255, 255, 255, 0.07);">
+                                                    {{ $mat->material_name }}
+                                                </td>
+                                                <td style="padding: 6px 10px; text-align: right; width: 175px; font-family: var(--font-mono); font-weight: 700; color: {{ $isDone ? '#10b981' : '#38bdf8' }}; white-space: nowrap; background: rgba(0, 0, 0, 0.15);">
+                                                    {{ number_format($mat->quantity) }} {{ $mat->unit }} <span style="opacity: 0.75; font-weight: normal; color: {{ $isDone ? '#6ee7b7' : '#93c5fd' }};">(₱{{ number_format($mat->total_cost, 2) }})</span>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @else
+                            <span style="font-size: 0.75rem; color: var(--text-muted); font-style: italic;">
+                                Direct trade labor & inspection activity
+                            </span>
+                        @endif
                     </td>
 
                     <!-- 4. Task Status Dropdown (Forward-Only Monotonic) -->
-                    <td style="text-align: center; vertical-align: middle;" class="cell-status">
+                    <td style="text-align: center; vertical-align: middle; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px;" class="cell-status">
                         @if($isDone)
                             <span class="badge badge-completed" style="font-size: 0.8rem; padding: 5px 12px; display: inline-flex; align-items: center; gap: 4px;" title="Permanent milestone: Completed and materials mobilized">
                                 Completed
@@ -76,8 +82,8 @@
                     </td>
 
                     <!-- 5. Actions (Edit / Delete) -->
-                    <td style="text-align: right; vertical-align: middle;" class="cell-actions">
-                        <div style="display: inline-flex; gap: 4px; justify-content: flex-end;">
+                    <td style="text-align: center; vertical-align: middle; padding: 8px;" class="cell-actions">
+                        <div style="display: inline-flex; gap: 4px; justify-content: center;">
                             <button type="button" class="btn-secondary" style="font-size: 0.75rem; padding: 4px 7px;" title="Edit Task" onclick="openEditTaskModal({{ $task->id }}, '{{ addslashes($task->task_name) }}', '{{ addslashes($task->category) }}', {{ $task->progress }}, '{{ $task->status }}', '{{ $task->assigned_personnel_id ?? '' }}', '{{ $task->start_date ? $task->start_date->format('Y-m-d') : '' }}', '{{ $task->due_date ? $task->due_date->format('Y-m-d') : '' }}', {{ $task->allocated_budget ?? 0 }})">
                                 Edit
                             </button>

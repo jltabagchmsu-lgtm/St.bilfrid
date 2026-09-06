@@ -707,31 +707,31 @@
 
         <!-- Active Materials Table -->
         <div style="overflow-x: auto; max-height: 420px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
-            <table class="data-table" id="activeMaterialsTable" style="margin-bottom: 0; font-size: 0.825rem; width: 100%;">
-                <thead style="position: sticky; top: 0; background: #0f172a; z-index: 5;">
+            <table class="data-table" id="activeMaterialsTable" style="margin-bottom: 0; font-size: 0.825rem; width: 100%; border-collapse: collapse;">
+                <thead style="position: sticky; top: 0; background: #0f172a; z-index: 5; border-bottom: 2px solid rgba(16, 185, 129, 0.4);">
                     <tr>
-                        <th style="width: 40px; text-align: center;">#</th>
-                        <th style="min-width: 220px;">Material Specification</th>
-                        <th style="width: 140px;">Discipline</th>
-                        <th style="width: 150px; text-align: right;">Accumulated Qty</th>
-                        <th style="width: 120px; text-align: right;">Unit Cost</th>
-                        <th style="width: 150px; text-align: right;">Total Cost</th>
-                        <th style="min-width: 250px;">Aligned Construction Task(s)</th>
-                        <th style="width: 150px; text-align: center;">Status</th>
+                        <th style="width: 40px; text-align: center; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 10px 6px;">#</th>
+                        <th style="min-width: 220px; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 10px 12px;">Material Specification</th>
+                        <th style="width: 140px; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 10px 10px;">Discipline</th>
+                        <th style="width: 150px; text-align: right; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 10px 12px;">Accumulated Qty</th>
+                        <th style="width: 120px; text-align: right; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 10px 10px;">Unit Cost</th>
+                        <th style="width: 150px; text-align: right; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 10px 12px;">Total Cost</th>
+                        <th style="min-width: 250px; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 10px 12px;">Aligned Construction Task(s)</th>
+                        <th style="width: 150px; text-align: center; padding: 10px 8px;">Status</th>
                     </tr>
                 </thead>
                 <tbody id="activeMaterialsTableBody">
                     @forelse($activeMaterialsData['materials'] as $index => $mat)
-                        <tr class="active-mat-row" data-name="{{ strtolower($mat['material_name']) }}" data-category="{{ strtolower($mat['category']) }}">
-                            <td style="text-align: center; color: var(--text-muted); font-family: var(--font-mono);">
+                        <tr class="active-mat-row" data-name="{{ strtolower($mat['material_name']) }}" data-category="{{ strtolower($mat['category']) }}" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+                            <td style="text-align: center; color: var(--text-muted); font-family: var(--font-mono); border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 6px;">
                                 {{ $index + 1 }}
                             </td>
-                            <td>
+                            <td style="border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 12px;">
                                 <strong style="color: #f8fafc; font-size: 0.875rem;">
                                     {{ $mat['material_name'] }}
                                 </strong>
                             </td>
-                            <td>
+                            <td style="border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 10px;">
                                 @php
                                     $catColor = match($mat['category']) {
                                         'Structural' => '#38bdf8',
@@ -744,16 +744,16 @@
                                     {{ $mat['category'] }}
                                 </span>
                             </td>
-                            <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: #f8fafc;">
+                            <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: #f8fafc; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 12px;">
                                 {{ number_format($mat['total_quantity']) }} {{ $mat['unit'] }}
                             </td>
-                            <td style="text-align: right; font-family: var(--font-mono); color: var(--text-muted);">
+                            <td style="text-align: right; font-family: var(--font-mono); color: var(--text-muted); border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 10px;">
                                 ₱{{ number_format($mat['unit_cost'], 2) }}
                             </td>
-                            <td style="text-align: right; font-family: var(--font-mono); font-weight: 800; color: #10b981;">
+                            <td style="text-align: right; font-family: var(--font-mono); font-weight: 800; color: #10b981; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 12px;">
                                 ₱{{ number_format($mat['total_cost'], 2) }}
                             </td>
-                            <td>
+                            <td style="border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 12px;">
                                 <div style="display: flex; flex-wrap: wrap; gap: 4px;">
                                     @foreach($mat['task_names'] as $tName)
                                         <span class="badge" style="font-size: 0.675rem; background: rgba(56, 189, 248, 0.1); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.25);">
@@ -762,7 +762,7 @@
                                     @endforeach
                                 </div>
                             </td>
-                            <td style="text-align: center;">
+                            <td style="text-align: center; padding: 8px;">
                                 @if($mat['is_all_completed'])
                                     <span class="badge badge-completed" style="font-size: 0.725rem;">
                                         Installed & Finalized
@@ -3553,15 +3553,15 @@
                 : `<span class="badge badge-in_progress" style="font-size: 0.725rem;">In Consumption</span>`;
 
             html += `
-                <tr class="active-mat-row" data-name="${(mat.material_name || '').toLowerCase()}" data-category="${(mat.category || '').toLowerCase()}">
-                    <td style="text-align: center; color: var(--text-muted); font-family: var(--font-mono);">${idx + 1}</td>
-                    <td><strong style="color: #f8fafc; font-size: 0.875rem;">${mat.material_name}</strong></td>
-                    <td><span class="spec-chip" style="font-size: 0.7rem; color: ${catColor}; border-color: ${catColor}44;">${mat.category}</span></td>
-                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: #f8fafc;">${Number(mat.total_quantity).toLocaleString()} ${mat.unit}</td>
-                    <td style="text-align: right; font-family: var(--font-mono); color: var(--text-muted);">₱${Number(mat.unit_cost).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 800; color: #10b981;">₱${Number(mat.total_cost).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                    <td><div style="display: flex; flex-wrap: wrap; gap: 4px;">${taskChips}</div></td>
-                    <td style="text-align: center;">${statusBadge}</td>
+                <tr class="active-mat-row" data-name="${(mat.material_name || '').toLowerCase()}" data-category="${(mat.category || '').toLowerCase()}" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+                    <td style="text-align: center; color: var(--text-muted); font-family: var(--font-mono); border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 6px;">${idx + 1}</td>
+                    <td style="border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 12px;"><strong style="color: #f8fafc; font-size: 0.875rem;">${mat.material_name}</strong></td>
+                    <td style="border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 10px;"><span class="spec-chip" style="font-size: 0.7rem; color: ${catColor}; border-color: ${catColor}44;">${mat.category}</span></td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: #f8fafc; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 12px;">${Number(mat.total_quantity).toLocaleString()} ${mat.unit}</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--text-muted); border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 10px;">₱${Number(mat.unit_cost).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 800; color: #10b981; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 12px;">₱${Number(mat.total_cost).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                    <td style="border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 12px;"><div style="display: flex; flex-wrap: wrap; gap: 4px;">${taskChips}</div></td>
+                    <td style="text-align: center; padding: 8px;">${statusBadge}</td>
                 </tr>
             `;
         });
