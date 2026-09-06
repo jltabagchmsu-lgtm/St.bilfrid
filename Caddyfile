@@ -7,7 +7,26 @@
 #       Start PHP-FPM (Linux):        sudo systemctl start php8.1-fpm
 #    2. Run Caddy:                   caddy run --config Caddyfile
 #
+#  Trusted proxy note:
+#    Caddy terminates TLS / forwards X-Forwarded-Proto, X-Forwarded-For,
+#    X-Forwarded-Host and X-Forwarded-Port to PHP. Laravel must trust those
+#    headers via App\Http\Middleware\TrustProxies (TRUSTED_PROXIES env,
+#    defaults to '*'). Without it, isSecure()/url()/asset()/secure cookies
+#    break behind Caddy (login loops, mixed content, http redirect loops).
+#
+#  Docker/FrankenPHP note:
+#    This file is for stock Caddy + php-cgi/php-fpm local dev.
+#    Docker (FrankenPHP) uses Caddyfile.frankenphp instead - see Dockerfile.
+#
 # ==============================================================================
+
+# Trust private-range proxies (Docker, LAN, outer TLS terminator) so Caddy
+# correctly resolves client_ip from X-Forwarded-For before passing to PHP.
+{
+	servers {
+		trusted_proxies static private_ranges
+	}
+}
 
 # ------------------------------------------------------------------------------
 # 1. Local Development Server (HTTP on Port 8000)
@@ -74,9 +93,15 @@
 # ------------------------------------------------------------------------------
 # 3. Production Deployment Example (Automatic Free SSL via Let's Encrypt / ZeroSSL)
 # ------------------------------------------------------------------------------
-# your-domain.com {
+# stbilfrid.site, www.stbilfrid.site {
 #     root * /var/www/NewConstuc.FIRM/public
 #     encode zstd gzip
+#
+#     # If Caddy itself sits behind another proxy/CDN, trust it so
+#     # X-Forwarded-Proto/For from the outer terminator is honoured.
+#     # Otherwise the global `trusted_proxies static private_ranges` above
+#     # is sufficient for direct Let's Encrypt deployments.
+#     # trusted_proxies static private_ranges
 #
 #     # Linux PHP-FPM socket
 #     php_fastcgi unix//run/php/php8.1-fpm.sock
