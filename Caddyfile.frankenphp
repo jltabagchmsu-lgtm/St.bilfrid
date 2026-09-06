@@ -1,0 +1,73 @@
+# ==============================================================================
+#  NewConstuc.FIRM - FrankenPHP (Docker) Caddy Configuration (Laravel 10)
+# ==============================================================================
+#
+#  Used by: Dockerfile (dunglas/frankenphp) via:
+#    CMD ["frankenphp", "run", "--config", "/app/Caddyfile.frankenphp"]
+#
+#  Local stock-Caddy + php-cgi dev still uses ./Caddyfile.
+#
+#  Trusted proxy note:
+#    FrankenPHP/Caddy terminates TLS and sets X-Forwarded-Proto/For/Host/Port.
+#    Laravel trusts them via App\Http\Middleware\TrustProxies
+#    (TRUSTED_PROXIES env, default '*'). Caddy trusts private-range
+#    upstreams below so client_ip is resolved correctly when behind an
+#    outer proxy / load balancer / CDN.
+#
+#  Env:
+#    SERVER_NAME=":8000" (Docker default, see Dockerfile / docker-compose.yml)
+#    Production example: SERVER_NAME="stbilfrid.site, www.stbilfrid.site"
+#    FRANKENPHP_CONFIG="worker ./public/index.php"
+#
+# ==============================================================================
+{
+	servers {
+		trusted_proxies static private_ranges
+	}
+
+	frankenphp {
+		worker ./public/index.php
+	}
+}
+
+{$SERVER_NAME} {
+	# FrankenPHP container path (Dockerfile WORKDIR /app)
+	root * /app/public
+
+	encode zstd gzip
+
+	header {
+		X-Frame-Options "SAMEORIGIN"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "camera=(), microphone=(), geolocation=()"
+		-Server
+	}
+
+	@blocked {
+		path */.*
+		path /composer.*
+		path /package.*
+		path /artisan
+		path /storage/logs/*
+		path /database/*
+		path /config/*
+		path /app/*
+		path /bootstrap/*
+		path /routes/*
+	}
+	respond @blocked 404
+
+	# FrankenPHP runtime (not php_fastcgi to an external php-cgi:9000).
+	php_server
+
+	file_server
+
+	@static {
+		file
+		path *.css *.js *.ico *.png *.jpg *.jpeg *.gif *.svg *.woff *.woff2 *.ttf *.eot *.webp
+	}
+	header @static Cache-Control "public, max-age=31536000, immutable"
+
+	log
+}

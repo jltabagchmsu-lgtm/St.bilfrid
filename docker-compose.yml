@@ -16,6 +16,9 @@ services:
       - APP_KEY=base64:PpYtcYJglb5PToxUuyeZ6y/H75Z7KXgF3PtpNibxc50=
       - APP_URL=http://localhost:8000
       - DB_CONNECTION=sqlite
+      - TRUSTED_PROXIES=*
+      - SERVER_NAME=:8000
+      - FRANKENPHP_CONFIG=worker ./public/index.php
     volumes:
       - ./storage:/app/storage
       - ./database:/app/database
