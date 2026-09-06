@@ -14,6 +14,8 @@ use App\Http\Controllers\ProjectScopeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RoofingTransferController;
 use App\Http\Controllers\WindowsDoorsTransferController;
+use App\Http\Controllers\SupplierPortalController;
+use App\Http\Controllers\AdminSupplierController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,12 +70,50 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // =========================================================================
-    // 3. Master Administrator Full Access Routes (Admin Role Only)
+    // 3. Dedicated Supplier Operations Dashboard & Portals
+    // =========================================================================
+    Route::prefix('supplier')->middleware(['role:supplier'])->group(function () {
+        Route::get('/dashboard', [SupplierPortalController::class, 'dashboard'])->name('supplier.dashboard');
+        
+        // My Materials & Inventory Management
+        Route::get('/materials', [SupplierPortalController::class, 'materials'])->name('supplier.materials');
+        Route::post('/materials/store', [SupplierPortalController::class, 'storeMaterial'])->name('supplier.materials.store');
+        Route::post('/materials/{id}/update', [SupplierPortalController::class, 'updateMaterial'])->name('supplier.materials.update');
+        Route::post('/materials/{id}/delete', [SupplierPortalController::class, 'destroyMaterial'])->name('supplier.materials.destroy');
+        Route::post('/materials/{id}/quick-stock', [SupplierPortalController::class, 'quickStockUpdate'])->name('supplier.materials.quickStock');
+        
+        // Supplier Orders Management
+        Route::get('/orders', [SupplierPortalController::class, 'orders'])->name('supplier.orders');
+        Route::get('/orders/{id}', [SupplierPortalController::class, 'showOrder'])->name('supplier.orders.show');
+        Route::post('/orders/{id}/status', [SupplierPortalController::class, 'updateOrderStatus'])->name('supplier.orders.updateStatus');
+
+        // Profile & Account Settings
+        Route::get('/profile', [SupplierPortalController::class, 'profile'])->name('supplier.profile');
+        Route::post('/profile', [SupplierPortalController::class, 'updateProfile'])->name('supplier.profile.update');
+
+        // Notifications
+        Route::post('/notifications/mark-read', [SupplierPortalController::class, 'markNotificationsRead'])->name('supplier.notifications.markRead');
+    });
+
+    // =========================================================================
+    // 4. Master Administrator Full Access Routes (Admin Role Only)
     // =========================================================================
     Route::middleware(['role:admin'])->group(function () {
 
         // Executive Dashboard
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
+        // Centralized Supplier Hub & Management
+        Route::prefix('suppliers')->group(function () {
+            Route::get('/', [AdminSupplierController::class, 'index'])->name('admin.suppliers.index');
+            Route::get('/materials', [AdminSupplierController::class, 'materials'])->name('admin.suppliers.materials');
+            Route::get('/orders', [AdminSupplierController::class, 'orders'])->name('admin.suppliers.orders');
+            Route::post('/orders/store', [AdminSupplierController::class, 'storeOrder'])->name('admin.suppliers.orders.store');
+            Route::post('/orders/{id}/status', [AdminSupplierController::class, 'updateOrderStatus'])->name('admin.suppliers.orders.updateStatus');
+            Route::post('/orders/{id}/receive', [AdminSupplierController::class, 'receiveOrder'])->name('admin.suppliers.orders.receive');
+            Route::post('/{id}/update', [AdminSupplierController::class, 'updateSupplier'])->name('admin.suppliers.update');
+            Route::post('/{id}/toggle-status', [AdminSupplierController::class, 'toggleSupplierStatus'])->name('admin.suppliers.toggleStatus');
+        });
 
         // Active Project Tracker & Monitoring
         Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');

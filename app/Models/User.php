@@ -20,6 +20,7 @@ class User extends Authenticatable
         'name',
         'email',
         'role',
+        'supplier_id',
         'password',
     ];
 
@@ -42,6 +43,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * Supplier company associated with this user.
+     */
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class);
+    }
 
     /**
      * Check if user is Master Admin.
@@ -68,10 +77,22 @@ class User extends Authenticatable
     }
 
     /**
+     * Check if user is a Supplier Account.
+     */
+    public function isSupplier(): bool
+    {
+        return $this->role === 'supplier' || !empty($this->supplier_id);
+    }
+
+    /**
      * Get user role display title.
      */
     public function getRoleTitleAttribute(): string
     {
+        if ($this->isSupplier()) {
+            return $this->supplier ? ($this->supplier->name . ' (' . $this->supplier->category . ')') : 'Supplier Account';
+        }
+
         return match ($this->role) {
             'roofing_transfer' => 'Roofing Transfer Officer',
             'windows_doors_transfer' => 'Windows & Doors Transfer Officer',
@@ -84,6 +105,10 @@ class User extends Authenticatable
      */
     public function getPortalRouteAttribute(): string
     {
+        if ($this->isSupplier()) {
+            return route('supplier.dashboard');
+        }
+
         return match ($this->role) {
             'roofing_transfer' => route('roofing.index'),
             'windows_doors_transfer' => route('windowsDoors.index'),

@@ -139,6 +139,30 @@
                     </div>
                 </div>
 
+                <!-- Supplier Network & Procurement Management -->
+                <div class="nav-dropdown {{ request()->is('suppliers*') ? 'open active' : '' }}" id="supplierDropdown">
+                    <div class="nav-item nav-dropdown-trigger" onclick="toggleNavDropdown('supplierDropdown')">
+                        <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
+                            <span class="nav-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                            </span>
+                            <span>Supplier Network</span>
+                        </div>
+                        <span class="dropdown-chevron">▼</span>
+                    </div>
+                    <div class="nav-dropdown-menu">
+                        <a href="{{ route('admin.suppliers.index') }}" class="nav-sub-item {{ request()->is('suppliers') ? 'active' : '' }}">
+                            <span class="sub-dot dot-active"></span> Supplier Hub & Partners
+                        </a>
+                        <a href="{{ route('admin.suppliers.materials') }}" class="nav-sub-item {{ request()->is('suppliers/materials*') ? 'active' : '' }}">
+                            <span class="sub-dot dot-active"></span> Materials Catalog & Matrix
+                        </a>
+                        <a href="{{ route('admin.suppliers.orders') }}" class="nav-sub-item {{ request()->is('suppliers/orders*') ? 'active' : '' }}">
+                            <span class="sub-dot dot-active"></span> Purchase Orders Tracker
+                        </a>
+                    </div>
+                </div>
+
                 <!-- Trade Transfer Hubs (Dedicated Roofing and Windows & Doors Terminals) -->
                 <div class="nav-section-title" style="margin-top: 16px;">Trade Transfer Hubs</div>
 

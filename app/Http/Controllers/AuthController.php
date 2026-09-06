@@ -18,6 +18,8 @@ class AuthController extends Controller
                 return redirect()->route('roofing.index');
             } elseif ($user->role === 'windows_doors_transfer') {
                 return redirect()->route('windowsDoors.index');
+            } elseif ($user->isSupplier()) {
+                return redirect()->route('supplier.dashboard');
             }
             return redirect()->route('dashboard');
         }
@@ -47,6 +49,10 @@ class AuthController extends Controller
             } elseif ($user->role === 'windows_doors_transfer') {
                 return redirect()->route('windowsDoors.index')
                     ->with('success', 'Welcome, ' . $user->name . '! Signed in to Windows & Doors Materials Transfer Station.');
+            } elseif ($user->isSupplier()) {
+                $supplierName = $user->supplier ? $user->supplier->name : 'Supplier Portal';
+                return redirect()->route('supplier.dashboard')
+                    ->with('success', 'Welcome, ' . $user->name . '! Signed in to ' . $supplierName . ' Management Dashboard.');
             }
 
             return redirect()->intended(route('dashboard'))
