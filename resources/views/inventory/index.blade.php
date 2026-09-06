@@ -126,7 +126,6 @@
                     <th>In-Stock Quantity</th>
                     <th>Total Value (₱)</th>
                     <th>Stock Health</th>
-                    <th>Procurement Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -168,16 +167,10 @@
                             <span class="badge badge-completed">Well Stocked</span>
                         @endif
                     </td>
-                    <td>
-                        <a href="{{ route('admin.suppliers.materials', ['search' => $mat->name]) }}" class="btn-primary" style="font-size: 0.78rem; padding: 6px 12px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
-                            + Procure from Supplier
-                        </a>
-                    </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="8" style="color: var(--text-muted); text-align: center; padding: 36px;">
+                    <td colspan="7" style="color: var(--text-muted); text-align: center; padding: 36px;">
                         No material catalog items found matching filters.
                     </td>
                 </tr>
