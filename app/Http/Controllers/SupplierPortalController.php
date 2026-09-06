@@ -301,6 +301,7 @@ class SupplierPortalController extends Controller
         $order->status = $newStatus;
         if ($newStatus === 'delivered' || $newStatus === 'completed') {
             $order->actual_delivery_date = $validated['actual_delivery_date'] ?? now();
+            $order->syncToInventory();
         }
         $order->save();
 
@@ -323,8 +324,10 @@ class SupplierPortalController extends Controller
             'link' => route('admin.suppliers.orders', ['search' => $order->order_code]),
         ]);
 
+        $syncMsg = ($newStatus === 'delivered' || $newStatus === 'completed') ? ' Materials successfully transferred and credited into Admin Materials Inventory.' : '';
+
         return redirect()->back()
-            ->with('success', 'Order ' . $order->order_code . ' workflow status updated to ' . ucfirst(str_replace('_', ' ', $newStatus)) . '.');
+            ->with('success', 'Order ' . $order->order_code . ' workflow status updated to ' . ucfirst(str_replace('_', ' ', $newStatus)) . '.' . $syncMsg);
     }
 
     /**

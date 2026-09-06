@@ -65,52 +65,31 @@ class InventoryController extends Controller
             'category' => 'required|string|max:100',
             'unit' => 'required|string|max:50',
             'unit_cost' => 'required|numeric|min:0',
-            'stock_quantity' => 'required|integer|min:0',
         ]);
 
         $validated['material_code'] = 'MAT-' . strtoupper(substr(uniqid(), -5));
+        // Strict procurement rule: Initial warehouse stock is 0 until supplier purchase orders are delivered
+        $validated['stock_quantity'] = 0;
 
         $material = Material::create($validated);
 
-        // Record Initial Stock in Inventory Log
+        // Record Initial Catalog Registration in Inventory Log
         InventoryLog::create([
             'material_id' => $material->id,
             'project_id' => null,
-            'transaction_type' => 'restock',
-            'quantity' => $validated['stock_quantity'],
+            'transaction_type' => 'adjustment',
+            'quantity' => 0,
             'unit_cost' => $validated['unit_cost'],
-            'reference_no' => 'INIT-STOCK',
-            'notes' => 'Initial warehouse catalog stock setup.',
+            'reference_no' => 'CATALOG-INIT',
+            'notes' => 'New catalog item registered. Ready for trade supplier procurement.',
         ]);
 
-        return redirect()->route('inventory.index')->with('success', 'New material item added to warehouse inventory!');
+        return redirect()->route('inventory.index')->with('success', 'New material "' . $material->name . '" registered into warehouse catalog. Stock will automatically increment upon supplier order deliveries.');
     }
 
     public function updateStock(Request $request, $id)
     {
-        $material = Material::findOrFail($id);
-
-        $validated = $request->validate([
-            'stock_quantity' => 'required|integer|min:0',
-            'unit_cost' => 'required|numeric|min:0',
-        ]);
-
-        $delta = $validated['stock_quantity'] - $material->stock_quantity;
-
-        $material->update($validated);
-
-        if ($delta != 0) {
-            InventoryLog::create([
-                'material_id' => $material->id,
-                'project_id' => null,
-                'transaction_type' => $delta > 0 ? 'restock' : 'adjustment',
-                'quantity' => abs($delta),
-                'unit_cost' => $validated['unit_cost'],
-                'reference_no' => 'ADJ-' . date('Ymd'),
-                'notes' => 'Manual warehouse stock adjustment (' . ($delta > 0 ? '+' : '-') . abs($delta) . ' ' . $material->unit . ').',
-            ]);
-        }
-
-        return redirect()->route('inventory.index')->with('success', 'Warehouse material inventory stock and pricing updated successfully!');
+        // Direct manual stock quantity overrides are locked because materials are strictly procured from external suppliers
+        return redirect()->route('inventory.index')->with('error', 'Manual stock quantity overrides are locked. Material stocks are strictly replenished upon Supplier Purchase Order delivery receipts.');
     }
 }

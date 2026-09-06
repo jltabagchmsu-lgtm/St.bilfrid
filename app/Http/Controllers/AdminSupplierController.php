@@ -266,6 +266,7 @@ class AdminSupplierController extends Controller
         $order->status = $newStatus;
         if ($newStatus === 'delivered' || $newStatus === 'completed') {
             $order->actual_delivery_date = now();
+            $order->syncToInventory();
         }
         $order->save();
 
@@ -287,8 +288,10 @@ class AdminSupplierController extends Controller
             'link' => route('supplier.orders', ['search' => $order->order_code]),
         ]);
 
+        $syncMsg = ($newStatus === 'delivered' || $newStatus === 'completed') ? ' Materials automatically synchronized into Admin Inventory.' : '';
+
         return redirect()->back()
-            ->with('success', 'Order ' . $order->order_code . ' status updated to ' . ucfirst(str_replace('_', ' ', $newStatus)) . '.');
+            ->with('success', 'Order ' . $order->order_code . ' status updated to ' . ucfirst(str_replace('_', ' ', $newStatus)) . '.' . $syncMsg);
     }
 
     /**
@@ -302,41 +305,18 @@ class AdminSupplierController extends Controller
         $order->actual_delivery_date = now();
         $order->save();
 
+        // Synchronize into inventory & BOM
+        $order->syncToInventory();
+
         SupplierOrderLog::create([
             'supplier_order_id' => $order->id,
             'user_id' => Auth::id(),
             'from_status' => $order->status,
             'to_status' => 'completed',
-            'comment' => 'Products officially received, verified on-site, and accepted.',
+            'comment' => 'Products officially received, verified on-site, and accepted into inventory.',
         ]);
 
-        // If order was tied to a project, integrate into Project Materials BOM
-        if ($order->project_id) {
-            foreach ($order->items as $item) {
-                $localMaterial = Material::where('name', 'like', "%{$item->material_name}%")->first();
-                if (!$localMaterial) {
-                    $localMaterial = Material::create([
-                        'material_code' => 'MAT-PO-' . strtoupper(Str::random(5)),
-                        'name' => $item->material_name,
-                        'category' => $order->supplier->category,
-                        'unit' => $item->unit,
-                        'unit_cost' => $item->unit_price,
-                        'stock_quantity' => $item->quantity,
-                    ]);
-                }
-
-                $projectMat = ProjectMaterial::firstOrNew([
-                    'project_id' => $order->project_id,
-                    'material_id' => $localMaterial->id,
-                ]);
-
-                $projectMat->allocated_qty = ($projectMat->allocated_qty ?? 0) + $item->quantity;
-                $projectMat->unit_price = $item->unit_price;
-                $projectMat->save();
-            }
-        }
-
-        return redirect()->back()->with('success', 'Order ' . $order->order_code . ' marked as Completed. Delivered products accepted.');
+        return redirect()->back()->with('success', 'Order ' . $order->order_code . ' marked as Completed. Delivered products successfully synchronized into Admin Materials Inventory.');
     }
 
     /**

@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use Illuminate\Support\Str;
+
 class SupplierOrder extends Model
 {
     use HasFactory;
@@ -19,6 +21,7 @@ class SupplierOrder extends Model
         'actual_delivery_date',
         'total_amount',
         'status',
+        'is_synced_to_inventory',
         'notes',
     ];
 
@@ -26,6 +29,7 @@ class SupplierOrder extends Model
         'requested_delivery_date' => 'date',
         'actual_delivery_date' => 'date',
         'total_amount' => 'decimal:2',
+        'is_synced_to_inventory' => 'boolean',
     ];
 
     /**
@@ -74,6 +78,74 @@ class SupplierOrder extends Model
     public function messages()
     {
         return $this->hasMany(SupplierOrderMessage::class)->with('user')->orderBy('created_at', 'asc');
+    }
+
+    /**
+     * Synchronize delivered products into Central Materials Inventory (and Project Materials if linked).
+     */
+    public function syncToInventory(): bool
+    {
+        if ($this->is_synced_to_inventory) {
+            return false; // already synced to prevent duplicate increments
+        }
+
+        $this->loadMissing(['items.material', 'supplier', 'project']);
+
+        foreach ($this->items as $item) {
+            // Find or create in Material inventory
+            $material = Material::where('name', $item->material_name)->first();
+
+            if (!$material) {
+                $codePrefix = match($this->supplier->category ?? '') {
+                    'Windows & Doors' => 'MAT-WNDR-',
+                    'Roofing' => 'MAT-ROOF-',
+                    'Structural & Masonry' => 'MAT-STRC-',
+                    default => 'MAT-SUP-',
+                };
+                $code = $codePrefix . strtoupper(substr(uniqid(), -5));
+
+                $material = Material::create([
+                    'material_code' => $code,
+                    'name' => $item->material_name,
+                    'category' => $this->supplier->category ?? 'General',
+                    'unit' => $item->unit,
+                    'unit_cost' => $item->unit_price,
+                    'stock_quantity' => $item->quantity,
+                ]);
+            } else {
+                $material->increment('stock_quantity', $item->quantity);
+                $material->unit_cost = $item->unit_price;
+                $material->save();
+            }
+
+            // Record official inventory movement in InventoryLog
+            InventoryLog::create([
+                'material_id' => $material->id,
+                'project_id' => $this->project_id,
+                'transaction_type' => 'restock',
+                'quantity' => $item->quantity,
+                'unit_cost' => $item->unit_price,
+                'reference_no' => $this->order_code,
+                'notes' => 'Trade Supplier Delivery Receipt from ' . ($this->supplier->name ?? 'Trade Supplier') . ($this->project ? ' for site ' . $this->project->title : ' to Central Warehouse Depot') . '.',
+            ]);
+
+            // If directly assigned to a Project, also sync with Project Materials BOM
+            if ($this->project_id) {
+                $projectMat = ProjectMaterial::firstOrNew([
+                    'project_id' => $this->project_id,
+                    'material_id' => $material->id,
+                ]);
+
+                $projectMat->allocated_qty = ($projectMat->allocated_qty ?? 0) + $item->quantity;
+                $projectMat->unit_price = $item->unit_price;
+                $projectMat->save();
+            }
+        }
+
+        $this->is_synced_to_inventory = true;
+        $this->save();
+
+        return true;
     }
 
     /**

@@ -59,6 +59,27 @@
     </div>
 </div>
 
+<!-- Procurement-Governed Inventory Control Briefing Banner -->
+<div style="background: linear-gradient(135deg, rgba(30, 41, 59, 0.75) 0%, rgba(15, 23, 42, 0.9) 100%); border: 1px solid rgba(56, 189, 248, 0.3); border-left: 4px solid #38bdf8; border-radius: 12px; padding: 16px 20px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; box-shadow: 0 4px 16px rgba(0,0,0,0.25);">
+    <div style="display: flex; align-items: center; gap: 14px;">
+        <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(56, 189, 248, 0.15); display: flex; align-items: center; justify-content: center; color: #38bdf8; flex-shrink: 0; border: 1px solid rgba(56, 189, 248, 0.25);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        </div>
+        <div>
+            <h4 style="font-size: 0.95rem; font-weight: 800; color: var(--text-primary); margin-bottom: 2px;">Procurement-Governed Inventory System</h4>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">Warehouse inventory is replenished exclusively through verified outside Trade Suppliers (Mils Glass, Colorsteel, Titan Structural). In-stock quantities automatically increment upon PO delivery receipts and cannot be manually overridden.</p>
+        </div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <a href="{{ route('admin.suppliers.materials') }}" class="btn-secondary" style="font-size: 0.8rem; padding: 8px 14px; text-decoration: none;">
+            Supplier Product Matrix &rarr;
+        </a>
+        <a href="{{ route('admin.suppliers.index') }}" class="btn-primary" style="font-size: 0.8rem; padding: 8px 16px; text-decoration: none;">
+            Central Supplier Hub &rarr;
+        </a>
+    </div>
+</div>
+
 <!-- Search & Filter Controls -->
 <div class="glass-panel" style="padding: 18px 24px; margin-bottom: 24px;">
     <form action="{{ route('inventory.index') }}" method="GET" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
@@ -89,9 +110,9 @@
     <div class="panel-header">
         <div>
             <h3 class="panel-title">Master Materials Inventory & Warehouse Stock</h3>
-            <span style="font-size: 0.85rem; color: var(--text-muted);">Central warehouse stock levels, unit valuations, and supply health</span>
+            <span style="font-size: 0.85rem; color: var(--text-muted);">Central warehouse stock levels synchronized automatically with Trade Supplier purchase order deliveries</span>
         </div>
-        <button class="btn-secondary" style="font-size: 0.85rem; padding: 6px 14px;" onclick="openModal('addMaterialModal')">+ New Material</button>
+        <button class="btn-secondary" style="font-size: 0.85rem; padding: 6px 14px;" onclick="openModal('addMaterialModal')">+ New Catalog Item</button>
     </div>
 
     <div style="overflow-x: auto;">
@@ -101,11 +122,11 @@
                     <th>Code & Material Name</th>
                     <th>Trade Category</th>
                     <th>Unit of Measure</th>
-                    <th>Unit Cost (₱)</th>
+                    <th>Contract Cost (₱)</th>
                     <th>In-Stock Quantity</th>
                     <th>Total Value (₱)</th>
                     <th>Stock Health</th>
-                    <th>Action</th>
+                    <th>Procurement Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -128,6 +149,10 @@
                         <strong style="font-family: var(--font-mono); font-size: 1.05rem; color: {{ $mat->stock_quantity <= 500 ? '#ef4444' : '#10b981' }};">
                             {{ number_format($mat->stock_quantity) }} {{ $mat->unit }}
                         </strong>
+                        <div style="font-size: 0.68rem; color: #38bdf8; display: flex; align-items: center; gap: 4px; margin-top: 2px;">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                            Supplier-Synchronized
+                        </div>
                     </td>
                     <td>
                         <strong style="font-family: var(--font-mono); color: #10b981;">
@@ -144,9 +169,10 @@
                         @endif
                     </td>
                     <td>
-                        <button class="btn-secondary" style="font-size: 0.8rem; padding: 6px 12px;" onclick="openRestockModal({{ $mat->id }}, '{{ addslashes($mat->name) }}', {{ $mat->stock_quantity }}, {{ $mat->unit_cost }}, '{{ $mat->unit }}')">
-                            Adjust / Restock
-                        </button>
+                        <a href="{{ route('admin.suppliers.materials', ['search' => $mat->name]) }}" class="btn-primary" style="font-size: 0.78rem; padding: 6px 12px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                            + Procure from Supplier
+                        </a>
                     </td>
                 </tr>
                 @empty
@@ -165,8 +191,8 @@
 <div class="glass-panel" style="border: 1px solid rgba(16, 185, 129, 0.3);">
     <div class="panel-header" style="margin-bottom: 14px;">
         <div>
-            <h3 class="panel-title" style="font-size: 1.1rem; color: #10b981;">Central Warehouse Movement & Site Excess Returns Audit Log</h3>
-            <span style="font-size: 0.85rem; color: var(--text-muted);">Real-time audit log of stock allocations, project excess returns, and warehouse deliveries</span>
+            <h3 class="panel-title" style="font-size: 1.1rem; color: #10b981;">Central Warehouse Movement & Supplier Delivery Receipts Log</h3>
+            <span style="font-size: 0.85rem; color: var(--text-muted);">Audit log of supplier procurement deliveries, stock allocations, and site excess returns</span>
         </div>
     </div>
 
@@ -178,10 +204,10 @@
                     <th>Date & Time</th>
                     <th>Type</th>
                     <th>Material Item</th>
-                    <th>Project Site Link</th>
+                    <th>Destination / Source</th>
                     <th>Quantity Change</th>
                     <th>Unit Cost</th>
-                    <th>Notes</th>
+                    <th>Audit Verification</th>
                 </tr>
             </thead>
             <tbody>
@@ -196,7 +222,7 @@
                     </td>
                     <td>
                         <span class="badge" style="background: {{ $tBadge['bg'] }}; color: {{ $tBadge['color'] }}; border: 1px solid {{ $tBadge['border'] }}; font-size: 0.75rem;">
-                            {{ $tBadge['icon'] }} {{ $tBadge['label'] }}
+                            {{ $tBadge['label'] }}
                         </span>
                     </td>
                     <td>
@@ -220,7 +246,7 @@
                         ₱{{ number_format($log->unit_cost, 2) }}
                     </td>
                     <td style="font-size: 0.8rem; color: var(--text-muted);">
-                        {{ $log->notes ?? 'Standard warehouse inventory movement' }}
+                        {{ $log->notes ?? 'Verified inventory movement' }}
                     </td>
                 </tr>
                 @empty
@@ -235,11 +261,11 @@
     </div>
 </div>
 
-<!-- Modal 1: Add New Master Material -->
+<!-- Modal 1: Add New Master Material to Catalog -->
 <div class="modal-overlay" id="addMaterialModal">
     <div class="modal-box">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h3 style="font-weight: 700;">Add New Material to Master Inventory</h3>
+            <h3 style="font-weight: 700;">Add Material Item to Catalog</h3>
             <button onclick="closeModal('addMaterialModal')" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer;">&times;</button>
         </div>
 
@@ -254,7 +280,9 @@
                 <div class="form-group">
                     <label class="form-label">Category</label>
                     <select name="category" class="form-select" required>
-                        <option value="Structural">Structural</option>
+                        <option value="Windows & Doors">Windows & Doors</option>
+                        <option value="Roofing">Roofing</option>
+                        <option value="Structural & Masonry">Structural & Masonry</option>
                         <option value="Electrical">Electrical</option>
                         <option value="Piping/Plumbing">Piping/Plumbing</option>
                         <option value="Finishing">Finishing</option>
@@ -263,58 +291,27 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">Unit of Measure</label>
-                    <input type="text" name="unit" class="form-input" placeholder="e.g. bags, pcs, meters, tons, sheets" required>
+                    <input type="text" name="unit" class="form-input" placeholder="e.g. bags, pcs, ln.m., sets, sheets" required>
                 </div>
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                 <div class="form-group">
-                    <label class="form-label">Unit Cost (₱)</label>
+                    <label class="form-label">Contracted Unit Cost (₱)</label>
                     <input type="number" step="0.01" name="unit_cost" class="form-input" placeholder="₱ 0.00" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Initial Warehouse Stock</label>
-                    <input type="number" name="stock_quantity" class="form-input" placeholder="e.g. 5000" min="0" required>
+                    <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 8px; padding: 10px 12px; font-size: 0.78rem; color: #38bdf8; display: flex; align-items: center; gap: 6px;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                        <span>0 units (Auto-increments upon PO delivery)</span>
+                    </div>
                 </div>
             </div>
 
             <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
                 <button type="button" class="btn-secondary" onclick="closeModal('addMaterialModal')">Cancel</button>
-                <button type="submit" class="btn-primary">Add to Warehouse Catalog</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- Modal 2: Adjust Stock & Pricing -->
-<div class="modal-overlay" id="restockModal">
-    <div class="modal-box">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h3 style="font-weight: 700;">Adjust Inventory Stock & Pricing</h3>
-            <button onclick="closeModal('restockModal')" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer;">&times;</button>
-        </div>
-
-        <form id="restockForm" method="POST">
-            @csrf
-            <div class="form-group">
-                <label class="form-label">Material</label>
-                <input type="text" id="restockMatName" class="form-input" readonly style="background: rgba(255,255,255,0.05); font-weight: 700;">
-            </div>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-                <div class="form-group">
-                    <label class="form-label">Updated Warehouse Stock (<span id="restockUnitLbl"></span>)</label>
-                    <input type="number" id="restockQuantity" name="stock_quantity" class="form-input" min="0" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Updated Unit Cost (₱)</label>
-                    <input type="number" step="0.01" id="restockCost" name="unit_cost" class="form-input" required>
-                </div>
-            </div>
-
-            <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
-                <button type="button" class="btn-secondary" onclick="closeModal('restockModal')">Cancel</button>
-                <button type="submit" class="btn-primary">Save Inventory Update</button>
+                <button type="submit" class="btn-primary">Register in Warehouse Catalog</button>
             </div>
         </form>
     </div>
@@ -326,14 +323,5 @@
 <script>
     function openModal(id) { document.getElementById(id).classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-
-    function openRestockModal(matId, name, currentStock, currentCost, unit) {
-        document.getElementById('restockForm').action = '/inventory/' + matId + '/update-stock';
-        document.getElementById('restockMatName').value = name;
-        document.getElementById('restockQuantity').value = currentStock;
-        document.getElementById('restockCost').value = currentCost;
-        document.getElementById('restockUnitLbl').innerText = unit;
-        openModal('restockModal');
-    }
 </script>
 @endsection
