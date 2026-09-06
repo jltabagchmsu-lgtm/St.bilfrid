@@ -22,9 +22,12 @@
      ==================================================== -->
 <div class="glass-panel" style="border: 1px solid rgba(16, 185, 129, 0.35); background: linear-gradient(180deg, rgba(16, 185, 129, 0.05) 0%, rgba(15, 23, 42, 0.8) 100%); margin-bottom: 28px;">
     <div class="panel-header" style="margin-bottom: 20px;">
-        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-            <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: rgba(16, 185, 129, 0.2); display: grid; place-items: center; font-size: 1rem; font-weight: 800; color: #10b981;">
-                SALES
+        <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+            <div style="width: 40px; height: 40px; min-width: 40px; border-radius: var(--radius-md); background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); display: flex; align-items: center; justify-content: center; color: #10b981; flex-shrink: 0;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                    <polyline points="17 6 23 6 23 12"></polyline>
+                </svg>
             </div>
             <div>
                 <div style="display: flex; align-items: center; gap: 8px;">
@@ -199,9 +202,14 @@
      ==================================================== -->
 <div class="glass-panel" style="border: 1px solid rgba(56, 189, 248, 0.25); margin-bottom: 28px;">
     <div class="panel-header" style="margin-bottom: 16px;">
-        <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: rgba(56, 189, 248, 0.2); display: grid; place-items: center; font-size: 0.75rem; font-weight: 800; color: #38bdf8;">
-                SITE
+        <div style="display: flex; align-items: center; gap: 14px;">
+            <div style="width: 40px; height: 40px; min-width: 40px; border-radius: var(--radius-md); background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); display: flex; align-items: center; justify-content: center; color: #38bdf8; flex-shrink: 0;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
             </div>
             <div>
                 <h3 class="panel-title" style="font-size: 1.15rem;">Company-Wide On-Site Workforce & Resource Deployment</h3>
