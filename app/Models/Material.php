@@ -16,11 +16,15 @@ class Material extends Model
         'unit',
         'unit_cost',
         'stock_quantity',
+        'is_new_product',
+        'last_purchased_at',
     ];
 
     protected $casts = [
         'unit_cost' => 'float',
         'stock_quantity' => 'integer',
+        'is_new_product' => 'boolean',
+        'last_purchased_at' => 'datetime',
     ];
 
     public function projectMaterials()

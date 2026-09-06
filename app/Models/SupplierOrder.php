@@ -111,10 +111,14 @@ class SupplierOrder extends Model
                     'unit' => $item->unit,
                     'unit_cost' => $item->unit_price,
                     'stock_quantity' => $item->quantity,
+                    'is_new_product' => true,
+                    'last_purchased_at' => now(),
                 ]);
             } else {
                 $material->increment('stock_quantity', $item->quantity);
                 $material->unit_cost = $item->unit_price;
+                $material->is_new_product = true;
+                $material->last_purchased_at = now();
                 $material->save();
             }
 
@@ -126,7 +130,7 @@ class SupplierOrder extends Model
                 'quantity' => $item->quantity,
                 'unit_cost' => $item->unit_price,
                 'reference_no' => $this->order_code,
-                'notes' => 'Trade Supplier Delivery Receipt from ' . ($this->supplier->name ?? 'Trade Supplier') . ($this->project ? ' for site ' . $this->project->title : ' to Central Warehouse Depot') . '.',
+                'notes' => 'Trade Supplier Delivery Receipt (New Product Delivery) from ' . ($this->supplier->name ?? 'Trade Supplier') . ($this->project ? ' for site ' . $this->project->title : ' to Central Warehouse Depot') . '.',
             ]);
 
             // If directly assigned to a Project, also sync with Project Materials BOM

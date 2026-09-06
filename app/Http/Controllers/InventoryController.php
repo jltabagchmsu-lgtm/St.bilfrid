@@ -12,10 +12,13 @@ class InventoryController extends Controller
     {
         $selectedCategory = $request->query('category');
         $search = $request->query('search');
+        $filter = $request->query('filter');
 
         $query = Material::query();
 
-        if ($selectedCategory) {
+        if ($filter === 'new' || $selectedCategory === 'new_products') {
+            $query->where('is_new_product', true);
+        } elseif ($selectedCategory) {
             $query->where('category', $selectedCategory);
         }
 
@@ -26,10 +29,11 @@ class InventoryController extends Controller
             });
         }
 
-        $materials = $query->orderBy('category')->orderBy('name')->get();
+        $materials = $query->orderBy('is_new_product', 'desc')->orderBy('category')->orderBy('name')->get();
         $allCategories = Material::select('category')->distinct()->pluck('category');
 
         $totalItemsCount = Material::count();
+        $newProductsCount = Material::where('is_new_product', true)->count();
         $totalStockUnits = Material::sum('stock_quantity');
         $totalValuation = Material::all()->sum(function ($m) {
             return $m->stock_quantity * $m->unit_cost;
@@ -49,7 +53,9 @@ class InventoryController extends Controller
             'allCategories',
             'selectedCategory',
             'search',
+            'filter',
             'totalItemsCount',
+            'newProductsCount',
             'totalStockUnits',
             'totalValuation',
             'lowStockCount',

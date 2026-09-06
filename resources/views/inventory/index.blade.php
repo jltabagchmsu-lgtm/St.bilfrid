@@ -12,14 +12,23 @@
 @section('content')
 
 <!-- Inventory Valuation KPI Cards -->
-<div class="kpi-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+<div class="kpi-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
     <div class="kpi-card">
         <div class="kpi-header">
-            <span class="kpi-title">Warehouse Inventory Valuation</span>
+            <span class="kpi-title">Warehouse Valuation</span>
             <span class="spec-chip" style="font-size: 0.65rem; color: #10b981;">VALUATION</span>
         </div>
         <div class="kpi-val" style="font-family: var(--font-mono); color: #10b981;">₱{{ number_format($totalValuation, 2) }}</div>
         <div class="kpi-sub">Total Capital in Stock</div>
+    </div>
+
+    <div class="kpi-card" style="border-top: 3px solid #10b981;">
+        <div class="kpi-header">
+            <span class="kpi-title">Purchased New Products</span>
+            <span class="spec-chip" style="font-size: 0.65rem; color: #10b981; background: rgba(16, 185, 129, 0.15);">NEW ARRIVALS</span>
+        </div>
+        <div class="kpi-val" style="color: #10b981; font-family: var(--font-mono);">{{ $newProductsCount }}</div>
+        <div class="kpi-sub">Procured from Trade Partners</div>
     </div>
 
     <div class="kpi-card">
@@ -38,15 +47,6 @@
         </div>
         <div class="kpi-val" style="font-family: var(--font-mono); color: #f59e0b;">{{ number_format($totalStockUnits) }}</div>
         <div class="kpi-sub">Gross On-Hand Stock</div>
-    </div>
-
-    <div class="kpi-card">
-        <div class="kpi-header">
-            <span class="kpi-title">Reconciled Site Returns</span>
-            <span class="spec-chip" style="font-size: 0.65rem; color: #10b981;">EXCESS</span>
-        </div>
-        <div class="kpi-val" style="font-family: var(--font-mono); color: #10b981;">+{{ number_format($totalReturnedUnits) }}</div>
-        <div class="kpi-sub">Units Returned from Projects</div>
     </div>
 
     <div class="kpi-card">
@@ -86,15 +86,18 @@
         <div style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 280px;">
             <input type="text" name="search" class="form-input" placeholder="Search by material code or name..." value="{{ $search }}" style="max-width: 380px;">
             <button type="submit" class="btn-primary" style="padding: 8px 16px;">Search</button>
-            @if($search || $selectedCategory)
+            @if($search || $selectedCategory || $filter)
                 <a href="{{ route('inventory.index') }}" class="btn-secondary" style="padding: 8px 14px; font-size: 0.85rem;">Reset Filters</a>
             @endif
         </div>
 
         <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-            <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted);">Categories:</span>
-            <a href="{{ route('inventory.index') }}" class="spec-chip {{ empty($selectedCategory) ? 'spec-chip-active' : '' }}" style="text-decoration: none; cursor: pointer;">
+            <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted);">Stations & Categories:</span>
+            <a href="{{ route('inventory.index') }}" class="spec-chip {{ empty($selectedCategory) && empty($filter) ? 'spec-chip-active' : '' }}" style="text-decoration: none; cursor: pointer;">
                 All ({{ $totalItemsCount }})
+            </a>
+            <a href="{{ route('inventory.index', ['filter' => 'new', 'search' => $search]) }}" class="spec-chip {{ $filter === 'new' ? 'spec-chip-active' : '' }}" style="text-decoration: none; cursor: pointer; color: #10b981; border-color: rgba(16, 185, 129, 0.4); background: {{ $filter === 'new' ? 'rgba(16, 185, 129, 0.2)' : 'rgba(16, 185, 129, 0.08)' }}; font-weight: 700;">
+                New Products ({{ $newProductsCount }})
             </a>
             @foreach($allCategories as $cat)
                 <a href="{{ route('inventory.index', ['category' => $cat, 'search' => $search]) }}" class="spec-chip {{ $selectedCategory == $cat ? 'spec-chip-active' : '' }}" style="text-decoration: none; cursor: pointer;">
@@ -132,8 +135,20 @@
                 @forelse($materials as $mat)
                 <tr>
                     <td>
-                        <strong style="color: var(--text-primary); font-size: 1rem;">{{ $mat->name }}</strong>
-                        <div style="font-family: var(--font-mono); font-size: 0.8rem; color: #38bdf8; margin-top: 2px;">{{ $mat->material_code }}</div>
+                        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                            <strong style="color: var(--text-primary); font-size: 1rem;">{{ $mat->name }}</strong>
+                            @if($mat->is_new_product)
+                                <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.45); font-size: 0.68rem; font-weight: 800; letter-spacing: 0.04em; padding: 2px 8px; border-radius: 6px;">
+                                    NEW PRODUCT
+                                </span>
+                            @endif
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px; margin-top: 3px;">
+                            <span style="font-family: var(--font-mono); font-size: 0.8rem; color: #38bdf8;">{{ $mat->material_code }}</span>
+                            @if($mat->last_purchased_at)
+                                <span style="font-size: 0.72rem; color: var(--text-muted);">&bull; Purchased {{ $mat->last_purchased_at->format('M d, Y') }}</span>
+                            @endif
+                        </div>
                     </td>
                     <td>
                         <span class="badge" style="background: rgba(56, 189, 248, 0.1); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.25);">
