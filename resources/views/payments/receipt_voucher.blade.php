@@ -226,7 +226,7 @@
 <body>
 
     <div class="print-actions">
-        <a href="javascript:history.back()" class="btn-back">&larr; Back to System</a>
+        <a href="{{ route('payments.index', ['project_id' => $payment->project_id]) }}" class="btn-back" onclick="navigateBack(event)">&larr; Back to System</a>
         <button class="btn-print" onclick="window.print()">
             Print Official Receipt Voucher
         </button>
@@ -276,7 +276,7 @@
             </div>
             <div class="row-item">
                 <span class="row-label">Payment Method:</span>
-                <span class="row-value">{{ $payment->payment_method }} {{ $payment->bank_reference ? ' &bull; Ref/Check: ' . $payment->bank_reference : '' }}</span>
+                <span class="row-value">{{ $payment->payment_method }}@if($payment->bank_reference) &bull; Ref/Check: {{ $payment->bank_reference }}@endif</span>
             </div>
             @if($payment->notes)
             <div class="row-item">
@@ -328,5 +328,24 @@
         </div>
     </div>
 
+    <script>
+        function navigateBack(e) {
+            // Check if opened from within the application history
+            if (window.history.length > 1 && document.referrer && document.referrer.indexOf(window.location.host) !== -1) {
+                e.preventDefault();
+                window.history.back();
+                return;
+            }
+            
+            // If opened in a popup/child window
+            if (window.opener && !window.opener.closed) {
+                e.preventDefault();
+                window.close();
+                return;
+            }
+            
+            // Otherwise, let the fallback href execute normally
+        }
+    </script>
 </body>
 </html>
