@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'St. Bilfrid Development Corporation - Construction Management & Monitoring')</title>
-    <link rel="stylesheet" href="/css/app.css">
+    <link rel="stylesheet" href="/css/app.css?v={{ file_exists(public_path('css/app.css')) ? filemtime(public_path('css/app.css')) : time() }}">
+    @yield('styles')
+    @stack('styles')
 </head>
 <body>
 
@@ -303,7 +305,31 @@
                 window.location.href = '/';
             }
         }
+
+        function openModal(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.classList.add('active');
+                el.style.display = 'flex';
+            }
+        }
+
+        function closeModal(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.classList.remove('active');
+                el.style.display = 'none';
+            }
+        }
+
+        window.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal-backdrop')) {
+                event.target.classList.remove('active');
+                event.target.style.display = 'none';
+            }
+        });
     </script>
     @yield('scripts')
+    @stack('scripts')
 </body>
 </html>
