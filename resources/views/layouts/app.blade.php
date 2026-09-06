@@ -163,23 +163,6 @@
                     </div>
                 </div>
 
-                <!-- Trade Transfer Hubs (Dedicated Roofing and Windows & Doors Terminals) -->
-                <div class="nav-section-title" style="margin-top: 16px;">Trade Transfer Hubs</div>
-
-                <a href="{{ route('roofing.index') }}" class="nav-item {{ request()->is('roofing*') ? 'active' : '' }}">
-                    <span class="nav-icon">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                    </span>
-                    <span>Roofing Transfer Hub</span>
-                </a>
-
-                <a href="{{ route('windowsDoors.index') }}" class="nav-item {{ request()->is('windows-doors*') ? 'active' : '' }}">
-                    <span class="nav-icon">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="3" x2="12" y2="21"></line><line x1="3" y1="12" x2="21" y2="12"></line></svg>
-                    </span>
-                    <span>Windows & Doors Hub</span>
-                </a>
-
                 <!-- Project Costing & Expenditure Control with Dropdown -->
                 <div class="nav-dropdown {{ request()->is('costing*') ? 'open active' : '' }}" id="costingDropdown" style="margin-top: 16px;">
                     <div class="nav-item nav-dropdown-trigger" onclick="toggleNavDropdown('costingDropdown')">
