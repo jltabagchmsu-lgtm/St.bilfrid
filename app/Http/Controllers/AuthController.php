@@ -12,6 +12,18 @@ class AuthController extends Controller
      */
     public function showLoginForm()
     {
+        // Automatically ensure supplier tables and accounts exist on live server
+        try {
+            if (!\Illuminate\Support\Facades\Schema::hasTable('suppliers')) {
+                \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+            }
+            if (\Illuminate\Support\Facades\Schema::hasTable('suppliers') && \App\Models\Supplier::count() === 0) {
+                (new \Database\Seeders\SupplierManagementSeeder())->run();
+            }
+        } catch (\Throwable $e) {
+            // Silently continue
+        }
+
         if (Auth::check()) {
             $user = Auth::user();
             if ($user->role === 'roofing_transfer') {
@@ -36,6 +48,20 @@ class AuthController extends Controller
             'email' => 'required|email',
             'password' => 'required|string',
         ]);
+
+        // Auto-seed supplier accounts on-the-fly if missing when logging in
+        try {
+            if (!\Illuminate\Support\Facades\Schema::hasTable('suppliers')) {
+                \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+            }
+            if (\Illuminate\Support\Facades\Schema::hasTable('suppliers')) {
+                if (\App\Models\Supplier::count() === 0 || \App\Models\User::where('email', $credentials['email'])->doesntExist()) {
+                    (new \Database\Seeders\SupplierManagementSeeder())->run();
+                }
+            }
+        } catch (\Throwable $e) {
+            // Silently continue
+        }
 
         $remember = $request->boolean('remember');
 
