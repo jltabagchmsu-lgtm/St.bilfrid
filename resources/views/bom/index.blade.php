@@ -110,41 +110,6 @@
         </div>
 
         <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-            <!-- 1-Click Template Loaders Dropdown -->
-            <div class="dropdown" style="position: relative; display: inline-block;">
-                <button type="button" class="btn-secondary" style="font-size: 0.8rem; height: 36px; background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.3); color: #38bdf8; display: inline-flex; align-items: center; gap: 6px;" onclick="toggleTemplateMenu()">
-                    1-Click Load Template &#9662;
-                </button>
-                <div id="templateMenuDropdown" style="display: none; position: absolute; right: 0; top: 100%; margin-top: 6px; background: #0f172a; border: 1px solid var(--border-color); border-radius: var(--radius-md); box-shadow: 0 10px 30px rgba(0,0,0,0.7); min-width: 310px; z-index: 50; padding: 8px;">
-                    <form action="{{ route('projects.loadProjectTemplate', $selectedProject->id) }}" method="POST" onsubmit="return confirm('Generate and load the official 18-item Bill of Materials calibrated specifically for {{ addslashes($selectedProject->title ?: $selectedProject->project_code) }} (₱{{ number_format($selectedProject->contract_budget ?: ($selectedProject->estimated_cost ?: 1831613.80), 2) }})?');">
-                        @csrf
-                        <button type="submit" style="display: block; width: 100%; text-align: left; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 10px 12px; color: #38bdf8; font-size: 0.825rem; cursor: pointer; border-radius: 4px; margin-bottom: 6px;" onmouseover="this.style.background='rgba(56, 189, 248, 0.22)'" onmouseout="this.style.background='rgba(56, 189, 248, 0.12)'">
-                            <strong>Match Open Project: {{ $selectedProject->title ?: $selectedProject->project_code }}</strong>
-                            <div style="font-size: 0.725rem; color: #cbd5e1;">Calibrated to ₱{{ number_format($selectedProject->contract_budget ?: ($selectedProject->estimated_cost ?: 1831613.80), 2) }} &bull; {{ $selectedProject->floor_area_sqm ?? 80 }} m²</div>
-                        </button>
-                    </form>
-                    <div style="font-size: 0.7rem; color: var(--text-muted); padding: 4px 8px; text-transform: uppercase; font-weight: 700;">Or Load Standard Architectural Presets:</div>
-                    <form action="{{ route('projects.load2BrBungalowTemplate', $selectedProject->id) }}" method="POST" onsubmit="return confirm('Load the 2-Bedroom Bungalow Bill of Materials template (₱1,831,613.80)?');">
-                        @csrf
-                        <button type="submit" style="display: block; width: 100%; text-align: left; background: none; border: none; padding: 8px 10px; color: #f8fafc; font-size: 0.8rem; cursor: pointer; border-radius: 4px;" onmouseover="this.style.background='rgba(255, 255, 255, 0.08)'" onmouseout="this.style.background='none'">
-                            2BR Bungalow (₱1.831M)
-                        </button>
-                    </form>
-                    <form action="{{ route('projects.load3BrBungalowTemplate', $selectedProject->id) }}" method="POST" onsubmit="return confirm('Load the 3-Bedroom Bungalow Bill of Materials template (₱1,778,062.08) with 18 scope items?');">
-                        @csrf
-                        <button type="submit" style="display: block; width: 100%; text-align: left; background: none; border: none; padding: 8px 10px; color: #f8fafc; font-size: 0.8rem; cursor: pointer; border-radius: 4px;" onmouseover="this.style.background='rgba(255, 255, 255, 0.08)'" onmouseout="this.style.background='none'">
-                            3BR Bungalow (₱1.778M)
-                        </button>
-                    </form>
-                    <form action="{{ route('projects.loadDuplexTemplate', $selectedProject->id) }}" method="POST" onsubmit="return confirm('Load the 2-Storey Duplex Housing BOM template (₱742,800.74)?');">
-                        @csrf
-                        <button type="submit" style="display: block; width: 100%; text-align: left; background: none; border: none; padding: 8px 10px; color: #f8fafc; font-size: 0.8rem; cursor: pointer; border-radius: 4px;" onmouseover="this.style.background='rgba(255, 255, 255, 0.08)'" onmouseout="this.style.background='none'">
-                            31 m² Duplex Housing (₱742.8K)
-                        </button>
-                    </form>
-                </div>
-            </div>
-
             <!-- Auto-Allocate Scope to Site Tracker -->
             <form action="{{ route('bom.autoAllocateScope', $selectedProject->id) }}" method="POST" onsubmit="return confirm('Synchronize and auto-allocate all materials from the Scope BOM into the Site Tracker warehouse allocation?');">
                 @csrf
@@ -1533,18 +1498,6 @@
     // Modal helpers
     function openModal(id) { document.getElementById(id).classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-
-    function toggleTemplateMenu() {
-        const menu = document.getElementById('templateMenuDropdown');
-        menu.style.display = (menu.style.display === 'none' || menu.style.display === '') ? 'block' : 'none';
-    }
-
-    window.addEventListener('click', function(e) {
-        if (!e.target.closest('.dropdown')) {
-            const menu = document.getElementById('templateMenuDropdown');
-            if (menu) menu.style.display = 'none';
-        }
-    });
 
     function openAddScopeLineModal(itemId, itemNumber, itemName) {
         @if($selectedProject)
