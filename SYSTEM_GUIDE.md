@@ -120,18 +120,13 @@ Open your browser at 👉 **[http://localhost:8000](http://localhost:8000)** or 
 
 ---
 
-### 📅 6. Clarified Project Master Schedule & Phase Matrix
+### 📅 6. Clarified Project Master Schedule & Timeline
 - **Execution Timeline**:
   - Total Scheduled Window (in calendar days).
   - Elapsed Days vs Days to Target Handover.
-  - Timeline Consumption Gauge.
+  - Timeline Consumption Gauge (% consumed).
+  - Active Construction Phase & Accomplishment Progress.
   - Live Schedule Health Indicator: `Ahead of Schedule`, `On Schedule Target`, `Schedule Lagging`, `Overdue`.
-- **5 Standard Construction Phase Gates**:
-  1. *Phase 1*: Site Mobilization & Earthworks
-  2. *Phase 2*: Substructure & Concrete Framing
-  3. *Phase 3*: MEP Rough-in & Conduits
-  4. *Phase 4*: Enclosure & Turnkey Finishes
-  5. *Phase 5*: Testing, Commissioning & Handover
 
 ---
 

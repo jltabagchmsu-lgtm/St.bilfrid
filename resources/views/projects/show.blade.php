@@ -336,7 +336,7 @@
                     </span>
                 </div>
                 <span style="font-size: 0.85rem; color: var(--text-muted);">
-                    Clarified schedule planning, calendar duration, elapsed vs remaining days, and critical-path construction phase gates
+                    Clarified schedule planning, calendar duration, and elapsed vs remaining days
                 </span>
             </div>
         </div>
@@ -346,7 +346,7 @@
     </div>
 
     <!-- 4 Schedule Metrics Grid -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
         <div class="summary-block" style="border-left: 3px solid #38bdf8; background: rgba(15, 23, 42, 0.6);">
             <div class="summary-block-label">Total Scheduled Window</div>
             <div class="summary-block-val" style="color: #f8fafc;">{{ $totalScheduleDays }} Days</div>
@@ -371,41 +371,6 @@
                 {{ $project->current_phase ?? 'Phase 1: Mobilization' }}
             </div>
             <div class="summary-block-sub">{{ $project->overall_progress }}% Accomplished</div>
-        </div>
-    </div>
-
-    <!-- 5 Standard Construction Phase Gates Matrix -->
-    <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px;">
-        <div style="font-size: 0.85rem; font-weight: 700; color: #f8fafc; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
-            <span>Standard Construction Phase Gates & Schedule Status</span>
-            <span style="font-size: 0.75rem; color: var(--text-muted);">Sequential Milestone Progression</span>
-        </div>
-
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px;">
-            @php
-                $phases = [
-                    ['num' => 'Phase 1', 'name' => 'Mobilization & Earthworks', 'target' => 'Month 1-2', 'status' => $project->overall_progress >= 20 ? 'completed' : 'active'],
-                    ['num' => 'Phase 2', 'name' => 'Substructure & Framing', 'target' => 'Month 2-5', 'status' => $project->structural_progress >= 80 ? 'completed' : ($project->overall_progress >= 20 ? 'active' : 'pending')],
-                    ['num' => 'Phase 3', 'name' => 'MEP Rough-in & Conduits', 'target' => 'Month 5-8', 'status' => ($project->electrical_progress >= 80 && $project->piping_progress >= 80) ? 'completed' : ($project->structural_progress >= 40 ? 'active' : 'pending')],
-                    ['num' => 'Phase 4', 'name' => 'Architectural Finishes', 'target' => 'Month 8-11', 'status' => $project->finishing_progress >= 90 ? 'completed' : (($project->electrical_progress >= 50) ? 'active' : 'pending')],
-                    ['num' => 'Phase 5', 'name' => 'Testing & Client Handover', 'target' => 'Month 12', 'status' => $project->status === 'completed' ? 'completed' : 'pending'],
-                ];
-            @endphp
-
-            @foreach($phases as $ph)
-                <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid {{ $ph['status'] === 'completed' ? '#10b981' : ($ph['status'] === 'active' ? '#38bdf8' : 'var(--border-color)') }}; border-radius: var(--radius-sm); padding: 12px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                        <span style="font-size: 0.7rem; font-weight: 800; color: {{ $ph['status'] === 'completed' ? '#10b981' : ($ph['status'] === 'active' ? '#38bdf8' : 'var(--text-muted)') }};">
-                            {{ $ph['num'] }}
-                        </span>
-                        <span style="font-size: 0.65rem; font-weight: 700; color: {{ $ph['status'] === 'completed' ? '#10b981' : ($ph['status'] === 'active' ? '#38bdf8' : 'var(--text-muted)') }};">
-                            {{ strtoupper($ph['status']) }}
-                        </span>
-                    </div>
-                    <div style="font-size: 0.8rem; font-weight: 700; color: #f8fafc; margin-bottom: 4px;">{{ $ph['name'] }}</div>
-                    <div style="font-size: 0.7rem; color: var(--text-muted);">Target: {{ $ph['target'] }}</div>
-                </div>
-            @endforeach
         </div>
     </div>
 </div>
