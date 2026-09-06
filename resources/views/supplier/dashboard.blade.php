@@ -6,11 +6,11 @@
 
 @section('content')
 
-<!-- Metrics Row: Catalog Offerings & Purchase Order Pipeline -->
+<!-- Metrics Row: Catalog Offerings & Purchase Order Pipeline (Section 7) -->
 <div style="margin-bottom: 28px;">
     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
         <h3 style="font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary);">
-            Procurement & Order Fulfillment Overview
+            Material Catalog & Order Statistics
         </h3>
         <div style="display: flex; gap: 10px;">
             <a href="{{ route('supplier.materials') }}" style="font-size: 0.8rem; color: #38bdf8; text-decoration: none; font-weight: 600;">
@@ -23,62 +23,95 @@
         </div>
     </div>
 
-    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
-        <!-- Catalog Products -->
-        <div class="stat-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 20px;">
+    <!-- 6 KPI Cards Grid -->
+    <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px;">
+        <!-- 1. Total Materials -->
+        <div class="stat-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 16px;">
             <div style="display: flex; align-items: center; justify-content: space-between;">
-                <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);">Catalog Products</span>
-                <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(56, 189, 248, 0.1); display: grid; place-items: center; color: #38bdf8;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+                <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Total Materials</span>
+                <div style="width: 28px; height: 28px; border-radius: 6px; background: rgba(56, 189, 248, 0.1); display: grid; place-items: center; color: #38bdf8;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
                 </div>
             </div>
-            <div style="font-size: 1.85rem; font-weight: 800; color: var(--text-primary); margin-top: 10px;">
-                {{ number_format($totalProducts) }}
+            <div style="font-size: 1.6rem; font-weight: 800; color: var(--text-primary); margin-top: 8px;">
+                {{ number_format($totalMaterials) }}
             </div>
-            <div style="font-size: 0.75rem; color: #10b981; margin-top: 4px;">
-                {{ number_format($activeProducts) }} active offerings available to Admin
+            <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 2px;">
+                Cataloged offerings
             </div>
         </div>
 
-        <!-- Pending Confirmation -->
-        <div class="stat-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 20px;">
+        <!-- 2. Available Materials -->
+        <div class="stat-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 16px;">
             <div style="display: flex; align-items: center; justify-content: space-between;">
-                <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);">Awaiting Acceptance</span>
-                <span class="pill-badge" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b;">Action Required</span>
+                <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Available</span>
+                <div style="width: 28px; height: 28px; border-radius: 6px; background: rgba(16, 185, 129, 0.1); display: grid; place-items: center; color: #10b981;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                </div>
             </div>
-            <div style="font-size: 1.85rem; font-weight: 800; color: #f59e0b; margin-top: 10px;">
+            <div style="font-size: 1.6rem; font-weight: 800; color: #10b981; margin-top: 8px;">
+                {{ number_format($availableMaterials) }}
+            </div>
+            <div style="font-size: 0.7rem; color: #10b981; margin-top: 2px;">
+                Ready for order
+            </div>
+        </div>
+
+        <!-- 3. Unavailable Materials -->
+        <div class="stat-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 16px;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Unavailable</span>
+                <div style="width: 28px; height: 28px; border-radius: 6px; background: rgba(148, 163, 184, 0.1); display: grid; place-items: center; color: #94a3b8;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
+                </div>
+            </div>
+            <div style="font-size: 1.6rem; font-weight: 800; color: #94a3b8; margin-top: 8px;">
+                {{ number_format($unavailableMaterials) }}
+            </div>
+            <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 2px;">
+                Suspended / off-catalog
+            </div>
+        </div>
+
+        <!-- 4. Pending Orders -->
+        <div class="stat-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 16px;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Pending Orders</span>
+                <span class="pill-badge" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; padding: 2px 6px; font-size: 0.65rem;">New</span>
+            </div>
+            <div style="font-size: 1.6rem; font-weight: 800; color: #f59e0b; margin-top: 8px;">
                 {{ number_format($pendingOrders) }}
             </div>
-            <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px;">
-                New purchase orders from Admin
+            <div style="font-size: 0.7rem; color: var(--text-secondary); margin-top: 2px;">
+                Awaiting confirmation
             </div>
         </div>
 
-        <!-- In Production / Processing -->
-        <div class="stat-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 20px;">
+        <!-- 5. Active Orders -->
+        <div class="stat-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 16px;">
             <div style="display: flex; align-items: center; justify-content: space-between;">
-                <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);">In Fabrication / Dispatch</span>
-                <span class="pill-badge" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8;">In Progress</span>
+                <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Active Orders</span>
+                <span class="pill-badge" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; padding: 2px 6px; font-size: 0.65rem;">In Progress</span>
             </div>
-            <div style="font-size: 1.85rem; font-weight: 800; color: #38bdf8; margin-top: 10px;">
-                {{ number_format($processingOrders + $readyOrders) }}
+            <div style="font-size: 1.6rem; font-weight: 800; color: #38bdf8; margin-top: 8px;">
+                {{ number_format($activeOrders) }}
             </div>
-            <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px;">
-                {{ number_format($readyOrders) }} staged ready for delivery
+            <div style="font-size: 0.7rem; color: var(--text-secondary); margin-top: 2px;">
+                Processing & dispatch
             </div>
         </div>
 
-        <!-- Completed Revenue -->
-        <div class="stat-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 20px;">
+        <!-- 6. Completed Orders -->
+        <div class="stat-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 16px;">
             <div style="display: flex; align-items: center; justify-content: space-between;">
-                <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);">Fulfilled Value</span>
-                <span class="pill-badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">{{ number_format($completedOrders + $deliveredOrders) }} Orders</span>
+                <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Completed</span>
+                <span class="pill-badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 2px 6px; font-size: 0.65rem;">Delivered</span>
             </div>
-            <div style="font-size: 1.6rem; font-weight: 800; color: #f8fafc; margin-top: 10px; font-family: var(--font-mono);">
-                PHP {{ number_format($totalRevenue, 2) }}
+            <div style="font-size: 1.6rem; font-weight: 800; color: #10b981; margin-top: 8px;">
+                {{ number_format($completedOrders) }}
             </div>
-            <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px;">
-                Delivered procurement turnover
+            <div style="font-size: 0.7rem; color: var(--text-secondary); margin-top: 2px;">
+                Fulfilled requests
             </div>
         </div>
     </div>
@@ -172,7 +205,7 @@
                 <p style="font-size: 0.75rem; color: var(--text-muted);">Active supply products and price rates</p>
             </div>
             <a href="{{ route('supplier.materials') }}" style="font-size: 0.75rem; color: #38bdf8; text-decoration: none; font-weight: 600;">
-                View All ({{ $totalProducts }})
+                View All ({{ $totalMaterials }})
             </a>
         </div>
 

@@ -50,30 +50,24 @@ class SupplierMaterial extends Model
     }
 
     /**
-     * Automatically update availability status based on stock level if applicable.
-     */
-    public function syncAvailabilityStatus(): void
-    {
-        if ($this->available_quantity <= 0) {
-            $this->availability_status = 'out_of_stock';
-        } elseif ($this->available_quantity <= 10) {
-            $this->availability_status = 'low_stock';
-        } else {
-            $this->availability_status = 'available';
-        }
-    }
-
-    /**
-     * Status badge styling class.
+     * Status badge styling class (Strictly Available / Unavailable).
      */
     public function getStatusBadgeAttribute(): array
     {
-        return match ($this->availability_status) {
-            'available' => ['label' => 'Available', 'bg' => 'rgba(16, 185, 129, 0.15)', 'color' => '#10b981', 'border' => 'rgba(16, 185, 129, 0.3)'],
-            'low_stock' => ['label' => 'Low Stock', 'bg' => 'rgba(245, 158, 11, 0.15)', 'color' => '#f59e0b', 'border' => 'rgba(245, 158, 11, 0.3)'],
-            'out_of_stock' => ['label' => 'Out of Stock', 'bg' => 'rgba(239, 68, 68, 0.15)', 'color' => '#ef4444', 'border' => 'rgba(239, 68, 68, 0.3)'],
-            'unavailable' => ['label' => 'Unavailable', 'bg' => 'rgba(148, 163, 184, 0.15)', 'color' => '#94a3b8', 'border' => 'rgba(148, 163, 184, 0.3)'],
-            default => ['label' => ucfirst(str_replace('_', ' ', $this->availability_status)), 'bg' => 'rgba(148, 163, 184, 0.15)', 'color' => '#94a3b8', 'border' => 'rgba(148, 163, 184, 0.3)'],
-        };
+        if (!$this->is_active || $this->availability_status === 'unavailable') {
+            return [
+                'label' => 'Unavailable',
+                'bg' => 'rgba(148, 163, 184, 0.15)',
+                'color' => '#94a3b8',
+                'border' => 'rgba(148, 163, 184, 0.3)',
+            ];
+        }
+
+        return [
+            'label' => 'Available',
+            'bg' => 'rgba(16, 185, 129, 0.15)',
+            'color' => '#10b981',
+            'border' => 'rgba(16, 185, 129, 0.3)',
+        ];
     }
 }

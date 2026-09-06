@@ -23,17 +23,15 @@ class AdminSupplierController extends Controller
      */
     public function index()
     {
-        // 1. Fetch the primary suppliers
+        // 1. Fetch the 3 primary suppliers (Mils Glass and Aluminum Works, Colorsteel, Titan Structural & Steel)
         $suppliers = Supplier::withCount(['materials', 'orders'])->get();
 
-        // 2. Aggregate KPI Metrics
+        // 2. Aggregate KPI Metrics (Section 11)
         $totalSuppliers = $suppliers->count();
-        $totalProducts = SupplierMaterial::where('is_active', true)->where('availability_status', '!=', 'unavailable')->count();
+        $totalAvailableMaterials = SupplierMaterial::where('is_active', true)->where('availability_status', 'available')->count();
         $pendingOrders = SupplierOrder::where('status', 'pending')->count();
-        $processingOrders = SupplierOrder::whereIn('status', ['confirmed', 'processing'])->count();
-        $readyOrders = SupplierOrder::where('status', 'ready_for_delivery')->count();
-        $deliveredOrders = SupplierOrder::where('status', 'delivered')->count();
-        $completedOrders = SupplierOrder::where('status', 'completed')->count();
+        $activeOrders = SupplierOrder::whereIn('status', ['confirmed', 'processing', 'ready_for_delivery'])->count();
+        $completedOrders = SupplierOrder::whereIn('status', ['delivered', 'completed'])->count();
         $totalProcurementCost = SupplierOrder::whereIn('status', ['delivered', 'completed'])->sum('total_amount');
 
         // 3. Recent Orders Feed
@@ -43,16 +41,14 @@ class AdminSupplierController extends Controller
         $activeProjects = Project::whereIn('status', ['approved', 'in_progress'])->orderBy('title', 'asc')->get();
 
         // 5. Featured product catalog items for PO placement
-        $featuredMaterials = SupplierMaterial::with('supplier')->where('is_active', true)->where('availability_status', '!=', 'unavailable')->orderBy('name', 'asc')->get();
+        $featuredMaterials = SupplierMaterial::with('supplier')->where('is_active', true)->where('availability_status', 'available')->orderBy('name', 'asc')->get();
 
         return view('admin.suppliers.index', compact(
             'suppliers',
             'totalSuppliers',
-            'totalProducts',
+            'totalAvailableMaterials',
             'pendingOrders',
-            'processingOrders',
-            'readyOrders',
-            'deliveredOrders',
+            'activeOrders',
             'completedOrders',
             'totalProcurementCost',
             'recentOrders',
@@ -102,7 +98,11 @@ class AdminSupplierController extends Controller
 
         // Availability filter
         if ($request->filled('status') && $request->status !== 'all') {
-            $query->where('availability_status', $request->status);
+            if ($request->status === 'available') {
+                $query->where('availability_status', 'available');
+            } elseif ($request->status === 'unavailable') {
+                $query->where('availability_status', 'unavailable');
+            }
         }
 
         // Sorting
@@ -238,12 +238,12 @@ class AdminSupplierController extends Controller
             'user_id' => null,
             'type' => 'order_created',
             'title' => 'New Purchase Order Received: ' . $orderCode,
-            'message' => 'St. Bilfrid Dev. Corp placed purchase order ' . $orderCode . ' totaling ₱' . number_format($totalAmount, 2) . ' for ' . count($orderItemsData) . ' product(s).',
+            'message' => 'St. Bilfrid Dev. Corp placed purchase order ' . $orderCode . ' totaling PHP ' . number_format($totalAmount, 2) . ' for ' . count($orderItemsData) . ' product(s).',
             'link' => route('supplier.orders', ['search' => $orderCode]),
         ]);
 
         return redirect()->route('admin.suppliers.orders')
-            ->with('success', 'Purchase Order ' . $orderCode . ' successfully submitted to ' . $supplier->name . ' (Total: ₱' . number_format($totalAmount, 2) . ').');
+            ->with('success', 'Purchase Order ' . $orderCode . ' successfully submitted to ' . $supplier->name . ' (Total: PHP ' . number_format($totalAmount, 2) . ').');
     }
 
     /**

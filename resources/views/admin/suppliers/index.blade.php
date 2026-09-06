@@ -6,9 +6,9 @@
 
 @section('content')
 
-<!-- KPI Summary Cards -->
+<!-- KPI Summary Cards (Section 11) -->
 <div class="metrics-grid" style="grid-template-columns: repeat(6, 1fr); gap: 14px; margin-bottom: 24px;">
-    <!-- Total Suppliers -->
+    <!-- 1. Total Suppliers -->
     <div class="stat-card">
         <div class="stat-header">
             <span class="stat-label">Active Suppliers</span>
@@ -17,25 +17,25 @@
             </div>
         </div>
         <div class="stat-value" style="color: #38bdf8;">{{ number_format($totalSuppliers) }}</div>
-        <div class="stat-sub">3 Trade Categories</div>
+        <div class="stat-sub">3 Trade Partners</div>
     </div>
 
-    <!-- Catalog Products -->
+    <!-- 2. Total Available Materials -->
     <div class="stat-card">
         <div class="stat-header">
-            <span class="stat-label">Catalog Products</span>
+            <span class="stat-label">Available Materials</span>
             <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
             </div>
         </div>
-        <div class="stat-value" style="color: #10b981;">{{ number_format($totalProducts) }}</div>
+        <div class="stat-value" style="color: #10b981;">{{ number_format($totalAvailableMaterials) }}</div>
         <div class="stat-sub">Ready for PO Generation</div>
     </div>
 
-    <!-- Pending Confirmation Orders -->
+    <!-- 3. Pending Confirmation Orders -->
     <div class="stat-card">
         <div class="stat-header">
-            <span class="stat-label">Pending Acceptance</span>
+            <span class="stat-label">Pending Orders</span>
             <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
             </div>
@@ -44,31 +44,31 @@
         <div class="stat-sub">Supplier confirmation pending</div>
     </div>
 
-    <!-- Active Orders -->
+    <!-- 4. Active Orders -->
     <div class="stat-card">
         <div class="stat-header">
-            <span class="stat-label">In Fabrication & Transit</span>
+            <span class="stat-label">Active Orders</span>
             <div class="stat-icon" style="background: rgba(56, 189, 248, 0.1); color: #38bdf8;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
             </div>
         </div>
-        <div class="stat-value" style="color: #38bdf8;">{{ number_format($processingOrders + $readyOrders) }}</div>
-        <div class="stat-sub">{{ number_format($readyOrders) }} ready for dispatch</div>
+        <div class="stat-value" style="color: #38bdf8;">{{ number_format($activeOrders) }}</div>
+        <div class="stat-sub">In fabrication & transit</div>
     </div>
 
-    <!-- Delivered Orders -->
+    <!-- 5. Completed Orders -->
     <div class="stat-card">
         <div class="stat-header">
-            <span class="stat-label">Delivered & Received</span>
+            <span class="stat-label">Completed Orders</span>
             <div class="stat-icon" style="background: rgba(34, 197, 94, 0.1); color: #22c55e;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
             </div>
         </div>
-        <div class="stat-value" style="color: #22c55e;">{{ number_format($deliveredOrders + $completedOrders) }}</div>
+        <div class="stat-value" style="color: #22c55e;">{{ number_format($completedOrders) }}</div>
         <div class="stat-sub">Successfully fulfilled</div>
     </div>
 
-    <!-- Total Procurement Expenditure -->
+    <!-- 6. Total Procurement Expenditure -->
     <div class="stat-card">
         <div class="stat-header">
             <span class="stat-label">Fulfilled Volume</span>
@@ -334,7 +334,7 @@
                                     <option value="">-- Select Product Item --</option>
                                     @foreach($featuredMaterials as $fm)
                                         <option value="{{ $fm->id }}" data-supplier-id="{{ $fm->supplier_id }}" data-price="{{ $fm->unit_price }}" data-unit="{{ $fm->unit }}">
-                                            {{ $fm->name }} [{{ $fm->supplier ? $fm->supplier->category : '' }}] (PHP {{ number_format($fm->unit_price, 2) }} / {{ $fm->unit }})
+                                            {{ $fm->name }} [{{ $fm->supplier ? $fm->supplier->name : '' }}] (PHP {{ number_format($fm->unit_price, 2) }} / {{ $fm->unit }})
                                         </option>
                                     @endforeach
                                 </select>
@@ -456,15 +456,20 @@
         const supId = document.getElementById('poSupplierSelect').value;
         const selects = document.querySelectorAll('.po-material-select');
         selects.forEach(function(sel) {
+            let hasValidSelection = false;
             Array.from(sel.options).forEach(function(opt) {
                 if (!opt.value) return;
                 const optSupId = opt.getAttribute('data-supplier-id');
                 if (!supId || optSupId === supId) {
                     opt.style.display = '';
+                    if (sel.value === opt.value) hasValidSelection = true;
                 } else {
                     opt.style.display = 'none';
                 }
             });
+            if (!hasValidSelection && sel.value !== '') {
+                sel.value = '';
+            }
         });
         calculatePoTotal();
     }
@@ -483,6 +488,7 @@
 
         container.appendChild(clone);
         poItemIndex++;
+        onPoSupplierChange();
         calculatePoTotal();
     }
 

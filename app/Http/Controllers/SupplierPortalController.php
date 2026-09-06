@@ -38,16 +38,17 @@ class SupplierPortalController extends Controller
     {
         $supplier = $this->getSupplier();
 
-        // 1. Catalog Products Statistics
-        $totalProducts = $supplier->materials()->count();
-        $activeProducts = $supplier->materials()->where('is_active', true)->where('availability_status', '!=', 'unavailable')->count();
+        // 1. Material Catalog Statistics (Section 7)
+        $totalMaterials = $supplier->materials()->count();
+        $availableMaterials = $supplier->materials()->where('is_active', true)->where('availability_status', 'available')->count();
+        $unavailableMaterials = $supplier->materials()->where(function ($q) {
+            $q->where('is_active', false)->orWhere('availability_status', 'unavailable');
+        })->count();
 
-        // 2. Orders & Procurement Statistics
+        // 2. Orders Statistics (Section 7)
         $pendingOrders = $supplier->orders()->where('status', 'pending')->count();
-        $processingOrders = $supplier->orders()->whereIn('status', ['confirmed', 'processing'])->count();
-        $readyOrders = $supplier->orders()->where('status', 'ready_for_delivery')->count();
-        $deliveredOrders = $supplier->orders()->where('status', 'delivered')->count();
-        $completedOrders = $supplier->orders()->where('status', 'completed')->count();
+        $activeOrders = $supplier->orders()->whereIn('status', ['confirmed', 'processing', 'ready_for_delivery'])->count();
+        $completedOrders = $supplier->orders()->whereIn('status', ['delivered', 'completed'])->count();
         $totalRevenue = $supplier->orders()->whereIn('status', ['delivered', 'completed'])->sum('total_amount');
 
         // 3. Incoming & Recent Purchase Orders
@@ -57,12 +58,11 @@ class SupplierPortalController extends Controller
 
         return view('supplier.dashboard', compact(
             'supplier',
-            'totalProducts',
-            'activeProducts',
+            'totalMaterials',
+            'availableMaterials',
+            'unavailableMaterials',
             'pendingOrders',
-            'processingOrders',
-            'readyOrders',
-            'deliveredOrders',
+            'activeOrders',
             'completedOrders',
             'totalRevenue',
             'recentOrders',
@@ -131,6 +131,7 @@ class SupplierPortalController extends Controller
             'unit_price' => 'required|numeric|min:0',
             'min_order_qty' => 'nullable|integer|min:1',
             'availability_status' => 'nullable|in:available,unavailable',
+            'image' => 'nullable|image|max:4096',
         ]);
 
         // Generate Product Code
@@ -144,6 +145,12 @@ class SupplierPortalController extends Controller
         $count = $supplier->materials()->count() + 1;
         $materialCode = $prefix . '-' . str_pad($count, 3, '0', STR_PAD_LEFT) . '-' . strtoupper(Str::random(3));
 
+        $imageUrl = null;
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('materials', 'public');
+            $imageUrl = '/storage/' . $path;
+        }
+
         $material = SupplierMaterial::create([
             'supplier_id' => $supplier->id,
             'material_code' => $materialCode,
@@ -153,10 +160,11 @@ class SupplierPortalController extends Controller
             'description' => $validated['description'] ?? null,
             'specifications' => $validated['specifications'] ?? null,
             'unit' => $validated['unit'],
-            'available_quantity' => 999999, // Supply catalog offering (not bounded by artificial warehouse count)
+            'available_quantity' => 999999,
             'unit_price' => $validated['unit_price'],
             'min_order_qty' => $validated['min_order_qty'] ?? 1,
             'availability_status' => $validated['availability_status'] ?? 'available',
+            'image_url' => $imageUrl,
             'is_active' => true,
         ]);
 
@@ -182,9 +190,10 @@ class SupplierPortalController extends Controller
             'min_order_qty' => 'nullable|integer|min:1',
             'availability_status' => 'required|in:available,unavailable',
             'is_active' => 'nullable|boolean',
+            'image' => 'nullable|image|max:4096',
         ]);
 
-        $material->update([
+        $updateData = [
             'name' => $validated['name'],
             'subcategory' => $validated['subcategory'] ?? $material->subcategory,
             'description' => $validated['description'] ?? null,
@@ -194,7 +203,14 @@ class SupplierPortalController extends Controller
             'min_order_qty' => $validated['min_order_qty'] ?? 1,
             'availability_status' => $validated['availability_status'],
             'is_active' => $request->has('is_active') ? $request->boolean('is_active') : true,
-        ]);
+        ];
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('materials', 'public');
+            $updateData['image_url'] = '/storage/' . $path;
+        }
+
+        $material->update($updateData);
 
         return redirect()->back()
             ->with('success', 'Product "' . $material->name . '" specifications and unit price updated.');
@@ -210,7 +226,7 @@ class SupplierPortalController extends Controller
 
         if ($material->orderItems()->exists()) {
             $material->update(['is_active' => false, 'availability_status' => 'unavailable']);
-            return redirect()->back()->with('success', 'Product "' . $material->name . '" is linked to previous purchase orders and has been set to Inactive/Suspended.');
+            return redirect()->back()->with('success', 'Product "' . $material->name . '" is linked to previous purchase orders and has been set to Unavailable.');
         }
 
         $name = $material->name;

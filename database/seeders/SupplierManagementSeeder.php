@@ -17,13 +17,13 @@ class SupplierManagementSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Windows & Doors Supplier
+        // 1. Windows & Doors Supplier (Mils Glass and Aluminum Works)
         $supWndr = Supplier::updateOrCreate(
             ['code' => 'SUP-WNDR-01'],
             [
-                'name' => 'Prime Windows & Doors Supply Co.',
+                'name' => 'Mils Glass and Aluminum Works',
                 'category' => 'Windows & Doors',
-                'contact_person' => 'Roberto M. Santos',
+                'contact_person' => 'Engr. Roberto M. Santos',
                 'email' => 'windows.doors.supplier@stbilfrid.com',
                 'phone' => '+63 (34) 495-8821',
                 'address' => 'Zone 4 Industrial Park, Silay City, Negros Occidental',
@@ -35,7 +35,7 @@ class SupplierManagementSeeder extends Seeder
         User::updateOrCreate(
             ['email' => 'windows.doors.supplier@stbilfrid.com'],
             [
-                'name' => 'Prime Windows & Doors Portal',
+                'name' => 'Mils Glass and Aluminum Works Portal',
                 'role' => 'supplier',
                 'supplier_id' => $supWndr->id,
                 'password' => Hash::make('supplier123'),
@@ -222,11 +222,11 @@ class SupplierManagementSeeder extends Seeder
             );
         }
 
-        // 2. Roofing Supplier
+        // 2. Roofing Supplier (Colorsteel)
         $supRoof = Supplier::updateOrCreate(
             ['code' => 'SUP-ROOF-01'],
             [
-                'name' => 'Summit Roofing & Metal Works Inc.',
+                'name' => 'Colorsteel',
                 'category' => 'Roofing',
                 'contact_person' => 'Engr. Danilo V. Tan',
                 'email' => 'roofing.supplier@stbilfrid.com',
@@ -240,7 +240,7 @@ class SupplierManagementSeeder extends Seeder
         User::updateOrCreate(
             ['email' => 'roofing.supplier@stbilfrid.com'],
             [
-                'name' => 'Summit Roofing Portal',
+                'name' => 'Colorsteel Supplier Portal',
                 'role' => 'supplier',
                 'supplier_id' => $supRoof->id,
                 'password' => Hash::make('supplier123'),
