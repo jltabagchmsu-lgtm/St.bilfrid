@@ -101,6 +101,7 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/projects/scope-lines/{lineId}', [ProjectScopeController::class, 'updateScopeLine'])->name('projects.scopeLines.update');
         Route::delete('/projects/scope-items/{itemId}', [ProjectScopeController::class, 'destroyScopeItem'])->name('projects.scopeItems.destroy');
         Route::delete('/projects/scope-lines/{lineId}', [ProjectScopeController::class, 'destroyScopeLine'])->name('projects.scopeLines.destroy');
+        Route::post('/projects/{id}/load-project-template', [ProjectScopeController::class, 'loadProjectTemplate'])->name('projects.loadProjectTemplate');
         Route::post('/projects/{id}/load-bungalow-template', [ProjectScopeController::class, 'loadBungalowTemplate'])->name('projects.loadBungalowTemplate');
         Route::post('/projects/{id}/load-3br-bungalow-template', [ProjectScopeController::class, 'load3BrBungalowTemplate'])->name('projects.load3BrBungalowTemplate');
         Route::post('/projects/{id}/load-2br-bungalow-template', [ProjectScopeController::class, 'load2BrBungalowTemplate'])->name('projects.load2BrBungalowTemplate');

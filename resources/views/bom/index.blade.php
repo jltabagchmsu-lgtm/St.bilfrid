@@ -115,26 +115,31 @@
                 <button type="button" class="btn-secondary" style="font-size: 0.8rem; height: 36px; background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.3); color: #38bdf8; display: inline-flex; align-items: center; gap: 6px;" onclick="toggleTemplateMenu()">
                     ⚡ 1-Click Load Template &#9662;
                 </button>
-                <div id="templateMenuDropdown" style="display: none; position: absolute; right: 0; top: 100%; margin-top: 6px; background: #0f172a; border: 1px solid var(--border-color); border-radius: var(--radius-md); box-shadow: 0 10px 30px rgba(0,0,0,0.6); min-width: 290px; z-index: 50; padding: 8px;">
-                    <form action="{{ route('projects.load3BrBungalowTemplate', $selectedProject->id) }}" method="POST" onsubmit="return confirm('Load the 3-Bedroom Bungalow Bill of Materials template (₱1,778,062.08) with 18 scope items?');">
+                <div id="templateMenuDropdown" style="display: none; position: absolute; right: 0; top: 100%; margin-top: 6px; background: #0f172a; border: 1px solid var(--border-color); border-radius: var(--radius-md); box-shadow: 0 10px 30px rgba(0,0,0,0.7); min-width: 310px; z-index: 50; padding: 8px;">
+                    <form action="{{ route('projects.loadProjectTemplate', $selectedProject->id) }}" method="POST" onsubmit="return confirm('Generate and load the official 18-item Bill of Materials calibrated specifically for {{ addslashes($selectedProject->title ?: $selectedProject->project_code) }} (₱{{ number_format($selectedProject->contract_budget ?: ($selectedProject->estimated_cost ?: 1831613.80), 2) }})?');">
                         @csrf
-                        <button type="submit" style="display: block; width: 100%; text-align: left; background: none; border: none; padding: 10px 12px; color: #f8fafc; font-size: 0.825rem; cursor: pointer; border-radius: 4px;" onmouseover="this.style.background='rgba(56, 189, 248, 0.15)'" onmouseout="this.style.background='none'">
-                            <strong>⚡ 3BR Bungalow (₱1.778M)</strong>
-                            <div style="font-size: 0.725rem; color: var(--text-muted);">18 Scope Items &bull; Single Detached</div>
+                        <button type="submit" style="display: block; width: 100%; text-align: left; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 10px 12px; color: #38bdf8; font-size: 0.825rem; cursor: pointer; border-radius: 4px; margin-bottom: 6px;" onmouseover="this.style.background='rgba(56, 189, 248, 0.22)'" onmouseout="this.style.background='rgba(56, 189, 248, 0.12)'">
+                            <strong>🎯 Match Open Project: {{ $selectedProject->title ?: $selectedProject->project_code }}</strong>
+                            <div style="font-size: 0.725rem; color: #cbd5e1;">Calibrated to ₱{{ number_format($selectedProject->contract_budget ?: ($selectedProject->estimated_cost ?: 1831613.80), 2) }} &bull; {{ $selectedProject->floor_area_sqm ?? 80 }} m²</div>
                         </button>
                     </form>
+                    <div style="font-size: 0.7rem; color: var(--text-muted); padding: 4px 8px; text-transform: uppercase; font-weight: 700;">Or Load Standard Architectural Presets:</div>
                     <form action="{{ route('projects.load2BrBungalowTemplate', $selectedProject->id) }}" method="POST" onsubmit="return confirm('Load the 2-Bedroom Bungalow Bill of Materials template (₱1,831,613.80)?');">
                         @csrf
-                        <button type="submit" style="display: block; width: 100%; text-align: left; background: none; border: none; padding: 10px 12px; color: #f8fafc; font-size: 0.825rem; cursor: pointer; border-radius: 4px;" onmouseover="this.style.background='rgba(56, 189, 248, 0.15)'" onmouseout="this.style.background='none'">
-                            <strong>⚡ 2BR Bungalow (₱1.831M)</strong>
-                            <div style="font-size: 0.725rem; color: var(--text-muted);">18 Scope Items &bull; 2-Bedroom Unit</div>
+                        <button type="submit" style="display: block; width: 100%; text-align: left; background: none; border: none; padding: 8px 10px; color: #f8fafc; font-size: 0.8rem; cursor: pointer; border-radius: 4px;" onmouseover="this.style.background='rgba(255, 255, 255, 0.08)'" onmouseout="this.style.background='none'">
+                            ⚡ 2BR Bungalow (₱1.831M)
                         </button>
                     </form>
-                    <form action="{{ route('projects.loadDuplexTemplate', $selectedProject->id) }}" method="POST" onsubmit="return confirm('Load the 2-Storey Duplex Housing BOM template (₱3,450,890.00)?');">
+                    <form action="{{ route('projects.load3BrBungalowTemplate', $selectedProject->id) }}" method="POST" onsubmit="return confirm('Load the 3-Bedroom Bungalow Bill of Materials template (₱1,778,062.08) with 18 scope items?');">
                         @csrf
-                        <button type="submit" style="display: block; width: 100%; text-align: left; background: none; border: none; padding: 10px 12px; color: #f8fafc; font-size: 0.825rem; cursor: pointer; border-radius: 4px;" onmouseover="this.style.background='rgba(56, 189, 248, 0.15)'" onmouseout="this.style.background='none'">
-                            <strong>⚡ 2-Storey Duplex (₱3.45M)</strong>
-                            <div style="font-size: 0.725rem; color: var(--text-muted);">22 Scope Items &bull; Multi-Storey Build</div>
+                        <button type="submit" style="display: block; width: 100%; text-align: left; background: none; border: none; padding: 8px 10px; color: #f8fafc; font-size: 0.8rem; cursor: pointer; border-radius: 4px;" onmouseover="this.style.background='rgba(255, 255, 255, 0.08)'" onmouseout="this.style.background='none'">
+                            ⚡ 3BR Bungalow (₱1.778M)
+                        </button>
+                    </form>
+                    <form action="{{ route('projects.loadDuplexTemplate', $selectedProject->id) }}" method="POST" onsubmit="return confirm('Load the 2-Storey Duplex Housing BOM template (₱742,800.74)?');">
+                        @csrf
+                        <button type="submit" style="display: block; width: 100%; text-align: left; background: none; border: none; padding: 8px 10px; color: #f8fafc; font-size: 0.8rem; cursor: pointer; border-radius: 4px;" onmouseover="this.style.background='rgba(255, 255, 255, 0.08)'" onmouseout="this.style.background='none'">
+                            ⚡ 31 m² Duplex Housing (₱742.8K)
                         </button>
                     </form>
                 </div>
@@ -350,13 +355,13 @@
                             <td colspan="10" style="text-align: center; padding: 48px 20px; color: var(--text-muted);">
                                 <div style="font-size: 2.2rem; margin-bottom: 8px;">📋</div>
                                 <div style="font-size: 1.05rem; font-weight: 700; color: #f8fafc;">No Material Requirements in BOM Yet</div>
-                                <div style="font-size: 0.85rem; margin-top: 4px;">Load an engineering template (e.g. 3BR Bungalow) or add custom Scope Items to generate the master materials table.</div>
+                                <div style="font-size: 0.85rem; margin-top: 4px;">Load an official Bill of Materials calibrated specifically for <strong>{{ $selectedProject ? ($selectedProject->title ?: $selectedProject->project_code) : 'this project' }}</strong> or add custom Scope Items.</div>
                                 <div style="margin-top: 16px;">
                                     @if($selectedProject)
-                                        <form action="{{ route('projects.load3BrBungalowTemplate', $selectedProject->id) }}" method="POST" style="display: inline-block;">
+                                        <form action="{{ route('projects.loadProjectTemplate', $selectedProject->id) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Generate and load the official 18-item Bill of Materials calibrated specifically for {{ addslashes($selectedProject->title ?: $selectedProject->project_code) }} (₱{{ number_format($selectedProject->contract_budget ?: ($selectedProject->estimated_cost ?: 1831613.80), 2) }})?');">
                                             @csrf
                                             <button type="submit" class="btn-primary" style="background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); border-color: #38bdf8;">
-                                                ⚡ 1-Click Load 3BR Bungalow Template (₱1.778M)
+                                                ⚡ 1-Click Load {{ $selectedProject->title ?: $selectedProject->project_code }} BOM (₱{{ number_format($selectedProject->contract_budget ?: ($selectedProject->estimated_cost ?: 1831613.80), 2) }})
                                             </button>
                                         </form>
                                     @endif
@@ -661,15 +666,15 @@
         <div style="text-align: center; padding: 48px 20px; background: rgba(0, 0, 0, 0.2); border-radius: var(--radius-md); border: 1px dashed var(--border-color); margin-bottom: 28px;">
             <div style="font-size: 2.5rem; margin-bottom: 10px;">📐</div>
             <h4 style="font-size: 1.15rem; font-weight: 700; color: #f8fafc; margin-bottom: 6px;">No Itemized Scope Items Created Yet</h4>
-            <p style="font-size: 0.85rem; color: var(--text-muted); max-width: 520px; margin: 0 auto 16px auto;">
-                Create itemized scope items (Foundation & Footings, Columns, Beams, Walls, Roofing, Plumbing, Electrical) with itemized Materials (A), Labor (B), and Equipment (C), or 1-click load the standard 18-item ₱1.778M template.
+            <p style="font-size: 0.85rem; color: var(--text-muted); max-width: 540px; margin: 0 auto 16px auto;">
+                Generate an itemized Scope of Work Bill of Materials tailored specifically for <strong>{{ $selectedProject ? ($selectedProject->title ?: $selectedProject->project_code) : 'this project' }}</strong> (Foundation, Columns, Beams, Walls, Roofing, Plumbing, Electrical, Finishes) with itemized Materials (A), Labor (B), Equipment (C), and official Philippine markups.
             </p>
-            <div style="display: inline-flex; gap: 10px;">
+            <div style="display: inline-flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
                 @if($selectedProject)
-                    <form action="{{ route('projects.load3BrBungalowTemplate', $selectedProject->id) }}" method="POST">
+                    <form action="{{ route('projects.loadProjectTemplate', $selectedProject->id) }}" method="POST" onsubmit="return confirm('Generate and load the official 18-item Bill of Materials calibrated specifically for {{ addslashes($selectedProject->title ?: $selectedProject->project_code) }} (₱{{ number_format($selectedProject->contract_budget ?: ($selectedProject->estimated_cost ?: 1831613.80), 2) }})?');">
                         @csrf
                         <button type="submit" class="btn-primary" style="background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); border-color: #38bdf8;">
-                            ⚡ 1-Click Load 3BR Bungalow Template (₱1.778M)
+                            ⚡ 1-Click Load {{ $selectedProject->title ?: $selectedProject->project_code }} BOM (₱{{ number_format($selectedProject->contract_budget ?: ($selectedProject->estimated_cost ?: 1831613.80), 2) }})
                         </button>
                     </form>
                 @endif

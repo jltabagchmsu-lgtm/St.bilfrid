@@ -1675,11 +1675,449 @@ class ProjectScopeController extends Controller
     }
 
     /**
+     * 1-Click Load BOM calibrated specifically to the open project's title, scope, floor area, and budget.
+     */
+    public function loadProjectTemplate($projectId)
+    {
+        $project = Project::findOrFail($projectId);
+        $projectName = $project->title ?: ($project->project_code ?? 'Project');
+        $floorArea = $project->floor_area_sqm > 0 ? (float) $project->floor_area_sqm : 80.0;
+
+        // Determine target budget from project's own financial figures
+        if ($project->contract_budget > 0) {
+            $targetBudget = (float) $project->contract_budget;
+        } elseif ($project->estimated_cost > 0) {
+            $targetBudget = (float) $project->estimated_cost;
+        } elseif ($project->client_budget > 0) {
+            $targetBudget = (float) $project->client_budget;
+        } elseif ($project->floor_area_sqm > 0) {
+            $targetBudget = (float) $project->floor_area_sqm * 28000.0;
+        } else {
+            $targetBudget = 1831613.80;
+        }
+
+        // Base 18-item template total with markups is ₱1,831,613.80
+        $baseTotal = 1831613.80;
+        $scale = $targetBudget > 0 ? ($targetBudget / $baseTotal) : 1.0;
+        $scale = max(0.05, $scale);
+
+        $template = [
+            [
+                'item_number' => 1,
+                'item_name' => 'FOUNDATION AND FOOTING',
+                'volume_or_area' => 'Concrete: ' . round(2.61 * $scale, 2) . ' cu.m',
+                'notes' => $projectName . ' - Structural excavation, footing rebar, formwork, and concrete pour.',
+                'contingency_percent' => 15.00,
+                'taxes_percent' => 6.00,
+                'profit_percent' => 10.00,
+                'materials' => [
+                    ['quantity' => max(1, round(18 * $scale)), 'unit' => 'lghts', 'description' => $projectName . ' - 16mmx6m Corr. Steel bar', 'unit_price' => 430.00],
+                    ['quantity' => max(1, round(31 * $scale)), 'unit' => 'lghts', 'description' => $projectName . ' - 10mmx6m Corr. Steel Bars', 'unit_price' => 168.00],
+                    ['quantity' => max(1, round(11 * $scale)), 'unit' => 'lghts', 'description' => $projectName . ' - 9mmx6m Corr. Steel Bars', 'unit_price' => 120.00],
+                    ['quantity' => max(1, round(6 * $scale)), 'unit' => 'kls', 'description' => '#18 G.I Tie Wire', 'unit_price' => 70.00],
+                    ['quantity' => max(1, round(60 * $scale)), 'unit' => 'pcs', 'description' => '2x2x10 Coco Lumber', 'unit_price' => 100.00],
+                    ['quantity' => max(1, round(5 * $scale)), 'unit' => 'kls', 'description' => 'Assorted sizes Nails', 'unit_price' => 70.00],
+                    ['quantity' => round(2.61 * $scale, 2), 'unit' => 'cu.m', 'description' => 'Premix Concrete (3/4in Aggregate 3000 psi)', 'unit_price' => 4500.00],
+                    ['quantity' => 1, 'unit' => 'Lump Sum', 'description' => $projectName . ' Consumables', 'unit_price' => round(1500.00 * $scale, 2)],
+                ],
+                'labors' => [
+                    ['quantity' => round(23.90 * $scale, 2), 'unit' => 'cu.m', 'description' => 'Foundation Excavation & Earthworks', 'unit_price' => 420.00],
+                    ['quantity' => round(320.00 * $scale, 2), 'unit' => 'kgs', 'description' => 'Footing Rebar Installation & Bending', 'unit_price' => 10.00],
+                    ['quantity' => 1, 'unit' => 'Lump Sum', 'description' => 'Staking, Batterboards & Layout', 'unit_price' => round(2000.00 * $scale, 2)],
+                    ['quantity' => round(2.61 * $scale, 2), 'unit' => 'cu.m', 'description' => 'Foundation Concrete Pouring & Tamping', 'unit_price' => 1800.00],
+                ],
+                'equipments' => [
+                    ['quantity' => 1, 'unit' => 'Lump Sum', 'description' => 'Concrete Vibrator & Compactor Rental', 'unit_price' => round(3500.00 * $scale, 2)],
+                ],
+            ],
+            [
+                'item_number' => 2,
+                'item_name' => 'COLUMNS',
+                'volume_or_area' => 'Volume: ' . round(3.46 * $scale, 2) . ' cu.m',
+                'notes' => $projectName . ' - Reinforced concrete columns, ties, formworks and pouring.',
+                'contingency_percent' => 15.00,
+                'taxes_percent' => 6.00,
+                'profit_percent' => 10.00,
+                'materials' => [
+                    ['quantity' => max(1, round(16 * $scale)), 'unit' => 'lghts', 'description' => $projectName . ' - 16mmx6m Corr. Steel bar', 'unit_price' => 430.00],
+                    ['quantity' => max(1, round(20 * $scale)), 'unit' => 'lghts', 'description' => $projectName . ' - 12mmx6m Corr. Steel bar', 'unit_price' => 240.00],
+                    ['quantity' => max(1, round(14 * $scale)), 'unit' => 'lghts', 'description' => $projectName . ' - 10mmx6m Corr. Steel Bars', 'unit_price' => 168.00],
+                    ['quantity' => max(1, round(100 * $scale)), 'unit' => 'lghts', 'description' => $projectName . ' - 9mmx6m Corr. Steel Bars', 'unit_price' => 120.00],
+                    ['quantity' => max(1, round(15 * $scale)), 'unit' => 'kls', 'description' => '#18 G.I Tie Wire', 'unit_price' => 70.00],
+                    ['quantity' => round(3.5 * $scale, 2), 'unit' => 'cu.m', 'description' => 'Premix Concrete (3000 psi)', 'unit_price' => 4500.00],
+                    ['quantity' => max(1, round(6 * $scale)), 'unit' => 'sheets', 'description' => 'Phenolic board 3/8x4x8', 'unit_price' => 1300.00],
+                    ['quantity' => max(1, round(100 * $scale)), 'unit' => 'pcs', 'description' => '2x2x10 Coco Lumber', 'unit_price' => 100.00],
+                    ['quantity' => max(1, round(12 * $scale)), 'unit' => 'kls', 'description' => 'Assorted sizes Nails', 'unit_price' => 70.00],
+                ],
+                'labors' => [
+                    ['quantity' => round(44.30 * $scale, 2), 'unit' => 'sq.m', 'description' => 'Column Formworks Fabrication & Stripping', 'unit_price' => 350.00],
+                    ['quantity' => round(607.00 * $scale, 2), 'unit' => 'kgs', 'description' => 'Column Rebar Assembly & Ties', 'unit_price' => 10.00],
+                    ['quantity' => round(3.46 * $scale, 2), 'unit' => 'cu.m', 'description' => 'Column Concrete Pouring & Scaffolding', 'unit_price' => 1800.00],
+                ],
+                'equipments' => [
+                    ['quantity' => 1, 'unit' => 'Lump Sum', 'description' => 'Column Scaffoldings & Support Equipment', 'unit_price' => round(6148.00 * $scale, 2)],
+                ],
+            ],
+            [
+                'item_number' => 3,
+                'item_name' => 'BEAMS',
+                'volume_or_area' => 'Volume: ' . round(2.07 * $scale, 2) . ' cu.m',
+                'notes' => $projectName . ' - Roof beams, tie beams framing, formworks and concrete.',
+                'contingency_percent' => 15.00,
+                'taxes_percent' => 6.00,
+                'profit_percent' => 10.00,
+                'materials' => [
+                    ['quantity' => max(1, round(43 * $scale)), 'unit' => 'lghts', 'description' => $projectName . ' - 10mmx6m Corr. Steel Bars', 'unit_price' => 168.00],
+                    ['quantity' => max(1, round(50 * $scale)), 'unit' => 'lghts', 'description' => $projectName . ' - 9mmx6m Corr. Steel Bars', 'unit_price' => 120.00],
+                    ['quantity' => max(1, round(9 * $scale)), 'unit' => 'kls', 'description' => '#18 G.I Tie Wire', 'unit_price' => 70.00],
+                    ['quantity' => round(2.07 * $scale, 2), 'unit' => 'cu.m', 'description' => 'Premix Concrete (3000 psi)', 'unit_price' => 4500.00],
+                    ['quantity' => max(1, round(5 * $scale)), 'unit' => 'sheets', 'description' => 'Phenolic board 3/8x4x8', 'unit_price' => 1300.00],
+                    ['quantity' => max(1, round(60 * $scale)), 'unit' => 'pcs', 'description' => '2x2x10 Coco Lumber', 'unit_price' => 100.00],
+                    ['quantity' => max(1, round(8 * $scale)), 'unit' => 'kls', 'description' => 'Assorted sizes Nails', 'unit_price' => 70.00],
+                    ['quantity' => 1, 'unit' => 'Lump Sum', 'description' => 'Beam Shoring Consumables', 'unit_price' => round(1500.00 * $scale, 2)],
+                ],
+                'labors' => [
+                    ['quantity' => round(31.67 * $scale, 2), 'unit' => 'sq.m', 'description' => 'Beam Formworks & Shoring', 'unit_price' => 350.00],
+                    ['quantity' => round(336.28 * $scale, 2), 'unit' => 'kgs', 'description' => 'Beam Rebar Assembly & Stirrups', 'unit_price' => 10.00],
+                    ['quantity' => round(2.07 * $scale, 2), 'unit' => 'cu.m', 'description' => 'Beam Concrete Pouring', 'unit_price' => 1800.00],
+                ],
+                'equipments' => [
+                    ['quantity' => 1, 'unit' => 'Lump Sum', 'description' => 'Beam Equipment Expense', 'unit_price' => round(3773.00 * $scale, 2)],
+                ],
+            ],
+            [
+                'item_number' => 4,
+                'item_name' => 'SLAB ON FILL',
+                'volume_or_area' => 'Volume: ' . round(3.90 * $scale, 2) . ' cu.m (' . $floorArea . ' sq.m footprint)',
+                'notes' => $projectName . ' - Earth fill, gravel bedding, rebar mesh, and slab topping.',
+                'contingency_percent' => 15.00,
+                'taxes_percent' => 6.00,
+                'profit_percent' => 10.00,
+                'materials' => [
+                    ['quantity' => max(1, round(25 * $scale)), 'unit' => 'cu.m', 'description' => 'Base Coarse / Backfill Bedding', 'unit_price' => 700.00],
+                    ['quantity' => round(3.9 * $scale, 2), 'unit' => 'cu.m', 'description' => 'Premix Concrete (3000 psi)', 'unit_price' => 4500.00],
+                    ['quantity' => max(1, round(32 * $scale)), 'unit' => 'lghts', 'description' => $projectName . ' - 9mmx6m Corr. Steel Bars', 'unit_price' => 120.00],
+                    ['quantity' => max(1, round(5 * $scale)), 'unit' => 'kls', 'description' => '#18 G.I Tie Wire', 'unit_price' => 70.00],
+                ],
+                'labors' => [
+                    ['quantity' => round(25.00 * $scale, 2), 'unit' => 'cu.m', 'description' => 'Backfilling, Leveling & Compaction', 'unit_price' => 350.00],
+                    ['quantity' => round(98.00 * $scale, 2), 'unit' => 'kgs', 'description' => 'Slab Rebar Mesh Laying', 'unit_price' => 10.00],
+                    ['quantity' => round(3.9 * $scale, 2), 'unit' => 'cu.m', 'description' => 'Slab Pouring, Screeding & Trowel Finish', 'unit_price' => 1800.00],
+                ],
+                'equipments' => [
+                    ['quantity' => 1, 'unit' => 'Lump Sum', 'description' => 'Plate Compactor & Power Trowel Rental', 'unit_price' => round(3924.00 * $scale, 2)],
+                ],
+            ],
+            [
+                'item_number' => 5,
+                'item_name' => 'CHB WALLS',
+                'volume_or_area' => 'Total Area: ' . round(196.40 * $scale, 1) . ' sq.m',
+                'notes' => $projectName . ' - 4" Concrete Hollow Blocks for exterior and interior masonry partitions.',
+                'contingency_percent' => 15.00,
+                'taxes_percent' => 6.00,
+                'profit_percent' => 10.00,
+                'materials' => [
+                    ['quantity' => max(1, round(2500 * $scale)), 'unit' => 'pcs', 'description' => '4" Concrete Hollow Blocks (CHB)', 'unit_price' => 15.00],
+                    ['quantity' => max(1, round(120 * $scale)), 'unit' => 'lghts', 'description' => '10mmx6m Corr. Steel Bars', 'unit_price' => 168.00],
+                    ['quantity' => max(1, round(10 * $scale)), 'unit' => 'kls', 'description' => '#18 G.I Tie Wire', 'unit_price' => 70.00],
+                    ['quantity' => max(1, round(150 * $scale)), 'unit' => 'bags', 'description' => 'Portland Cement (Type 1)', 'unit_price' => 240.00],
+                    ['quantity' => max(1, round(15 * $scale)), 'unit' => 'cu.m', 'description' => 'Fine Washed Sand', 'unit_price' => 1000.00],
+                ],
+                'labors' => [
+                    ['quantity' => round(196.40 * $scale, 2), 'unit' => 'sq.m', 'description' => 'CHB Laying, Mortar Filling & Jointing', 'unit_price' => 220.00],
+                    ['quantity' => round(376.80 * $scale, 2), 'unit' => 'kgs', 'description' => 'Wall Horizontal & Vertical Reinforcements', 'unit_price' => 10.00],
+                ],
+                'equipments' => [
+                    ['quantity' => 1, 'unit' => 'Lump Sum', 'description' => 'Masonry Scaffolding & Tools', 'unit_price' => round(9387.00 * $scale, 2)],
+                ],
+            ],
+            [
+                'item_number' => 6,
+                'item_name' => 'ROOF TRUSSES',
+                'volume_or_area' => 'Roof Span: ' . round(110.0 * $scale, 1) . ' sq.m coverage',
+                'notes' => $projectName . ' - Structural steel roof framing, angle bars, and C-purlins.',
+                'contingency_percent' => 15.00,
+                'taxes_percent' => 6.00,
+                'profit_percent' => 10.00,
+                'materials' => [
+                    ['quantity' => max(1, round(45 * $scale)), 'unit' => 'lghts', 'description' => '2"x2"x1/4" Angle Bar', 'unit_price' => 950.00],
+                    ['quantity' => max(1, round(35 * $scale)), 'unit' => 'lghts', 'description' => '1 1/2"x1 1/2"x3/16" Angle Bar', 'unit_price' => 680.00],
+                    ['quantity' => max(1, round(65 * $scale)), 'unit' => 'lghts', 'description' => '2"x4"x1.5mm C-Purlins', 'unit_price' => 520.00],
+                    ['quantity' => max(1, round(25 * $scale)), 'unit' => 'boxes', 'description' => 'Welding Rod E6013', 'unit_price' => 380.00],
+                    ['quantity' => max(1, round(6 * $scale)), 'unit' => 'gal', 'description' => 'Red Oxide / Epoxy Primer', 'unit_price' => 850.00],
+                ],
+                'labors' => [
+                    ['quantity' => 1, 'unit' => 'Lump Sum', 'description' => 'Steel Truss Fabrication & Erection Labor', 'unit_price' => round(42000.00 * $scale, 2)],
+                ],
+                'equipments' => [
+                    ['quantity' => 1, 'unit' => 'Lump Sum', 'description' => 'Inverter Welding Machine & Cutting Rig', 'unit_price' => round(8500.00 * $scale, 2)],
+                ],
+            ],
+            [
+                'item_number' => 7,
+                'item_name' => 'ROOFING & FLASHING',
+                'volume_or_area' => 'Area: ' . round(120.0 * $scale, 1) . ' sq.m',
+                'notes' => $projectName . ' - 0.40mm Prepainted Longspan Rib-Type roofing, ridge rolls, and gutter.',
+                'contingency_percent' => 15.00,
+                'taxes_percent' => 6.00,
+                'profit_percent' => 10.00,
+                'materials' => [
+                    ['quantity' => max(1, round(120 * $scale)), 'unit' => 'ln.m', 'description' => '0.40mm Longspan Rib-Type Roof Sheets', 'unit_price' => 450.00],
+                    ['quantity' => max(1, round(18 * $scale)), 'unit' => 'pcs', 'description' => '0.40mm Prepainted Ridge Roll', 'unit_price' => 380.00],
+                    ['quantity' => max(1, round(14 * $scale)), 'unit' => 'pcs', 'description' => '0.40mm Prepainted Valley & End Flashing', 'unit_price' => 380.00],
+                    ['quantity' => max(1, round(800 * $scale)), 'unit' => 'pcs', 'description' => '2 1/2" Tekscrew for Metal', 'unit_price' => 2.50],
+                    ['quantity' => max(1, round(6 * $scale)), 'unit' => 'tubes', 'description' => 'Elastomeric Sealant / Vulca Seal', 'unit_price' => 280.00],
+                ],
+                'labors' => [
+                    ['quantity' => round(120.0 * $scale, 2), 'unit' => 'sq.m', 'description' => 'Roofing Installation & Flashing Sealing Labor', 'unit_price' => 180.00],
+                ],
+                'equipments' => [
+                    ['quantity' => 1, 'unit' => 'Lump Sum', 'description' => 'Fall Protection & Roofing Equipment', 'unit_price' => round(4200.00 * $scale, 2)],
+                ],
+            ],
+            [
+                'item_number' => 8,
+                'item_name' => 'CEILING SYSTEM',
+                'volume_or_area' => 'Area: ' . round(85.0 * $scale, 1) . ' sq.m',
+                'notes' => $projectName . ' - 4.5mm Hardiflex fiber cement board on metal furring ceiling joists.',
+                'contingency_percent' => 15.00,
+                'taxes_percent' => 6.00,
+                'profit_percent' => 10.00,
+                'materials' => [
+                    ['quantity' => max(1, round(32 * $scale)), 'unit' => 'sheets', 'description' => '4.5mm x 4ft x 8ft Hardiflex Fiber Cement Board', 'unit_price' => 480.00],
+                    ['quantity' => max(1, round(110 * $scale)), 'unit' => 'pcs', 'description' => '0.50mm x 19mm x 50mm Metal Furring', 'unit_price' => 150.00],
+                    ['quantity' => max(1, round(22 * $scale)), 'unit' => 'pcs', 'description' => '0.60mm x 12mm x 38mm Carrying Channel', 'unit_price' => 180.00],
+                    ['quantity' => max(1, round(24 * $scale)), 'unit' => 'pcs', 'description' => 'Wall Angle 25mm x 25mm', 'unit_price' => 85.00],
+                    ['quantity' => max(1, round(1500 * $scale)), 'unit' => 'pcs', 'description' => 'Blind Rivets & Drywall Screws', 'unit_price' => 1.50],
+                ],
+                'labors' => [
+                    ['quantity' => round(85.0 * $scale, 2), 'unit' => 'sq.m', 'description' => 'Ceiling Framing & Board Installation Labor', 'unit_price' => 240.00],
+                ],
+                'equipments' => [
+                    ['quantity' => 1, 'unit' => 'Lump Sum', 'description' => 'Ceiling Scaffoldings & Power Tools', 'unit_price' => round(4800.00 * $scale, 2)],
+                ],
+            ],
+            [
+                'item_number' => 9,
+                'item_name' => 'FLOOR FINISHES',
+                'volume_or_area' => 'Area: ' . round(75.0 * $scale, 1) . ' sq.m',
+                'notes' => $projectName . ' - 60x60cm Polished Granite Tiles and 30x30cm Non-Skid Bath Tiles.',
+                'contingency_percent' => 15.00,
+                'taxes_percent' => 6.00,
+                'profit_percent' => 10.00,
+                'materials' => [
+                    ['quantity' => max(1, round(180 * $scale)), 'unit' => 'pcs', 'description' => '60cm x 60cm Polished Vitrified Floor Tiles', 'unit_price' => 240.00],
+                    ['quantity' => max(1, round(90 * $scale)), 'unit' => 'pcs', 'description' => '30cm x 30cm Non-Skid Bathroom Tiles', 'unit_price' => 45.00],
+                    ['quantity' => max(1, round(28 * $scale)), 'unit' => 'bags', 'description' => 'Heavy-Duty Tile Adhesive (25kg)', 'unit_price' => 280.00],
+                    ['quantity' => max(1, round(12 * $scale)), 'unit' => 'bags', 'description' => 'Tile Grout (2kg)', 'unit_price' => 90.00],
+                ],
+                'labors' => [
+                    ['quantity' => round(75.0 * $scale, 2), 'unit' => 'sq.m', 'description' => 'Tile Setting, Cutting & Grouting Labor', 'unit_price' => 280.00],
+                ],
+                'equipments' => [
+                    ['quantity' => 1, 'unit' => 'Lump Sum', 'description' => 'Tile Cutter & Leveling Spacers', 'unit_price' => round(3800.00 * $scale, 2)],
+                ],
+            ],
+            [
+                'item_number' => 10,
+                'item_name' => 'WALL FINISHES & PLASTERING',
+                'volume_or_area' => 'Area: ' . round(196.0 * $scale, 1) . ' sq.m',
+                'notes' => $projectName . ' - Two-coat cement plastering, grooving and accent stonework.',
+                'contingency_percent' => 15.00,
+                'taxes_percent' => 6.00,
+                'profit_percent' => 10.00,
+                'materials' => [
+                    ['quantity' => max(1, round(85 * $scale)), 'unit' => 'bags', 'description' => 'Portland Cement (Type 1P)', 'unit_price' => 235.00],
+                    ['quantity' => max(1, round(12 * $scale)), 'unit' => 'cu.m', 'description' => 'Fine Sifted Plaster Sand', 'unit_price' => 1050.00],
+                    ['quantity' => max(1, round(10 * $scale)), 'unit' => 'sq.m', 'description' => $projectName . ' Accent Wall Cladding / Grooving', 'unit_price' => 1200.00],
+                ],
+                'labors' => [
+                    ['quantity' => round(196.0 * $scale, 2), 'unit' => 'sq.m', 'description' => 'Interior & Exterior Wall Plastering Labor', 'unit_price' => 170.00],
+                ],
+                'equipments' => [
+                    ['quantity' => 1, 'unit' => 'Lump Sum', 'description' => 'Plastering Platform & Finishing Tools', 'unit_price' => round(3200.00 * $scale, 2)],
+                ],
+            ],
+            [
+                'item_number' => 11,
+                'item_name' => 'DOORS & HARDWARE',
+                'volume_or_area' => 'Doors: ' . max(4, round(6 * $scale)) . ' Total Sets',
+                'notes' => $projectName . ' - Main entrance panel door, flush interior doors, PVC toilet doors.',
+                'contingency_percent' => 15.00,
+                'taxes_percent' => 6.00,
+                'profit_percent' => 10.00,
+                'materials' => [
+                    ['quantity' => 1, 'unit' => 'set', 'description' => $projectName . ' Main Entrance Solid Panel Door (0.90x2.10m) with Jamb', 'unit_price' => 9500.00],
+                    ['quantity' => max(1, round(3 * $scale)), 'unit' => 'sets', 'description' => 'Bedroom Flush Wood Doors (0.80x2.10m) with Jamb', 'unit_price' => 4800.00],
+                    ['quantity' => max(1, round(2 * $scale)), 'unit' => 'sets', 'description' => 'PVC Bathroom Doors with Louvers (0.60x2.10m)', 'unit_price' => 2200.00],
+                    ['quantity' => max(1, round(6 * $scale)), 'unit' => 'sets', 'description' => 'Heavy-Duty Cylindrical Locksets & Hinges', 'unit_price' => 850.00],
+                ],
+                'labors' => [
+                    ['quantity' => max(4, round(6 * $scale)), 'unit' => 'sets', 'description' => 'Door Jamb Alignment & Hanging Labor', 'unit_price' => 1200.00],
+                ],
+                'equipments' => [
+                    ['quantity' => 1, 'unit' => 'Lump Sum', 'description' => 'Carpentry Installation Tools', 'unit_price' => round(2500.00 * $scale, 2)],
+                ],
+            ],
+            [
+                'item_number' => 12,
+                'item_name' => 'WINDOWS & GLAZING',
+                'volume_or_area' => 'Windows: ' . max(5, round(8 * $scale)) . ' Units',
+                'notes' => $projectName . ' - Powder-coated aluminum frame sliding and awning glass windows.',
+                'contingency_percent' => 15.00,
+                'taxes_percent' => 6.00,
+                'profit_percent' => 10.00,
+                'materials' => [
+                    ['quantity' => max(1, round(2 * $scale)), 'unit' => 'sets', 'description' => '1.20m x 1.50m Sliding Glass Window (Aluminum Frame)', 'unit_price' => 6800.00],
+                    ['quantity' => max(1, round(4 * $scale)), 'unit' => 'sets', 'description' => '1.20m x 1.20m Sliding Glass Window (Aluminum Frame)', 'unit_price' => 5400.00],
+                    ['quantity' => max(1, round(2 * $scale)), 'unit' => 'sets', 'description' => '0.60m x 0.60m Awning Bath Window (Aluminum Frame)', 'unit_price' => 2400.00],
+                ],
+                'labors' => [
+                    ['quantity' => max(5, round(8 * $scale)), 'unit' => 'sets', 'description' => 'Window Installation & Silicone Caulking Labor', 'unit_price' => 950.00],
+                ],
+                'equipments' => [
+                    ['quantity' => 1, 'unit' => 'Lump Sum', 'description' => 'Glazing Alignment Equipment', 'unit_price' => round(2000.00 * $scale, 2)],
+                ],
+            ],
+            [
+                'item_number' => 13,
+                'item_name' => 'KITCHEN COUNTER',
+                'volume_or_area' => 'Counter: ' . round(2.4 * $scale, 1) . ' ln.m',
+                'notes' => $projectName . ' - Reinforced concrete slab with polished granite counter, stainless sink and base cabinets.',
+                'contingency_percent' => 15.00,
+                'taxes_percent' => 6.00,
+                'profit_percent' => 10.00,
+                'materials' => [
+                    ['quantity' => 1, 'unit' => 'lot', 'description' => $projectName . ' Natural Granite Countertop Slab', 'unit_price' => round(12500.00 * $scale, 2)],
+                    ['quantity' => 1, 'unit' => 'set', 'description' => 'Single Bowl Stainless Steel Kitchen Sink with Gooseneck Faucet', 'unit_price' => 3800.00],
+                    ['quantity' => 1, 'unit' => 'lot', 'description' => 'Marine Plywood Under-Counter Cabinets with Concealed Hinges', 'unit_price' => round(11000.00 * $scale, 2)],
+                ],
+                'labors' => [
+                    ['quantity' => 1, 'unit' => 'Lump Sum', 'description' => 'Kitchen Counter Masonry & Cabinetry Labor', 'unit_price' => round(9500.00 * $scale, 2)],
+                ],
+                'equipments' => [
+                    ['quantity' => 1, 'unit' => 'Lump Sum', 'description' => 'Granite Cutting & Polishing Equipment', 'unit_price' => round(2200.00 * $scale, 2)],
+                ],
+            ],
+            [
+                'item_number' => 14,
+                'item_name' => 'PLUMBING & SANITARY SYSTEM',
+                'volume_or_area' => 'Complete Rough-in & Fixtures',
+                'notes' => $projectName . ' - PVC sanitary/drain lines, PPR waterline distribution, water closet, and bathroom fixtures.',
+                'contingency_percent' => 15.00,
+                'taxes_percent' => 6.00,
+                'profit_percent' => 10.00,
+                'materials' => [
+                    ['quantity' => max(1, round(12 * $scale)), 'unit' => 'pcs', 'description' => '4" x 10ft PVC Sanitary Pipe (Series 1000)', 'unit_price' => 450.00],
+                    ['quantity' => max(1, round(10 * $scale)), 'unit' => 'pcs', 'description' => '2" x 10ft PVC Sanitary Pipe', 'unit_price' => 240.00],
+                    ['quantity' => max(1, round(14 * $scale)), 'unit' => 'pcs', 'description' => '1/2" PPR Hot/Cold Waterline Pipes', 'unit_price' => 220.00],
+                    ['quantity' => max(1, round(2 * $scale)), 'unit' => 'sets', 'description' => 'Dual-Flush Water Closet with Tank & Fittings', 'unit_price' => 6800.00],
+                    ['quantity' => max(1, round(2 * $scale)), 'unit' => 'sets', 'description' => 'Wall-Hung Ceramic Lavatory with Chrome Faucet', 'unit_price' => 3200.00],
+                    ['quantity' => max(1, round(2 * $scale)), 'unit' => 'sets', 'description' => 'Stainless Shower Set with Valve', 'unit_price' => 1850.00],
+                ],
+                'labors' => [
+                    ['quantity' => 1, 'unit' => 'Lump Sum', 'description' => 'Plumbing Rough-in & Fixture Installation Labor', 'unit_price' => round(24000.00 * $scale, 2)],
+                ],
+                'equipments' => [
+                    ['quantity' => 1, 'unit' => 'Lump Sum', 'description' => 'PPR Fusion Machine & Hydrotesting Pump', 'unit_price' => round(3800.00 * $scale, 2)],
+                ],
+            ],
+            [
+                'item_number' => 15,
+                'item_name' => 'ELECTRICAL SYSTEM',
+                'volume_or_area' => 'Complete Rough-in, Panel & Fixtures',
+                'notes' => $projectName . ' - PVC conduits, THHN copper wires, 8-branch panelboard, LED fixtures, and convenience outlets.',
+                'contingency_percent' => 15.00,
+                'taxes_percent' => 6.00,
+                'profit_percent' => 10.00,
+                'materials' => [
+                    ['quantity' => max(1, round(40 * $scale)), 'unit' => 'pcs', 'description' => '1/2" x 10ft Electrical PVC Conduit Pipes', 'unit_price' => 110.00],
+                    ['quantity' => max(1, round(4 * $scale)), 'unit' => 'boxes', 'description' => '3.5mm² (AWG #12) THHN Stranded Copper Wire (150m)', 'unit_price' => 4600.00],
+                    ['quantity' => max(1, round(3 * $scale)), 'unit' => 'boxes', 'description' => '2.0mm² (AWG #14) THHN Stranded Copper Wire (150m)', 'unit_price' => 3200.00],
+                    ['quantity' => 1, 'unit' => 'set', 'description' => $projectName . ' 8-Branch Main Breaker Panelboard (Plug-in)', 'unit_price' => 4500.00],
+                    ['quantity' => max(1, round(22 * $scale)), 'unit' => 'sets', 'description' => '9W LED Recessed Downlights & Switches/Outlets', 'unit_price' => 420.00],
+                ],
+                'labors' => [
+                    ['quantity' => 1, 'unit' => 'Lump Sum', 'description' => 'Electrical Roughing-in, Wiring & Testing Labor', 'unit_price' => round(28000.00 * $scale, 2)],
+                ],
+                'equipments' => [
+                    ['quantity' => 1, 'unit' => 'Lump Sum', 'description' => 'Multi-Tester, Insulation Megger & Pulling Gear', 'unit_price' => round(3500.00 * $scale, 2)],
+                ],
+            ],
+            [
+                'item_number' => 16,
+                'item_name' => 'PAINTING WORKS',
+                'volume_or_area' => 'Total Area: ' . round(320.0 * $scale, 1) . ' sq.m',
+                'notes' => $projectName . ' - Concrete primer sealer, skimcoat putty, 2-coat acrylic latex topcoats.',
+                'contingency_percent' => 15.00,
+                'taxes_percent' => 6.00,
+                'profit_percent' => 10.00,
+                'materials' => [
+                    ['quantity' => max(1, round(6 * $scale)), 'unit' => 'pails', 'description' => 'Acrylic Concrete Primer Sealer (16L)', 'unit_price' => 2600.00],
+                    ['quantity' => max(1, round(8 * $scale)), 'unit' => 'pails', 'description' => 'Semi-Gloss Latex Topcoat Paint (16L)', 'unit_price' => 3100.00],
+                    ['quantity' => max(1, round(12 * $scale)), 'unit' => 'bags', 'description' => 'Skimcoat Masonry Finishing Powder (20kg)', 'unit_price' => 480.00],
+                    ['quantity' => max(1, round(14 * $scale)), 'unit' => 'pcs', 'description' => 'Paint Rollers, Brushes & Sanding Paper', 'unit_price' => 120.00],
+                ],
+                'labors' => [
+                    ['quantity' => round(320.0 * $scale, 2), 'unit' => 'sq.m', 'description' => 'Surface Preparation, Sanding & 3-Coat Paint Application', 'unit_price' => 110.00],
+                ],
+                'equipments' => [
+                    ['quantity' => 1, 'unit' => 'Lump Sum', 'description' => 'Painters Scaffolding & Drop Cloths', 'unit_price' => round(3200.00 * $scale, 2)],
+                ],
+            ],
+            [
+                'item_number' => 17,
+                'item_name' => 'SEPTIC TANK & DRAINAGE',
+                'volume_or_area' => '1 Complete Sanitary Vault Unit',
+                'notes' => $projectName . ' - 3-Chamber reinforced septic vault with heavy-duty inspection manholes.',
+                'contingency_percent' => 15.00,
+                'taxes_percent' => 6.00,
+                'profit_percent' => 10.00,
+                'materials' => [
+                    ['quantity' => max(1, round(350 * $scale)), 'unit' => 'pcs', 'description' => '5" Heavy-Duty CHB for Septic Vault', 'unit_price' => 18.00],
+                    ['quantity' => max(1, round(24 * $scale)), 'unit' => 'bags', 'description' => 'Waterproofed Cement Mix', 'unit_price' => 260.00],
+                    ['quantity' => max(1, round(18 * $scale)), 'unit' => 'lghts', 'description' => '10mm Deformed Steel Rebar', 'unit_price' => 168.00],
+                    ['quantity' => max(1, round(2 * $scale)), 'unit' => 'sets', 'description' => 'Cast Iron / Concrete Manhole Covers', 'unit_price' => 2200.00],
+                ],
+                'labors' => [
+                    ['quantity' => 1, 'unit' => 'Lump Sum', 'description' => 'Septic Vault Excavation, Masonry & Waterproofing Labor', 'unit_price' => round(16500.00 * $scale, 2)],
+                ],
+                'equipments' => [
+                    ['quantity' => 1, 'unit' => 'Lump Sum', 'description' => 'Submersible De-watering Pump & Excavation Tools', 'unit_price' => round(2800.00 * $scale, 2)],
+                ],
+            ],
+            [
+                'item_number' => 18,
+                'item_name' => 'MISCELLANEOUS & ENGINEERING OVERHEAD',
+                'volume_or_area' => 'Project Duration Provision',
+                'notes' => $projectName . ' - Temporary site facilities, water/power utilities, safety gear, and final turnover cleaning.',
+                'contingency_percent' => 15.00,
+                'taxes_percent' => 6.00,
+                'profit_percent' => 10.00,
+                'materials' => [
+                    ['quantity' => 1, 'unit' => 'lot', 'description' => $projectName . ' Personal Protective Equipment (PPE) & First Aid', 'unit_price' => round(6500.00 * $scale, 2)],
+                    ['quantity' => 1, 'unit' => 'lot', 'description' => 'Temporary Site Bunkhouse, Storage Enclosure & Signage', 'unit_price' => round(12000.00 * $scale, 2)],
+                ],
+                'labors' => [
+                    ['quantity' => 1, 'unit' => 'Lump Sum', 'description' => 'Site Security, Waste Hauling & Final Turnover Deep Cleaning', 'unit_price' => round(14000.00 * $scale, 2)],
+                ],
+                'equipments' => [
+                    ['quantity' => 1, 'unit' => 'Lump Sum', 'description' => 'Safety Harnesses, Barricades & Site Utilities Provision', 'unit_price' => round(4500.00 * $scale, 2)],
+                ],
+            ],
+        ];
+
+        $grandTotal = $this->applyTemplate($project, $template);
+
+        return redirect()->back()->with('success', 'Official Itemized Bill of Materials & DUPA for "' . $projectName . '" (Total ₱' . number_format($grandTotal, 2) . ') generated and matched successfully!');
+    }
+
+    /**
      * Backward compatibility alias for 2BR Bungalow Template.
      */
     public function loadBungalowTemplate($projectId)
     {
-        return $this->load2BrBungalowTemplate($projectId);
+        return $this->loadProjectTemplate($projectId);
     }
 
     /**
