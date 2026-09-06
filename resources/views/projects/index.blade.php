@@ -49,8 +49,8 @@
                                 <img src="{{ $heroPhoto->file_path }}" alt="{{ $prj->title }}" style="width: 100%; height: 100%; object-fit: cover;">
                             </div>
                         @else
-                            <div style="width: 54px; height: 54px; border-radius: var(--radius-sm); background: rgba(239, 68, 68, 0.1); border: 1px dashed var(--border-accent); display: grid; place-items: center; color: #ef4444; font-size: 1.2rem; flex-shrink: 0;">
-                                📐
+                            <div style="width: 54px; height: 54px; border-radius: var(--radius-sm); background: rgba(239, 68, 68, 0.1); border: 1px dashed var(--border-accent); display: grid; place-items: center; color: #ef4444; font-size: 0.8rem; font-weight: bold; flex-shrink: 0;">
+                                CAD
                             </div>
                         @endif
                         <div>
@@ -88,7 +88,7 @@
                 <td>
                     <div style="display: flex; flex-direction: column; gap: 4px;">
                         <span class="spec-chip" style="background: {{ $schedHealth['bg'] }}; color: {{ $schedHealth['color'] }}; border-color: {{ $schedHealth['border'] }}; font-size: 0.7rem;">
-                            {{ $schedHealth['icon'] }} {{ $schedHealth['label'] }}
+                            {{ $schedHealth['label'] }}
                         </span>
                         <div style="font-size: 0.75rem; color: var(--text-secondary); font-family: var(--font-mono);">
                             {{ $prj->remaining_days }}d left &bull; {{ $prj->end_date->format('M d, Y') }}
@@ -142,13 +142,13 @@
                             Master View &rarr;
                         </a>
                         <button type="button" class="btn-secondary" style="font-size: 0.75rem; padding: 4px 8px; text-align: center; color: #38bdf8;" onclick="openEditProjectModal({{ json_encode($prj) }})">
-                            ✏️ Edit
+                            Edit
                         </button>
                         <a href="{{ route('projects.printReport', $prj->id) }}" target="_blank" class="btn-secondary" style="font-size: 0.725rem; padding: 3px 6px; text-align: center; color: #ef4444;">
-                            🖨️ Report
+                            Report
                         </a>
                         <button type="button" class="btn-secondary" style="font-size: 0.725rem; padding: 3px 6px; text-align: center; color: #f87171; width: 100%; border-color: rgba(239,68,68,0.35); cursor: pointer;" onclick="openDeleteProjectModal({{ $prj->id }}, '{{ addslashes($prj->project_code) }}', '{{ addslashes($prj->title) }}')">
-                            🗑️ Delete
+                            Delete
                         </button>
                     </div>
                 </td>
@@ -221,7 +221,7 @@
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
                     <div>
                         <div style="font-weight: 700; font-size: 0.95rem; color: #38bdf8; display: flex; align-items: center; gap: 8px;">
-                            <span>📐</span> Floor Plan Model & Room Configuration (Dropdown Driven)
+                            <span>[PLAN]</span> Floor Plan Model & Room Configuration (Dropdown Driven)
                         </div>
                         <span style="font-size: 0.775rem; color: var(--text-muted);">
                             Select a floor plan preset or customize room counts and dimensions from structured dropdowns.
@@ -289,7 +289,7 @@
             <div style="display: grid; grid-template-columns: 1.2fr 1fr 1fr 1.2fr; gap: 14px; margin-top: 14px;">
                 <div class="form-group" style="background: rgba(56, 189, 248, 0.06); padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid rgba(56, 189, 248, 0.3);">
                     <label class="form-label" style="color: #38bdf8; font-weight: 700; display: flex; align-items: center; justify-content: space-between;">
-                        <span>💼 Client Stated Budget (₱)</span>
+                        <span>Client Stated Budget (₱)</span>
                         <span style="font-size: 0.65rem; color: #94a3b8; font-weight: 400;">Target Cap</span>
                     </label>
                     <input type="number" step="0.01" name="client_budget" id="modalInputClientBudget" class="form-input" placeholder="e.g. 3500000" oninput="recalculateProjectModalCosting()" style="border-color: rgba(56, 189, 248, 0.5); font-weight: 700; color: #38bdf8; font-family: var(--font-mono);">
@@ -307,7 +307,7 @@
 
                 <div class="form-group" style="background: rgba(16, 185, 129, 0.06); padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid rgba(16, 185, 129, 0.3);">
                     <label class="form-label" style="color: #10b981; font-weight: 700; display: flex; align-items: center; justify-content: space-between;">
-                        <span>📋 Contract Budget (₱)</span>
+                        <span>Contract Budget (₱)</span>
                         <span style="font-size: 0.65rem; color: #94a3b8; font-weight: 400;">Monitored Cap</span>
                     </label>
                     <input type="number" step="0.01" name="contract_budget" id="modalInputContractBudget" class="form-input" placeholder="₱ 0.00" style="border-color: rgba(16, 185, 129, 0.5); font-weight: 700; color: #10b981; font-family: var(--font-mono);" required>
@@ -422,7 +422,7 @@
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 12px;">
                     <div>
                         <div style="font-size: 1rem; font-weight: 800; color: #f8fafc; display: flex; align-items: center; gap: 8px;">
-                            <span>📊 Automated Costing & Financial Feasibility Engine</span>
+                            <span>Automated Costing & Financial Feasibility Engine</span>
                         </div>
                         <div style="font-size: 0.775rem; color: var(--text-muted); margin-top: 2px;">
                             Dynamically calculated from Service Rate, Floor Area, Land Preparation, Fit-out, & Room Configuration.
@@ -430,10 +430,10 @@
                     </div>
                     <div style="display: flex; gap: 6px; flex-wrap: wrap;">
                         <span class="spec-chip" style="font-size: 0.7rem; color: #38bdf8; background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.3);">
-                            📐 UNIT COST BENCHMARK
+                            UNIT COST BENCHMARK
                         </span>
                         <span id="modalCostingHealthBadge" class="spec-chip" style="font-size: 0.7rem; color: #10b981; background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.3);">
-                            ✓ SIZING ANALYSIS READY
+                            SIZING ANALYSIS READY
                         </span>
                     </div>
                 </div>
@@ -502,7 +502,7 @@
     <div class="modal-box modal-box-large">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
             <div>
-                <h3 style="font-weight: 700;">✏️ Edit Project Specifications & Adjust Settings</h3>
+                <h3 style="font-weight: 700;">Edit Project Specifications & Adjust Settings</h3>
                 <span style="font-size: 0.8rem; color: var(--text-muted);">Update project details, financial contract, schedule, weights, and workforce</span>
             </div>
             <button onclick="closeModal('editProjectModal')" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer;">&times;</button>
@@ -617,7 +617,7 @@
             <!-- Project Hero Blueprint & 3D Render Image Setup -->
             <div style="margin-top: 14px; padding: 14px; background: rgba(0,0,0,0.25); border-radius: var(--radius-md); border: 1px solid rgba(236, 72, 153, 0.35);">
                 <div style="font-weight: 700; font-size: 0.85rem; color: #ec4899; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
-                    <span>🎨</span> Update Project Hero Image / CAD Blueprint
+                    <span>[CAD]</span> Update Project Hero Image / CAD Blueprint
                 </div>
 
                 <div id="indexEditPhotoPreviewWrap" style="display: flex; gap: 14px; margin-bottom: 12px; padding: 10px; background: rgba(0,0,0,0.4); border-radius: var(--radius-sm); align-items: center;">
@@ -625,7 +625,7 @@
                         <img id="indexEditPhotoPreviewImg" src="" alt="Selected Preview" style="width: 100%; height: 100%; object-fit: cover;">
                     </div>
                     <div style="font-size: 0.75rem; color: #38bdf8;">
-                        🖼️ Current hero thumbnail. Select a new file or type a URL below to change it.
+                        Current hero thumbnail. Select a new file or type a URL below to change it.
                     </div>
                 </div>
 
@@ -741,8 +741,8 @@
     <div class="modal-box" style="max-width: 480px; border: 1px solid rgba(239, 68, 68, 0.4); box-shadow: 0 20px 30px rgba(0,0,0,0.6), 0 0 20px rgba(239, 68, 68, 0.2);">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
             <div style="display: flex; align-items: center; gap: 12px;">
-                <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(239, 68, 68, 0.15); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3);">
-                    🗑️
+                <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(239, 68, 68, 0.15); display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: bold; color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3);">
+                    DEL
                 </div>
                 <div>
                     <h3 style="font-weight: 700; color: #f87171; margin: 0; font-size: 1.15rem;">Delete Project</h3>
@@ -759,7 +759,7 @@
         </div>
 
         <div style="background: rgba(15, 23, 42, 0.6); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 20px; font-size: 0.78rem; color: var(--text-secondary); line-height: 1.5; border: 1px solid var(--border-color);">
-            ⚠️ <strong>Action Details:</strong> This will permanently delete this project, including its 53-item checklist, material allocations, BOM estimates, incurred expense logs, CAD blueprints/photos, and billing payment history.
+            <strong>Action Details:</strong> This will permanently delete this project, including its 53-item checklist, material allocations, BOM estimates, incurred expense logs, CAD blueprints/photos, and billing payment history.
         </div>
 
         <form id="deleteProjectForm" action="" method="POST">
@@ -768,7 +768,7 @@
             <div style="display: flex; justify-content: flex-end; gap: 10px;">
                 <button type="button" class="btn-secondary" onclick="closeModal('deleteProjectModal')">Cancel</button>
                 <button type="submit" class="btn-primary" style="background: linear-gradient(135deg, #ef4444, #dc2626); border-color: #dc2626; color: white; font-weight: 700;">
-                    🗑️ Permanently Delete Project
+                    Permanently Delete Project
                 </button>
             </div>
         </form>
@@ -922,7 +922,7 @@
         master_bedroom: {
             label: "Master Bedroom Suite",
             category: "dry_living",
-            icon: "🛏️",
+            icon: "",
             brackets: {
                 small:     { label: "Compact Suite (16 m² — 4.0m × 4.0m)", sqm: 16.0 },
                 medium:    { label: "Standard Suite (22 m² — 4.5m × 4.9m)", sqm: 22.0 },
@@ -933,7 +933,7 @@
         standard_bedroom: {
             label: "Standard Bedroom",
             category: "dry_living",
-            icon: "🚪",
+            icon: "",
             brackets: {
                 small:  { label: "Compact Bedroom (10 m² — 3.0m × 3.3m)", sqm: 10.0 },
                 medium: { label: "Standard Bedroom (14 m² — 3.5m × 4.0m)", sqm: 14.0 },
@@ -943,7 +943,7 @@
         guest_bedroom: {
             label: "Guest Bedroom",
             category: "dry_living",
-            icon: "🛌",
+            icon: "",
             brackets: {
                 small:  { label: "Compact Guest Room (10 m² — 3.0m × 3.3m)", sqm: 10.0 },
                 medium: { label: "Standard Guest Room (14 m² — 3.5m × 4.0m)", sqm: 14.0 }
@@ -952,7 +952,7 @@
         master_bathroom: {
             label: "Full Master Bathroom (En-Suite)",
             category: "wet_area",
-            icon: "🚿",
+            icon: "",
             brackets: {
                 small:  { label: "Compact Full Bath (5 m² — 2.0m × 2.5m)", sqm: 5.0 },
                 medium: { label: "Standard Master Bath (8 m² — 2.5m × 3.2m)", sqm: 8.0 },
@@ -962,7 +962,7 @@
         powder_room: {
             label: "Common Bathroom / Powder Room",
             category: "wet_area",
-            icon: "🚽",
+            icon: "",
             brackets: {
                 small:  { label: "Compact Powder Room (2.5 m² — 1.5m × 1.7m)", sqm: 2.5 },
                 medium: { label: "Standard Powder Room (4.0 m² — 2.0m × 2.0m)", sqm: 4.0 }
@@ -971,7 +971,7 @@
         kitchen: {
             label: "Kitchen & Pantry",
             category: "culinary",
-            icon: "🍳",
+            icon: "",
             brackets: {
                 small:  { label: "Galley Kitchen (9 m² — 2.5m × 3.6m)", sqm: 9.0 },
                 medium: { label: "Open Concept Kitchen (15 m² — 3.5m × 4.3m)", sqm: 15.0 },
@@ -981,7 +981,7 @@
         living_dining: {
             label: "Living & Dining Great Room",
             category: "dry_living",
-            icon: "🛋️",
+            icon: "",
             brackets: {
                 small:  { label: "Compact Living-Dining (24 m² — 4.0m × 6.0m)", sqm: 24.0 },
                 medium: { label: "Standard Great Room (36 m² — 6.0m × 6.0m)", sqm: 36.0 },
@@ -991,7 +991,7 @@
         home_office: {
             label: "Home Office / Study",
             category: "workspace",
-            icon: "💼",
+            icon: "",
             brackets: {
                 small:  { label: "Work Nook (8 m² — 2.5m × 3.2m)", sqm: 8.0 },
                 medium: { label: "Standard Executive Office (14 m² — 3.5m × 4.0m)", sqm: 14.0 }
@@ -1000,7 +1000,7 @@
         utility_laundry: {
             label: "Laundry & Utility Room",
             category: "wet_area",
-            icon: "🧺",
+            icon: "",
             brackets: {
                 small:  { label: "Utility Closet (4 m² — 2.0m × 2.0m)", sqm: 4.0 },
                 medium: { label: "Full Laundry & Storage (8 m² — 2.5m × 3.2m)", sqm: 8.0 }
@@ -1009,7 +1009,7 @@
         balcony: {
             label: "Balcony / Covered Terrace",
             category: "outdoor",
-            icon: "🌿",
+            icon: "",
             brackets: {
                 small:  { label: "Veranda Balcony (6 m² — 2.0m × 3.0m)", sqm: 6.0 },
                 medium: { label: "Spacious Terrace (12 m² — 3.0m × 4.0m)", sqm: 12.0 }
@@ -1344,7 +1344,7 @@
             if (variance >= 0) {
                 if (marginPct >= 10) {
                     if (healthBadge) {
-                        healthBadge.innerText = '✅ EXCELLENT BUDGET MARGIN';
+                        healthBadge.innerText = 'EXCELLENT BUDGET MARGIN';
                         healthBadge.style.color = '#10b981';
                         healthBadge.style.background = 'rgba(16, 185, 129, 0.15)';
                         healthBadge.style.borderColor = 'rgba(16, 185, 129, 0.3)';
@@ -1352,7 +1352,7 @@
                     if (compNote) compNote.innerText = 'Client budget has comfortable margin over engineering estimate.';
                 } else {
                     if (healthBadge) {
-                        healthBadge.innerText = '⚖️ TIGHT BUDGET BUFFER';
+                        healthBadge.innerText = 'TIGHT BUDGET BUFFER';
                         healthBadge.style.color = '#f59e0b';
                         healthBadge.style.background = 'rgba(245, 158, 11, 0.15)';
                         healthBadge.style.borderColor = 'rgba(245, 158, 11, 0.3)';
@@ -1361,7 +1361,7 @@
                 }
             } else {
                 if (healthBadge) {
-                    healthBadge.innerText = '🚨 BUDGET DEFICIT / DEFICIENT';
+                    healthBadge.innerText = 'BUDGET DEFICIT / DEFICIENT';
                     healthBadge.style.color = '#ef4444';
                     healthBadge.style.background = 'rgba(239, 68, 68, 0.15)';
                     healthBadge.style.borderColor = 'rgba(239, 68, 68, 0.3)';
@@ -1375,7 +1375,7 @@
             }
             if (compNote) compNote.innerText = 'Enter client stated budget to calculate live margin & feasibility.';
             if (healthBadge) {
-                healthBadge.innerText = '✓ ESTIMATE COMPUTED';
+                healthBadge.innerText = 'ESTIMATE COMPUTED';
                 healthBadge.style.color = '#38bdf8';
                 healthBadge.style.background = 'rgba(56, 189, 248, 0.15)';
                 healthBadge.style.borderColor = 'rgba(56, 189, 248, 0.3)';

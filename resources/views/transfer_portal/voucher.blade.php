@@ -211,7 +211,6 @@
 
     <div class="no-print-toolbar">
         <button onclick="window.print()" style="background: #0f172a; color: #ffffff; border: none; padding: 10px 18px; border-radius: 6px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-            <span>🖨️</span>
             <span>Print Official Slip</span>
         </button>
         <button onclick="window.close()" style="background: #e2e8f0; color: #0f172a; border: 1px solid #cbd5e1; padding: 10px 16px; border-radius: 6px; font-weight: 600; cursor: pointer;">
@@ -253,11 +252,11 @@
                 <span class="meta-label">Transfer Type</span>
                 <span class="meta-val">
                     @if($transfer->transfer_type === 'warehouse_dispatch')
-                        📦 Warehouse Dispatch to Project Site
+                        Warehouse Dispatch to Project Site
                     @elseif($transfer->transfer_type === 'inter_project')
-                        🔄 Inter-Project Surplus Relocation
+                        Inter-Project Surplus Relocation
                     @else
-                        ↩ Site Excess Return to Central Stock
+                        Site Excess Return to Central Stock
                     @endif
                 </span>
             </div>

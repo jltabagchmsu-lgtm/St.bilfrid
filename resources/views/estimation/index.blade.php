@@ -15,10 +15,10 @@
         <div style="flex: 1; min-width: 320px;">
             <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
                 <span class="spec-chip" style="color: #38bdf8; background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.3);">
-                    📐 UNIT COST ESTIMATION
+                    UNIT COST ESTIMATION
                 </span>
                 <span class="spec-chip" style="color: #10b981; background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.3);">
-                    ✓ ACCURATE CONTRACT BUDGETS
+                    ACCURATE CONTRACT BUDGETS
                 </span>
             </div>
             <h4 style="font-size: 1.15rem; font-weight: 800; color: #f8fafc; margin-bottom: 6px;">
@@ -101,11 +101,11 @@
                                 <form action="{{ route('estimation.initialize', $req->id) }}" method="POST">
                                     @csrf
                                     <button type="submit" class="btn-primary" style="font-size: 0.75rem; padding: 5px 10px; white-space: nowrap; background: #38bdf8; border-color: #38bdf8;">
-                                        ⚡ Initialize to Tracker
+                                        Initialize to Tracker
                                     </button>
                                 </form>
                             @else
-                                <span style="font-size: 0.8rem; color: #10b981; font-weight: 700; white-space: nowrap;">✓ In Active Tracker</span>
+                                <span style="font-size: 0.8rem; color: #10b981; font-weight: 700; white-space: nowrap;">In Active Tracker</span>
                             @endif
 
                             <form action="{{ route('estimation.destroy', $req->id) }}" method="POST" onsubmit="return confirm('Delete this estimation record?')">

@@ -872,7 +872,7 @@ class Project extends Model
                 'color' => '#10b981',
                 'bg' => 'rgba(16, 185, 129, 0.15)',
                 'border' => 'rgba(16, 185, 129, 0.3)',
-                'icon' => '✓',
+                'icon' => '',
             ];
         }
 
@@ -884,7 +884,7 @@ class Project extends Model
                 'color' => '#ef4444',
                 'bg' => 'rgba(239, 68, 68, 0.15)',
                 'border' => 'rgba(239, 68, 68, 0.3)',
-                'icon' => '⚠️',
+                'icon' => '',
             ];
         }
 
@@ -899,7 +899,7 @@ class Project extends Model
                 'color' => '#10b981',
                 'bg' => 'rgba(16, 185, 129, 0.15)',
                 'border' => 'rgba(16, 185, 129, 0.3)',
-                'icon' => '🚀',
+                'icon' => '',
             ];
         } elseif ($variance >= -10) {
             return [
@@ -908,7 +908,7 @@ class Project extends Model
                 'color' => '#38bdf8',
                 'bg' => 'rgba(56, 189, 248, 0.15)',
                 'border' => 'rgba(56, 189, 248, 0.3)',
-                'icon' => '⚡',
+                'icon' => '',
             ];
         } else {
             return [
@@ -917,7 +917,7 @@ class Project extends Model
                 'color' => '#f59e0b',
                 'bg' => 'rgba(245, 158, 11, 0.15)',
                 'border' => 'rgba(245, 158, 11, 0.3)',
-                'icon' => '⏳',
+                'icon' => '',
             ];
         }
     }
@@ -944,7 +944,7 @@ class Project extends Model
                 'title' => 'General Construction Workers',
                 'role' => 'Laborers & General Hands',
                 'count' => (int) $this->deployed_workers,
-                'icon' => '👷',
+                'icon' => '',
                 'color' => '#38bdf8',
                 'percent' => round(($this->deployed_workers / $total) * 100, 1),
             ],
@@ -952,7 +952,7 @@ class Project extends Model
                 'title' => 'Skilled Tradesmen',
                 'role' => 'Masons, Carpenters & Welders',
                 'count' => (int) $this->deployed_skilled_workers,
-                'icon' => '🔨',
+                'icon' => '',
                 'color' => '#818cf8',
                 'percent' => round(($this->deployed_skilled_workers / $total) * 100, 1),
             ],
@@ -960,7 +960,7 @@ class Project extends Model
                 'title' => 'Field & Trade Engineers',
                 'role' => 'Site, Structural, Electrical & Piping',
                 'count' => (int) $this->deployed_engineers,
-                'icon' => '📐',
+                'icon' => '',
                 'color' => '#f59e0b',
                 'percent' => round(($this->deployed_engineers / $total) * 100, 1),
             ],
@@ -968,7 +968,7 @@ class Project extends Model
                 'title' => 'Architects & Design Leads',
                 'role' => 'Architectural & Spatial Planning',
                 'count' => (int) $this->deployed_architects,
-                'icon' => '🏛️',
+                'icon' => '',
                 'color' => '#ec4899',
                 'percent' => round(($this->deployed_architects / $total) * 100, 1),
             ],
@@ -976,7 +976,7 @@ class Project extends Model
                 'title' => 'Heavy Equipment Operators',
                 'role' => 'Tower Crane, Rig & Excavator',
                 'count' => (int) $this->deployed_operators,
-                'icon' => '🚜',
+                'icon' => '',
                 'color' => '#ef4444',
                 'percent' => round(($this->deployed_operators / $total) * 100, 1),
             ],
@@ -984,7 +984,7 @@ class Project extends Model
                 'title' => 'Site Foremen & Supervisors',
                 'role' => 'Crew Directives & Quality Inspection',
                 'count' => (int) $this->deployed_foremen,
-                'icon' => '📋',
+                'icon' => '',
                 'color' => '#10b981',
                 'percent' => round(($this->deployed_foremen / $total) * 100, 1),
             ],
@@ -992,7 +992,7 @@ class Project extends Model
                 'title' => 'Safety & QA/QC Officers',
                 'role' => 'Site Compliance & Hazard Control',
                 'count' => (int) $this->deployed_safety_officers,
-                'icon' => '🛡️',
+                'icon' => '',
                 'color' => '#14b8a6',
                 'percent' => round(($this->deployed_safety_officers / $total) * 100, 1),
             ],
@@ -1092,19 +1092,19 @@ class Project extends Model
     public function getCategoryCostSummaryAttribute(): array
     {
         $categories = [
-            'Materials & Consumables' => ['color' => '#38bdf8', 'icon' => '🧱', 'actual' => 0, 'estimated' => 0, 'count' => 0],
-            'Labor & Engineering' => ['color' => '#f59e0b', 'icon' => '👷', 'actual' => 0, 'estimated' => 0, 'count' => 0],
-            'Equipment & Heavy Machinery' => ['color' => '#ef4444', 'icon' => '🚜', 'actual' => 0, 'estimated' => 0, 'count' => 0],
-            'Subcontractor & Trade' => ['color' => '#8b5cf6', 'icon' => '🤝', 'actual' => 0, 'estimated' => 0, 'count' => 0],
-            'Permits & Regulatory' => ['color' => '#06b6d4', 'icon' => '📜', 'actual' => 0, 'estimated' => 0, 'count' => 0],
-            'Site Overhead & Utilities' => ['color' => '#10b981', 'icon' => '⚡', 'actual' => 0, 'estimated' => 0, 'count' => 0],
-            'Contingency & Testing' => ['color' => '#ec4899', 'icon' => '🛡️', 'actual' => 0, 'estimated' => 0, 'count' => 0],
+            'Materials & Consumables' => ['color' => '#38bdf8', 'icon' => '', 'actual' => 0, 'estimated' => 0, 'count' => 0],
+            'Labor & Engineering' => ['color' => '#f59e0b', 'icon' => '', 'actual' => 0, 'estimated' => 0, 'count' => 0],
+            'Equipment & Heavy Machinery' => ['color' => '#ef4444', 'icon' => '', 'actual' => 0, 'estimated' => 0, 'count' => 0],
+            'Subcontractor & Trade' => ['color' => '#8b5cf6', 'icon' => '', 'actual' => 0, 'estimated' => 0, 'count' => 0],
+            'Permits & Regulatory' => ['color' => '#06b6d4', 'icon' => '', 'actual' => 0, 'estimated' => 0, 'count' => 0],
+            'Site Overhead & Utilities' => ['color' => '#10b981', 'icon' => '', 'actual' => 0, 'estimated' => 0, 'count' => 0],
+            'Contingency & Testing' => ['color' => '#ec4899', 'icon' => '', 'actual' => 0, 'estimated' => 0, 'count' => 0],
         ];
 
         foreach ($this->costs as $cost) {
             $cat = $cost->cost_category;
             if (!isset($categories[$cat])) {
-                $categories[$cat] = ['color' => '#94a3b8', 'icon' => '⚙️', 'actual' => 0, 'estimated' => 0, 'count' => 0];
+                $categories[$cat] = ['color' => '#94a3b8', 'icon' => '', 'actual' => 0, 'estimated' => 0, 'count' => 0];
             }
             $categories[$cat]['actual'] += $cost->actual_cost;
             $categories[$cat]['estimated'] += $cost->estimated_cost;

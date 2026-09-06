@@ -119,7 +119,7 @@
         <div style="background: rgba(0, 0, 0, 0.35); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                 <div>
-                    <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--text-primary);">📊 Multi-Year Sales & Revenue Trajectory</h4>
+                    <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--text-primary);">Multi-Year Sales & Revenue Trajectory</h4>
                     <span style="font-size: 0.75rem; color: var(--text-muted);">Annual Booked Contract Sales vs Cleared Cash Inflow (2024 &ndash; 2027)</span>
                 </div>
                 <span class="badge badge-in_progress" style="font-size: 0.7rem;">₱ in Millions</span>
@@ -227,7 +227,7 @@
                 <span class="spec-chip" style="font-size: 0.65rem; color: #38bdf8;">WORKERS</span>
                 <span class="manpower-count" style="color: #38bdf8;">{{ $totalActiveWorkers }}</span>
             </div>
-            <div class="manpower-title">👷 General Workers</div>
+            <div class="manpower-title">General Workers</div>
             <div class="manpower-role">Laborers & Site Helpers</div>
             <div class="manpower-bar"><div class="manpower-bar-fill" style="width: {{ $totalActiveManpower > 0 ? round(($totalActiveWorkers / $totalActiveManpower)*100) : 0 }}%; background: #38bdf8;"></div></div>
         </div>
@@ -237,7 +237,7 @@
                 <span class="spec-chip" style="font-size: 0.65rem; color: #818cf8;">TRADES</span>
                 <span class="manpower-count" style="color: #818cf8;">{{ $totalActiveSkilled }}</span>
             </div>
-            <div class="manpower-title">🔨 Skilled Tradesmen</div>
+            <div class="manpower-title">Skilled Tradesmen</div>
             <div class="manpower-role">Masons, Carpenters & Welders</div>
             <div class="manpower-bar"><div class="manpower-bar-fill" style="width: {{ $totalActiveManpower > 0 ? round(($totalActiveSkilled / $totalActiveManpower)*100) : 0 }}%; background: #818cf8;"></div></div>
         </div>
@@ -247,7 +247,7 @@
                 <span class="spec-chip" style="font-size: 0.65rem; color: #f59e0b;">ENGR</span>
                 <span class="manpower-count" style="color: #f59e0b;">{{ $totalActiveEngineers }}</span>
             </div>
-            <div class="manpower-title">📐 Field Engineers</div>
+            <div class="manpower-title">Field Engineers</div>
             <div class="manpower-role">Structural, Electrical, Piping</div>
             <div class="manpower-bar"><div class="manpower-bar-fill" style="width: {{ $totalActiveManpower > 0 ? round(($totalActiveEngineers / $totalActiveManpower)*100) : 0 }}%; background: #f59e0b;"></div></div>
         </div>
@@ -257,7 +257,7 @@
                 <span class="spec-chip" style="font-size: 0.65rem; color: #ec4899;">ARCH</span>
                 <span class="manpower-count" style="color: #ec4899;">{{ $totalActiveArchitects }}</span>
             </div>
-            <div class="manpower-title">🎨 Architects</div>
+            <div class="manpower-title">Architects</div>
             <div class="manpower-role">Principal & Design Leads</div>
             <div class="manpower-bar"><div class="manpower-bar-fill" style="width: {{ $totalActiveManpower > 0 ? round(($totalActiveArchitects / $totalActiveManpower)*100) : 0 }}%; background: #ec4899;"></div></div>
         </div>
@@ -267,7 +267,7 @@
                 <span class="spec-chip" style="font-size: 0.65rem; color: #ef4444;">OPERATORS</span>
                 <span class="manpower-count" style="color: #ef4444;">{{ $totalActiveOperators }}</span>
             </div>
-            <div class="manpower-title">🚜 Equipment Operators</div>
+            <div class="manpower-title">Equipment Operators</div>
             <div class="manpower-role">Cranes, Rigs & Heavy Plant</div>
             <div class="manpower-bar"><div class="manpower-bar-fill" style="width: {{ $totalActiveManpower > 0 ? round(($totalActiveOperators / $totalActiveManpower)*100) : 0 }}%; background: #ef4444;"></div></div>
         </div>
@@ -277,7 +277,7 @@
                 <span class="spec-chip" style="font-size: 0.65rem; color: #10b981;">FOREMEN</span>
                 <span class="manpower-count" style="color: #10b981;">{{ $totalActiveForemen }}</span>
             </div>
-            <div class="manpower-title">📋 Site Foremen</div>
+            <div class="manpower-title">Site Foremen</div>
             <div class="manpower-role">Trade Supervisors & Leads</div>
             <div class="manpower-bar"><div class="manpower-bar-fill" style="width: {{ $totalActiveManpower > 0 ? round(($totalActiveForemen / $totalActiveManpower)*100) : 0 }}%; background: #10b981;"></div></div>
         </div>
@@ -287,7 +287,7 @@
                 <span class="spec-chip" style="font-size: 0.65rem; color: #14b8a6;">QA/QC</span>
                 <span class="manpower-count" style="color: #14b8a6;">{{ $totalActiveSafety }}</span>
             </div>
-            <div class="manpower-title">🛡️ Safety Officers</div>
+            <div class="manpower-title">Safety Officers</div>
             <div class="manpower-role">QA/QC & Site Compliance</div>
             <div class="manpower-bar"><div class="manpower-bar-fill" style="width: {{ $totalActiveManpower > 0 ? round(($totalActiveSafety / $totalActiveManpower)*100) : 0 }}%; background: #14b8a6;"></div></div>
         </div>
@@ -303,7 +303,7 @@
     <div class="chart-card">
         <div class="panel-header" style="margin-bottom: 8px;">
             <div>
-                <h3 class="panel-title">🥧 Project Status</h3>
+                <h3 class="panel-title">Project Status</h3>
                 <span style="font-size: 0.8rem; color: var(--text-muted);">Site portfolio distribution</span>
             </div>
             <span class="badge badge-in_progress">{{ $totalProjectsCount }} Total Sites</span>
@@ -345,7 +345,7 @@
     <div class="chart-card">
         <div class="panel-header" style="margin-bottom: 8px;">
             <div>
-                <h3 class="panel-title">💰 Cost Breakdown</h3>
+                <h3 class="panel-title">Cost Breakdown</h3>
                 <span style="font-size: 0.8rem; color: var(--text-muted);">Incurred expenditure by category</span>
             </div>
             <span class="badge badge-settled">₱{{ number_format($totalActualCost / 1000000, 2) }}M Incurred</span>
@@ -379,7 +379,7 @@
     <div class="chart-card">
         <div class="panel-header" style="margin-bottom: 8px;">
             <div>
-                <h3 class="panel-title">📈 Financial Margin & Budget</h3>
+                <h3 class="panel-title">Financial Margin & Budget</h3>
                 <span style="font-size: 0.8rem; color: var(--text-muted);">Cost vs profit margin vs contract</span>
             </div>
             <span class="badge badge-healthy">{{ $avgGrossMarginPercent }}% Profit Margin</span>
@@ -434,7 +434,7 @@
         <!-- Structural Meter -->
         <div class="trade-meter-card">
             <div style="display: flex; align-items: center; gap: 6px; font-weight: 700; color: #38bdf8; font-size: 0.9rem;">
-                🏗️ Structural Works
+                Structural Works
             </div>
             <div class="circle-gauge-wrap">
                 <svg class="circle-gauge-svg" viewBox="0 0 100 100">
@@ -454,7 +454,7 @@
         <!-- Electrical Meter -->
         <div class="trade-meter-card">
             <div style="display: flex; align-items: center; gap: 6px; font-weight: 700; color: #f59e0b; font-size: 0.9rem;">
-                ⚡ Electrical Works
+                Electrical Works
             </div>
             <div class="circle-gauge-wrap">
                 <svg class="circle-gauge-svg" viewBox="0 0 100 100">
@@ -474,7 +474,7 @@
         <!-- Piping & Plumbing Meter -->
         <div class="trade-meter-card">
             <div style="display: flex; align-items: center; gap: 6px; font-weight: 700; color: #10b981; font-size: 0.9rem;">
-                🚰 Piping & Plumbing
+                Piping & Plumbing
             </div>
             <div class="circle-gauge-wrap">
                 <svg class="circle-gauge-svg" viewBox="0 0 100 100">
@@ -494,7 +494,7 @@
         <!-- Overall Site Average Meter -->
         <div class="trade-meter-card">
             <div style="display: flex; align-items: center; gap: 6px; font-weight: 700; color: #f87171; font-size: 0.9rem;">
-                🎯 Overall Progress
+                Overall Progress
             </div>
             <div class="circle-gauge-wrap">
                 <svg class="circle-gauge-svg" viewBox="0 0 100 100">

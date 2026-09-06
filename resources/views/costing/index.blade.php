@@ -148,7 +148,7 @@
     <div class="glass-panel">
         <div class="panel-header">
             <div>
-                <h3 class="panel-title">📊 Cost Head Breakdown & Proportional Distribution</h3>
+                <h3 class="panel-title">Cost Head Breakdown & Proportional Distribution</h3>
                 <span style="font-size: 0.85rem; color: var(--text-muted);">Itemized expenditures divided across structural, trade, labor, and operational cost heads</span>
             </div>
             <button class="btn-primary" style="font-size: 0.8rem; padding: 5px 12px;" onclick="openModal('addCostModal')">

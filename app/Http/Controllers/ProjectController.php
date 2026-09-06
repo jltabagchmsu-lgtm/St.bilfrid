@@ -503,7 +503,7 @@ class ProjectController extends Controller
                 'title' => 'Payment Cleared: ' . $paidInvoice->payment_stage,
                 'description' => 'Official Receipt ' . $paidInvoice->effective_or_number . ' for ₱' . number_format($paidInvoice->amount, 2) . ' via ' . $paidInvoice->payment_method . '.',
                 'status' => 'completed',
-                'icon' => '✓',
+                'icon' => '●',
             ];
         }
 
@@ -515,7 +515,7 @@ class ProjectController extends Controller
                 'title' => 'Final Building Inspection & Client Turnover',
                 'description' => '100% construction completion achieved. Realized gross profit: ₱' . number_format($grossMargin, 2) . ' (' . $grossMarginPercent . '%).',
                 'status' => 'completed',
-                'icon' => '✓',
+                'icon' => '●',
             ];
         } else {
             $milestones[] = [

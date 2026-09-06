@@ -5,22 +5,22 @@
 
 @section('top_actions')
     <button class="btn-secondary" style="font-size: 0.85rem; color: #38bdf8; border-color: rgba(56, 189, 248, 0.4);" onclick="openModal('editProjectModal')">
-        ✏️ Edit Project Specs
+        Edit Project Specs
     </button>
     <a href="{{ route('projects.printReport', $project->id) }}" target="_blank" class="btn-primary" style="font-size: 0.85rem; background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);">
-        🖨️ Official Accomplishment Report
+        Official Accomplishment Report
     </a>
     <a href="{{ route('projects.printBom', $project->id) }}" target="_blank" class="btn-secondary" style="font-size: 0.85rem; color: #10b981; border-color: rgba(16, 185, 129, 0.4);">
-        📑 Print 8-Page BOM (DUPA)
+        Print 8-Page BOM (DUPA)
     </a>
     <button class="btn-secondary" style="font-size: 0.85rem;" onclick="openModal('updateScheduleModal')">
-        📅 Set Schedule ({{ $remainingDays }}d left)
+        Set Schedule ({{ $remainingDays }}d left)
     </button>
     <button class="btn-secondary" style="font-size: 0.85rem;" onclick="openModal('uploadPhotoModal')">
-        📸 + Blueprint / Photo
+        + Blueprint / Photo
     </button>
     <button class="btn-secondary" style="font-size: 0.85rem;" onclick="openModal('updateManpowerModal')">
-        👷 Manpower ({{ $totalDeployedManpower }})
+        Manpower ({{ $totalDeployedManpower }})
     </button>
     <button class="btn-secondary" style="font-size: 0.85rem;" onclick="openModal('addCostItemModal')">
         + Cost Item
@@ -28,11 +28,11 @@
     <button class="btn-secondary" style="font-size: 0.85rem;" onclick="openModal('addProjectPaymentModal')">
         + Payment / OR
     </button>
-    <form action="{{ route('projects.destroy', $project->id) }}" method="POST" onsubmit="return confirm('⚠️ Are you sure you want to permanently delete this project ({{ addslashes($project->project_code) }} - {{ addslashes($project->title) }}) and all associated records? This cannot be undone.');" style="display:inline;">
+    <form action="{{ route('projects.destroy', $project->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this project ({{ addslashes($project->project_code) }} - {{ addslashes($project->title) }}) and all associated records? This cannot be undone.');" style="display:inline;">
         @csrf
         @method('DELETE')
         <button type="submit" class="btn-secondary" style="font-size: 0.85rem; color: #f87171; border-color: rgba(239,68,68,0.35);" title="Permanently Delete Project">
-            🗑️ Delete
+            Delete
         </button>
     </form>
     @if($project->status === 'completed')
@@ -58,12 +58,12 @@
                         {{ $heroPhoto->type_badge['icon'] }} {{ $heroPhoto->photo_type === 'blueprint' ? 'BLUEPRINT' : ($heroPhoto->photo_type === '3d_render' ? '3D DESIGN' : 'SITE PHOTO') }}
                     </span>
                     <button type="button" onclick="event.stopPropagation(); openEditPhotoModal({{ $heroPhoto->id }}, '{{ addslashes($heroPhoto->title) }}', '{{ $heroPhoto->photo_type }}', '{{ addslashes($heroPhoto->description ?? '') }}', '{{ addslashes($heroPhoto->file_path) }}', '{{ $heroPhoto->taken_at ? $heroPhoto->taken_at->format('Y-m-d') : '' }}', {{ $heroPhoto->is_primary ? 1 : 0 }})" style="position: absolute; top: 4px; right: 4px; background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(255,255,255,0.3); color: #fff; border-radius: 4px; padding: 2px 6px; font-size: 0.65rem; cursor: pointer;" title="Edit this primary hero image">
-                        ✏️ Edit
+                        Edit
                     </button>
                 </div>
             @else
                 <div style="width: 140px; height: 110px; border-radius: var(--radius-md); border: 2px dashed var(--border-accent); background: rgba(239, 68, 68, 0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; flex-shrink: 0;" onclick="openModal('uploadPhotoModal')">
-                    <span style="font-size: 1.5rem;">📷</span>
+                    
                     <span style="font-size: 0.7rem; color: #ef4444; font-weight: 700;">+ Add Image</span>
                 </div>
             @endif
@@ -77,7 +77,7 @@
                         {{ $scheduleHealth['icon'] }} {{ $scheduleHealth['label'] }}
                     </span>
                     <span class="spec-chip" style="font-size: 0.775rem; background: rgba(56, 189, 248, 0.15); color: #38bdf8; border-color: rgba(56, 189, 248, 0.3);">
-                        👷 {{ $totalDeployedManpower }} Deployed
+                        {{ $totalDeployedManpower }} Deployed
                     </span>
                 </div>
                 <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--text-primary); letter-spacing: -0.02em;">{{ $project->title }}</h1>
@@ -130,7 +130,7 @@
         </div>
         <div style="display: flex; gap: 10px;">
             <a href="{{ route('projects.printReport', $project->id) }}" target="_blank" class="btn-primary" style="font-size: 0.8rem; padding: 6px 14px; background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);">
-                🖨️ Print Accomplishment Report (Signed) &rarr;
+                Print Accomplishment Report (Signed) &rarr;
             </a>
         </div>
     </div>
@@ -203,9 +203,7 @@
 <div class="glass-panel" style="border: 1px solid rgba(236, 72, 153, 0.35); margin-bottom: 28px;">
     <div class="panel-header" style="margin-bottom: 16px;">
         <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: rgba(236, 72, 153, 0.2); display: grid; place-items: center; font-size: 1rem; font-weight: 800; color: #ec4899;">
-                🎨
-            </div>
+            <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: rgba(236, 72, 153, 0.2); display: grid; place-items: center; font-size: 0.8rem; font-weight: 800; color: #ec4899;">CAD</div>
             <div>
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <h3 class="panel-title" style="font-size: 1.15rem;">Project Design, Technical Blueprints & Site Photos</h3>
@@ -228,22 +226,22 @@
                 All Media ({{ $project->photos->count() }})
             </button>
             <button type="button" class="spec-chip" onclick="filterGalleryCategory('blueprint', this)" style="cursor: pointer; font-size: 0.775rem; padding: 5px 12px;">
-                📐 Blueprints ({{ $project->photos->where('photo_type', 'blueprint')->count() }})
+                Blueprints ({{ $project->photos->where('photo_type', 'blueprint')->count() }})
             </button>
             <button type="button" class="spec-chip" onclick="filterGalleryCategory('3d_render', this)" style="cursor: pointer; font-size: 0.775rem; padding: 5px 12px;">
-                🎨 3D Renders ({{ $project->photos->where('photo_type', '3d_render')->count() }})
+                3D Renders ({{ $project->photos->where('photo_type', '3d_render')->count() }})
             </button>
             <button type="button" class="spec-chip" onclick="filterGalleryCategory('actual_site', this)" style="cursor: pointer; font-size: 0.775rem; padding: 5px 12px;">
-                📸 Site Progress ({{ $project->photos->where('photo_type', 'actual_site')->count() }})
+                Site Progress ({{ $project->photos->where('photo_type', 'actual_site')->count() }})
             </button>
             <button type="button" class="spec-chip" onclick="filterGalleryCategory('structural', this)" style="cursor: pointer; font-size: 0.775rem; padding: 5px 12px;">
-                🏗️ Structural ({{ $project->photos->where('photo_type', 'structural')->count() }})
+                Structural ({{ $project->photos->where('photo_type', 'structural')->count() }})
             </button>
             <button type="button" class="spec-chip" onclick="filterGalleryCategory('finishing', this)" style="cursor: pointer; font-size: 0.775rem; padding: 5px 12px;">
-                ✨ Finishing ({{ $project->photos->where('photo_type', 'finishing')->count() }})
+                Finishing ({{ $project->photos->where('photo_type', 'finishing')->count() }})
             </button>
             <button type="button" class="spec-chip" onclick="filterGalleryCategory('client_want', this)" style="cursor: pointer; font-size: 0.775rem; padding: 5px 12px;">
-                💡 Client Want ({{ $project->photos->where('photo_type', 'client_want')->count() }})
+                Client Want ({{ $project->photos->where('photo_type', 'client_want')->count() }})
             </button>
         </div>
 
@@ -259,7 +257,7 @@
                         </span>
                         @if($photo->is_primary)
                             <span style="position: absolute; top: 8px; right: 8px; font-size: 0.65rem; background: #ef4444; color: #fff; padding: 3px 8px; border-radius: 4px; font-weight: 800; box-shadow: 0 2px 8px rgba(0,0,0,0.6);">
-                                ⭐ PRIMARY BANNER
+                                PRIMARY BANNER
                             </span>
                         @endif
                     </div>
@@ -275,19 +273,19 @@
 
                         <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 10px; border-top: 1px solid var(--border-color); font-size: 0.75rem;">
                             <span style="color: var(--text-secondary); font-family: var(--font-mono);">
-                                📅 {{ $photo->taken_at ? $photo->taken_at->format('M d, Y') : $photo->created_at->format('M d, Y') }}
+                                {{ $photo->taken_at ? $photo->taken_at->format('M d, Y') : $photo->created_at->format('M d, Y') }}
                             </span>
                             <div style="display: flex; gap: 6px; align-items: center;">
                                 <!-- Edit Photo Button -->
                                 <button type="button" class="btn-secondary" style="font-size: 0.725rem; padding: 3px 8px; background: rgba(56, 189, 248, 0.1); color: #38bdf8; border-color: rgba(56, 189, 248, 0.3);" onclick="openEditPhotoModal({{ $photo->id }}, '{{ addslashes($photo->title) }}', '{{ $photo->photo_type }}', '{{ addslashes($photo->description ?? '') }}', '{{ addslashes($photo->file_path) }}', '{{ $photo->taken_at ? $photo->taken_at->format('Y-m-d') : '' }}', {{ $photo->is_primary ? 1 : 0 }})" title="Edit photo details, classification, or replace image">
-                                    ✏️ Edit
+                                    Edit
                                 </button>
 
                                 @if(!$photo->is_primary)
                                     <form action="{{ route('projects.photos.primary', $photo->id) }}" method="POST" style="display:inline;">
                                         @csrf
                                         <button type="submit" class="btn-secondary" style="font-size: 0.725rem; padding: 3px 8px; color: #f59e0b; border-color: rgba(245, 158, 11, 0.3);" title="Set as primary project hero photo">
-                                            ⭐ Set Banner
+                                            Set Banner
                                         </button>
                                     </form>
                                 @endif
@@ -296,7 +294,7 @@
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn-secondary" style="font-size: 0.725rem; padding: 3px 6px; color: #ef4444; border-color: rgba(239, 68, 68, 0.3);" title="Delete photo">
-                                        🗑️
+                                        Delete
                                     </button>
                                 </form>
                             </div>
@@ -307,7 +305,7 @@
         </div>
     @else
         <div style="text-align: center; padding: 36px 20px; background: rgba(0, 0, 0, 0.2); border-radius: var(--radius-md); border: 1px dashed var(--border-color);">
-            <div style="font-size: 2.5rem; margin-bottom: 10px;">📐</div>
+            <div style="font-size: 2.5rem; margin-bottom: 10px; display:none;"></div>
             <div style="font-size: 1.05rem; font-weight: 700; color: #f8fafc; margin-bottom: 4px;">No Blueprints or Architectural Photos Uploaded Yet</div>
             <div style="font-size: 0.85rem; color: var(--text-muted); max-width: 480px; margin: 0 auto 16px auto;">
                 Upload technical CAD drawings, 3D concept renders, client wish-list inspirations, or on-site actual progress photographs to monitor visual fidelity.
@@ -325,9 +323,7 @@
 <div class="glass-panel" style="border: 1px solid rgba(56, 189, 248, 0.35); margin-bottom: 28px;">
     <div class="panel-header" style="margin-bottom: 18px;">
         <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: rgba(56, 189, 248, 0.2); display: grid; place-items: center; font-size: 1rem; font-weight: 800; color: #38bdf8;">
-                📅
-            </div>
+            <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: rgba(56, 189, 248, 0.2); display: grid; place-items: center; font-size: 0.8rem; font-weight: 800; color: #38bdf8;">SCH</div>
             <div>
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <h3 class="panel-title" style="font-size: 1.15rem;">Project Master Scheduling & Execution Timeline</h3>
@@ -341,7 +337,7 @@
             </div>
         </div>
         <button class="btn-primary" style="font-size: 0.825rem; padding: 6px 14px;" onclick="openModal('updateScheduleModal')">
-            📅 Set / Adjust Project Schedule
+            Set / Adjust Project Schedule
         </button>
     </div>
 
@@ -384,14 +380,12 @@
 <div class="glass-panel" style="border: 1px solid rgba(56, 189, 248, 0.35); margin-bottom: 28px;">
     <div class="panel-header" style="margin-bottom: 16px; flex-wrap: wrap; gap: 14px;">
         <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 40px; height: 40px; border-radius: var(--radius-sm); background: rgba(56, 189, 248, 0.2); display: grid; place-items: center; font-size: 1.1rem; font-weight: 800; color: #38bdf8;">
-                ☑️
-            </div>
+            <div style="width: 40px; height: 40px; border-radius: var(--radius-sm); background: rgba(56, 189, 248, 0.2); display: grid; place-items: center; font-size: 0.8rem; font-weight: 800; color: #38bdf8;">CHK</div>
             <div>
                 <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                     <h3 class="panel-title" style="font-size: 1.15rem;">Project Monitoring & Trade Progression (Checklist Method)</h3>
                     <span class="badge badge-in_progress">{{ $completedTasksCount }} / {{ $totalTasksCount }} Tasks Completed ({{ $project->overall_progress }}%)</span>
-                    <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 0.725rem; font-weight: 700; padding: 3px 8px;">🔒 Forward-Only Monotonic Progress</span>
+                    <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 0.725rem; font-weight: 700; padding: 3px 8px;">Forward-Only Monotonic Progress</span>
                 </div>
                 <span style="font-size: 0.85rem; color: var(--text-muted);">
                     Checklist execution for Structural, Electrical, Piping & Plumbing, and Design-Build. Tasks and progress advance strictly forward-only; completed milestones are permanent and irreversible.
@@ -400,12 +394,12 @@
         </div>
         <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
             <button type="button" class="btn-secondary" style="font-size: 0.8rem; height: 36px; color: #10b981; border-color: rgba(16, 185, 129, 0.3); display: inline-flex; align-items: center; gap: 6px;" onclick="openChecklistJsonModal()">
-                📋 Structured JSON State
+                Structured JSON State
             </button>
             <form action="{{ route('projects.resetChecklist', $project->id) }}" method="POST" onsubmit="return confirm('Reset and load the standard 53-item engineering checklist for Structural, Electrical, Piping, and Design-Build?');" style="display: inline;">
                 @csrf
                 <button type="submit" class="btn-secondary" style="font-size: 0.8rem; height: 36px; color: #38bdf8; border-color: rgba(56, 189, 248, 0.3); display: inline-flex; align-items: center; gap: 6px;">
-                    ⚡ Reset Standard Checklist (53 Tasks)
+                    Reset Standard Checklist (53 Tasks)
                 </button>
             </form>
             <button class="btn-primary" style="font-size: 0.8rem; height: 36px; background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); border-color: #38bdf8; display: inline-flex; align-items: center; gap: 6px;" onclick="openAddSpecificTaskModal('Structural')">
@@ -435,7 +429,7 @@
         <!-- Structural Card -->
         <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: var(--radius-md); padding: 16px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                <span style="font-weight: 700; font-size: 0.9rem; color: #38bdf8;">🏗️ Structural Works</span>
+                <span style="font-weight: 700; font-size: 0.9rem; color: #38bdf8;">Structural Works</span>
                 <span class="spec-chip" id="chipStructWeight" style="font-size: 0.65rem;">{{ $project->structural_weight }}% WEIGHT</span>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px;">
@@ -454,7 +448,7 @@
         <!-- Electrical Card -->
         <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: var(--radius-md); padding: 16px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                <span style="font-weight: 700; font-size: 0.9rem; color: #f59e0b;">⚡ Electrical Works</span>
+                <span style="font-weight: 700; font-size: 0.9rem; color: #f59e0b;">Electrical Works</span>
                 <span class="spec-chip" id="chipElecWeight" style="font-size: 0.65rem;">{{ $project->electrical_weight }}% WEIGHT</span>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px;">
@@ -473,7 +467,7 @@
         <!-- Piping Card -->
         <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-md); padding: 16px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                <span style="font-weight: 700; font-size: 0.9rem; color: #10b981;">🚰 Piping & Plumbing</span>
+                <span style="font-weight: 700; font-size: 0.9rem; color: #10b981;">Piping & Plumbing</span>
                 <span class="spec-chip" id="chipPipeWeight" style="font-size: 0.65rem;">{{ $project->piping_weight }}% WEIGHT</span>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px;">
@@ -492,7 +486,7 @@
         <!-- Finishing Card -->
         <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(236, 72, 153, 0.3); border-radius: var(--radius-md); padding: 16px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                <span style="font-weight: 700; font-size: 0.9rem; color: #ec4899;">✨ Design-Build / Turnkey</span>
+                <span style="font-weight: 700; font-size: 0.9rem; color: #ec4899;">Design-Build / Turnkey</span>
                 <span class="spec-chip" id="chipFinishWeight" style="font-size: 0.65rem;">{{ $project->finishing_weight }}% WEIGHT</span>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px;">
@@ -519,16 +513,16 @@
                     All Disciplines (<span id="tabCountAll">{{ $project->tasks->count() }}</span>)
                 </button>
                 <button type="button" class="btn-tab" onclick="switchChecklistTab('structural', this)" style="padding: 7px 14px; font-size: 0.825rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid transparent; background: rgba(15, 23, 42, 0.5); color: var(--text-secondary); cursor: pointer;">
-                    🏗️ Structural (<span id="tabCountStruct">{{ $structuralTasks->count() }}</span>)
+                    Structural (<span id="tabCountStruct">{{ $structuralTasks->count() }}</span>)
                 </button>
                 <button type="button" class="btn-tab" onclick="switchChecklistTab('electrical', this)" style="padding: 7px 14px; font-size: 0.825rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid transparent; background: rgba(15, 23, 42, 0.5); color: var(--text-secondary); cursor: pointer;">
-                    ⚡ Electrical (<span id="tabCountElec">{{ $electricalTasks->count() }}</span>)
+                    Electrical (<span id="tabCountElec">{{ $electricalTasks->count() }}</span>)
                 </button>
                 <button type="button" class="btn-tab" onclick="switchChecklistTab('piping', this)" style="padding: 7px 14px; font-size: 0.825rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid transparent; background: rgba(15, 23, 42, 0.5); color: var(--text-secondary); cursor: pointer;">
-                    🚰 Piping (<span id="tabCountPipe">{{ $pipingTasks->count() }}</span>)
+                    Piping (<span id="tabCountPipe">{{ $pipingTasks->count() }}</span>)
                 </button>
                 <button type="button" class="btn-tab" onclick="switchChecklistTab('finishing', this)" style="padding: 7px 14px; font-size: 0.825rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid transparent; background: rgba(15, 23, 42, 0.5); color: var(--text-secondary); cursor: pointer;">
-                    ✨ Design-Build (<span id="tabCountFinish">{{ $finishingTasks->count() }}</span>)
+                    Design-Build (<span id="tabCountFinish">{{ $finishingTasks->count() }}</span>)
                 </button>
             </div>
 
@@ -542,16 +536,16 @@
                     </label>
                     <select id="taskStatusFilter" class="form-select" onchange="filterChecklistByStatus(this.value)" style="padding: 6px 12px; font-size: 0.825rem; font-weight: 600; min-width: 170px; height: 34px; background: rgba(15, 23, 42, 0.9); border-color: rgba(56, 189, 248, 0.4); color: #38bdf8;">
                         <option value="all">All Statuses ({{ $project->tasks->count() }})</option>
-                        <option value="in_progress">⚡ In Progress</option>
-                        <option value="completed">🔒 Completed (100%)</option>
-                        <option value="not_started">⏳ Not Started</option>
+                        <option value="in_progress">In Progress</option>
+                        <option value="completed">Completed (100%)</option>
+                        <option value="not_started">Not Started</option>
                     </select>
                 </div>
 
                 <!-- Dropdown Choice: Jump to Specific Task -->
                 <div style="display: flex; align-items: center; gap: 6px;">
                     <label style="font-size: 0.775rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; white-space: nowrap;">
-                        🎯 Jump to Task:
+                        Jump to Task:
                     </label>
                     <select id="taskJumpSelect" class="form-select" onchange="jumpToTaskDirect(this.value)" style="padding: 6px 12px; font-size: 0.825rem; font-weight: 600; max-width: 280px; height: 34px; background: rgba(15, 23, 42, 0.9); border-color: rgba(245, 158, 11, 0.4); color: #f8fafc;">
                         <option value="">-- Choose Task to Locate --</option>
@@ -583,7 +577,7 @@
         <div class="checklist-section" id="chkSectionStructural" style="background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: var(--radius-md); overflow: hidden;">
             <div style="padding: 12px 18px; background: rgba(56, 189, 248, 0.08); border-bottom: 1px solid rgba(56, 189, 248, 0.2); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <span style="font-weight: 800; font-size: 1rem; color: #38bdf8;">🏗️ Structural Works Checklist</span>
+                    <span style="font-weight: 800; font-size: 1rem; color: #38bdf8;">Structural Works Checklist</span>
                     <span class="badge badge-in_progress" style="font-size: 0.7rem;" id="structSectionDoneBadge">{{ $structuralDone }} / {{ $structuralTasks->count() }} Tasks Done</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 10px;">
@@ -599,7 +593,7 @@
         <div class="checklist-section" id="chkSectionElectrical" style="background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: var(--radius-md); overflow: hidden;">
             <div style="padding: 12px 18px; background: rgba(245, 158, 11, 0.08); border-bottom: 1px solid rgba(245, 158, 11, 0.2); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <span style="font-weight: 800; font-size: 1rem; color: #f59e0b;">⚡ Electrical Works Checklist</span>
+                    <span style="font-weight: 800; font-size: 1rem; color: #f59e0b;">Electrical Works Checklist</span>
                     <span class="badge badge-in_progress" style="font-size: 0.7rem;" id="elecSectionDoneBadge">{{ $electricalDone }} / {{ $electricalTasks->count() }} Tasks Done</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 10px;">
@@ -615,7 +609,7 @@
         <div class="checklist-section" id="chkSectionPiping" style="background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: var(--radius-md); overflow: hidden;">
             <div style="padding: 12px 18px; background: rgba(16, 185, 129, 0.08); border-bottom: 1px solid rgba(16, 185, 129, 0.2); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <span style="font-weight: 800; font-size: 1rem; color: #10b981;">🚰 Piping & Plumbing Checklist</span>
+                    <span style="font-weight: 800; font-size: 1rem; color: #10b981;">Piping & Plumbing Checklist</span>
                     <span class="badge badge-in_progress" style="font-size: 0.7rem;" id="pipeSectionDoneBadge">{{ $pipingDone }} / {{ $pipingTasks->count() }} Tasks Done</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 10px;">
@@ -631,7 +625,7 @@
         <div class="checklist-section" id="chkSectionFinishing" style="background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(236, 72, 153, 0.25); border-radius: var(--radius-md); overflow: hidden;">
             <div style="padding: 12px 18px; background: rgba(236, 72, 153, 0.08); border-bottom: 1px solid rgba(236, 72, 153, 0.2); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <span style="font-weight: 800; font-size: 1rem; color: #ec4899;">✨ Design-Build / Turnkey Finishing Checklist</span>
+                    <span style="font-weight: 800; font-size: 1rem; color: #ec4899;">Design-Build / Turnkey Finishing Checklist</span>
                     <span class="badge badge-in_progress" style="font-size: 0.7rem;" id="finishSectionDoneBadge">{{ $finishingDone }} / {{ $finishingTasks->count() }} Tasks Done</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 10px;">
@@ -651,14 +645,12 @@
     <div id="activeProjectMaterialsSection" class="glass-panel" style="margin-top: 24px; background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-md); padding: 20px;">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 14px; margin-bottom: 18px; border-bottom: 1px solid rgba(16, 185, 129, 0.2); padding-bottom: 14px;">
             <div style="display: flex; align-items: center; gap: 12px;">
-                <div style="width: 42px; height: 42px; border-radius: var(--radius-sm); background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); display: grid; place-items: center; font-size: 1.25rem;">
-                    📦
-                </div>
+                <div style="width: 42px; height: 42px; border-radius: var(--radius-sm); background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); display: grid; place-items: center; font-size: 0.8rem; font-weight: 800; color: #10b981;">MAT</div>
                 <div>
                     <div style="display: flex; align-items: center; gap: 8px;">
                         <h4 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #f8fafc;">Active Project Materials & On-Site Resource Consumption</h4>
                         <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 0.75rem;">
-                            ⚡ Dynamically Accumulated from Active Tasks
+                            Dynamically Accumulated from Active Tasks
                         </span>
                     </div>
                     <span style="font-size: 0.825rem; color: var(--text-muted);">
@@ -669,9 +661,9 @@
 
             <!-- Search Filter for Active Materials -->
             <div style="display: flex; align-items: center; gap: 8px;">
-                <input type="text" id="activeMaterialSearchInput" onkeyup="filterActiveMaterialsTable(this.value)" placeholder="🔍 Filter active materials..." class="form-input" style="padding: 6px 12px; font-size: 0.825rem; width: 220px; height: 34px; background: rgba(0,0,0,0.4); border-color: rgba(255,255,255,0.15);">
+                <input type="text" id="activeMaterialSearchInput" onkeyup="filterActiveMaterialsTable(this.value)" placeholder="Filter active materials..." class="form-input" style="padding: 6px 12px; font-size: 0.825rem; width: 220px; height: 34px; background: rgba(0,0,0,0.4); border-color: rgba(255,255,255,0.15);">
                 <button type="button" class="btn-secondary" onclick="refreshActiveMaterialsAjax()" style="font-size: 0.775rem; padding: 6px 12px; height: 34px;" title="Refresh Active Materials">
-                    🔄 Sync
+                    Sync
                 </button>
             </div>
         </div>
@@ -736,7 +728,7 @@
                             </td>
                             <td>
                                 <strong style="color: #f8fafc; font-size: 0.875rem;">
-                                    🧱 {{ $mat['material_name'] }}
+                                    {{ $mat['material_name'] }}
                                 </strong>
                             </td>
                             <td>
@@ -765,7 +757,7 @@
                                 <div style="display: flex; flex-wrap: wrap; gap: 4px;">
                                     @foreach($mat['task_names'] as $tName)
                                         <span class="badge" style="font-size: 0.675rem; background: rgba(56, 189, 248, 0.1); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.25);">
-                                            📍 {{ $tName }}
+                                            {{ $tName }}
                                         </span>
                                     @endforeach
                                 </div>
@@ -773,11 +765,11 @@
                             <td style="text-align: center;">
                                 @if($mat['is_all_completed'])
                                     <span class="badge badge-completed" style="font-size: 0.725rem;">
-                                        🔒 Installed & Finalized
+                                        Installed & Finalized
                                     </span>
                                 @else
                                     <span class="badge badge-in_progress" style="font-size: 0.725rem;">
-                                        ⚡ In Consumption
+                                        In Consumption
                                     </span>
                                 @endif
                             </td>
@@ -880,9 +872,7 @@
 <div class="glass-panel" style="border: 1px solid rgba(239, 68, 68, 0.35); margin-bottom: 28px;">
     <div class="panel-header" style="margin-bottom: 18px;">
         <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: rgba(239, 68, 68, 0.2); display: grid; place-items: center; font-size: 1.1rem; font-weight: 800; color: #ef4444;">
-                📐
-            </div>
+            <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: rgba(239, 68, 68, 0.2); display: grid; place-items: center; font-size: 0.8rem; font-weight: 800; color: #ef4444;">BOM</div>
             <div>
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <h3 class="panel-title" style="font-size: 1.15rem;">Itemized Bill of Materials & Detailed Unit Price Analysis (DUPA)</h3>
@@ -899,13 +889,13 @@
             <!-- 1-Click Load Project BOM / Templates Dropdown -->
             <div class="dropdown" style="position: relative; display: inline-block;">
                 <button type="button" class="btn-secondary" style="font-size: 0.8rem; background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.3); color: #38bdf8; display: inline-flex; align-items: center; gap: 6px;" onclick="toggleProjectBomTemplateMenu()">
-                    ⚡ 1-Click Load {{ $project->title ?: $project->project_code }} BOM &#9662;
+                    1-Click Load {{ $project->title ?: $project->project_code }} BOM &#9662;
                 </button>
                 <div id="projectBomTemplateMenuDropdown" style="display: none; position: absolute; right: 0; top: 100%; margin-top: 6px; background: #0f172a; border: 1px solid var(--border-color); border-radius: var(--radius-md); box-shadow: 0 10px 30px rgba(0,0,0,0.7); min-width: 310px; z-index: 50; padding: 8px;">
                     <form action="{{ route('projects.loadProjectTemplate', $project->id) }}" method="POST" onsubmit="return confirm('Generate and load the official 18-item Bill of Materials calibrated specifically for {{ addslashes($project->title ?: $project->project_code) }} (₱{{ number_format($project->contract_budget ?: ($project->estimated_cost ?: 1831613.80), 2) }})?');">
                         @csrf
                         <button type="submit" style="display: block; width: 100%; text-align: left; background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); padding: 10px 12px; color: #38bdf8; font-size: 0.825rem; cursor: pointer; border-radius: 4px; margin-bottom: 6px;" onmouseover="this.style.background='rgba(56, 189, 248, 0.2)'" onmouseout="this.style.background='rgba(56, 189, 248, 0.1)'">
-                            <strong>🎯 Match Open Project: {{ $project->title ?: $project->project_code }}</strong>
+                            <strong>Match Open Project: {{ $project->title ?: $project->project_code }}</strong>
                             <div style="font-size: 0.725rem; color: #cbd5e1;">Calibrated to ₱{{ number_format($project->contract_budget ?: ($project->estimated_cost ?: 1831613.80), 2) }} &bull; {{ $project->floor_area_sqm ?? 80 }} m²</div>
                         </button>
                     </form>
@@ -913,25 +903,25 @@
                     <form action="{{ route('projects.load2BrBungalowTemplate', $project->id) }}" method="POST" onsubmit="return confirm('Load 2-Bedroom Bungalow Bill of Materials template (₱1,831,613.80)?');">
                         @csrf
                         <button type="submit" style="display: block; width: 100%; text-align: left; background: none; border: none; padding: 8px 10px; color: #f8fafc; font-size: 0.8rem; cursor: pointer; border-radius: 4px;" onmouseover="this.style.background='rgba(255, 255, 255, 0.08)'" onmouseout="this.style.background='none'">
-                            ⚡ 2BR Bungalow Preset (₱1.831M)
+                            2BR Bungalow Preset (₱1.831M)
                         </button>
                     </form>
                     <form action="{{ route('projects.load3BrBungalowTemplate', $project->id) }}" method="POST" onsubmit="return confirm('Load 3-Bedroom Bungalow Bill of Materials template (₱1,778,062.08)?');">
                         @csrf
                         <button type="submit" style="display: block; width: 100%; text-align: left; background: none; border: none; padding: 8px 10px; color: #f8fafc; font-size: 0.8rem; cursor: pointer; border-radius: 4px;" onmouseover="this.style.background='rgba(255, 255, 255, 0.08)'" onmouseout="this.style.background='none'">
-                            ⚡ 3BR Bungalow Preset (₱1.778M)
+                            3BR Bungalow Preset (₱1.778M)
                         </button>
                     </form>
                     <form action="{{ route('projects.loadDuplexTemplate', $project->id) }}" method="POST" onsubmit="return confirm('Load 2-Storey Duplex Housing BOM template (₱742,800.74)?');">
                         @csrf
                         <button type="submit" style="display: block; width: 100%; text-align: left; background: none; border: none; padding: 8px 10px; color: #f8fafc; font-size: 0.8rem; cursor: pointer; border-radius: 4px;" onmouseover="this.style.background='rgba(255, 255, 255, 0.08)'" onmouseout="this.style.background='none'">
-                            ⚡ 31 m² Duplex Housing Preset (₱742.8K)
+                            31 m² Duplex Housing Preset (₱742.8K)
                         </button>
                     </form>
                 </div>
             </div>
             <a href="{{ route('projects.printBom', $project->id) }}" target="_blank" class="btn-secondary" style="font-size: 0.8rem; color: #10b981; border-color: rgba(16, 185, 129, 0.3);" title="Print official multi-page engineering document">
-                🖨️ Print Official BOM Document
+                Print Official BOM Document
             </a>
             <button class="btn-primary" style="font-size: 0.8rem; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); border-color: #ef4444;" onclick="openModal('addScopeItemModal')">
                 + Add Scope Item
@@ -1044,7 +1034,7 @@
                                             <td style="font-family: var(--font-mono); font-weight: 700; text-align: right; color: #38bdf8;">₱{{ number_format($mat->total_cost, 2) }}</td>
                                             <td style="text-align: right;">
                                                 <div style="display: inline-flex; gap: 4px; justify-content: flex-end;">
-                                                    <button type="button" style="background:none; border:none; color:#38bdf8; cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Edit Line" onclick="openEditScopeLineModal({{ $mat->id }}, 'material', '{{ addslashes($mat->description) }}', {{ $mat->quantity }}, '{{ addslashes($mat->unit) }}', {{ $mat->unit_price }})">✏️</button>
+                                                    <button type="button" style="background:none; border:none; color:#38bdf8; cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Edit Line" onclick="openEditScopeLineModal({{ $mat->id }}, 'material', '{{ addslashes($mat->description) }}', {{ $mat->quantity }}, '{{ addslashes($mat->unit) }}', {{ $mat->unit_price }})"><i class="icon-edit">Edit</i></button>
                                                     <form action="{{ route('projects.scopeLines.destroy', $mat->id) }}" method="POST" onsubmit="return confirm('Delete this material line?');" style="display:inline;">
                                                         @csrf
                                                         @method('DELETE')
@@ -1085,7 +1075,7 @@
                                             <td style="font-family: var(--font-mono); font-weight: 700; text-align: right; color: #f59e0b;">₱{{ number_format($lab->total_cost, 2) }}</td>
                                             <td style="text-align: right;">
                                                 <div style="display: inline-flex; gap: 4px; justify-content: flex-end;">
-                                                    <button type="button" style="background:none; border:none; color:#38bdf8; cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Edit Line" onclick="openEditScopeLineModal({{ $lab->id }}, 'labor', '{{ addslashes($lab->description) }}', {{ $lab->quantity }}, '{{ addslashes($lab->unit) }}', {{ $lab->unit_price }})">✏️</button>
+                                                    <button type="button" style="background:none; border:none; color:#38bdf8; cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Edit Line" onclick="openEditScopeLineModal({{ $lab->id }}, 'labor', '{{ addslashes($lab->description) }}', {{ $lab->quantity }}, '{{ addslashes($lab->unit) }}', {{ $lab->unit_price }})"><i class="icon-edit">Edit</i></button>
                                                     <form action="{{ route('projects.scopeLines.destroy', $lab->id) }}" method="POST" onsubmit="return confirm('Delete this labor line?');" style="display:inline;">
                                                         @csrf
                                                         @method('DELETE')
@@ -1120,7 +1110,7 @@
                                             <td style="font-family: var(--font-mono); font-weight: 700; text-align: right; color: #ec4899;">₱{{ number_format($eq->total_cost, 2) }}</td>
                                             <td style="text-align: right;">
                                                 <div style="display: inline-flex; gap: 4px; justify-content: flex-end;">
-                                                    <button type="button" style="background:none; border:none; color:#38bdf8; cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Edit Line" onclick="openEditScopeLineModal({{ $eq->id }}, 'equipment', '{{ addslashes($eq->description) }}', {{ $eq->quantity }}, '{{ addslashes($eq->unit) }}', {{ $eq->unit_price }})">✏️</button>
+                                                    <button type="button" style="background:none; border:none; color:#38bdf8; cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Edit Line" onclick="openEditScopeLineModal({{ $eq->id }}, 'equipment', '{{ addslashes($eq->description) }}', {{ $eq->quantity }}, '{{ addslashes($eq->unit) }}', {{ $eq->unit_price }})"><i class="icon-edit">Edit</i></button>
                                                     <form action="{{ route('projects.scopeLines.destroy', $eq->id) }}" method="POST" onsubmit="return confirm('Delete this equipment line?');" style="display:inline;">
                                                         @csrf
                                                         @method('DELETE')
@@ -1171,7 +1161,7 @@
         </div>
     @else
         <div style="text-align: center; padding: 36px 20px; background: rgba(0, 0, 0, 0.2); border-radius: var(--radius-md); border: 1px dashed var(--border-color);">
-            <div style="font-size: 2.5rem; margin-bottom: 10px;">📐</div>
+            <div style="font-size: 2.5rem; margin-bottom: 10px; display:none;"></div>
             <div style="font-size: 1.05rem; font-weight: 700; color: #f8fafc; margin-bottom: 4px;">No Scope of Work Bill of Materials Items Created Yet</div>
             <div style="font-size: 0.85rem; color: var(--text-muted); max-width: 540px; margin: 0 auto 16px auto;">
                 Generate an itemized Scope of Work Bill of Materials tailored specifically for <strong>{{ $project->title ?: $project->project_code }}</strong> (Foundation, Columns, Beams, Walls, Roofing, Plumbing, Electrical, Finishes) with itemized Materials (A), Labor (B), Equipment (C), and official Philippine markups.
@@ -1180,7 +1170,7 @@
                 <form action="{{ route('projects.loadProjectTemplate', $project->id) }}" method="POST" onsubmit="return confirm('Generate and load the official 18-item Bill of Materials calibrated specifically for {{ addslashes($project->title ?: $project->project_code) }} (₱{{ number_format($project->contract_budget ?: ($project->estimated_cost ?: 1831613.80), 2) }})?');">
                     @csrf
                     <button type="submit" class="btn-primary" style="background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); border-color: #38bdf8;">
-                        ⚡ 1-Click Load {{ $project->title ?: $project->project_code }} BOM Template (₱{{ number_format($project->contract_budget ?: ($project->estimated_cost ?: 1831613.80), 2) }})
+                        1-Click Load {{ $project->title ?: $project->project_code }} BOM Template (₱{{ number_format($project->contract_budget ?: ($project->estimated_cost ?: 1831613.80), 2) }})
                     </button>
                 </form>
                 <button class="btn-secondary" onclick="openModal('addScopeItemModal')">
@@ -1197,9 +1187,7 @@
 <div class="glass-panel" style="margin-bottom: 28px;">
     <div class="panel-header" style="margin-bottom: 16px;">
         <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: rgba(56, 189, 248, 0.2); display: grid; place-items: center; font-size: 1rem; font-weight: 800; color: #38bdf8;">
-                📋
-            </div>
+            <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: rgba(56, 189, 248, 0.2); display: grid; place-items: center; font-size: 0.8rem; font-weight: 800; color: #38bdf8;">TSK</div>
             <div>
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <h3 class="panel-title" style="font-size: 1.15rem;">Task Tracking & Milestone Execution Matrix</h3>
@@ -1281,9 +1269,7 @@
 <div class="glass-panel" style="margin-bottom: 28px;">
     <div class="panel-header" style="margin-bottom: 16px;">
         <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: rgba(16, 185, 129, 0.2); display: grid; place-items: center; font-size: 1.1rem; font-weight: 800; color: #10b981;">
-                💳
-            </div>
+            <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: rgba(16, 185, 129, 0.2); display: grid; place-items: center; font-size: 0.8rem; font-weight: 800; color: #10b981;">PAY</div>
             <div>
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <h3 class="panel-title" style="font-size: 1.15rem;">Project Billing, Financial Payments & Official Receipts (OR)</h3>
@@ -1382,13 +1368,13 @@
                             </div>
                             <span class="spec-chip" style="font-size: 0.675rem; margin-top: 2px;">
                                 @if(str_contains(strtolower($payment->payment_method), 'check') || str_contains(strtolower($payment->payment_method), 'cheque'))
-                                    📄 {{ $payment->payment_method }}
+                                    {{ $payment->payment_method }}
                                 @elseif(str_contains(strtolower($payment->payment_method), 'cash'))
-                                    💵 {{ $payment->payment_method }}
+                                    {{ $payment->payment_method }}
                                 @elseif(str_contains(strtolower($payment->payment_method), 'online') || str_contains(strtolower($payment->payment_method), 'gcash') || str_contains(strtolower($payment->payment_method), 'maya'))
-                                    📱 {{ $payment->payment_method }}
+                                    {{ $payment->payment_method }}
                                 @else
-                                    💳 {{ $payment->payment_method }}
+                                    {{ $payment->payment_method }}
                                 @endif
                             </span>
                         </td>
@@ -1405,7 +1391,7 @@
                         <td style="text-align: right;">
                             <div style="display: inline-flex; gap: 6px; align-items: center;">
                                 <a href="{{ route('payments.printReceipt', $payment->id) }}" target="_blank" class="btn-secondary" style="font-size: 0.725rem; padding: 4px 8px; color: #10b981; border-color: rgba(16,185,129,0.3);" title="Print Official Receipt Voucher">
-                                    🖨️ Print OR
+                                    Print OR
                                 </a>
                                 @if($payment->status !== 'paid')
                                     <form action="{{ route('payments.updateStatus', $payment->id) }}" method="POST" style="display: inline;">
@@ -1466,7 +1452,7 @@
     <div class="modal-box modal-box-large" style="max-width: 680px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
             <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 1.5rem;">📸</span>
+                
                 <div>
                     <h3 style="font-weight: 700; margin: 0; font-size: 1.15rem; color: #f8fafc;">Upload Blueprint, 3D Render or Progress Photo</h3>
                     <span style="font-size: 0.775rem; color: var(--text-muted);">Add technical CAD drawings, architectural renders, or on-site photographs</span>
@@ -1498,12 +1484,12 @@
                 <div class="form-group">
                     <label class="form-label">Media Classification Category <span style="color:#ef4444;">*</span></label>
                     <select name="photo_type" class="form-select" required>
-                        <option value="blueprint">📐 Technical Blueprint / CAD Plan</option>
-                        <option value="3d_render">🎨 3D Architectural Render (Target Design)</option>
-                        <option value="client_want">💡 Client Design Inspiration / Request</option>
-                        <option value="actual_site" selected>📸 Actual On-Site Progress Photo</option>
-                        <option value="structural">🏗️ Structural & Foundation Works</option>
-                        <option value="finishing">✨ Turnkey Architectural Finishing</option>
+                        <option value="blueprint">Technical Blueprint / CAD Plan</option>
+                        <option value="3d_render">3D Architectural Render (Target Design)</option>
+                        <option value="client_want">Client Design Inspiration / Request</option>
+                        <option value="actual_site" selected>Actual On-Site Progress Photo</option>
+                        <option value="structural">Structural & Foundation Works</option>
+                        <option value="finishing">Turnkey Architectural Finishing</option>
                     </select>
                 </div>
 
@@ -1533,14 +1519,14 @@
             <div class="form-group" style="display: flex; align-items: center; gap: 10px; padding: 10px; background: rgba(239, 68, 68, 0.08); border-radius: var(--radius-sm); border: 1px solid rgba(239, 68, 68, 0.2);">
                 <input type="checkbox" name="is_primary" id="chkPrimaryPhoto" value="1" style="width: 18px; height: 18px; accent-color: #ef4444; cursor: pointer;">
                 <label for="chkPrimaryPhoto" style="font-size: 0.85rem; color: #f8fafc; cursor: pointer; font-weight: 600;">
-                    ⭐ Set this as the Primary Profile Hero Banner Image for this project
+                    Set this as the Primary Profile Hero Banner Image for this project
                 </label>
             </div>
 
             <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 16px;">
                 <button type="button" class="btn-secondary" onclick="closeModal('uploadPhotoModal')">Cancel</button>
                 <button type="submit" class="btn-primary" style="background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);">
-                    📸 Upload Media to Gallery
+                    Upload Media to Gallery
                 </button>
             </div>
         </form>
@@ -1552,7 +1538,7 @@
     <div class="modal-box modal-box-large" style="max-width: 680px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
             <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 1.5rem;">🖼️</span>
+                
                 <div>
                     <h3 style="font-weight: 700; margin: 0; font-size: 1.15rem; color: #f8fafc;">Edit Project Image & Blueprint Media</h3>
                     <span style="font-size: 0.775rem; color: var(--text-muted);">Update specifications, change classification category, or replace the image/URL</span>
@@ -1574,7 +1560,7 @@
                     <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 2px;">Active Image Preview</div>
                     <div id="editPhotoPreviewTitle" style="font-size: 0.95rem; font-weight: 800; color: #f8fafc; margin-bottom: 4px;"></div>
                     <div style="font-size: 0.75rem; color: #38bdf8;">
-                        💡 Uploading a new image file or typing a new media URL below will instantly update this image preview.
+                        Uploading a new image file or typing a new media URL below will instantly update this image preview.
                     </div>
                 </div>
             </div>
@@ -1588,12 +1574,12 @@
                 <div class="form-group">
                     <label class="form-label">Media Classification Category <span style="color:#ef4444;">*</span></label>
                     <select id="editPhotoType" name="photo_type" class="form-select" required>
-                        <option value="blueprint">📐 Technical Blueprint / CAD Plan</option>
-                        <option value="3d_render">🎨 3D Architectural Render (Target Design)</option>
-                        <option value="client_want">💡 Client Design Inspiration / Request</option>
-                        <option value="actual_site">📸 Actual On-Site Progress Photo</option>
-                        <option value="structural">🏗️ Structural & Foundation Works</option>
-                        <option value="finishing">✨ Turnkey Architectural Finishing</option>
+                        <option value="blueprint">Technical Blueprint / CAD Plan</option>
+                        <option value="3d_render">3D Architectural Render (Target Design)</option>
+                        <option value="client_want">Client Design Inspiration / Request</option>
+                        <option value="actual_site">Actual On-Site Progress Photo</option>
+                        <option value="structural">Structural & Foundation Works</option>
+                        <option value="finishing">Turnkey Architectural Finishing</option>
                     </select>
                 </div>
 
@@ -1606,7 +1592,7 @@
             <!-- Replace Image Controls -->
             <div style="background: rgba(15, 23, 42, 0.6); padding: 14px; border: 1px dashed rgba(56, 189, 248, 0.4); border-radius: var(--radius-sm); margin-bottom: 16px;">
                 <div style="font-size: 0.825rem; font-weight: 700; color: #38bdf8; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
-                    <span>🔄</span> Replace Existing Image File or Web URL
+                    Replace Existing Image File or Web URL
                 </div>
 
                 <div class="form-group" style="margin-bottom: 10px;">
@@ -1628,18 +1614,18 @@
             <div class="form-group" style="display: flex; align-items: center; gap: 10px; padding: 10px; background: rgba(239, 68, 68, 0.08); border-radius: var(--radius-sm); border: 1px solid rgba(239, 68, 68, 0.2);">
                 <input type="checkbox" name="is_primary" id="editPhotoIsPrimary" value="1" style="width: 18px; height: 18px; accent-color: #ef4444; cursor: pointer;">
                 <label for="editPhotoIsPrimary" style="font-size: 0.85rem; color: #f8fafc; cursor: pointer; font-weight: 600;">
-                    ⭐ Set this as the Primary Profile Hero Banner Image for this project
+                    Set this as the Primary Profile Hero Banner Image for this project
                 </label>
             </div>
 
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 16px;">
                 <button type="button" class="btn-secondary" id="editPhotoDeleteBtn" onclick="confirmDeletePhotoFromModal()" style="color: #ef4444; border-color: rgba(239, 68, 68, 0.3);">
-                    🗑️ Delete Photo
+                    Delete Photo
                 </button>
                 <div style="display: flex; gap: 10px;">
                     <button type="button" class="btn-secondary" onclick="closeModal('editPhotoModal')">Cancel</button>
                     <button type="submit" class="btn-primary" style="background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);">
-                        💾 Save & Update Media
+                        Save & Update Media
                     </button>
                 </div>
             </div>
@@ -1657,7 +1643,7 @@
 <div class="modal-overlay" id="updateScheduleModal">
     <div class="modal-box">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h3 style="font-weight: 700;">📅 Set Project Master Schedule & Phases</h3>
+            <h3 style="font-weight: 700;">Set Project Master Schedule & Phases</h3>
             <button onclick="closeModal('updateScheduleModal')" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer;">&times;</button>
         </div>
 
@@ -1695,7 +1681,7 @@
 <div class="modal-overlay" id="returnExcessModal">
     <div class="modal-box">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h3 style="font-weight: 700;">↩️ Return Excess Material to Central Warehouse</h3>
+            <h3 style="font-weight: 700;">Return Excess Material to Central Warehouse</h3>
             <button onclick="closeModal('returnExcessModal')" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer;">&times;</button>
         </div>
 
@@ -1783,11 +1769,11 @@
                 <div class="form-group">
                     <label class="form-label">Payment Method <span style="color:#ef4444;">*</span></label>
                     <select name="payment_method" class="form-select" required>
-                        <option value="Bank Transfer">💳 Bank Direct Wire / Transfer</option>
-                        <option value="Cheque">📄 Cheque / Manager's Check</option>
-                        <option value="Cash">💵 Cash Settlement</option>
-                        <option value="Online Banking">📱 Online Banking (GCash / Maya / Instapay)</option>
-                        <option value="Credit / Debit Card">💳 Credit / Debit Card</option>
+                        <option value="Bank Transfer">Bank Direct Wire / Transfer</option>
+                        <option value="Cheque">Cheque / Manager's Check</option>
+                        <option value="Cash">Cash Settlement</option>
+                        <option value="Online Banking">Online Banking (GCash / Maya / Instapay)</option>
+                        <option value="Credit / Debit Card">Credit / Debit Card</option>
                     </select>
                 </div>
             </div>
@@ -1844,7 +1830,7 @@
             <div id="lightboxDesc" style="font-size: 0.825rem; color: #94a3b8; max-width: 600px;"></div>
             <div style="display: flex; gap: 10px; margin-top: 4px;">
                 <button type="button" id="lightboxEditBtn" class="btn-primary" style="font-size: 0.8rem; padding: 5px 14px; background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);">
-                    ✏️ Edit This Image & Blueprint
+                    Edit This Image & Blueprint
                 </button>
                 <button type="button" class="btn-secondary" onclick="closeModal('photoLightboxModal')" style="font-size: 0.8rem; padding: 5px 14px;">
                     Close Preview
@@ -1928,10 +1914,10 @@
                 <div class="form-group">
                     <label class="form-label">Trade Discipline Category</label>
                     <select name="category" id="addTaskCategorySelect" class="form-select" required>
-                        <option value="Structural">🏗️ Structural Works</option>
-                        <option value="Electrical">⚡ Electrical Works</option>
-                        <option value="Piping & Plumbing">🚰 Piping & Plumbing</option>
-                        <option value="Design-Build / Turnkey Finishing">✨ Design-Build / Turnkey Finishing</option>
+                        <option value="Structural">Structural Works</option>
+                        <option value="Electrical">Electrical Works</option>
+                        <option value="Piping & Plumbing">Piping & Plumbing</option>
+                        <option value="Design-Build / Turnkey Finishing">Design-Build / Turnkey Finishing</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -1972,7 +1958,7 @@
 <div class="modal-overlay" id="editTaskModal">
     <div class="modal-box">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h3 style="font-weight: 700; color: #38bdf8;">✏️ Edit Checklist Task</h3>
+            <h3 style="font-weight: 700; color: #38bdf8;">Edit Checklist Task</h3>
             <button onclick="closeModal('editTaskModal')" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer;">&times;</button>
         </div>
 
@@ -1987,10 +1973,10 @@
                 <div class="form-group">
                     <label class="form-label">Trade Discipline Category</label>
                     <select name="category" id="editTaskCategorySelect" class="form-select" required>
-                        <option value="Structural">🏗️ Structural Works</option>
-                        <option value="Electrical">⚡ Electrical Works</option>
-                        <option value="Piping & Plumbing">🚰 Piping & Plumbing</option>
-                        <option value="Design-Build / Turnkey Finishing">✨ Design-Build / Turnkey Finishing</option>
+                        <option value="Structural">Structural Works</option>
+                        <option value="Electrical">Electrical Works</option>
+                        <option value="Piping & Plumbing">Piping & Plumbing</option>
+                        <option value="Design-Build / Turnkey Finishing">Design-Build / Turnkey Finishing</option>
                     </select>
                 </div>
 
@@ -2066,7 +2052,7 @@
     <div class="modal-box modal-box-large" style="max-width: 820px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
             <div>
-                <h3 style="font-weight: 700; color: #10b981;">📋 Structured Task Checklist State (JSON)</h3>
+                <h3 style="font-weight: 700; color: #10b981;">Structured Task Checklist State (JSON)</h3>
                 <span style="font-size: 0.8rem; color: var(--text-muted);">Real-time computed data state with project metrics, completion %, and array of individual tasks</span>
             </div>
             <button onclick="closeModal('checklistJsonModal')" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer;">&times;</button>
@@ -2079,7 +2065,7 @@
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
             <span style="font-size: 0.75rem; color: var(--text-muted);">Exact Formula: <code>(Completed Tasks / Total Tasks) * 100</code> rounded to nearest whole number</span>
             <div style="display: flex; gap: 8px;">
-                <button type="button" class="btn-secondary" onclick="copyChecklistJson()">📋 Copy JSON to Clipboard</button>
+                <button type="button" class="btn-secondary" onclick="copyChecklistJson()">Copy JSON to Clipboard</button>
                 <button type="button" class="btn-primary" onclick="closeModal('checklistJsonModal')">Close</button>
             </div>
         </div>
@@ -2091,7 +2077,7 @@
     <div class="modal-box">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
             <h3 style="font-weight: 700; color: #14b8a6; display: flex; align-items: center; gap: 8px;">
-                <span>📦</span> Allocate Material to Project Site BOM
+                Allocate Material to Project Site BOM
             </h3>
             <button onclick="closeModal('addProjectBomModal')" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer;">&times;</button>
         </div>
@@ -2132,7 +2118,7 @@
             <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
                 <button type="button" class="btn-secondary" onclick="closeModal('addProjectBomModal')">Cancel</button>
                 <button type="submit" class="btn-primary" style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%); border-color: #14b8a6;">
-                    🚀 Allocate Material
+                    Allocate Material
                 </button>
             </div>
         </form>
@@ -2286,7 +2272,7 @@
     <div class="modal-box modal-box-large">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
             <div>
-                <h3 style="font-weight: 700;">✏️ Edit Project Specifications & Adjust Settings</h3>
+                <h3 style="font-weight: 700;">Edit Project Specifications & Adjust Settings</h3>
                 <span style="font-size: 0.8rem; color: var(--text-muted);">Update project details, financial contract, schedule, weights, and workforce</span>
             </div>
             <button onclick="closeModal('editProjectModal')" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer;">&times;</button>
@@ -2376,15 +2362,15 @@
 
             <!-- Tripartite Loan Financing & Payment First Setup -->
             <div style="margin-top: 14px; padding: 14px; background: rgba(0,0,0,0.25); border-radius: var(--radius-md); border: 1px solid var(--border-color);">
-                <div style="font-weight: 700; font-size: 0.85rem; color: #38bdf8; margin-bottom: 10px;">🏦 Bank & Pag-IBIG Tripartite Loan Financing & Escrow Setup</div>
+                <div style="font-weight: 700; font-size: 0.85rem; color: #38bdf8; margin-bottom: 10px;">Bank & Pag-IBIG Tripartite Loan Financing & Escrow Setup</div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
                     <div class="form-group">
                         <label class="form-label" style="font-size: 0.75rem;">Financing Channel</label>
                         <select name="financing_type" class="form-select">
-                            <option value="bank_loan" {{ $project->financing_type === 'bank_loan' ? 'selected' : '' }}>🏦 Bank Construction Loan</option>
-                            <option value="pagibig_loan" {{ $project->financing_type === 'pagibig_loan' ? 'selected' : '' }}>🏠 Pag-IBIG (HDMF) Loan</option>
-                            <option value="client_equity" {{ $project->financing_type === 'client_equity' ? 'selected' : '' }}>💵 Client Direct Equity</option>
-                            <option value="cash_progress" {{ $project->financing_type === 'cash_progress' ? 'selected' : '' }}>💼 Direct Progress Cash</option>
+                            <option value="bank_loan" {{ $project->financing_type === 'bank_loan' ? 'selected' : '' }}>Bank Construction Loan</option>
+                            <option value="pagibig_loan" {{ $project->financing_type === 'pagibig_loan' ? 'selected' : '' }}>Pag-IBIG (HDMF) Loan</option>
+                            <option value="client_equity" {{ $project->financing_type === 'client_equity' ? 'selected' : '' }}>Client Direct Equity</option>
+                            <option value="cash_progress" {{ $project->financing_type === 'cash_progress' ? 'selected' : '' }}>Direct Progress Cash</option>
                         </select>
                     </div>
 
@@ -2641,7 +2627,7 @@
 <div class="modal-overlay" id="editScopeLineModal">
     <div class="modal-box modal-box-large">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h3 style="font-weight: 700; color: #38bdf8;">✏️ Edit Line Item Entry</h3>
+            <h3 style="font-weight: 700; color: #38bdf8;">Edit Line Item Entry</h3>
             <button onclick="closeModal('editScopeLineModal')" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer;">&times;</button>
         </div>
 
@@ -2694,7 +2680,7 @@
     <div class="modal-box">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
             <div>
-                <h3 style="font-weight: 700; color: #f59e0b;">📅 Log Today's On-Site Material Consumption</h3>
+                <h3 style="font-weight: 700; color: #f59e0b;">Log Today's On-Site Material Consumption</h3>
                 <span style="font-size: 0.8rem; color: var(--text-muted);">Record materials used today to update remaining inventory for tomorrow</span>
             </div>
             <button onclick="closeModal('logDailyUsageModal')" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer;">&times;</button>
@@ -2755,7 +2741,7 @@
     <div class="modal-box modal-box-large">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
             <div>
-                <h3 style="font-weight: 700; color: #38bdf8;">🔁 Transfer Surplus Material to Another Project</h3>
+                <h3 style="font-weight: 700; color: #38bdf8;">Transfer Surplus Material to Another Project</h3>
                 <span style="font-size: 0.8rem; color: var(--text-muted);">Reallocate remaining unused materials to another active project or central inventory</span>
             </div>
             <button onclick="closeModal('transferMaterialModal')" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer;">&times;</button>
@@ -2774,8 +2760,8 @@
                 <div class="form-group">
                     <label class="form-label">Transfer Destination Mode</label>
                     <select name="transfer_type" class="form-select" id="transferTypeSelect" onchange="toggleTransferDest(this.value)" required>
-                        <option value="inter_project" selected>🏢 Direct Inter-Project Transfer (Reallocate to another project)</option>
-                        <option value="warehouse_stock">📦 Return & Stock in Central Warehouse (Save for future projects)</option>
+                        <option value="inter_project" selected>Direct Inter-Project Transfer (Reallocate to another project)</option>
+                        <option value="warehouse_stock">Return & Stock in Central Warehouse (Save for future projects)</option>
                     </select>
                 </div>
 
@@ -3254,7 +3240,7 @@
         if (progress >= 100 || status === 'completed') {
             progInput.readOnly = true;
             progInput.style.opacity = '0.6';
-            statusSelect.innerHTML = '<option value="completed">🔒 Completed (100% - Locked)</option>';
+            statusSelect.innerHTML = '<option value="completed">Completed (100% - Locked)</option>';
             statusSelect.value = 'completed';
         } else {
             progInput.readOnly = false;
@@ -3370,7 +3356,7 @@
 
                 const doneCell = row.querySelector('.cell-done');
                 if (doneCell) {
-                    doneCell.innerHTML = `<span class="locked-done-badge" title="🔒 Irreversible Completion: This task is completed and permanently locked." style="display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 6px; background: rgba(16, 185, 129, 0.2); border: 1.5px solid #10b981; color: #10b981; font-weight: 900; font-size: 0.9rem; cursor: not-allowed;">✓</span>`;
+                    doneCell.innerHTML = `<span class="locked-done-badge" title="Irreversible Completion: This task is completed and permanently locked." style="display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 6px; background: rgba(16, 185, 129, 0.2); border: 1.5px solid #10b981; color: #10b981; font-weight: 900; font-size: 0.9rem; cursor: not-allowed;">&#10003;</span>`;
                 }
 
                 const titleText = row.querySelector('.task-title-text');
@@ -3381,12 +3367,12 @@
 
                 const statusCell = row.querySelector('.cell-status');
                 if (statusCell) {
-                    statusCell.innerHTML = `<span class="badge badge-completed" style="font-size: 0.8rem; padding: 5px 12px; display: inline-flex; align-items: center; gap: 4px;" title="🔒 Permanent milestone: Completed and materials mobilized">🔒 Completed</span>`;
+                    statusCell.innerHTML = `<span class="badge badge-completed" style="font-size: 0.8rem; padding: 5px 12px; display: inline-flex; align-items: center; gap: 4px;" title="Permanent milestone: Completed and materials mobilized">Completed</span>`;
                 }
 
                 const delForm = row.querySelector('.cell-actions form');
                 if (delForm) {
-                    delForm.outerHTML = `<button type="button" class="btn-secondary" style="font-size: 0.75rem; padding: 4px 7px; opacity: 0.4; cursor: not-allowed;" title="🔒 Completed milestones cannot be deleted" disabled>🔒</button>`;
+                    delForm.outerHTML = `<button type="button" class="btn-secondary" style="font-size: 0.75rem; padding: 4px 7px; opacity: 0.4; cursor: not-allowed;" title="Completed milestones cannot be deleted" disabled>Locked</button>`;
                 }
             }
 
@@ -3394,7 +3380,7 @@
             if (body.active_materials_data) {
                 renderActiveMaterials(body.active_materials_data);
             }
-            showChecklistToast(`✓ ${body.task_name || 'Task'} marked Completed & materials accumulated! [🔒 Locked]`, false);
+            showChecklistToast(`${body.task_name || 'Task'} marked Completed & materials accumulated! [Locked]`, false);
         })
         .catch(err => {
             showChecklistToast('Error updating task: ' + err.message, true);
@@ -3433,7 +3419,7 @@
                     row.style.background = 'rgba(16, 185, 129, 0.05)';
                     const doneCell = row.querySelector('.cell-done');
                     if (doneCell) {
-                        doneCell.innerHTML = `<span class="locked-done-badge" title="🔒 Irreversible Completion: This task is completed and permanently locked." style="display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 6px; background: rgba(16, 185, 129, 0.2); border: 1.5px solid #10b981; color: #10b981; font-weight: 900; font-size: 0.9rem; cursor: not-allowed;">✓</span>`;
+                        doneCell.innerHTML = `<span class="locked-done-badge" title="Irreversible Completion: This task is completed and permanently locked." style="display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 6px; background: rgba(16, 185, 129, 0.2); border: 1.5px solid #10b981; color: #10b981; font-weight: 900; font-size: 0.9rem; cursor: not-allowed;">&#10003;</span>`;
                     }
                     const titleText = row.querySelector('.task-title-text');
                     if (titleText) {
@@ -3442,11 +3428,11 @@
                     }
                     const statusCell = row.querySelector('.cell-status');
                     if (statusCell) {
-                        statusCell.innerHTML = `<span class="badge badge-completed" style="font-size: 0.8rem; padding: 5px 12px; display: inline-flex; align-items: center; gap: 4px;" title="🔒 Permanent milestone: Completed and materials mobilized">🔒 Completed</span>`;
+                        statusCell.innerHTML = `<span class="badge badge-completed" style="font-size: 0.8rem; padding: 5px 12px; display: inline-flex; align-items: center; gap: 4px;" title="Permanent milestone: Completed and materials mobilized">Completed</span>`;
                     }
                     const delForm = row.querySelector('.cell-actions form');
                     if (delForm) {
-                        delForm.outerHTML = `<button type="button" class="btn-secondary" style="font-size: 0.75rem; padding: 4px 7px; opacity: 0.4; cursor: not-allowed;" title="🔒 Completed milestones cannot be deleted" disabled>🔒</button>`;
+                        delForm.outerHTML = `<button type="button" class="btn-secondary" style="font-size: 0.75rem; padding: 4px 7px; opacity: 0.4; cursor: not-allowed;" title="Completed milestones cannot be deleted" disabled>Locked</button>`;
                     }
                 } else if (body.status === 'in_progress') {
                     selectEl.style.color = '#38bdf8';
@@ -3463,7 +3449,7 @@
             if (body.active_materials_data) {
                 renderActiveMaterials(body.active_materials_data);
             }
-            showChecklistToast(`⚡ ${body.task_name || 'Task'} updated to ${body.status_label} & materials synchronized!`, false);
+            showChecklistToast(`${body.task_name || 'Task'} updated to ${body.status_label} & materials synchronized!`, false);
         })
         .catch(err => {
             selectEl.disabled = false;
@@ -3490,7 +3476,7 @@
             if (row && data.timeline_phase_key) {
                 row.setAttribute('data-phase', data.timeline_phase_key);
             }
-            showChecklistToast(`📅 Timeline phase updated to: ${phaseVal}`, false);
+            showChecklistToast(`Timeline phase updated to: ${phaseVal}`, false);
         })
         .catch(err => {
             selectEl.disabled = false;
@@ -3558,18 +3544,18 @@
             let taskChips = '';
             if (mat.task_names && Array.isArray(mat.task_names)) {
                 mat.task_names.forEach(tName => {
-                    taskChips += `<span class="badge" style="font-size: 0.675rem; background: rgba(56, 189, 248, 0.1); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.25);">📍 ${tName}</span>`;
+                    taskChips += `<span class="badge" style="font-size: 0.675rem; background: rgba(56, 189, 248, 0.1); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.25);">${tName}</span>`;
                 });
             }
 
             const statusBadge = mat.is_all_completed
-                ? `<span class="badge badge-completed" style="font-size: 0.725rem;">🔒 Installed & Finalized</span>`
-                : `<span class="badge badge-in_progress" style="font-size: 0.725rem;">⚡ In Consumption</span>`;
+                ? `<span class="badge badge-completed" style="font-size: 0.725rem;">Installed & Finalized</span>`
+                : `<span class="badge badge-in_progress" style="font-size: 0.725rem;">In Consumption</span>`;
 
             html += `
                 <tr class="active-mat-row" data-name="${(mat.material_name || '').toLowerCase()}" data-category="${(mat.category || '').toLowerCase()}">
                     <td style="text-align: center; color: var(--text-muted); font-family: var(--font-mono);">${idx + 1}</td>
-                    <td><strong style="color: #f8fafc; font-size: 0.875rem;">🧱 ${mat.material_name}</strong></td>
+                    <td><strong style="color: #f8fafc; font-size: 0.875rem;">${mat.material_name}</strong></td>
                     <td><span class="spec-chip" style="font-size: 0.7rem; color: ${catColor}; border-color: ${catColor}44;">${mat.category}</span></td>
                     <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: #f8fafc;">${Number(mat.total_quantity).toLocaleString()} ${mat.unit}</td>
                     <td style="text-align: right; font-family: var(--font-mono); color: var(--text-muted);">₱${Number(mat.unit_cost).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
@@ -3589,7 +3575,7 @@
             .then(res => res.json())
             .then(data => {
                 renderActiveMaterials(data);
-                showChecklistToast('📦 Active project materials synchronized with task list!', false);
+                showChecklistToast('Active project materials synchronized with task list!', false);
             })
             .catch(err => {
                 showChecklistToast('Error syncing materials: ' + err.message, true);

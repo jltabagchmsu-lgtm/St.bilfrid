@@ -78,10 +78,10 @@
         <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
             <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted);">Method:</span>
             <a href="{{ route('payments.index', ['project_id' => $selectedProjectId ?? '', 'status' => $selectedStatus ?? '']) }}" class="spec-chip {{ empty($selectedMethod) ? 'spec-chip-active' : '' }}" style="text-decoration: none;">All</a>
-            <a href="{{ route('payments.index', ['project_id' => $selectedProjectId ?? '', 'status' => $selectedStatus ?? '', 'payment_method' => 'Bank Transfer']) }}" class="spec-chip {{ ($selectedMethod ?? '') == 'Bank Transfer' ? 'spec-chip-active' : '' }}" style="text-decoration: none;">💳 Bank Transfer</a>
-            <a href="{{ route('payments.index', ['project_id' => $selectedProjectId ?? '', 'status' => $selectedStatus ?? '', 'payment_method' => 'Cheque']) }}" class="spec-chip {{ ($selectedMethod ?? '') == 'Cheque' ? 'spec-chip-active' : '' }}" style="text-decoration: none;">📄 Cheque</a>
-            <a href="{{ route('payments.index', ['project_id' => $selectedProjectId ?? '', 'status' => $selectedStatus ?? '', 'payment_method' => 'Cash']) }}" class="spec-chip {{ ($selectedMethod ?? '') == 'Cash' ? 'spec-chip-active' : '' }}" style="text-decoration: none;">💵 Cash</a>
-            <a href="{{ route('payments.index', ['project_id' => $selectedProjectId ?? '', 'status' => $selectedStatus ?? '', 'payment_method' => 'Online Banking']) }}" class="spec-chip {{ ($selectedMethod ?? '') == 'Online Banking' ? 'spec-chip-active' : '' }}" style="text-decoration: none;">📱 Online</a>
+            <a href="{{ route('payments.index', ['project_id' => $selectedProjectId ?? '', 'status' => $selectedStatus ?? '', 'payment_method' => 'Bank Transfer']) }}" class="spec-chip {{ ($selectedMethod ?? '') == 'Bank Transfer' ? 'spec-chip-active' : '' }}" style="text-decoration: none;">Bank Transfer</a>
+            <a href="{{ route('payments.index', ['project_id' => $selectedProjectId ?? '', 'status' => $selectedStatus ?? '', 'payment_method' => 'Cheque']) }}" class="spec-chip {{ ($selectedMethod ?? '') == 'Cheque' ? 'spec-chip-active' : '' }}" style="text-decoration: none;">Cheque</a>
+            <a href="{{ route('payments.index', ['project_id' => $selectedProjectId ?? '', 'status' => $selectedStatus ?? '', 'payment_method' => 'Cash']) }}" class="spec-chip {{ ($selectedMethod ?? '') == 'Cash' ? 'spec-chip-active' : '' }}" style="text-decoration: none;">Cash</a>
+            <a href="{{ route('payments.index', ['project_id' => $selectedProjectId ?? '', 'status' => $selectedStatus ?? '', 'payment_method' => 'Online Banking']) }}" class="spec-chip {{ ($selectedMethod ?? '') == 'Online Banking' ? 'spec-chip-active' : '' }}" style="text-decoration: none;">Online</a>
         </div>
 
         <!-- Status Filter -->
@@ -140,15 +140,7 @@
                     <td>
                         <div style="font-family: var(--font-mono); font-size: 0.85rem;">{{ $pay->payment_date->format('M d, Y') }}</div>
                         <span class="spec-chip" style="font-size: 0.7rem; margin-top: 3px;">
-                            @if(str_contains(strtolower($pay->payment_method), 'check') || str_contains(strtolower($pay->payment_method), 'cheque'))
-                                📄 {{ $pay->payment_method }}
-                            @elseif(str_contains(strtolower($pay->payment_method), 'cash'))
-                                💵 {{ $pay->payment_method }}
-                            @elseif(str_contains(strtolower($pay->payment_method), 'online') || str_contains(strtolower($pay->payment_method), 'gcash') || str_contains(strtolower($pay->payment_method), 'maya'))
-                                📱 {{ $pay->payment_method }}
-                            @else
-                                💳 {{ $pay->payment_method }}
-                            @endif
+                            {{ $pay->payment_method }}
                         </span>
                     </td>
                     <td>
@@ -169,7 +161,7 @@
                     <td style="text-align: right;">
                         <div style="display: inline-flex; gap: 6px; align-items: center;">
                             <a href="{{ route('payments.printReceipt', $pay->id) }}" target="_blank" class="btn-secondary" style="font-size: 0.75rem; padding: 4px 8px; color: #10b981; border-color: rgba(16, 185, 129, 0.4);" title="Print Official Receipt Voucher">
-                                🖨️ Print OR
+                                Print OR
                             </a>
                             @if($pay->status !== 'paid')
                                 <form action="{{ route('payments.updateStatus', $pay->id) }}" method="POST" style="display:inline;">
@@ -184,7 +176,7 @@
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn-secondary" style="font-size: 0.75rem; padding: 4px 6px; color: #ef4444; border-color: rgba(239, 68, 68, 0.3);" title="Delete Payment Record">
-                                    🗑️
+                                    Delete
                                 </button>
                             </form>
                         </div>
@@ -269,11 +261,11 @@
                 <div class="form-group">
                     <label class="form-label">Payment Method <span style="color:#ef4444;">*</span></label>
                     <select name="payment_method" class="form-select" required>
-                        <option value="Bank Transfer">💳 Bank Direct Wire / Transfer</option>
-                        <option value="Cheque">📄 Cheque / Manager's Check</option>
-                        <option value="Cash">💵 Cash Settlement</option>
-                        <option value="Online Banking">📱 Online Banking (GCash / Maya / Instapay)</option>
-                        <option value="Credit / Debit Card">💳 Credit / Debit Card</option>
+                        <option value="Bank Transfer">Bank Direct Wire / Transfer</option>
+                        <option value="Cheque">Cheque / Manager's Check</option>
+                        <option value="Cash">Cash Settlement</option>
+                        <option value="Online Banking">Online Banking (GCash / Maya / Instapay)</option>
+                        <option value="Credit / Debit Card">Credit / Debit Card</option>
                     </select>
                 </div>
             </div>

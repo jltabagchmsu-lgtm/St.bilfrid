@@ -6,7 +6,7 @@
 @section('top_actions')
     @if($selectedProject)
         <a href="{{ route('projects.printBom', $selectedProject->id) }}" target="_blank" class="btn-secondary" style="font-size: 0.85rem; color: #10b981; border-color: rgba(16, 185, 129, 0.3); display: inline-flex; align-items: center; gap: 6px; height: 38px;">
-            🖨️ Print 8-Page BOM
+            Print 8-Page BOM
         </a>
         <a href="{{ route('projects.show', $selectedProject->id) }}" class="btn-secondary" style="font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px; height: 38px;">
             View Project Master &rarr;
@@ -113,13 +113,13 @@
             <!-- 1-Click Template Loaders Dropdown -->
             <div class="dropdown" style="position: relative; display: inline-block;">
                 <button type="button" class="btn-secondary" style="font-size: 0.8rem; height: 36px; background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.3); color: #38bdf8; display: inline-flex; align-items: center; gap: 6px;" onclick="toggleTemplateMenu()">
-                    ⚡ 1-Click Load Template &#9662;
+                    1-Click Load Template &#9662;
                 </button>
                 <div id="templateMenuDropdown" style="display: none; position: absolute; right: 0; top: 100%; margin-top: 6px; background: #0f172a; border: 1px solid var(--border-color); border-radius: var(--radius-md); box-shadow: 0 10px 30px rgba(0,0,0,0.7); min-width: 310px; z-index: 50; padding: 8px;">
                     <form action="{{ route('projects.loadProjectTemplate', $selectedProject->id) }}" method="POST" onsubmit="return confirm('Generate and load the official 18-item Bill of Materials calibrated specifically for {{ addslashes($selectedProject->title ?: $selectedProject->project_code) }} (₱{{ number_format($selectedProject->contract_budget ?: ($selectedProject->estimated_cost ?: 1831613.80), 2) }})?');">
                         @csrf
                         <button type="submit" style="display: block; width: 100%; text-align: left; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 10px 12px; color: #38bdf8; font-size: 0.825rem; cursor: pointer; border-radius: 4px; margin-bottom: 6px;" onmouseover="this.style.background='rgba(56, 189, 248, 0.22)'" onmouseout="this.style.background='rgba(56, 189, 248, 0.12)'">
-                            <strong>🎯 Match Open Project: {{ $selectedProject->title ?: $selectedProject->project_code }}</strong>
+                            <strong>Match Open Project: {{ $selectedProject->title ?: $selectedProject->project_code }}</strong>
                             <div style="font-size: 0.725rem; color: #cbd5e1;">Calibrated to ₱{{ number_format($selectedProject->contract_budget ?: ($selectedProject->estimated_cost ?: 1831613.80), 2) }} &bull; {{ $selectedProject->floor_area_sqm ?? 80 }} m²</div>
                         </button>
                     </form>
@@ -127,19 +127,19 @@
                     <form action="{{ route('projects.load2BrBungalowTemplate', $selectedProject->id) }}" method="POST" onsubmit="return confirm('Load the 2-Bedroom Bungalow Bill of Materials template (₱1,831,613.80)?');">
                         @csrf
                         <button type="submit" style="display: block; width: 100%; text-align: left; background: none; border: none; padding: 8px 10px; color: #f8fafc; font-size: 0.8rem; cursor: pointer; border-radius: 4px;" onmouseover="this.style.background='rgba(255, 255, 255, 0.08)'" onmouseout="this.style.background='none'">
-                            ⚡ 2BR Bungalow (₱1.831M)
+                            2BR Bungalow (₱1.831M)
                         </button>
                     </form>
                     <form action="{{ route('projects.load3BrBungalowTemplate', $selectedProject->id) }}" method="POST" onsubmit="return confirm('Load the 3-Bedroom Bungalow Bill of Materials template (₱1,778,062.08) with 18 scope items?');">
                         @csrf
                         <button type="submit" style="display: block; width: 100%; text-align: left; background: none; border: none; padding: 8px 10px; color: #f8fafc; font-size: 0.8rem; cursor: pointer; border-radius: 4px;" onmouseover="this.style.background='rgba(255, 255, 255, 0.08)'" onmouseout="this.style.background='none'">
-                            ⚡ 3BR Bungalow (₱1.778M)
+                            3BR Bungalow (₱1.778M)
                         </button>
                     </form>
                     <form action="{{ route('projects.loadDuplexTemplate', $selectedProject->id) }}" method="POST" onsubmit="return confirm('Load the 2-Storey Duplex Housing BOM template (₱742,800.74)?');">
                         @csrf
                         <button type="submit" style="display: block; width: 100%; text-align: left; background: none; border: none; padding: 8px 10px; color: #f8fafc; font-size: 0.8rem; cursor: pointer; border-radius: 4px;" onmouseover="this.style.background='rgba(255, 255, 255, 0.08)'" onmouseout="this.style.background='none'">
-                            ⚡ 31 m² Duplex Housing (₱742.8K)
+                            31 m² Duplex Housing (₱742.8K)
                         </button>
                     </form>
                 </div>
@@ -149,7 +149,7 @@
             <form action="{{ route('bom.autoAllocateScope', $selectedProject->id) }}" method="POST" onsubmit="return confirm('Synchronize and auto-allocate all materials from the Scope BOM into the Site Tracker warehouse allocation?');">
                 @csrf
                 <button type="submit" class="btn-primary" style="font-size: 0.8rem; height: 36px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-color: #10b981; display: inline-flex; align-items: center; gap: 6px;" title="Sync all Scope BOM materials to Site Tracker">
-                    🔄 Sync Scope to Site Tracker
+                    Sync Scope to Site Tracker
                 </button>
             </form>
 
@@ -166,15 +166,15 @@
      ==================================================== -->
 <div style="display: flex; gap: 8px; margin-bottom: 24px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; flex-wrap: wrap;">
     <button type="button" id="tabBtnMaster" class="btn-tab active" onclick="switchBomTab('master')" style="padding: 10px 20px; font-size: 0.9rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: rgba(56, 189, 248, 0.15); color: #38bdf8; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; height: 42px;">
-        <span>📋</span> Master Consolidated Materials Table
+        Master Consolidated Materials Table
         <span class="badge" style="background: rgba(56, 189, 248, 0.3); color: #f8fafc; font-size: 0.725rem;">{{ $masterMaterialsDistinctCount }} Materials</span>
     </button>
     <button type="button" id="tabBtnScope" class="btn-tab" onclick="switchBomTab('scope')" style="padding: 10px 20px; font-size: 0.9rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid transparent; background: rgba(15, 23, 42, 0.5); color: var(--text-secondary); cursor: pointer; display: inline-flex; align-items: center; gap: 8px; height: 42px;">
-        <span>🏗️</span> Itemized Scope BOM Breakdown (DUPA)
+        Itemized Scope BOM Breakdown (DUPA)
         <span class="badge" style="background: rgba(255, 255, 255, 0.1); color: var(--text-secondary); font-size: 0.725rem;">{{ $selectedProject ? $selectedProject->scopeItems->count() : 0 }} Scope Items</span>
     </button>
     <button type="button" id="tabBtnSite" class="btn-tab" onclick="switchBomTab('site')" style="padding: 10px 20px; font-size: 0.9rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid transparent; background: rgba(15, 23, 42, 0.5); color: var(--text-secondary); cursor: pointer; display: inline-flex; align-items: center; gap: 8px; height: 42px;">
-        <span>📦</span> Site Stock Allocations & Daily Usage
+        Site Stock Allocations & Daily Usage
         <span class="badge" style="background: rgba(255, 255, 255, 0.1); color: var(--text-secondary); font-size: 0.725rem;">{{ $projectMaterials->count() }} Site Items</span>
     </button>
 </div>
@@ -227,7 +227,7 @@
         <div class="panel-header" style="flex-wrap: wrap; gap: 16px; margin-bottom: 16px;">
             <div>
                 <h3 class="panel-title" style="display: flex; align-items: center; gap: 10px;">
-                    <span>📋</span> Complete Bill of Materials (BOM) Master Table
+                    Complete Bill of Materials (BOM) Master Table
                 </h3>
                 <span style="font-size: 0.85rem; color: var(--text-muted);">
                     Unified engineering material requirements, aggregated total quantities, unit costs, and warehouse stock tracking.
@@ -237,14 +237,14 @@
             <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                 <!-- Real-time Search Input -->
                 <div style="position: relative;">
-                    <input type="text" id="bomSearchInput" onkeyup="filterMasterMaterials()" placeholder="🔍 Search materials..." class="form-input" style="padding: 8px 14px; font-size: 0.825rem; min-width: 240px; border-radius: var(--radius-sm);">
+                    <input type="text" id="bomSearchInput" onkeyup="filterMasterMaterials()" placeholder="Search materials..." class="form-input" style="padding: 8px 14px; font-size: 0.825rem; min-width: 240px; border-radius: var(--radius-sm);">
                 </div>
 
                 <button type="button" class="btn-secondary" style="font-size: 0.8rem; height: 36px; color: #38bdf8; border-color: rgba(56, 189, 248, 0.3); display: inline-flex; align-items: center; gap: 6px;" onclick="exportMasterBomToCsv()">
-                    📥 Export CSV
+                    Export CSV
                 </button>
                 <button type="button" class="btn-secondary" style="font-size: 0.8rem; height: 36px; color: #10b981; border-color: rgba(16, 185, 129, 0.3); display: inline-flex; align-items: center; gap: 6px;" onclick="window.print()">
-                    🖨️ Print View
+                    Print View
                 </button>
             </div>
         </div>
@@ -353,7 +353,6 @@
                     @empty
                         <tr>
                             <td colspan="10" style="text-align: center; padding: 48px 20px; color: var(--text-muted);">
-                                <div style="font-size: 2.2rem; margin-bottom: 8px;">📋</div>
                                 <div style="font-size: 1.05rem; font-weight: 700; color: #f8fafc;">No Material Requirements in BOM Yet</div>
                                 <div style="font-size: 0.85rem; margin-top: 4px;">Load an official Bill of Materials calibrated specifically for <strong>{{ $selectedProject ? ($selectedProject->title ?: $selectedProject->project_code) : 'this project' }}</strong> or add custom Scope Items.</div>
                                 <div style="margin-top: 16px;">
@@ -361,7 +360,7 @@
                                         <form action="{{ route('projects.loadProjectTemplate', $selectedProject->id) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Generate and load the official 18-item Bill of Materials calibrated specifically for {{ addslashes($selectedProject->title ?: $selectedProject->project_code) }} (₱{{ number_format($selectedProject->contract_budget ?: ($selectedProject->estimated_cost ?: 1831613.80), 2) }})?');">
                                             @csrf
                                             <button type="submit" class="btn-primary" style="background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); border-color: #38bdf8;">
-                                                ⚡ 1-Click Load {{ $selectedProject->title ?: $selectedProject->project_code }} BOM (₱{{ number_format($selectedProject->contract_budget ?: ($selectedProject->estimated_cost ?: 1831613.80), 2) }})
+                                                1-Click Load {{ $selectedProject->title ?: $selectedProject->project_code }} BOM (₱{{ number_format($selectedProject->contract_budget ?: ($selectedProject->estimated_cost ?: 1831613.80), 2) }})
                                             </button>
                                         </form>
                                     @endif
@@ -468,7 +467,7 @@
                                     + Add Line
                                 </button>
                                 <button class="btn-secondary" style="font-size: 0.75rem; padding: 5px 8px;" onclick="openEditScopeItemModal({{ $item->id }}, {{ $item->item_number }}, '{{ addslashes($item->item_name) }}', '{{ addslashes($item->volume_or_area ?? '') }}', '{{ addslashes($item->notes ?? '') }}', {{ $item->contingency_percent ?? 0 }}, {{ $item->taxes_percent ?? 0 }}, {{ $item->profit_percent ?? 0 }})">
-                                    ✏️ Edit
+                                    Edit
                                 </button>
                                 <form action="{{ route('projects.scopeItems.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Delete Item {{ $item->item_number }} ({{ $item->item_name }}) and all its line items?');">
                                     @csrf
@@ -520,7 +519,7 @@
                                             <td style="text-align: center;">
                                                 <div style="display: inline-flex; gap: 4px; justify-content: center; align-items: center;">
                                                     <button type="button" style="background:none; border:none; color:#38bdf8; cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Edit Line" onclick="openEditScopeLineModal({{ $mat->id }}, 'material', '{{ addslashes($mat->description) }}', {{ $mat->quantity }}, '{{ addslashes($mat->unit) }}', {{ $mat->unit_price }})">
-                                                        ✏️
+                                                        Edit
                                                     </button>
                                                     <form action="{{ route('projects.scopeLines.destroy', $mat->id) }}" method="POST" onsubmit="return confirm('Delete material line: {{ $mat->description }}?');" style="display:inline;">
                                                         @csrf
@@ -571,7 +570,7 @@
                                             <td style="text-align: center;">
                                                 <div style="display: inline-flex; gap: 4px; justify-content: center; align-items: center;">
                                                     <button type="button" style="background:none; border:none; color:#38bdf8; cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Edit Line" onclick="openEditScopeLineModal({{ $lab->id }}, 'labor', '{{ addslashes($lab->description) }}', {{ $lab->quantity }}, '{{ addslashes($lab->unit) }}', {{ $lab->unit_price }})">
-                                                        ✏️
+                                                        Edit
                                                     </button>
                                                     <form action="{{ route('projects.scopeLines.destroy', $lab->id) }}" method="POST" onsubmit="return confirm('Delete labor line: {{ $lab->description }}?');" style="display:inline;">
                                                         @csrf
@@ -612,7 +611,7 @@
                                             <td style="text-align: center;">
                                                 <div style="display: inline-flex; gap: 4px; justify-content: center; align-items: center;">
                                                     <button type="button" style="background:none; border:none; color:#38bdf8; cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Edit Line" onclick="openEditScopeLineModal({{ $eq->id }}, 'equipment', '{{ addslashes($eq->description) }}', {{ $eq->quantity }}, '{{ addslashes($eq->unit) }}', {{ $eq->unit_price }})">
-                                                        ✏️
+                                                        Edit
                                                     </button>
                                                     <form action="{{ route('projects.scopeLines.destroy', $eq->id) }}" method="POST" onsubmit="return confirm('Delete equipment line: {{ $eq->description }}?');" style="display:inline;">
                                                         @csrf
@@ -664,7 +663,6 @@
         </div>
     @else
         <div style="text-align: center; padding: 48px 20px; background: rgba(0, 0, 0, 0.2); border-radius: var(--radius-md); border: 1px dashed var(--border-color); margin-bottom: 28px;">
-            <div style="font-size: 2.5rem; margin-bottom: 10px;">📐</div>
             <h4 style="font-size: 1.15rem; font-weight: 700; color: #f8fafc; margin-bottom: 6px;">No Itemized Scope Items Created Yet</h4>
             <p style="font-size: 0.85rem; color: var(--text-muted); max-width: 540px; margin: 0 auto 16px auto;">
                 Generate an itemized Scope of Work Bill of Materials tailored specifically for <strong>{{ $selectedProject ? ($selectedProject->title ?: $selectedProject->project_code) : 'this project' }}</strong> (Foundation, Columns, Beams, Walls, Roofing, Plumbing, Electrical, Finishes) with itemized Materials (A), Labor (B), Equipment (C), and official Philippine markups.
@@ -674,7 +672,7 @@
                     <form action="{{ route('projects.loadProjectTemplate', $selectedProject->id) }}" method="POST" onsubmit="return confirm('Generate and load the official 18-item Bill of Materials calibrated specifically for {{ addslashes($selectedProject->title ?: $selectedProject->project_code) }} (₱{{ number_format($selectedProject->contract_budget ?: ($selectedProject->estimated_cost ?: 1831613.80), 2) }})?');">
                         @csrf
                         <button type="submit" class="btn-primary" style="background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); border-color: #38bdf8;">
-                            ⚡ 1-Click Load {{ $selectedProject->title ?: $selectedProject->project_code }} BOM (₱{{ number_format($selectedProject->contract_budget ?: ($selectedProject->estimated_cost ?: 1831613.80), 2) }})
+                            1-Click Load {{ $selectedProject->title ?: $selectedProject->project_code }} BOM (₱{{ number_format($selectedProject->contract_budget ?: ($selectedProject->estimated_cost ?: 1831613.80), 2) }})
                         </button>
                     </form>
                 @endif
@@ -840,13 +838,13 @@
                             <div style="display: inline-flex; gap: 4px; flex-wrap: wrap; justify-content: center;">
                                 @if($bm->remaining_qty > 0)
                                     <button class="btn-primary" style="font-size: 0.725rem; padding: 3px 6px; background: #f59e0b; border-color: #f59e0b;" onclick="openLogDailyUsageModal({{ $bm->id }}, '{{ addslashes($bm->material->name) }}', {{ $bm->remaining_qty }}, '{{ $bm->material->unit }}')">
-                                        📅 Log
+                                        Log
                                     </button>
                                     <button class="btn-primary" style="font-size: 0.725rem; padding: 3px 6px; background: #38bdf8; border-color: #38bdf8;" onclick="openTransferMaterialModal({{ $bm->id }}, '{{ addslashes($bm->material->name) }}', {{ $bm->remaining_qty }}, '{{ $bm->material->unit }}')">
-                                        🔁 Transfer
+                                        Transfer
                                     </button>
                                     <button class="btn-secondary" style="font-size: 0.725rem; padding: 3px 6px; color: #10b981; border-color: rgba(16, 185, 129, 0.3);" onclick="openReturnExcessModal({{ $bm->id }}, '{{ addslashes($bm->material->name) }}', {{ $bm->remaining_qty }}, '{{ $bm->material->unit }}')">
-                                        ↩ Return
+                                        Return
                                     </button>
                                 @else
                                     <span style="font-size: 0.75rem; color: var(--text-muted);">Fully Consumed</span>
@@ -857,7 +855,7 @@
                     @empty
                     <tr>
                         <td colspan="{{ $selectedProject ? 9 : 10 }}" style="color: var(--text-muted); text-align: center; padding: 36px;">
-                            No materials allocated in this Project's site tracker yet. Click "+ Allocate Material" or use "🔄 Sync Scope to Site Tracker" above.
+                            No materials allocated in this Project's site tracker yet. Click "+ Allocate Material" or use "Sync Scope to Site Tracker" above.
                         </td>
                     </tr>
                     @endforelse
@@ -872,7 +870,7 @@
         <div class="glass-panel" style="border: 1px solid rgba(245, 158, 11, 0.3); padding: 20px;">
             <div class="panel-header" style="margin-bottom: 12px;">
                 <div>
-                    <h3 class="panel-title" style="font-size: 1.05rem; color: #f59e0b;">📅 Daily Material Consumption Journal</h3>
+                    <h3 class="panel-title" style="font-size: 1.05rem; color: #f59e0b;">Daily Material Consumption Journal</h3>
                     <span style="font-size: 0.8rem; color: var(--text-muted);">Daily logs of materials used on active job site</span>
                 </div>
             </div>
@@ -917,7 +915,7 @@
         <div class="glass-panel" style="border: 1px solid rgba(56, 189, 248, 0.3); padding: 20px;">
             <div class="panel-header" style="margin-bottom: 12px;">
                 <div>
-                    <h3 class="panel-title" style="font-size: 1.05rem; color: #38bdf8;">🔁 Inter-Project Transfers & Restocking</h3>
+                    <h3 class="panel-title" style="font-size: 1.05rem; color: #38bdf8;">Inter-Project Transfers & Restocking</h3>
                     <span style="font-size: 0.8rem; color: var(--text-muted);">Surplus materials transferred between projects or stocked to central warehouse</span>
                 </div>
             </div>
@@ -927,7 +925,7 @@
                         <tr>
                             <th style="width: 120px; text-align: left;">Voucher Ref</th>
                             <th style="text-align: left;">Material & Qty</th>
-                            <th style="text-align: left;">Source ➔ Destination</th>
+                            <th style="text-align: left;">Source &rarr; Destination</th>
                             <th style="width: 80px; text-align: right;">Date</th>
                         </tr>
                     </thead>
@@ -943,7 +941,7 @@
                                 </td>
                                 <td style="text-align: left; font-size: 0.775rem;">
                                     <span style="color: #ec4899;">{{ $xfer->sourceProject->project_code ?? 'PRJ' }}</span>
-                                    ➔
+                                    &rarr;
                                     <span style="color: #38bdf8; font-weight: 700;">
                                         {{ $xfer->destinationProject ? $xfer->destinationProject->project_code : 'Central Inventory (Next Build)' }}
                                     </span>
@@ -965,7 +963,7 @@
     <div class="glass-panel" style="border: 1px solid rgba(16, 185, 129, 0.3); padding: 20px;">
         <div class="panel-header" style="margin-bottom: 14px;">
             <div>
-                <h3 class="panel-title" style="font-size: 1.1rem; color: #10b981;">↩️ Project Site Excess Material Returns & Reconciliation Log</h3>
+                <h3 class="panel-title" style="font-size: 1.1rem; color: #10b981;">Project Site Excess Material Returns & Reconciliation Log</h3>
                 <span style="font-size: 0.85rem; color: var(--text-muted);">Audited material stock returned from project construction site into central warehouse</span>
             </div>
         </div>
@@ -1083,7 +1081,7 @@
 <div class="modal-overlay" id="editScopeItemModal">
     <div class="modal-box">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h3 style="font-weight: 700;">✏️ Edit Scope of Work Item</h3>
+            <h3 style="font-weight: 700;">Edit Scope of Work Item</h3>
             <button onclick="closeModal('editScopeItemModal')" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer;">&times;</button>
         </div>
 
@@ -1150,9 +1148,9 @@
             <div class="form-group">
                 <label class="form-label">Breakdown Category</label>
                 <select name="category" class="form-select" id="addScopeLineCategory" required>
-                    <option value="material" selected>📦 A. Material Line Item</option>
-                    <option value="labor">👷 B. Labor Sub-activity</option>
-                    <option value="equipment">🚜 C. Equipment / Contingency Expense</option>
+                    <option value="material" selected>A. Material Line Item</option>
+                    <option value="labor">B. Labor Sub-activity</option>
+                    <option value="equipment">C. Equipment / Contingency Expense</option>
                 </select>
             </div>
 
@@ -1188,7 +1186,7 @@
 <div class="modal-overlay" id="editScopeLineModal">
     <div class="modal-box">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h3 style="font-weight: 700; color: #38bdf8;">✏️ Edit Line Item Entry</h3>
+            <h3 style="font-weight: 700; color: #38bdf8;">Edit Line Item Entry</h3>
             <button onclick="closeModal('editScopeLineModal')" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer;">&times;</button>
         </div>
 
@@ -1198,9 +1196,9 @@
             <div class="form-group">
                 <label class="form-label">Breakdown Category</label>
                 <select name="category" class="form-select" id="editScopeLineCategory" required>
-                    <option value="material">📦 A. Material Line Item</option>
-                    <option value="labor">👷 B. Labor Sub-activity</option>
-                    <option value="equipment">🚜 C. Equipment Expense</option>
+                    <option value="material">A. Material Line Item</option>
+                    <option value="labor">B. Labor Sub-activity</option>
+                    <option value="equipment">C. Equipment Expense</option>
                 </select>
             </div>
 
@@ -1288,7 +1286,7 @@
 <div class="modal-overlay" id="bomDailyUsageModal">
     <div class="modal-box">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h3 style="font-weight: 700; color: #f59e0b;">📅 Log Today's Material Consumption</h3>
+            <h3 style="font-weight: 700; color: #f59e0b;">Log Today's Material Consumption</h3>
             <button onclick="closeModal('bomDailyUsageModal')" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer;">&times;</button>
         </div>
 
@@ -1329,7 +1327,7 @@
 <div class="modal-overlay" id="bomTransferModal">
     <div class="modal-box modal-box-large">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h3 style="font-weight: 700; color: #38bdf8;">🔁 Transfer Surplus Material to Another Project</h3>
+            <h3 style="font-weight: 700; color: #38bdf8;">Transfer Surplus Material to Another Project</h3>
             <button onclick="closeModal('bomTransferModal')" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer;">&times;</button>
         </div>
 
@@ -1344,8 +1342,8 @@
                 <div class="form-group">
                     <label class="form-label">Transfer Destination Mode</label>
                     <select name="transfer_type" class="form-select" id="bomTransferTypeSelect" onchange="toggleBomTransferDest(this.value)" required>
-                        <option value="inter_project" selected>🏢 Direct Inter-Project Transfer (To another project)</option>
-                        <option value="warehouse_stock">📦 Return & Stock in Central Warehouse (For future projects)</option>
+                        <option value="inter_project" selected>Direct Inter-Project Transfer (To another project)</option>
+                        <option value="warehouse_stock">Return & Stock in Central Warehouse (For future projects)</option>
                     </select>
                 </div>
 

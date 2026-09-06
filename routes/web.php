@@ -30,7 +30,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware(['auth'])->group(function () {
 
     // =========================================================================
-    // 🏠 1. Dedicated Roofing Materials Transfer Portal
+    // 1. Dedicated Roofing Materials Transfer Portal
     // =========================================================================
     Route::prefix('roofing-transfer')->group(function () {
         // Read-only viewing and slip printing (Allowed for Roofing Officer & Admin)
@@ -49,7 +49,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // =========================================================================
-    // 🚪 2. Dedicated Windows & Doors Transfer Portal
+    // 2. Dedicated Windows & Doors Transfer Portal
     // =========================================================================
     Route::prefix('windows-doors-transfer')->group(function () {
         // Read-only viewing and slip printing (Allowed for Windows/Doors Officer & Admin)
@@ -68,7 +68,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // =========================================================================
-    // 👑 3. Master Administrator Full Access Routes (Admin Role Only)
+    // 3. Master Administrator Full Access Routes (Admin Role Only)
     // =========================================================================
     Route::middleware(['role:admin'])->group(function () {
 

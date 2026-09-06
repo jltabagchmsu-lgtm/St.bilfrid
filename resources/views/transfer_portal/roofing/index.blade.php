@@ -7,20 +7,16 @@
 <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
     @if(Auth::user()->isAdmin())
         <span class="badge" style="background: rgba(148, 163, 184, 0.15); color: #cbd5e1; font-size: 0.8rem; font-weight: 700; padding: 8px 14px; border: 1px solid rgba(148, 163, 184, 0.3); display: inline-flex; align-items: center; gap: 6px;">
-            <span>👁️</span>
             <span>Administrator Audit Mode (View-Only)</span>
         </span>
     @else
         <button type="button" class="btn-primary" onclick="openModal('restockStockModal')" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); display: inline-flex; align-items: center; gap: 8px; font-weight: 700;">
-            <span>📥</span>
             <span>Restock Roofing Inventory</span>
         </button>
         <button type="button" class="btn-primary" onclick="openModal('dispatchStockModal')" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); display: inline-flex; align-items: center; gap: 8px; font-weight: 700;">
-            <span>📦</span>
             <span>Dispatch Roofing Stock to Project</span>
         </button>
         <button type="button" class="btn-secondary" onclick="openModal('interProjectModal')" style="display: inline-flex; align-items: center; gap: 8px; font-weight: 600;">
-            <span>🔄</span>
             <span>Inter-Project Transfer</span>
         </button>
     @endif
@@ -32,12 +28,11 @@
 
     <!-- Department Header & Role Indicator -->
     <div class="card" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(15, 23, 42, 0.8) 100%); border: 1px solid rgba(239, 68, 68, 0.3); padding: 22px 26px; border-radius: var(--radius-lg); position: relative; overflow: hidden;">
-        <div style="position: absolute; right: -20px; top: -20px; font-size: 8rem; opacity: 0.05; pointer-events: none;">🏠</div>
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; position: relative; z-index: 1;">
             <div>
                 <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px; flex-wrap: wrap;">
                     <span style="background: rgba(239, 68, 68, 0.2); color: #fca5a5; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(239, 68, 68, 0.4); text-transform: uppercase; letter-spacing: 0.06em;">
-                        🏠 Roofing Trade Specialization
+                        Roofing Trade Specialization
                     </span>
                     <span style="font-size: 0.8rem; color: var(--text-muted);">
                         Logged in as: <strong style="color: var(--text-primary);">{{ Auth::user()->name }}</strong> ({{ Auth::user()->email }})
@@ -57,7 +52,7 @@
             </div>
             <div style="display: flex; align-items: center; gap: 12px;">
                 <a href="#transferLedger" class="btn-secondary" style="font-size: 0.825rem;">
-                    <span>📋 View Vouchers Log</span>
+                    <span>View Vouchers Log</span>
                 </a>
             </div>
         </div>
@@ -67,7 +62,6 @@
     @if(Auth::user()->isAdmin())
     <div class="card" style="background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(148, 163, 184, 0.3); border-left: 5px solid #f59e0b; padding: 16px 20px; border-radius: var(--radius-md);">
         <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="font-size: 1.5rem;">👁️</div>
             <div>
                 <div style="font-weight: 700; color: #fbbf24; font-size: 0.95rem;">
                     Master Administrator Audit & Monitoring Mode Active
@@ -132,7 +126,6 @@
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; margin-bottom: 20px;">
             <div>
                 <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
-                    <span>🏢</span>
                     <span>Central Warehouse Roofing Inventory Catalog</span>
                 </h3>
                 <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px;">
@@ -142,7 +135,7 @@
             <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                 @if(!Auth::user()->isAdmin())
                 <button type="button" class="btn-secondary" onclick="openModal('restockStockModal')" style="padding: 8px 14px; font-size: 0.85rem; font-weight: 700; color: #a78bfa; border-color: rgba(139, 92, 246, 0.4);">
-                    <span>📥 Quick Restock</span>
+                    <span>Quick Restock</span>
                 </button>
                 @endif
                 <form method="GET" action="{{ route('roofing.index') }}" style="display: flex; gap: 10px;">
@@ -185,7 +178,7 @@
                                 <span style="font-weight: 700; color: var(--text-primary);">{{ $mat->name }}</span>
                                 @if($isLowStock)
                                     <span class="badge" style="background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); font-size: 0.675rem; font-weight: 800; padding: 2px 6px;">
-                                        ⚠️ LOW STOCK
+                                        LOW STOCK
                                     </span>
                                 @endif
                             </div>
@@ -211,15 +204,15 @@
                         <td style="text-align: center;">
                             @if(Auth::user()->isAdmin())
                                 <span class="badge" style="background: rgba(148, 163, 184, 0.15); color: #94a3b8; font-size: 0.75rem; font-style: italic;">
-                                    👁️ View-Only
+                                    View-Only
                                 </span>
                             @else
                                 <div style="display: inline-flex; gap: 6px; align-items: center;">
                                     <button type="button" class="btn-primary" onclick="quickDispatch({{ $mat->id }}, '{{ addslashes($mat->name) }}', '{{ $mat->unit }}', {{ $mat->stock_quantity }})" style="padding: 6px 10px; font-size: 0.775rem; font-weight: 700; background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);">
-                                        🚀 Dispatch
+                                        Dispatch
                                     </button>
                                     <button type="button" class="btn-secondary" onclick="quickRestock({{ $mat->id }}, '{{ addslashes($mat->name) }}', '{{ $mat->unit }}', {{ $mat->unit_cost }}, {{ $mat->stock_quantity }})" style="padding: 6px 10px; font-size: 0.775rem; font-weight: 700; color: #a78bfa; border-color: rgba(139, 92, 246, 0.4);" title="Restock this material">
-                                        📥 Restock
+                                        Restock
                                     </button>
                                 </div>
                             @endif
@@ -242,7 +235,6 @@
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; margin-bottom: 20px;">
             <div>
                 <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
-                    <span>🏗️</span>
                     <span>Project Site Roofing Allocations & Balances</span>
                 </h3>
                 <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px;">
@@ -306,16 +298,16 @@
                         <td style="text-align: center;">
                             @if(Auth::user()->isAdmin())
                                 <span class="badge" style="background: rgba(148, 163, 184, 0.15); color: #94a3b8; font-size: 0.75rem; font-style: italic;">
-                                    👁️ Monitored
+                                    Monitored
                                 </span>
                             @else
                                 <div style="display: inline-flex; gap: 6px;">
                                     @if($pm->remaining_qty > 0)
                                     <button type="button" class="btn-secondary" onclick="quickReturn({{ $pm->id }}, '{{ addslashes($pm->material->name) }}', '{{ $pm->project->title }}', {{ $pm->remaining_qty }}, '{{ $pm->material->unit }}')" style="padding: 5px 10px; font-size: 0.75rem; font-weight: 700; color: #10b981; border-color: rgba(16, 185, 129, 0.3);">
-                                        ↩ Return to Stock
+                                        Return to Stock
                                     </button>
                                     <button type="button" class="btn-secondary" onclick="quickInterProjectTransfer({{ $pm->project_id }}, {{ $pm->material_id }}, '{{ addslashes($pm->material->name) }}', {{ $pm->remaining_qty }}, '{{ $pm->material->unit }}')" style="padding: 5px 10px; font-size: 0.75rem; font-weight: 700; color: #38bdf8; border-color: rgba(56, 189, 248, 0.3);">
-                                        🔄 Site Transfer
+                                        Site Transfer
                                     </button>
                                     @else
                                     <span style="font-size: 0.75rem; color: var(--text-muted);">No remaining balance</span>
@@ -341,7 +333,6 @@
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; margin-bottom: 20px;">
             <div>
                 <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
-                    <span>📋</span>
                     <span>Official Roofing Material Transfer Slips & Ledger</span>
                 </h3>
                 <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px;">
@@ -405,7 +396,6 @@
                         </td>
                         <td style="text-align: center;">
                             <a href="{{ route('roofing.printVoucher', $xf->id) }}" target="_blank" class="btn-secondary" style="padding: 5px 12px; font-size: 0.75rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
-                                <span>🖨️</span>
                                 <span>Print Slip</span>
                             </a>
                         </td>
@@ -431,7 +421,6 @@
     <div class="modal-content" style="max-width: 540px; background: #0f172a; border: 1px solid rgba(139, 92, 246, 0.4); border-radius: var(--radius-lg); padding: 28px; position: relative; z-index: 1000; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 14px;">
             <h3 style="font-size: 1.2rem; font-weight: 800; color: #f8fafc; display: flex; align-items: center; gap: 8px;">
-                <span>📥</span>
                 <span>Restock Roofing Inventory (Central Warehouse)</span>
             </h3>
             <button type="button" onclick="closeModal('restockStockModal')" style="background: none; border: none; color: var(--text-muted); font-size: 1.4rem; cursor: pointer;">&times;</button>
@@ -507,7 +496,6 @@
     <div class="modal-content" style="max-width: 540px; background: #0f172a; border: 1px solid rgba(239, 68, 68, 0.4); border-radius: var(--radius-lg); padding: 28px; position: relative; z-index: 1000; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 14px;">
             <h3 style="font-size: 1.2rem; font-weight: 800; color: #f8fafc; display: flex; align-items: center; gap: 8px;">
-                <span>📦</span>
                 <span>Dispatch Roofing Stock to Project Site</span>
             </h3>
             <button type="button" onclick="closeModal('dispatchStockModal')" style="background: none; border: none; color: var(--text-muted); font-size: 1.4rem; cursor: pointer;">&times;</button>
@@ -582,7 +570,6 @@
     <div class="modal-content" style="max-width: 540px; background: #0f172a; border: 1px solid rgba(56, 189, 248, 0.4); border-radius: var(--radius-lg); padding: 28px; position: relative; z-index: 1000; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 14px;">
             <h3 style="font-size: 1.2rem; font-weight: 800; color: #f8fafc; display: flex; align-items: center; gap: 8px;">
-                <span>🔄</span>
                 <span>Inter-Project Roofing Transfer</span>
             </h3>
             <button type="button" onclick="closeModal('interProjectModal')" style="background: none; border: none; color: var(--text-muted); font-size: 1.4rem; cursor: pointer;">&times;</button>
@@ -664,7 +651,6 @@
     <div class="modal-content" style="max-width: 500px; background: #0f172a; border: 1px solid rgba(16, 185, 129, 0.4); border-radius: var(--radius-lg); padding: 28px; position: relative; z-index: 1000; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 14px;">
             <h3 style="font-size: 1.2rem; font-weight: 800; color: #f8fafc; display: flex; align-items: center; gap: 8px;">
-                <span>↩️</span>
                 <span>Return Excess Roofing to Warehouse</span>
             </h3>
             <button type="button" onclick="closeModal('returnExcessModal')" style="background: none; border: none; color: var(--text-muted); font-size: 1.4rem; cursor: pointer;">&times;</button>
@@ -791,7 +777,7 @@ function updateStockHint(el) {
     const opt = el.options[el.selectedIndex];
     const hint = document.getElementById('dispatchStockHint');
     if (opt && opt.dataset.stock !== undefined) {
-        hint.innerHTML = `✓ Available Central Warehouse Stock: <strong>${Number(opt.dataset.stock).toLocaleString()} ${opt.dataset.unit}</strong>`;
+        hint.innerHTML = `Available Central Warehouse Stock: <strong>${Number(opt.dataset.stock).toLocaleString()} ${opt.dataset.unit}</strong>`;
         const qtyInput = document.getElementById('dispatchQtyInput');
         if (qtyInput) qtyInput.max = opt.dataset.stock;
     } else {

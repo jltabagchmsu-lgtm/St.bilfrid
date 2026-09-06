@@ -228,7 +228,7 @@
     <div class="print-actions">
         <a href="javascript:history.back()" class="btn-back">&larr; Back to System</a>
         <button class="btn-print" onclick="window.print()">
-            🖨️ Print Official Receipt Voucher
+            Print Official Receipt Voucher
         </button>
     </div>
 
@@ -303,7 +303,7 @@
                 Attached Proof of Settlement:
             </div>
             <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 1.2rem;">📎</span>
+                <span style="font-size: 0.85rem; font-weight: bold; color: var(--text-muted, #64748b);">[FILE]</span>
                 <div>
                     <div style="font-weight: 700; font-size: 12px; color: #0f172a;">{{ $payment->receipt_file }}</div>
                     <a href="{{ $payment->receipt_url }}" target="_blank" style="font-size: 11px; color: #ef4444; font-weight: 600; text-decoration: none;">Click to view original proof file &rarr;</a>

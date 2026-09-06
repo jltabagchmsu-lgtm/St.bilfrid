@@ -49,10 +49,10 @@
                 <div class="nav-section-title" style="margin-top: 16px;">Quick Actions</div>
                 <div style="padding: 0 12px;">
                     <button type="button" onclick="openModal('dispatchStockModal')" class="btn-primary" style="width: 100%; font-size: 0.8rem; padding: 10px; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); margin-bottom: 8px;">
-                        📦 Dispatch Roofing Stock
+                        Dispatch Roofing Stock
                     </button>
                     <button type="button" onclick="openModal('interProjectModal')" class="btn-secondary" style="width: 100%; font-size: 0.8rem; padding: 10px;">
-                        🔄 Inter-Project Transfer
+                        Inter-Project Transfer
                     </button>
                 </div>
 
@@ -77,10 +77,10 @@
                 <div class="nav-section-title" style="margin-top: 16px;">Quick Actions</div>
                 <div style="padding: 0 12px;">
                     <button type="button" onclick="openModal('dispatchStockModal')" class="btn-primary" style="width: 100%; font-size: 0.8rem; padding: 10px; background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); color: #0b0f17; margin-bottom: 8px;">
-                        📦 Dispatch Doors/Windows
+                        Dispatch Doors/Windows
                     </button>
                     <button type="button" onclick="openModal('interProjectModal')" class="btn-secondary" style="width: 100%; font-size: 0.8rem; padding: 10px;">
-                        🔄 Inter-Project Transfer
+                        Inter-Project Transfer
                     </button>
                 </div>
 
@@ -146,14 +146,14 @@
                     <span class="nav-icon">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
                     </span>
-                    <span>🏠 Roofing Transfer Hub</span>
+                    <span>Roofing Transfer Hub</span>
                 </a>
 
                 <a href="{{ route('windowsDoors.index') }}" class="nav-item {{ request()->is('windows-doors*') ? 'active' : '' }}">
                     <span class="nav-icon">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="3" x2="12" y2="21"></line><line x1="3" y1="12" x2="21" y2="12"></line></svg>
                     </span>
-                    <span>🚪 Windows & Doors Hub</span>
+                    <span>Windows & Doors Hub</span>
                 </a>
 
                 <!-- Project Costing & Expenditure Control with Dropdown -->
@@ -257,12 +257,12 @@
         <main class="main-body">
             @if(session('error'))
                 <div class="alert-danger" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #fca5a5; padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 20px; font-size: 0.85rem; display: flex; align-items: center; gap: 8px;">
-                    ⚠️ {{ session('error') }}
+                    {{ session('error') }}
                 </div>
             @endif
             @if(session('success'))
                 <div class="alert-success">
-                    ✓ {{ session('success') }}
+                    {{ session('success') }}
                 </div>
             @endif
 

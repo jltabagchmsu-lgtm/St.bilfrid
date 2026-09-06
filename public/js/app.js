@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🚀 Laravel Foundation Loaded Successfully!');
+    console.log('Laravel Foundation Loaded Successfully!');
 
     // Handle code snippet copy buttons
     document.querySelectorAll('.copy-btn').forEach(button => {
@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (targetEl) {
                 navigator.clipboard.writeText(targetEl.innerText);
                 const originalHTML = button.innerHTML;
-                button.innerHTML = '✓ Copied';
+                button.innerHTML = 'Copied';
                 button.style.color = '#4ade80';
                 setTimeout(() => {
                     button.innerHTML = originalHTML;

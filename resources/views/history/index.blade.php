@@ -78,7 +78,7 @@
                 <span class="spec-chip" style="font-size: 0.65rem; color: #38bdf8;">WORKERS</span>
                 <span class="manpower-count" style="color: #38bdf8;">{{ $historicalWorkers }}</span>
             </div>
-            <div class="manpower-title">👷 General Laborers</div>
+            <div class="manpower-title">General Laborers</div>
             <div class="manpower-role">Construction Crew</div>
         </div>
 
@@ -87,7 +87,7 @@
                 <span class="spec-chip" style="font-size: 0.65rem; color: #818cf8;">TRADES</span>
                 <span class="manpower-count" style="color: #818cf8;">{{ $historicalSkilled }}</span>
             </div>
-            <div class="manpower-title">🔨 Skilled Tradesmen</div>
+            <div class="manpower-title">Skilled Tradesmen</div>
             <div class="manpower-role">Masons, Carpenters, Welders</div>
         </div>
 
@@ -96,7 +96,7 @@
                 <span class="spec-chip" style="font-size: 0.65rem; color: #f59e0b;">ENGR</span>
                 <span class="manpower-count" style="color: #f59e0b;">{{ $historicalEngineers }}</span>
             </div>
-            <div class="manpower-title">📐 Licensed Engineers</div>
+            <div class="manpower-title">Licensed Engineers</div>
             <div class="manpower-role">Structural, Electrical, Piping</div>
         </div>
 
@@ -105,7 +105,7 @@
                 <span class="spec-chip" style="font-size: 0.65rem; color: #ec4899;">ARCH</span>
                 <span class="manpower-count" style="color: #ec4899;">{{ $historicalArchitects }}</span>
             </div>
-            <div class="manpower-title">🎨 Architects</div>
+            <div class="manpower-title">Architects</div>
             <div class="manpower-role">Design & Spatial Planners</div>
         </div>
 
@@ -114,7 +114,7 @@
                 <span class="spec-chip" style="font-size: 0.65rem; color: #ef4444;">OPERATORS</span>
                 <span class="manpower-count" style="color: #ef4444;">{{ $historicalOperators }}</span>
             </div>
-            <div class="manpower-title">🚜 Equipment Operators</div>
+            <div class="manpower-title">Equipment Operators</div>
             <div class="manpower-role">Heavy Crane & Plant</div>
         </div>
 
@@ -123,7 +123,7 @@
                 <span class="spec-chip" style="font-size: 0.65rem; color: #10b981;">FOREMEN</span>
                 <span class="manpower-count" style="color: #10b981;">{{ $historicalForemen }}</span>
             </div>
-            <div class="manpower-title">📋 Site Foremen</div>
+            <div class="manpower-title">Site Foremen</div>
             <div class="manpower-role">Trade Supervisors</div>
         </div>
 
@@ -132,79 +132,61 @@
                 <span class="spec-chip" style="font-size: 0.65rem; color: #14b8a6;">QA/QC</span>
                 <span class="manpower-count" style="color: #14b8a6;">{{ $historicalSafety }}</span>
             </div>
-            <div class="manpower-title">🛡️ Safety Officers</div>
+            <div class="manpower-title">Safety Officers</div>
             <div class="manpower-role">QA/QC Compliance</div>
         </div>
     </div>
 </div>
 
-<!-- Separated Project History Table -->
-<div class="glass-panel">
+<!-- Historical Completed Projects Matrix Table -->
+<div class="glass-panel" style="margin-bottom: 28px;">
     <div class="panel-header">
         <div>
-            <h3 class="panel-title">Completed & Turned Over Construction Projects</h3>
-            <span style="font-size: 0.85rem; color: var(--text-muted);">Historical records of completed structures, specifications, final costing, realized margins & workforce</span>
+            <h3 class="panel-title">Archived & Completed Construction Projects</h3>
+            <span style="font-size: 0.85rem; color: var(--text-muted);">Fully delivered infrastructure and residential contracts</span>
         </div>
-        <a href="/costing" class="btn-secondary" style="font-size: 0.8rem; padding: 6px 12px;">
-            View All Costings &rarr;
-        </a>
     </div>
 
     <table class="custom-table">
         <thead>
             <tr>
-                <th>Project Code & Title</th>
-                <th>Client Name</th>
-                <th>Land & Floor Area</th>
-                <th>Workforce Deployed</th>
-                <th>Planned vs Actual Turnover</th>
-                <th>Final Cost & Margin</th>
-                <th>Status</th>
-                <th>Action</th>
+                <th>Code & Project</th>
+                <th>Contract Budget</th>
+                <th>Final Actual Cost</th>
+                <th>Total Revenue</th>
+                <th>Realized Profit</th>
+                <th>Completed Date</th>
+                <th>Final Status</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             @forelse($completedProjects as $cp)
+            @php
+                $rev = $cp->total_revenue ?? 0;
+                $cost = $cp->total_incurred_cost ?? 0;
+                $profit = $rev - $cost;
+            @endphp
             <tr>
                 <td>
-                    <strong style="font-size: 1.05rem; color: var(--text-primary);">{{ $cp->title }}</strong>
-                    <div style="font-family: var(--font-mono); font-size: 0.8rem; color: #10b981; margin-top: 2px;">{{ $cp->project_code }}</div>
-                    <div style="font-size: 0.8rem; color: var(--text-muted);">{{ $cp->project_type }} &bull; {{ $cp->location }}</div>
+                    <strong style="color: var(--text-primary); font-size: 0.95rem;">{{ $cp->title }}</strong>
+                    <div style="font-family: var(--font-mono); font-size: 0.75rem; color: #ef4444;">{{ $cp->project_code }}</div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted);">Client: {{ $cp->client_name ?? 'N/A' }}</div>
                 </td>
-                <td>{{ $cp->client_name }}</td>
-                <td>
-                    <div style="display: flex; flex-direction: column; gap: 4px;">
-                        <span class="spec-chip">Land: {{ number_format($cp->land_area_sqm) }} m²</span>
-                        <span class="spec-chip">Floor: {{ number_format($cp->floor_area_sqm) }} m²</span>
-                    </div>
+                <td style="font-family: var(--font-mono); font-weight: 700; color: #f8fafc;">
+                    ₱{{ number_format($cp->contract_budget, 2) }}
                 </td>
-                <td>
-                    <div style="display: flex; flex-direction: column; gap: 3px;">
-                        <div style="font-weight: 800; font-family: var(--font-mono); color: #38bdf8; font-size: 0.95rem;">
-                            {{ $cp->total_deployed_manpower }} Headcount
-                        </div>
-                        <div style="font-size: 0.725rem; color: var(--text-muted);">
-                            {{ $cp->deployed_workers }} Workers &bull; {{ $cp->deployed_engineers }} Engr
-                        </div>
-                        <div style="font-size: 0.725rem; color: var(--text-muted);">
-                            {{ $cp->deployed_architects }} Arch &bull; {{ $cp->deployed_operators }} Ops
-                        </div>
-                    </div>
+                <td style="font-family: var(--font-mono); font-weight: 700; color: #f87171;">
+                    ₱{{ number_format($cost, 2) }}
                 </td>
-                <td style="font-size: 0.85rem;">
-                    <div>Target: {{ $cp->end_date->format('M d, Y') }}</div>
-                    <div style="color: #10b981; font-weight: 700; margin-top: 2px;">
-                        Turned Over: {{ $cp->actual_completion_date ? $cp->actual_completion_date->format('M d, Y') : $cp->end_date->format('M d, Y') }}
-                    </div>
+                <td style="font-family: var(--font-mono); font-weight: 700; color: #38bdf8;">
+                    ₱{{ number_format($rev, 2) }}
                 </td>
-                <td>
-                    <div style="font-family: var(--font-mono);">
-                        <div style="color: #38bdf8; font-weight: 700;">₱{{ number_format($cp->total_incurred_cost, 2) }}</div>
-                        <div style="font-size: 0.775rem; color: var(--text-muted);">Contract: ₱{{ number_format($cp->contract_budget, 2) }}</div>
-                        <div style="font-size: 0.75rem; color: {{ $cp->gross_margin >= 0 ? '#10b981' : '#ef4444' }}; font-weight: 600;">
-                            Margin: ₱{{ number_format($cp->gross_margin, 2) }} ({{ $cp->gross_margin_percent }}%)
-                        </div>
-                    </div>
+                <td style="font-family: var(--font-mono); font-weight: 700; color: {{ $profit >= 0 ? '#10b981' : '#ef4444' }};">
+                    ₱{{ number_format($profit, 2) }}
+                </td>
+                <td style="font-family: var(--font-mono); font-size: 0.825rem; color: var(--text-secondary);">
+                    {{ $cp->end_date ? $cp->end_date->format('M d, Y') : 'Completed' }}
                 </td>
                 <td>
                     <span class="badge badge-completed">100% Completed</span>
@@ -215,16 +197,16 @@
                             Master Summary &rarr;
                         </a>
                         <a href="{{ route('projects.printBom', $cp->id) }}" target="_blank" class="btn-secondary" style="font-size: 0.75rem; padding: 3px 6px; text-align: center; color: #10b981; border-color: rgba(16, 185, 129, 0.35);">
-                            🖨️ Print BOM
+                            Print BOM
                         </a>
                         <a href="{{ route('costing.index', ['project_id' => $cp->id]) }}" class="btn-secondary" style="font-size: 0.75rem; padding: 3px 6px; text-align: center;">
                             Costing Sheet
                         </a>
-                        <form action="{{ route('projects.destroy', $cp->id) }}" method="POST" onsubmit="return confirm('⚠️ Are you sure you want to permanently delete this completed project archive ({{ addslashes($cp->project_code) }} - {{ addslashes($cp->title) }})?');">
+                        <form action="{{ route('projects.destroy', $cp->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this completed project archive ({{ addslashes($cp->project_code) }} - {{ addslashes($cp->title) }})?');">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn-secondary" style="font-size: 0.725rem; padding: 3px 6px; text-align: center; color: #f87171; width: 100%; border-color: rgba(239,68,68,0.25);">
-                                🗑️ Delete
+                                Delete
                             </button>
                         </form>
                     </div>
@@ -284,7 +266,7 @@
                     </strong>
                 </td>
                 <td>
-                    <span class="badge badge-completed">✓ Cleared</span>
+                    <span class="badge badge-completed">Cleared</span>
                 </td>
             </tr>
             @empty

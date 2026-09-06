@@ -78,7 +78,7 @@ class Payment extends Model
                 'color' => '#10b981',
                 'bg' => 'rgba(16, 185, 129, 0.12)',
                 'border' => 'rgba(16, 185, 129, 0.3)',
-                'icon' => '✅',
+                'icon' => '',
                 'cleared' => true,
             ];
         }
@@ -89,7 +89,7 @@ class Payment extends Model
                 'color' => '#38bdf8',
                 'bg' => 'rgba(56, 189, 248, 0.12)',
                 'border' => 'rgba(56, 189, 248, 0.3)',
-                'icon' => '🔍',
+                'icon' => '',
                 'cleared' => false,
             ];
         }
@@ -99,7 +99,7 @@ class Payment extends Model
             'color' => '#ef4444',
             'bg' => 'rgba(239, 68, 68, 0.12)',
             'border' => 'rgba(239, 68, 68, 0.3)',
-            'icon' => '🛑',
+            'icon' => '',
             'cleared' => false,
         ];
     }
