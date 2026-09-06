@@ -225,6 +225,32 @@
                 </div>
             </div>
 
+            <!-- Two-Way Procurement Discussion & Supplier Interaction -->
+            <div class="order-chat-container">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                    <h4 style="font-size: 0.85rem; font-weight: 700; color: #38bdf8; display: flex; align-items: center; gap: 8px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                        Two-Way Procurement Communication & Dispatch Notes
+                    </h4>
+                    <span style="font-size: 0.72rem; color: var(--text-muted);">Direct Line to Supplier</span>
+                </div>
+
+                <!-- Chat Messages Stream -->
+                <div id="adminOrderChatStream" class="order-chat-stream">
+                    <div style="text-align: center; color: var(--text-muted); font-size: 0.75rem; padding: 12px;">Loading discussion history...</div>
+                </div>
+
+                <!-- Chat Input Form -->
+                <form id="adminOrderChatForm" onsubmit="sendAdminOrderMessage(event)" class="chat-input-row">
+                    @csrf
+                    <input type="text" id="adminOrderChatInput" placeholder="Type a message, logistics update, or inquiry to supplier..." class="input-field" style="flex: 1; font-size: 0.825rem; padding: 8px 12px;" autocomplete="off" required>
+                    <button type="submit" class="btn-primary" style="font-size: 0.8rem; padding: 8px 16px; white-space: nowrap;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                        Send
+                    </button>
+                </form>
+            </div>
+
             <!-- Admin Status Override Form -->
             <form id="adminUpdateOrderStatusForm" method="POST" style="background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 12px; padding: 18px; margin-bottom: 20px;">
                 @csrf
@@ -284,7 +310,10 @@
 
 @push('scripts')
 <script>
+    let currentAdminOrderId = null;
+
     function openAdminOrderModal(order) {
+        currentAdminOrderId = order.id;
         document.getElementById('adminModalOrderCodeHeader').textContent = 'Order ID: ' + order.order_code;
         document.getElementById('adminModalSupplierName').textContent = (order.supplier ? order.supplier.name : 'Supplier') + ' (' + (order.supplier ? order.supplier.category : '') + ')';
         document.getElementById('adminModalRequestedDelivery').textContent = new Date(order.requested_delivery_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
@@ -343,7 +372,78 @@
             logsDiv.innerHTML = '<div style="color: var(--text-muted); font-size: 0.8rem;">Initial purchase order placement recorded.</div>';
         }
 
+        // Load Live Order Messages
+        loadAdminOrderMessages(order.id);
+
         openModal('adminOrderDetailsModal');
+    }
+
+    function loadAdminOrderMessages(orderId) {
+        const stream = document.getElementById('adminOrderChatStream');
+        fetch('/suppliers/orders/' + orderId + '/messages')
+            .then(res => res.json())
+            .then(data => {
+                stream.innerHTML = '';
+                if (data.messages && data.messages.length > 0) {
+                    data.messages.forEach(msg => {
+                        const isAdm = msg.sender_role === 'admin';
+                        const bubble = document.createElement('div');
+                        bubble.className = isAdm ? 'chat-msg chat-msg-admin' : 'chat-msg chat-msg-supplier';
+                        bubble.innerHTML = `
+                            <div class="chat-msg-header">
+                                <span class="chat-msg-sender" style="color: ${isAdm ? '#38bdf8' : '#10b981'};">
+                                    ${isAdm ? 'St. Bilfrid Procurement (Admin)' : (msg.user_name + ' (Supplier)')}
+                                </span>
+                                <span class="chat-msg-time">${msg.time}</span>
+                            </div>
+                            <div>${escapeHtml(msg.message)}</div>
+                        `;
+                        stream.appendChild(bubble);
+                    });
+                } else {
+                    stream.innerHTML = '<div style="text-align: center; color: var(--text-muted); font-size: 0.75rem; padding: 16px;">No messages sent yet. Use the form below to communicate with the supplier regarding this order.</div>';
+                }
+                stream.scrollTop = stream.scrollHeight;
+            })
+            .catch(() => {
+                stream.innerHTML = '<div style="color: var(--text-muted); font-size: 0.75rem; padding: 10px;">Ready for discussion.</div>';
+            });
+    }
+
+    function sendAdminOrderMessage(e) {
+        e.preventDefault();
+        if (!currentAdminOrderId) return;
+        const input = document.getElementById('adminOrderChatInput');
+        const text = input.value.trim();
+        if (!text) return;
+
+        const csrfToken = document.querySelector('meta[name="csrf-token"]') ? document.querySelector('meta[name="csrf-token"]').content : '{{ csrf_token() }}';
+
+        fetch('/suppliers/orders/' + currentAdminOrderId + '/messages', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ message: text })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                input.value = '';
+                loadAdminOrderMessages(currentAdminOrderId);
+            }
+        })
+        .catch(err => {
+            console.error('Failed to send message', err);
+        });
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
     }
 </script>
 @endpush

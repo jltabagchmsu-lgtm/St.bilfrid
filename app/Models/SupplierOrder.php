@@ -69,6 +69,14 @@ class SupplierOrder extends Model
     }
 
     /**
+     * Interactive order communication messages.
+     */
+    public function messages()
+    {
+        return $this->hasMany(SupplierOrderMessage::class)->with('user')->orderBy('created_at', 'asc');
+    }
+
+    /**
      * Format status badge.
      */
     public function getStatusBadgeAttribute(): array

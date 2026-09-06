@@ -164,10 +164,15 @@
                             {{ $badge['label'] }}
                         </span>
                     </td>
-                    <td>
-                        <button type="button" onclick="orderSingleMaterial({{ json_encode($mat->load('supplier')) }})" class="btn-primary" style="padding: 6px 12px; font-size: 0.75rem;">
-                            Order Item
-                        </button>
+                    <td style="white-space: nowrap;">
+                        <div style="display: flex; align-items: center; gap: 6px;">
+                            <button type="button" onclick="orderSingleMaterial({{ json_encode($mat->load('supplier')) }})" class="btn-primary" style="padding: 6px 10px; font-size: 0.75rem; white-space: nowrap;">
+                                Order Item
+                            </button>
+                            <button type="button" onclick="inquireSingleMaterial({{ json_encode($mat->load('supplier')) }})" class="btn-secondary" style="padding: 6px 10px; font-size: 0.75rem; color: #38bdf8; border-color: rgba(56, 189, 248, 0.3); white-space: nowrap;">
+                                Inquire / RFQ
+                            </button>
+                        </div>
                     </td>
                 </tr>
             @empty
@@ -267,6 +272,64 @@
     </div>
 </div>
 
+<!-- Modal: Send Material Inquiry / RFQ to Supplier -->
+<div class="modal-backdrop" id="inquireMaterialModal">
+    <div class="modal-box" style="max-width: 600px;">
+        <div class="modal-header">
+            <div>
+                <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary);">Send Material Inquiry / RFQ</h3>
+                <p id="inqSupplierHeader" style="font-size: 0.75rem; color: #38bdf8; margin-top: 2px;"></p>
+            </div>
+            <button type="button" onclick="closeModal('inquireMaterialModal')" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.25rem;">&times;</button>
+        </div>
+        <form action="{{ route('admin.suppliers.inquiries.store') }}" method="POST">
+            @csrf
+            <input type="hidden" name="supplier_id" id="inqSupplierId">
+            <input type="hidden" name="supplier_material_id" id="inqMaterialId">
+
+            <div class="modal-body">
+                <!-- Selected Material Overview -->
+                <div style="background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 10px; padding: 14px; margin-bottom: 16px;">
+                    <div id="inqMaterialName" style="font-size: 0.95rem; font-weight: 700; color: var(--text-primary);"></div>
+                    <div id="inqMaterialSpecs" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;"></div>
+                    <div style="display: flex; gap: 16px; margin-top: 8px; font-size: 0.8rem;">
+                        <div><span style="color: var(--text-muted);">Standard Rate:</span> <strong id="inqUnitPriceDisplay" style="color: #38bdf8; font-family: var(--font-mono);"></strong></div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 16px;">
+                    <div>
+                        <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px;">
+                            Inquiry Subject <span style="color: var(--primary-red);">*</span>
+                        </label>
+                        <input type="text" name="subject" id="inqSubjectInput" required placeholder="e.g. Bulk discount quote for 500 units" class="input-field" style="width: 100%;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px;">
+                            Estimated Qty (<span id="inqUnitLabel"></span>)
+                        </label>
+                        <input type="number" name="requested_quantity" id="inqQtyInput" min="1" placeholder="Optional" class="input-field" style="width: 100%; font-family: var(--font-mono);">
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 16px;">
+                    <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px;">
+                        Message & Inquiries for Supplier <span style="color: var(--primary-red);">*</span>
+                    </label>
+                    <textarea name="message" id="inqMessageInput" rows="4" required placeholder="Ask the supplier about custom dimensions, batch availability, bulk pricing tiers, or delivery lead times..." class="input-field" style="width: 100%; resize: vertical;"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="closeModal('inquireMaterialModal')" class="btn-secondary">Cancel</button>
+                <button type="submit" class="btn-primary">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                    Send Inquiry to Supplier
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 @endsection
 
 @push('scripts')
@@ -289,6 +352,21 @@
         activeQomUnitPrice = parseFloat(mat.unit_price) || 0;
         calculateQomTotal();
         openModal('quickOrderMaterialModal');
+    }
+
+    function inquireSingleMaterial(mat) {
+        document.getElementById('inqSupplierId').value = mat.supplier_id;
+        document.getElementById('inqMaterialId').value = mat.id;
+        document.getElementById('inqSupplierHeader').textContent = 'Supplier: ' + (mat.supplier ? mat.supplier.name : '') + ' (' + mat.category + ')';
+        document.getElementById('inqMaterialName').textContent = mat.name;
+        document.getElementById('inqMaterialSpecs').textContent = mat.specifications || 'Standard manufacturer specifications';
+        document.getElementById('inqUnitPriceDisplay').textContent = 'PHP ' + Number(mat.unit_price).toLocaleString('en-US', {minimumFractionDigits: 2}) + ' / ' + mat.unit;
+        document.getElementById('inqUnitLabel').textContent = mat.unit;
+        document.getElementById('inqSubjectInput').value = 'Pricing & Lead Time Inquiry: ' + mat.name;
+        document.getElementById('inqQtyInput').value = mat.min_order_qty || '';
+        document.getElementById('inqMessageInput').value = '';
+
+        openModal('inquireMaterialModal');
     }
 
     function calculateQomTotal() {

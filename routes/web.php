@@ -94,10 +94,14 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/materials/{id}/delete', [SupplierPortalController::class, 'destroyMaterial'])->name('supplier.materials.destroy');
         Route::post('/materials/{id}/quick-stock', [SupplierPortalController::class, 'quickStockUpdate'])->name('supplier.materials.quickStock');
         
-        // Supplier Orders Management
+        // Supplier Orders Management & Communication
         Route::get('/orders', [SupplierPortalController::class, 'orders'])->name('supplier.orders');
         Route::get('/orders/{id}', [SupplierPortalController::class, 'showOrder'])->name('supplier.orders.show');
         Route::post('/orders/{id}/status', [SupplierPortalController::class, 'updateOrderStatus'])->name('supplier.orders.updateStatus');
+        Route::post('/orders/{id}/messages', [SupplierPortalController::class, 'sendMessage'])->name('supplier.orders.sendMessage');
+        Route::get('/orders/{id}/messages', [SupplierPortalController::class, 'getMessages'])->name('supplier.orders.getMessages');
+        Route::get('/inquiries', [SupplierPortalController::class, 'inquiries'])->name('supplier.inquiries');
+        Route::post('/inquiries/{id}/respond', [SupplierPortalController::class, 'respondInquiry'])->name('supplier.inquiries.respond');
 
         // Profile & Account Settings
         Route::get('/profile', [SupplierPortalController::class, 'profile'])->name('supplier.profile');
@@ -123,6 +127,9 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/orders/store', [AdminSupplierController::class, 'storeOrder'])->name('admin.suppliers.orders.store');
             Route::post('/orders/{id}/status', [AdminSupplierController::class, 'updateOrderStatus'])->name('admin.suppliers.orders.updateStatus');
             Route::post('/orders/{id}/receive', [AdminSupplierController::class, 'receiveOrder'])->name('admin.suppliers.orders.receive');
+            Route::post('/orders/{id}/messages', [AdminSupplierController::class, 'sendMessage'])->name('admin.suppliers.orders.sendMessage');
+            Route::get('/orders/{id}/messages', [AdminSupplierController::class, 'getMessages'])->name('admin.suppliers.orders.getMessages');
+            Route::post('/inquiries/store', [AdminSupplierController::class, 'storeInquiry'])->name('admin.suppliers.inquiries.store');
             Route::post('/{id}/update', [AdminSupplierController::class, 'updateSupplier'])->name('admin.suppliers.update');
             Route::post('/{id}/toggle-status', [AdminSupplierController::class, 'toggleSupplierStatus'])->name('admin.suppliers.toggleStatus');
         });

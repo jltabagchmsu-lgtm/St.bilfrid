@@ -8,6 +8,8 @@ use App\Models\SupplierOrder;
 use App\Models\SupplierOrderItem;
 use App\Models\SupplierOrderLog;
 use App\Models\SupplierNotification;
+use App\Models\SupplierOrderMessage;
+use App\Models\SupplierInquiry;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -378,5 +380,118 @@ class SupplierPortalController extends Controller
         $supplier->notifications()->update(['is_read' => true]);
 
         return redirect()->back()->with('success', 'All notifications marked as read.');
+    }
+
+    /**
+     * Post a new message on a Purchase Order (Supplier to Admin).
+     */
+    public function sendMessage(Request $request, $id)
+    {
+        $supplier = $this->getSupplier();
+        $order = SupplierOrder::where('supplier_id', $supplier->id)->findOrFail($id);
+
+        $validated = $request->validate([
+            'message' => 'required|string|max:2000',
+        ]);
+
+        $msg = SupplierOrderMessage::create([
+            'supplier_order_id' => $order->id,
+            'user_id' => Auth::id(),
+            'sender_role' => 'supplier',
+            'message' => trim($validated['message']),
+        ]);
+
+        // Dispatch alert notification to Master Admin
+        SupplierNotification::create([
+            'supplier_id' => $supplier->id,
+            'user_id' => null,
+            'type' => 'order_message',
+            'title' => 'New Message from ' . $supplier->name . ' on ' . $order->order_code,
+            'message' => $supplier->name . ': ' . Str::limit($validated['message'], 100),
+            'link' => route('admin.suppliers.orders', ['search' => $order->order_code]),
+        ]);
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => $msg->load('user'),
+                'formatted_time' => $msg->created_at->format('M d, Y h:i A'),
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Message dispatched to St. Bilfrid Procurement Team.');
+    }
+
+    /**
+     * Get all chat messages for a specific Purchase Order.
+     */
+    public function getMessages($id)
+    {
+        $supplier = $this->getSupplier();
+        $order = SupplierOrder::where('supplier_id', $supplier->id)->findOrFail($id);
+
+        $messages = $order->messages()->with('user')->get()->map(function ($m) {
+            return [
+                'id' => $m->id,
+                'sender_role' => $m->sender_role,
+                'user_name' => $m->user ? $m->user->name : 'System',
+                'message' => $m->message,
+                'time' => $m->created_at->format('M d, Y h:i A'),
+                'is_supplier' => $m->sender_role === 'supplier',
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'order_code' => $order->order_code,
+            'messages' => $messages,
+        ]);
+    }
+
+    /**
+     * Inquiries list for Supplier.
+     */
+    public function inquiries(Request $request)
+    {
+        $supplier = $this->getSupplier();
+        $inquiries = SupplierInquiry::with(['material', 'user'])
+            ->where('supplier_id', $supplier->id)
+            ->latest()
+            ->paginate(15);
+
+        return view('supplier.inquiries', compact('supplier', 'inquiries'));
+    }
+
+    /**
+     * Respond to a Material Inquiry with quotation / details.
+     */
+    public function respondInquiry(Request $request, $id)
+    {
+        $supplier = $this->getSupplier();
+        $inquiry = SupplierInquiry::where('supplier_id', $supplier->id)->findOrFail($id);
+
+        $validated = $request->validate([
+            'supplier_response' => 'required|string|max:2000',
+            'quoted_unit_price' => 'nullable|numeric|min:0',
+        ]);
+
+        $inquiry->update([
+            'supplier_response' => $validated['supplier_response'],
+            'quoted_unit_price' => $validated['quoted_unit_price'] ?? $inquiry->quoted_unit_price,
+            'status' => 'quoted',
+            'responded_at' => now(),
+        ]);
+
+        // Dispatch alert notification to admin
+        SupplierNotification::create([
+            'supplier_id' => $supplier->id,
+            'user_id' => null,
+            'type' => 'inquiry_response',
+            'title' => 'Quotation Response from ' . $supplier->name,
+            'message' => $supplier->name . ' responded to inquiry "' . $inquiry->subject . '": ' . Str::limit($validated['supplier_response'], 100),
+            'link' => route('admin.suppliers.materials'),
+        ]);
+
+        return redirect()->back()->with('success', 'Quotation response sent to St. Bilfrid Dev. Corp.');
     }
 }
