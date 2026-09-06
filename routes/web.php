@@ -28,6 +28,18 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// 1-Click Live Web Migration & Supplier Seeding Trigger
+Route::get('/setup-suppliers', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        (new \Database\Seeders\SupplierManagementSeeder())->run();
+        \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+        return response('<div style="font-family:sans-serif;background:#0b0f17;color:#10b981;padding:40px;min-height:100vh;"><h2>Database Sync Successful!</h2><p style="color:#f8fafc;">All supplier tables migrated and 3 supplier accounts created successfully on live server.</p><p><a href="/login" style="color:#38bdf8;text-decoration:none;font-weight:bold;">&rarr; Go to Login Page</a></p></div>');
+    } catch (\Throwable $e) {
+        return response('<div style="font-family:sans-serif;background:#0b0f17;color:#ef4444;padding:40px;min-height:100vh;"><h2>Setup Error</h2><pre style="color:#f8fafc;">' . htmlspecialchars($e->getMessage()) . '</pre></div>', 500);
+    }
+});
+
 // Authenticated Routes
 Route::middleware(['auth'])->group(function () {
 

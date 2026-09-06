@@ -19,6 +19,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Auto-migrate and seed supplier tables on remote web host if they don't exist yet
+        try {
+            if (!\Illuminate\Support\Facades\Schema::hasTable('suppliers')) {
+                \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+            }
+            
+            if (\Illuminate\Support\Facades\Schema::hasTable('suppliers') && \App\Models\Supplier::count() === 0) {
+                (new \Database\Seeders\SupplierManagementSeeder())->run();
+            }
+        } catch (\Throwable $e) {
+            // Silently continue if database is not yet reachable
+        }
+
         \Illuminate\Support\Facades\View::composer('*', function ($view) {
             try {
                 if (\Illuminate\Support\Facades\Schema::hasTable('projects')) {
