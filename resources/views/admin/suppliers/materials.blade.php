@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'Cross-Supplier Materials Catalog - St. Bilfrid Dev. Corp')
-@section('header_title', 'Cross-Supplier Materials Matrix')
-@section('header_subtitle', 'Compare material specifications, real-time inventory availability, and unit pricing across all trade supplier partners.')
+@section('title', 'Cross-Supplier Product Catalog - St. Bilfrid Dev. Corp')
+@section('header_title', 'Cross-Supplier Product Matrix')
+@section('header_subtitle', 'Compare product specifications, trade rates, and minimum order requirements across all supplier partners.')
 
 @section('content')
 
@@ -32,7 +32,7 @@
         <!-- Left: Search Box -->
         <div style="display: flex; align-items: center; gap: 10px; flex: 1; min-width: 260px;">
             <div style="position: relative; width: 100%; max-width: 320px;">
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search material name, specs, or code..." class="input-field" style="width: 100%; padding-left: 36px; font-size: 0.85rem;">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search product name, specs, or code..." class="input-field" style="width: 100%; padding-left: 36px; font-size: 0.85rem;">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
             </div>
             <button type="submit" class="btn-secondary" style="padding: 8px 14px; font-size: 0.8rem;">
@@ -45,7 +45,7 @@
             @endif
         </div>
 
-        <!-- Right: Supplier & Status Selectors -->
+        <!-- Right: Supplier & Sorting Selectors -->
         <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
             <!-- Supplier Filter -->
             <select name="supplier_id" onchange="this.form.submit()" class="input-field" style="font-size: 0.8rem; padding: 8px 12px;">
@@ -59,10 +59,9 @@
 
             <!-- Availability Status -->
             <select name="status" onchange="this.form.submit()" class="input-field" style="font-size: 0.8rem; padding: 8px 12px;">
-                <option value="all" {{ !request('status') || request('status') === 'all' ? 'selected' : '' }}>All Availability</option>
-                <option value="available" {{ request('status') === 'available' ? 'selected' : '' }}>Available in Stock</option>
-                <option value="low_stock" {{ request('status') === 'low_stock' ? 'selected' : '' }}>Low Stock (<= 10)</option>
-                <option value="out_of_stock" {{ request('status') === 'out_of_stock' ? 'selected' : '' }}>Out of Stock</option>
+                <option value="all" {{ !request('status') || request('status') === 'all' ? 'selected' : '' }}>All Statuses</option>
+                <option value="available" {{ request('status') === 'available' ? 'selected' : '' }}>Available for Order</option>
+                <option value="unavailable" {{ request('status') === 'unavailable' ? 'selected' : '' }}>Unavailable</option>
             </select>
 
             <!-- Sorting -->
@@ -70,7 +69,6 @@
                 <option value="name_asc" {{ request('sort') === 'name_asc' ? 'selected' : '' }}>Sort: Name (A-Z)</option>
                 <option value="price_low" {{ request('sort') === 'price_low' ? 'selected' : '' }}>Price: Low to High</option>
                 <option value="price_high" {{ request('sort') === 'price_high' ? 'selected' : '' }}>Price: High to Low</option>
-                <option value="stock_high" {{ request('sort') === 'stock_high' ? 'selected' : '' }}>Highest Stock</option>
                 <option value="newest" {{ request('sort') === 'newest' ? 'selected' : '' }}>Newest Cataloged</option>
             </select>
         </div>
@@ -92,20 +90,19 @@
     @endif
 </div>
 
-<!-- Materials Comparison Table -->
+<!-- Product Matrix Table -->
 <div style="overflow-x: auto; margin-bottom: 24px;">
     <table class="grid-table">
         <thead>
             <tr>
                 <th>Supplier Organization</th>
-                <th>Material Code</th>
-                <th>Material Details & Specifications</th>
+                <th>Product Code</th>
+                <th>Product Details & Specifications</th>
                 <th>Subcategory</th>
                 <th>Unit</th>
-                <th>Available Stock</th>
                 <th>Unit Price (PHP)</th>
                 <th>MOQ</th>
-                <th>Stock Status</th>
+                <th>Status</th>
                 <th>Procurement</th>
             </tr>
         </thead>
@@ -134,13 +131,13 @@
                             {{ $mat->material_code }}
                         </strong>
                     </td>
-                    <td style="max-width: 280px;">
+                    <td style="max-width: 300px;">
                         <div style="font-weight: 700; color: var(--text-primary); font-size: 0.875rem;">
                             {{ $mat->name }}
                         </div>
                         @if($mat->specifications)
                             <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; line-height: 1.3;">
-                                {{ Str::limit($mat->specifications, 90) }}
+                                {{ Str::limit($mat->specifications, 110) }}
                             </div>
                         @endif
                     </td>
@@ -153,13 +150,8 @@
                         <span style="font-size: 0.8rem; font-family: var(--font-mono);">{{ $mat->unit }}</span>
                     </td>
                     <td>
-                        <strong style="font-size: 0.95rem; font-family: var(--font-mono); color: {{ $mat->available_quantity <= 0 ? '#ef4444' : ($mat->available_quantity <= 10 ? '#f59e0b' : 'var(--text-primary)') }};">
-                            {{ number_format($mat->available_quantity) }}
-                        </strong>
-                    </td>
-                    <td>
                         <strong style="font-family: var(--font-mono); color: var(--text-primary); font-size: 0.95rem;">
-                            ₱{{ number_format($mat->unit_price, 2) }}
+                            PHP {{ number_format($mat->unit_price, 2) }}
                         </strong>
                     </td>
                     <td>
@@ -180,8 +172,8 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="10" style="text-align: center; padding: 48px; color: var(--text-muted);">
-                        No materials found matching your category, supplier, and search criteria.
+                    <td colspan="9" style="text-align: center; padding: 48px; color: var(--text-muted);">
+                        No products found matching your category, supplier, and search criteria.
                     </td>
                 </tr>
             @endforelse
@@ -194,12 +186,12 @@
     {{ $materials->links() }}
 </div>
 
-<!-- Modal: Quick Purchase Order for Selected Material -->
+<!-- Modal: Quick Purchase Order for Selected Product -->
 <div class="modal-backdrop" id="quickOrderMaterialModal">
     <div class="modal-box" style="max-width: 600px;">
         <div class="modal-header">
             <div>
-                <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary);">Order Material from Supplier</h3>
+                <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary);">Generate Purchase Order to Supplier</h3>
                 <p id="qomSupplierHeader" style="font-size: 0.75rem; color: #38bdf8; margin-top: 2px;"></p>
             </div>
             <button type="button" onclick="closeModal('quickOrderMaterialModal')" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.25rem;">&times;</button>
@@ -215,8 +207,8 @@
                     <div id="qomMaterialName" style="font-size: 0.95rem; font-weight: 700; color: var(--text-primary);"></div>
                     <div id="qomMaterialSpecs" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;"></div>
                     <div style="display: flex; gap: 16px; margin-top: 8px; font-size: 0.8rem;">
-                        <div><span style="color: var(--text-muted);">Unit Price:</span> <strong id="qomUnitPriceDisplay" style="color: #38bdf8; font-family: var(--font-mono);"></strong></div>
-                        <div><span style="color: var(--text-muted);">Current Stock:</span> <strong id="qomStockDisplay" style="color: #10b981; font-family: var(--font-mono);"></strong></div>
+                        <div><span style="color: var(--text-muted);">Unit Rate:</span> <strong id="qomUnitPriceDisplay" style="color: #38bdf8; font-family: var(--font-mono);"></strong></div>
+                        <div><span style="color: var(--text-muted);">Minimum Order:</span> <strong id="qomMoqDisplay" style="color: #10b981; font-family: var(--font-mono);"></strong></div>
                     </div>
                 </div>
 
@@ -264,7 +256,7 @@
 
                 <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;">
                     <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-secondary);">Total PO Valuation:</span>
-                    <strong id="qomTotalValuation" style="font-size: 1.25rem; font-weight: 800; color: #38bdf8; font-family: var(--font-mono);">₱0.00</strong>
+                    <strong id="qomTotalValuation" style="font-size: 1.25rem; font-weight: 800; color: #38bdf8; font-family: var(--font-mono);">PHP 0.00</strong>
                 </div>
             </div>
             <div class="modal-footer">
@@ -287,8 +279,8 @@
         document.getElementById('qomSupplierHeader').textContent = 'Supplier: ' + (mat.supplier ? mat.supplier.name : '') + ' (' + mat.category + ')';
         document.getElementById('qomMaterialName').textContent = mat.name;
         document.getElementById('qomMaterialSpecs').textContent = mat.specifications || 'Standard manufacturer specifications';
-        document.getElementById('qomUnitPriceDisplay').textContent = '₱' + Number(mat.unit_price).toLocaleString('en-US', {minimumFractionDigits: 2}) + ' / ' + mat.unit;
-        document.getElementById('qomStockDisplay').textContent = mat.available_quantity + ' ' + mat.unit;
+        document.getElementById('qomUnitPriceDisplay').textContent = 'PHP ' + Number(mat.unit_price).toLocaleString('en-US', {minimumFractionDigits: 2}) + ' / ' + mat.unit;
+        document.getElementById('qomMoqDisplay').textContent = (mat.min_order_qty || 1) + ' ' + mat.unit;
         document.getElementById('qomUnitLabel').textContent = mat.unit;
         document.getElementById('qomQtyInput').value = mat.min_order_qty || 1;
         document.getElementById('qomQtyInput').min = mat.min_order_qty || 1;
@@ -302,7 +294,7 @@
     function calculateQomTotal() {
         const qty = parseInt(document.getElementById('qomQtyInput').value) || 0;
         const total = qty * activeQomUnitPrice;
-        document.getElementById('qomTotalValuation').textContent = '₱' + total.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        document.getElementById('qomTotalValuation').textContent = 'PHP ' + total.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
     }
 
     function onQomProjectChange() {

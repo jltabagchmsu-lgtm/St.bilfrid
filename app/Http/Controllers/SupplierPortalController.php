@@ -25,7 +25,6 @@ class SupplierPortalController extends Controller
         $supplier = $user->supplier;
 
         if (!$supplier) {
-            // Fallback for demo or edge cases: find first or fail
             abort(403, 'Your account is not linked to an authorized supplier organization.');
         }
 
@@ -39,41 +38,41 @@ class SupplierPortalController extends Controller
     {
         $supplier = $this->getSupplier();
 
-        // 1. Materials Statistics
-        $totalMaterials = $supplier->materials()->count();
-        $availableMaterials = $supplier->materials()->where('availability_status', 'available')->where('is_active', true)->count();
-        $lowStockMaterials = $supplier->materials()->where('availability_status', 'low_stock')->count();
-        $outOfStockMaterials = $supplier->materials()->where('availability_status', 'out_of_stock')->count();
+        // 1. Catalog Products Statistics
+        $totalProducts = $supplier->materials()->count();
+        $activeProducts = $supplier->materials()->where('is_active', true)->where('availability_status', '!=', 'unavailable')->count();
 
-        // 2. Orders Statistics
+        // 2. Orders & Procurement Statistics
         $pendingOrders = $supplier->orders()->where('status', 'pending')->count();
-        $activeOrders = $supplier->orders()->whereIn('status', ['confirmed', 'processing', 'ready_for_delivery'])->count();
+        $processingOrders = $supplier->orders()->whereIn('status', ['confirmed', 'processing'])->count();
+        $readyOrders = $supplier->orders()->where('status', 'ready_for_delivery')->count();
+        $deliveredOrders = $supplier->orders()->where('status', 'delivered')->count();
         $completedOrders = $supplier->orders()->where('status', 'completed')->count();
         $totalRevenue = $supplier->orders()->whereIn('status', ['delivered', 'completed'])->sum('total_amount');
 
-        // 3. Recent Feeds
-        $recentOrders = $supplier->orders()->with(['items', 'orderedBy', 'project'])->latest()->take(6)->get();
-        $lowStockAlerts = $supplier->materials()->whereIn('availability_status', ['low_stock', 'out_of_stock'])->orderBy('available_quantity', 'asc')->take(5)->get();
+        // 3. Incoming & Recent Purchase Orders
+        $recentOrders = $supplier->orders()->with(['items', 'orderedBy', 'project'])->latest()->take(8)->get();
         $recentNotifications = $supplier->notifications()->latest()->take(5)->get();
+        $catalogHighlights = $supplier->materials()->where('is_active', true)->orderBy('name', 'asc')->take(6)->get();
 
         return view('supplier.dashboard', compact(
             'supplier',
-            'totalMaterials',
-            'availableMaterials',
-            'lowStockMaterials',
-            'outOfStockMaterials',
+            'totalProducts',
+            'activeProducts',
             'pendingOrders',
-            'activeOrders',
+            'processingOrders',
+            'readyOrders',
+            'deliveredOrders',
             'completedOrders',
             'totalRevenue',
             'recentOrders',
-            'lowStockAlerts',
-            'recentNotifications'
+            'recentNotifications',
+            'catalogHighlights'
         ));
     }
 
     /**
-     * My Materials Catalog Management.
+     * My Products & Price Catalog Management.
      */
     public function materials(Request $request)
     {
@@ -97,9 +96,15 @@ class SupplierPortalController extends Controller
             $query->where('subcategory', $request->subcategory);
         }
 
-        // Availability status filter
+        // Status filter
         if ($request->filled('status') && $request->status !== 'all') {
-            $query->where('availability_status', $request->status);
+            if ($request->status === 'available') {
+                $query->where('availability_status', 'available')->where('is_active', true);
+            } elseif ($request->status === 'unavailable') {
+                $query->where(function ($q) {
+                    $q->where('availability_status', 'unavailable')->orWhere('is_active', false);
+                });
+            }
         }
 
         $materials = $query->orderBy('name', 'asc')->paginate(12)->withQueryString();
@@ -111,7 +116,7 @@ class SupplierPortalController extends Controller
     }
 
     /**
-     * Store a new supplier material.
+     * Store a new product in the catalog.
      */
     public function storeMaterial(Request $request)
     {
@@ -123,14 +128,12 @@ class SupplierPortalController extends Controller
             'description' => 'nullable|string',
             'specifications' => 'nullable|string',
             'unit' => 'required|string|max:50',
-            'available_quantity' => 'required|integer|min:0',
             'unit_price' => 'required|numeric|min:0',
             'min_order_qty' => 'nullable|integer|min:1',
-            'availability_status' => 'nullable|in:available,low_stock,out_of_stock,unavailable',
-            'image_url' => 'nullable|string|max:500',
+            'availability_status' => 'nullable|in:available,unavailable',
         ]);
 
-        // Generate Material Code if not provided
+        // Generate Product Code
         $prefix = match ($supplier->category) {
             'Windows & Doors' => 'MAT-WNDR',
             'Roofing' => 'MAT-ROOF',
@@ -141,18 +144,6 @@ class SupplierPortalController extends Controller
         $count = $supplier->materials()->count() + 1;
         $materialCode = $prefix . '-' . str_pad($count, 3, '0', STR_PAD_LEFT) . '-' . strtoupper(Str::random(3));
 
-        // Compute availability status if not explicitly set
-        $status = $validated['availability_status'] ?? null;
-        if (!$status) {
-            if ($validated['available_quantity'] <= 0) {
-                $status = 'out_of_stock';
-            } elseif ($validated['available_quantity'] <= 10) {
-                $status = 'low_stock';
-            } else {
-                $status = 'available';
-            }
-        }
-
         $material = SupplierMaterial::create([
             'supplier_id' => $supplier->id,
             'material_code' => $materialCode,
@@ -162,20 +153,19 @@ class SupplierPortalController extends Controller
             'description' => $validated['description'] ?? null,
             'specifications' => $validated['specifications'] ?? null,
             'unit' => $validated['unit'],
-            'available_quantity' => $validated['available_quantity'],
+            'available_quantity' => 999999, // Supply catalog offering (not bounded by artificial warehouse count)
             'unit_price' => $validated['unit_price'],
             'min_order_qty' => $validated['min_order_qty'] ?? 1,
-            'availability_status' => $status,
-            'image_url' => $validated['image_url'] ?? null,
+            'availability_status' => $validated['availability_status'] ?? 'available',
             'is_active' => true,
         ]);
 
         return redirect()->route('supplier.materials')
-            ->with('success', 'Material "' . $material->name . '" has been cataloged successfully under ' . $material->material_code . '.');
+            ->with('success', 'Product "' . $material->name . '" has been added to your catalog under ' . $material->material_code . '.');
     }
 
     /**
-     * Update an existing material.
+     * Update an existing product in the catalog.
      */
     public function updateMaterial(Request $request, $id)
     {
@@ -188,11 +178,9 @@ class SupplierPortalController extends Controller
             'description' => 'nullable|string',
             'specifications' => 'nullable|string',
             'unit' => 'required|string|max:50',
-            'available_quantity' => 'required|integer|min:0',
             'unit_price' => 'required|numeric|min:0',
             'min_order_qty' => 'nullable|integer|min:1',
-            'availability_status' => 'required|in:available,low_stock,out_of_stock,unavailable',
-            'image_url' => 'nullable|string|max:500',
+            'availability_status' => 'required|in:available,unavailable',
             'is_active' => 'nullable|boolean',
         ]);
 
@@ -202,56 +190,33 @@ class SupplierPortalController extends Controller
             'description' => $validated['description'] ?? null,
             'specifications' => $validated['specifications'] ?? null,
             'unit' => $validated['unit'],
-            'available_quantity' => $validated['available_quantity'],
             'unit_price' => $validated['unit_price'],
             'min_order_qty' => $validated['min_order_qty'] ?? 1,
             'availability_status' => $validated['availability_status'],
-            'image_url' => $validated['image_url'] ?? $material->image_url,
             'is_active' => $request->has('is_active') ? $request->boolean('is_active') : true,
         ]);
 
         return redirect()->back()
-            ->with('success', 'Material "' . $material->name . '" specifications and stock have been updated.');
+            ->with('success', 'Product "' . $material->name . '" specifications and unit price updated.');
     }
 
     /**
-     * Toggle active state or delete material.
+     * Delete or de-list product.
      */
     public function destroyMaterial($id)
     {
         $supplier = $this->getSupplier();
         $material = $supplier->materials()->findOrFail($id);
 
-        // Check if material has active order items
         if ($material->orderItems()->exists()) {
             $material->update(['is_active' => false, 'availability_status' => 'unavailable']);
-            return redirect()->back()->with('success', 'Material "' . $material->name . '" is linked to past orders and has been set to Inactive/Unavailable.');
+            return redirect()->back()->with('success', 'Product "' . $material->name . '" is linked to previous purchase orders and has been set to Inactive/Suspended.');
         }
 
         $name = $material->name;
         $material->delete();
 
-        return redirect()->back()->with('success', 'Material "' . $name . '" has been removed from your catalog.');
-    }
-
-    /**
-     * Quick stock quantity adjuster.
-     */
-    public function quickStockUpdate(Request $request, $id)
-    {
-        $supplier = $this->getSupplier();
-        $material = $supplier->materials()->findOrFail($id);
-
-        $validated = $request->validate([
-            'available_quantity' => 'required|integer|min:0',
-        ]);
-
-        $qty = $validated['available_quantity'];
-        $material->available_quantity = $qty;
-        $material->syncAvailabilityStatus();
-        $material->save();
-
-        return redirect()->back()->with('success', 'Stock quantity for "' . $material->name . '" updated to ' . $qty . ' ' . $material->unit . '.');
+        return redirect()->back()->with('success', 'Product "' . $name . '" removed from catalog.');
     }
 
     /**
@@ -284,7 +249,7 @@ class SupplierPortalController extends Controller
     }
 
     /**
-     * Show single order details JSON (for modal) or view.
+     * Show single order details.
      */
     public function showOrder($id)
     {
@@ -299,7 +264,7 @@ class SupplierPortalController extends Controller
     }
 
     /**
-     * Update order status workflow.
+     * Advance order status workflow.
      */
     public function updateOrderStatus(Request $request, $id)
     {
@@ -327,16 +292,16 @@ class SupplierPortalController extends Controller
             'user_id' => Auth::id(),
             'from_status' => $oldStatus,
             'to_status' => $newStatus,
-            'comment' => $validated['comment'] ?? ('Status changed by supplier to ' . ucfirst(str_replace('_', ' ', $newStatus))),
+            'comment' => $validated['comment'] ?? ('Supplier updated order status to ' . ucfirst(str_replace('_', ' ', $newStatus))),
         ]);
 
         // Notify Admins
         SupplierNotification::create([
             'supplier_id' => $supplier->id,
-            'user_id' => null, // Broadcast to admin
+            'user_id' => null,
             'type' => 'order_status_updated',
             'title' => 'Order ' . $order->order_code . ' Status: ' . ucfirst(str_replace('_', ' ', $newStatus)),
-            'message' => $supplier->name . ' updated purchase order ' . $order->order_code . ' status to ' . ucfirst(str_replace('_', ' ', $newStatus)) . '.',
+            'message' => $supplier->name . ' updated order ' . $order->order_code . ' to ' . ucfirst(str_replace('_', ' ', $newStatus)) . '.',
             'link' => route('admin.suppliers.orders', ['search' => $order->order_code]),
         ]);
 
@@ -345,7 +310,7 @@ class SupplierPortalController extends Controller
     }
 
     /**
-     * Supplier profile and account settings.
+     * Supplier profile and settings.
      */
     public function profile()
     {

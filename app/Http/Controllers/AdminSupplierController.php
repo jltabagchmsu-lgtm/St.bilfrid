@@ -11,7 +11,6 @@ use App\Models\SupplierNotification;
 use App\Models\Project;
 use App\Models\Material;
 use App\Models\ProjectMaterial;
-use App\Models\InventoryLog;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,15 +23,16 @@ class AdminSupplierController extends Controller
      */
     public function index()
     {
-        // 1. Fetch the three primary suppliers
+        // 1. Fetch the primary suppliers
         $suppliers = Supplier::withCount(['materials', 'orders'])->get();
 
         // 2. Aggregate KPI Metrics
         $totalSuppliers = $suppliers->count();
-        $totalAvailableMaterials = SupplierMaterial::where('availability_status', 'available')->where('is_active', true)->count();
-        $lowStockMaterials = SupplierMaterial::where('availability_status', 'low_stock')->count();
+        $totalProducts = SupplierMaterial::where('is_active', true)->where('availability_status', '!=', 'unavailable')->count();
         $pendingOrders = SupplierOrder::where('status', 'pending')->count();
-        $activeOrders = SupplierOrder::whereIn('status', ['confirmed', 'processing', 'ready_for_delivery'])->count();
+        $processingOrders = SupplierOrder::whereIn('status', ['confirmed', 'processing'])->count();
+        $readyOrders = SupplierOrder::where('status', 'ready_for_delivery')->count();
+        $deliveredOrders = SupplierOrder::where('status', 'delivered')->count();
         $completedOrders = SupplierOrder::where('status', 'completed')->count();
         $totalProcurementCost = SupplierOrder::whereIn('status', ['delivered', 'completed'])->sum('total_amount');
 
@@ -42,16 +42,17 @@ class AdminSupplierController extends Controller
         // 4. Active Projects for Order Generator
         $activeProjects = Project::whereIn('status', ['approved', 'in_progress'])->orderBy('title', 'asc')->get();
 
-        // 5. Featured materials sample for quick comparison
-        $featuredMaterials = SupplierMaterial::with('supplier')->where('is_active', true)->inRandomOrder()->take(6)->get();
+        // 5. Featured product catalog items for PO placement
+        $featuredMaterials = SupplierMaterial::with('supplier')->where('is_active', true)->where('availability_status', '!=', 'unavailable')->orderBy('name', 'asc')->get();
 
         return view('admin.suppliers.index', compact(
             'suppliers',
             'totalSuppliers',
-            'totalAvailableMaterials',
-            'lowStockMaterials',
+            'totalProducts',
             'pendingOrders',
-            'activeOrders',
+            'processingOrders',
+            'readyOrders',
+            'deliveredOrders',
             'completedOrders',
             'totalProcurementCost',
             'recentOrders',
@@ -109,7 +110,6 @@ class AdminSupplierController extends Controller
         match ($sort) {
             'price_low' => $query->orderBy('unit_price', 'asc'),
             'price_high' => $query->orderBy('unit_price', 'desc'),
-            'stock_high' => $query->orderBy('available_quantity', 'desc'),
             'newest' => $query->latest(),
             default => $query->orderBy('name', 'asc'),
         };
@@ -238,7 +238,7 @@ class AdminSupplierController extends Controller
             'user_id' => null,
             'type' => 'order_created',
             'title' => 'New Purchase Order Received: ' . $orderCode,
-            'message' => 'St. Bilfrid Dev. Corp placed purchase order ' . $orderCode . ' totaling ₱' . number_format($totalAmount, 2) . ' for ' . count($orderItemsData) . ' item(s).',
+            'message' => 'St. Bilfrid Dev. Corp placed purchase order ' . $orderCode . ' totaling ₱' . number_format($totalAmount, 2) . ' for ' . count($orderItemsData) . ' product(s).',
             'link' => route('supplier.orders', ['search' => $orderCode]),
         ]);
 
@@ -286,11 +286,11 @@ class AdminSupplierController extends Controller
         ]);
 
         return redirect()->back()
-            ->with('success', 'Order ' . $order->order_code . ' status successfully transitioned to ' . ucfirst(str_replace('_', ' ', $newStatus)) . '.');
+            ->with('success', 'Order ' . $order->order_code . ' status updated to ' . ucfirst(str_replace('_', ' ', $newStatus)) . '.');
     }
 
     /**
-     * 1-Click Receive Delivered Order into Project BOM or Central Inventory.
+     * 1-Click Receive Delivered Order into Project BOM or Central Stock.
      */
     public function receiveOrder(Request $request, $id)
     {
@@ -305,13 +305,12 @@ class AdminSupplierController extends Controller
             'user_id' => Auth::id(),
             'from_status' => $order->status,
             'to_status' => 'completed',
-            'comment' => 'Materials officially accepted and received at delivery destination.',
+            'comment' => 'Products officially received, verified on-site, and accepted.',
         ]);
 
-        // If order was tied to a project, ensure items are represented in Project Materials BOM
+        // If order was tied to a project, integrate into Project Materials BOM
         if ($order->project_id) {
             foreach ($order->items as $item) {
-                // Find or match local master material
                 $localMaterial = Material::where('name', 'like', "%{$item->material_name}%")->first();
                 if (!$localMaterial) {
                     $localMaterial = Material::create([
@@ -324,7 +323,6 @@ class AdminSupplierController extends Controller
                     ]);
                 }
 
-                // Add or update project BOM
                 $projectMat = ProjectMaterial::firstOrNew([
                     'project_id' => $order->project_id,
                     'material_id' => $localMaterial->id,
@@ -336,7 +334,7 @@ class AdminSupplierController extends Controller
             }
         }
 
-        return redirect()->back()->with('success', 'Order ' . $order->order_code . ' officially marked as Delivered & Completed. Stock integrated successfully.');
+        return redirect()->back()->with('success', 'Order ' . $order->order_code . ' marked as Completed. Delivered products accepted.');
     }
 
     /**

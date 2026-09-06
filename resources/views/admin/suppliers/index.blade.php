@@ -2,12 +2,12 @@
 
 @section('title', 'Centralized Supplier Hub - St. Bilfrid Dev. Corp')
 @section('header_title', 'Supplier Network & Procurement Control')
-@section('header_subtitle', 'Centralized management of trade suppliers, cross-supplier material catalogs, and purchase order fulfillment.')
+@section('header_subtitle', 'Centralized management of trade suppliers, cross-supplier product catalogs, and purchase order fulfillment.')
 
 @section('content')
 
 <!-- KPI Summary Cards -->
-<div class="metrics-grid" style="grid-template-columns: repeat(6, 1fr); margin-bottom: 24px;">
+<div class="metrics-grid" style="grid-template-columns: repeat(6, 1fr); gap: 14px; margin-bottom: 24px;">
     <!-- Total Suppliers -->
     <div class="stat-card">
         <div class="stat-header">
@@ -20,55 +20,43 @@
         <div class="stat-sub">3 Trade Categories</div>
     </div>
 
-    <!-- Available Materials -->
+    <!-- Catalog Products -->
     <div class="stat-card">
         <div class="stat-header">
-            <span class="stat-label">Available Materials</span>
+            <span class="stat-label">Catalog Products</span>
             <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
             </div>
         </div>
-        <div class="stat-value" style="color: #10b981;">{{ number_format($totalAvailableMaterials) }}</div>
-        <div class="stat-sub">Ready for PO</div>
+        <div class="stat-value" style="color: #10b981;">{{ number_format($totalProducts) }}</div>
+        <div class="stat-sub">Ready for PO Generation</div>
     </div>
 
-    <!-- Low Stock Materials -->
+    <!-- Pending Confirmation Orders -->
     <div class="stat-card">
         <div class="stat-header">
-            <span class="stat-label">Low Stock Alerts</span>
-            <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b;">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-            </div>
-        </div>
-        <div class="stat-value" style="color: #f59e0b;">{{ number_format($lowStockMaterials) }}</div>
-        <div class="stat-sub"><= 10 units in stock</div>
-    </div>
-
-    <!-- Pending Orders -->
-    <div class="stat-card">
-        <div class="stat-header">
-            <span class="stat-label">Pending Orders</span>
+            <span class="stat-label">Pending Acceptance</span>
             <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
             </div>
         </div>
         <div class="stat-value" style="color: #f59e0b;">{{ number_format($pendingOrders) }}</div>
-        <div class="stat-sub">Awaiting confirmation</div>
+        <div class="stat-sub">Supplier confirmation pending</div>
     </div>
 
     <!-- Active Orders -->
     <div class="stat-card">
         <div class="stat-header">
-            <span class="stat-label">In-Transit / Active</span>
+            <span class="stat-label">In Fabrication & Transit</span>
             <div class="stat-icon" style="background: rgba(56, 189, 248, 0.1); color: #38bdf8;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
             </div>
         </div>
-        <div class="stat-value" style="color: #38bdf8;">{{ number_format($activeOrders) }}</div>
-        <div class="stat-sub">Processing or Staged</div>
+        <div class="stat-value" style="color: #38bdf8;">{{ number_format($processingOrders + $readyOrders) }}</div>
+        <div class="stat-sub">{{ number_format($readyOrders) }} ready for dispatch</div>
     </div>
 
-    <!-- Completed Orders -->
+    <!-- Delivered Orders -->
     <div class="stat-card">
         <div class="stat-header">
             <span class="stat-label">Delivered & Received</span>
@@ -76,8 +64,20 @@
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
             </div>
         </div>
-        <div class="stat-value" style="color: #22c55e;">{{ number_format($completedOrders) }}</div>
-        <div class="stat-sub">₱{{ number_format($totalProcurementCost, 0) }} total</div>
+        <div class="stat-value" style="color: #22c55e;">{{ number_format($deliveredOrders + $completedOrders) }}</div>
+        <div class="stat-sub">Successfully fulfilled</div>
+    </div>
+
+    <!-- Total Procurement Expenditure -->
+    <div class="stat-card">
+        <div class="stat-header">
+            <span class="stat-label">Fulfilled Volume</span>
+            <div class="stat-icon" style="background: rgba(129, 140, 248, 0.1); color: #818cf8;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            </div>
+        </div>
+        <div class="stat-value" style="color: #818cf8; font-size: 1.25rem;">PHP {{ number_format($totalProcurementCost, 0) }}</div>
+        <div class="stat-sub">Delivered expenditure</div>
     </div>
 </div>
 
@@ -86,7 +86,7 @@
     <div style="display: flex; align-items: center; gap: 10px;">
         <a href="{{ route('admin.suppliers.materials') }}" class="btn-secondary" style="font-size: 0.85rem; padding: 10px 18px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
-            Cross-Supplier Materials Catalog
+            Cross-Supplier Product Matrix
         </a>
         <a href="{{ route('admin.suppliers.orders') }}" class="btn-secondary" style="font-size: 0.85rem; padding: 10px 18px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
@@ -157,7 +157,7 @@
 
                 <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 14px;">
                     <a href="{{ route('admin.suppliers.materials', ['supplier_id' => $sup->id]) }}" class="btn-secondary" style="flex: 1; font-size: 0.75rem; justify-content: center; padding: 6px;">
-                        Browse Items
+                        Browse Catalog
                     </a>
                     <button type="button" onclick="openEditSupplierModal({{ json_encode($sup) }})" class="btn-secondary" style="padding: 6px 10px; font-size: 0.75rem;">
                         Edit Info
@@ -226,7 +226,7 @@
                         </td>
                         <td>
                             <strong style="font-family: var(--font-mono); color: var(--text-primary);">
-                                ₱{{ number_format($ord->total_amount, 2) }}
+                                PHP {{ number_format($ord->total_amount, 2) }}
                             </strong>
                         </td>
                         <td>
@@ -253,7 +253,7 @@
                 @empty
                     <tr>
                         <td colspan="8" style="text-align: center; padding: 36px; color: var(--text-muted);">
-                            No purchase orders created yet. Click "+ Place New Purchase Order" to create one.
+                            No purchase orders created yet. Click "+ Place New Purchase Order" to generate one.
                         </td>
                     </tr>
                 @endforelse
@@ -268,7 +268,7 @@
         <div class="modal-header">
             <div>
                 <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary);">Generate Purchase Order to Supplier</h3>
-                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Procure materials directly from supplier inventory for a project site or central warehouse.</p>
+                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Procure products directly from supplier catalog for a project site or central warehouse.</p>
             </div>
             <button type="button" onclick="closeModal('createPurchaseOrderModal')" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.25rem;">&times;</button>
         </div>
@@ -331,10 +331,10 @@
                         <div class="po-item-row" style="display: grid; grid-template-columns: 3fr 1fr 1fr 36px; gap: 10px; margin-bottom: 8px; align-items: center;">
                             <div>
                                 <select name="items[0][material_id]" class="input-field po-material-select" required onchange="calculatePoTotal()" style="width: 100%; font-size: 0.8rem;">
-                                    <option value="">-- Select Material Item --</option>
+                                    <option value="">-- Select Product Item --</option>
                                     @foreach($featuredMaterials as $fm)
                                         <option value="{{ $fm->id }}" data-supplier-id="{{ $fm->supplier_id }}" data-price="{{ $fm->unit_price }}" data-unit="{{ $fm->unit }}">
-                                            {{ $fm->name }} (₱{{ number_format($fm->unit_price, 2) }} / {{ $fm->unit }}) - Stock: {{ $fm->available_quantity }}
+                                            {{ $fm->name }} [{{ $fm->supplier ? $fm->supplier->category : '' }}] (PHP {{ number_format($fm->unit_price, 2) }} / {{ $fm->unit }})
                                         </option>
                                     @endforeach
                                 </select>
@@ -343,7 +343,7 @@
                                 <input type="number" name="items[0][quantity]" class="input-field po-qty-input" min="1" value="1" required placeholder="Qty" oninput="calculatePoTotal()" style="width: 100%; font-size: 0.85rem;">
                             </div>
                             <div>
-                                <input type="text" class="input-field po-subtotal-display" readonly placeholder="₱0.00" style="width: 100%; font-size: 0.8rem; font-family: var(--font-mono); opacity: 0.8;">
+                                <input type="text" class="input-field po-subtotal-display" readonly placeholder="PHP 0.00" style="width: 100%; font-size: 0.8rem; font-family: var(--font-mono); opacity: 0.8;">
                             </div>
                             <div>
                                 <button type="button" onclick="removePoItemRow(this)" class="btn-secondary" style="padding: 6px; color: #ef4444; border-color: rgba(239, 68, 68, 0.3);">&times;</button>
@@ -353,7 +353,7 @@
 
                     <div style="display: flex; justify-content: flex-end; margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(255, 255, 255, 0.08);">
                         <div style="font-size: 0.9rem; font-weight: 700; color: var(--text-primary);">
-                            Estimated Total: <span id="poGrandTotalDisplay" style="color: #38bdf8; font-family: var(--font-mono); font-size: 1.1rem;">₱0.00</span>
+                            Estimated Total: <span id="poGrandTotalDisplay" style="color: #38bdf8; font-family: var(--font-mono); font-size: 1.1rem;">PHP 0.00</span>
                         </div>
                     </div>
                 </div>
@@ -479,7 +479,7 @@
         clone.querySelector('.po-material-select').value = '';
         clone.querySelector('.po-qty-input').name = `items[${poItemIndex}][quantity]`;
         clone.querySelector('.po-qty-input').value = '1';
-        clone.querySelector('.po-subtotal-display').value = '₱0.00';
+        clone.querySelector('.po-subtotal-display').value = 'PHP 0.00';
 
         container.appendChild(clone);
         poItemIndex++;
@@ -507,11 +507,11 @@
             const qty = parseInt(qtyInput.value) || 0;
             const subtotal = price * qty;
             
-            subtotalDisp.value = '₱' + subtotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            subtotalDisp.value = 'PHP ' + subtotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
             grandTotal += subtotal;
         });
 
-        document.getElementById('poGrandTotalDisplay').textContent = '₱' + grandTotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        document.getElementById('poGrandTotalDisplay').textContent = 'PHP ' + grandTotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
     }
 
     function openEditSupplierModal(sup) {

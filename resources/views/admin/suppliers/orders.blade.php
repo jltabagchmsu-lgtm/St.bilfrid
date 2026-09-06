@@ -122,7 +122,7 @@
                     </td>
                     <td>
                         <strong style="font-family: var(--font-mono); color: var(--text-primary); font-size: 0.95rem;">
-                            ₱{{ number_format($ord->total_amount, 2) }}
+                            PHP {{ number_format($ord->total_amount, 2) }}
                         </strong>
                     </td>
                     <td>

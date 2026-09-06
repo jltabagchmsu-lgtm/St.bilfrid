@@ -147,14 +147,14 @@
                 <span class="nav-icon">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
                 </span>
-                My Materials & Inventory
+                Product Catalog & Pricing
             </a>
 
             <a href="{{ route('supplier.orders') }}" class="nav-item {{ request()->routeIs('supplier.orders*') ? 'active' : '' }}">
                 <span class="nav-icon">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
                 </span>
-                Firm Purchase Orders
+                Incoming Purchase Orders
             </a>
 
             <div class="nav-section-title" style="margin-top: 16px;">Account & Settings</div>
@@ -169,7 +169,7 @@
             <div class="nav-section-title" style="margin-top: 16px;">Quick Actions</div>
             <div style="padding: 0 12px;">
                 <button type="button" onclick="openModal('addMaterialModal')" class="btn-primary" style="width: 100%; font-size: 0.8rem; padding: 10px; margin-bottom: 8px;">
-                    + Add New Material
+                    + Add New Product
                 </button>
             </div>
         </nav>
@@ -214,13 +214,13 @@
                     @endif
                 </div>
                 <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
-                    @yield('page_subtitle', 'Manage material availability, specifications, and client purchase orders.')
+                    @yield('page_subtitle', 'Manage product offerings, pricing, and fulfill client purchase orders.')
                 </p>
             </div>
 
             <div style="display: flex; align-items: center; gap: 16px;">
                 <div style="font-size: 0.8rem; color: var(--text-secondary); background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 14px; border-radius: 8px;">
-                    <span style="color: var(--text-muted);">Contractor Partner:</span> <strong style="color: var(--text-primary);">St. Bilfrid Dev. Corp</strong>
+                    <span style="color: var(--text-muted);">Contractor Client:</span> <strong style="color: var(--text-primary);">St. Bilfrid Dev. Corp</strong>
                 </div>
 
                 <a href="{{ route('supplier.profile') }}" class="btn-secondary" style="font-size: 0.8rem; padding: 8px 14px;">
@@ -260,13 +260,13 @@
         @yield('content')
     </main>
 
-    <!-- Global Add Material Modal -->
+    <!-- Global Add Product Modal -->
     <div class="modal-backdrop" id="addMaterialModal">
         <div class="modal-box">
             <div class="modal-header">
                 <div>
-                    <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary);">Add New Material to Catalog</h3>
-                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Register a material offering with specifications, inventory quantity, and unit price.</p>
+                    <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary);">Add Product to Trade Catalog</h3>
+                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Register a material offering with specifications, unit price, and minimum order requirements.</p>
                 </div>
                 <button type="button" onclick="closeModal('addMaterialModal')" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.25rem;">&times;</button>
             </div>
@@ -275,7 +275,7 @@
                 <div class="modal-body">
                     <div style="margin-bottom: 16px;">
                         <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px;">
-                            Material Name <span style="color: var(--primary-red);">*</span>
+                            Product / Material Name <span style="color: var(--primary-red);">*</span>
                         </label>
                         <input type="text" name="name" required placeholder="e.g. 1.20m x 1.20m Sliding Window 1/4 Glass" class="input-field" style="width: 100%;">
                     </div>
@@ -295,13 +295,7 @@
                         </div>
                     </div>
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px;">
-                        <div>
-                            <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px;">
-                                Available Quantity <span style="color: var(--primary-red);">*</span>
-                            </label>
-                            <input type="number" name="available_quantity" min="0" required placeholder="0" class="input-field" style="width: 100%;">
-                        </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
                         <div>
                             <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px;">
                                 Unit Price (PHP) <span style="color: var(--primary-red);">*</span>
@@ -310,7 +304,7 @@
                         </div>
                         <div>
                             <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px;">
-                                Min Order Qty (MOQ)
+                                Minimum Order Quantity (MOQ)
                             </label>
                             <input type="number" min="1" name="min_order_qty" value="1" class="input-field" style="width: 100%;">
                         </div>
@@ -318,26 +312,24 @@
 
                     <div style="margin-bottom: 16px;">
                         <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px;">
-                            Material Specifications
+                            Technical Specifications
                         </label>
                         <textarea name="specifications" rows="2" placeholder="e.g. 6mm Tempered Glass, Powder Coated Aluminum Section 38mm, ASTM C150 Standard" class="input-field" style="width: 100%; resize: vertical;"></textarea>
                     </div>
 
                     <div style="margin-bottom: 16px;">
                         <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px;">
-                            Description / Application Notes
+                            Description / Fabrication Notes
                         </label>
-                        <textarea name="description" rows="2" placeholder="Brief explanation of the material usage, warranty, or packaging." class="input-field" style="width: 100%; resize: vertical;"></textarea>
+                        <textarea name="description" rows="2" placeholder="Brief explanation of the material usage, lead time, or packaging." class="input-field" style="width: 100%; resize: vertical;"></textarea>
                     </div>
 
                     <div>
                         <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px;">
-                            Availability Status Override
+                            Catalog Offering Status
                         </label>
                         <select name="availability_status" class="input-field" style="width: 100%;">
-                            <option value="available">Available (In Stock)</option>
-                            <option value="low_stock">Low Stock</option>
-                            <option value="out_of_stock">Out of Stock</option>
+                            <option value="available">Available for Order</option>
                             <option value="unavailable">Unavailable / Suspended</option>
                         </select>
                     </div>
