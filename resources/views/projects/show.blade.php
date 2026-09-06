@@ -977,40 +977,6 @@
             </div>
         </div>
         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-            <!-- 1-Click Load Project BOM / Templates Dropdown -->
-            <div class="dropdown" style="position: relative; display: inline-block;">
-                <button type="button" class="btn-secondary" style="font-size: 0.8rem; background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.3); color: #38bdf8; display: inline-flex; align-items: center; gap: 6px;" onclick="toggleProjectBomTemplateMenu()">
-                    1-Click Load {{ $project->title ?: $project->project_code }} BOM &#9662;
-                </button>
-                <div id="projectBomTemplateMenuDropdown" style="display: none; position: absolute; right: 0; top: 100%; margin-top: 6px; background: #0f172a; border: 1px solid var(--border-color); border-radius: var(--radius-md); box-shadow: 0 10px 30px rgba(0,0,0,0.7); min-width: 310px; z-index: 50; padding: 8px;">
-                    <form action="{{ route('projects.loadProjectTemplate', $project->id) }}" method="POST" onsubmit="return confirm('Generate and load the official 18-item Bill of Materials calibrated specifically for {{ addslashes($project->title ?: $project->project_code) }} (₱{{ number_format($project->contract_budget ?: ($project->estimated_cost ?: 1831613.80), 2) }})?');">
-                        @csrf
-                        <button type="submit" style="display: block; width: 100%; text-align: left; background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); padding: 10px 12px; color: #38bdf8; font-size: 0.825rem; cursor: pointer; border-radius: 4px; margin-bottom: 6px;" onmouseover="this.style.background='rgba(56, 189, 248, 0.2)'" onmouseout="this.style.background='rgba(56, 189, 248, 0.1)'">
-                            <strong>Match Open Project: {{ $project->title ?: $project->project_code }}</strong>
-                            <div style="font-size: 0.725rem; color: #cbd5e1;">Calibrated to ₱{{ number_format($project->contract_budget ?: ($project->estimated_cost ?: 1831613.80), 2) }} &bull; {{ $project->floor_area_sqm ?? 80 }} m²</div>
-                        </button>
-                    </form>
-                    <div style="font-size: 0.7rem; color: var(--text-muted); padding: 4px 8px; text-transform: uppercase; font-weight: 700;">Or Load Standard Architectural Presets:</div>
-                    <form action="{{ route('projects.load2BrBungalowTemplate', $project->id) }}" method="POST" onsubmit="return confirm('Load 2-Bedroom Bungalow Bill of Materials template (₱1,831,613.80)?');">
-                        @csrf
-                        <button type="submit" style="display: block; width: 100%; text-align: left; background: none; border: none; padding: 8px 10px; color: #f8fafc; font-size: 0.8rem; cursor: pointer; border-radius: 4px;" onmouseover="this.style.background='rgba(255, 255, 255, 0.08)'" onmouseout="this.style.background='none'">
-                            2BR Bungalow Preset (₱1.831M)
-                        </button>
-                    </form>
-                    <form action="{{ route('projects.load3BrBungalowTemplate', $project->id) }}" method="POST" onsubmit="return confirm('Load 3-Bedroom Bungalow Bill of Materials template (₱1,778,062.08)?');">
-                        @csrf
-                        <button type="submit" style="display: block; width: 100%; text-align: left; background: none; border: none; padding: 8px 10px; color: #f8fafc; font-size: 0.8rem; cursor: pointer; border-radius: 4px;" onmouseover="this.style.background='rgba(255, 255, 255, 0.08)'" onmouseout="this.style.background='none'">
-                            3BR Bungalow Preset (₱1.778M)
-                        </button>
-                    </form>
-                    <form action="{{ route('projects.loadDuplexTemplate', $project->id) }}" method="POST" onsubmit="return confirm('Load 2-Storey Duplex Housing BOM template (₱742,800.74)?');">
-                        @csrf
-                        <button type="submit" style="display: block; width: 100%; text-align: left; background: none; border: none; padding: 8px 10px; color: #f8fafc; font-size: 0.8rem; cursor: pointer; border-radius: 4px;" onmouseover="this.style.background='rgba(255, 255, 255, 0.08)'" onmouseout="this.style.background='none'">
-                            31 m² Duplex Housing Preset (₱742.8K)
-                        </button>
-                    </form>
-                </div>
-            </div>
             <a href="{{ route('projects.printBom', $project->id) }}" target="_blank" class="btn-secondary" style="font-size: 0.8rem; color: #10b981; border-color: rgba(16, 185, 129, 0.3);" title="Print official multi-page engineering document">
                 Print Official BOM Document
             </a>
@@ -1258,14 +1224,8 @@
                 Generate an itemized Scope of Work Bill of Materials tailored specifically for <strong>{{ $project->title ?: $project->project_code }}</strong> (Foundation, Columns, Beams, Walls, Roofing, Plumbing, Electrical, Finishes) with itemized Materials (A), Labor (B), Equipment (C), and official Philippine markups.
             </div>
             <div style="display: inline-flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
-                <form action="{{ route('projects.loadProjectTemplate', $project->id) }}" method="POST" onsubmit="return confirm('Generate and load the official 18-item Bill of Materials calibrated specifically for {{ addslashes($project->title ?: $project->project_code) }} (₱{{ number_format($project->contract_budget ?: ($project->estimated_cost ?: 1831613.80), 2) }})?');">
-                    @csrf
-                    <button type="submit" class="btn-primary" style="background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); border-color: #38bdf8;">
-                        1-Click Load {{ $project->title ?: $project->project_code }} BOM Template (₱{{ number_format($project->contract_budget ?: ($project->estimated_cost ?: 1831613.80), 2) }})
-                    </button>
-                </form>
-                <button class="btn-secondary" onclick="openModal('addScopeItemModal')">
-                    + Add Custom Scope Item
+                <button class="btn-primary" onclick="openModal('addScopeItemModal')">
+                    + Add Scope Item
                 </button>
             </div>
         </div>
@@ -3848,18 +3808,5 @@
             disp.innerText = '₱ ' + total.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
         }
     }
-
-    function toggleProjectBomTemplateMenu() {
-        const menu = document.getElementById('projectBomTemplateMenuDropdown');
-        if (menu) {
-            menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
-        }
-    }
-    document.addEventListener('click', function(e) {
-        const menu = document.getElementById('projectBomTemplateMenuDropdown');
-        if (menu && !e.target.closest('.dropdown')) {
-            menu.style.display = 'none';
-        }
-    });
 </script>
 @endsection

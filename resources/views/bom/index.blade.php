@@ -319,16 +319,11 @@
                         <tr>
                             <td colspan="10" style="text-align: center; padding: 48px 20px; color: var(--text-muted);">
                                 <div style="font-size: 1.05rem; font-weight: 700; color: #f8fafc;">No Material Requirements in BOM Yet</div>
-                                <div style="font-size: 0.85rem; margin-top: 4px;">Load an official Bill of Materials calibrated specifically for <strong>{{ $selectedProject ? ($selectedProject->title ?: $selectedProject->project_code) : 'this project' }}</strong> or add custom Scope Items.</div>
+                                <div style="font-size: 0.85rem; margin-top: 4px;">Add Scope Items and itemized materials to generate this Bill of Materials.</div>
                                 <div style="margin-top: 16px;">
-                                    @if($selectedProject)
-                                        <form action="{{ route('projects.loadProjectTemplate', $selectedProject->id) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Generate and load the official 18-item Bill of Materials calibrated specifically for {{ addslashes($selectedProject->title ?: $selectedProject->project_code) }} (₱{{ number_format($selectedProject->contract_budget ?: ($selectedProject->estimated_cost ?: 1831613.80), 2) }})?');">
-                                            @csrf
-                                            <button type="submit" class="btn-primary" style="background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); border-color: #38bdf8;">
-                                                1-Click Load {{ $selectedProject->title ?: $selectedProject->project_code }} BOM (₱{{ number_format($selectedProject->contract_budget ?: ($selectedProject->estimated_cost ?: 1831613.80), 2) }})
-                                            </button>
-                                        </form>
-                                    @endif
+                                    <button class="btn-primary" onclick="openModal('addScopeItemModal')">
+                                        + Add Scope Item
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -633,16 +628,8 @@
                 Generate an itemized Scope of Work Bill of Materials tailored specifically for <strong>{{ $selectedProject ? ($selectedProject->title ?: $selectedProject->project_code) : 'this project' }}</strong> (Foundation, Columns, Beams, Walls, Roofing, Plumbing, Electrical, Finishes) with itemized Materials (A), Labor (B), Equipment (C), and official Philippine markups.
             </p>
             <div style="display: inline-flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
-                @if($selectedProject)
-                    <form action="{{ route('projects.loadProjectTemplate', $selectedProject->id) }}" method="POST" onsubmit="return confirm('Generate and load the official 18-item Bill of Materials calibrated specifically for {{ addslashes($selectedProject->title ?: $selectedProject->project_code) }} (₱{{ number_format($selectedProject->contract_budget ?: ($selectedProject->estimated_cost ?: 1831613.80), 2) }})?');">
-                        @csrf
-                        <button type="submit" class="btn-primary" style="background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); border-color: #38bdf8;">
-                            1-Click Load {{ $selectedProject->title ?: $selectedProject->project_code }} BOM (₱{{ number_format($selectedProject->contract_budget ?: ($selectedProject->estimated_cost ?: 1831613.80), 2) }})
-                        </button>
-                    </form>
-                @endif
-                <button class="btn-secondary" onclick="openModal('addScopeItemModal')">
-                    + Add Custom Scope Item
+                <button class="btn-primary" onclick="openModal('addScopeItemModal')">
+                    + Add Scope Item
                 </button>
             </div>
         </div>
