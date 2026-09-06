@@ -419,7 +419,7 @@
         <div>
             <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 4px;">Standard Engineering Weighting Formula (Calculated from Checklists):</div>
             <div style="font-family: var(--font-mono); font-size: 0.95rem; color: #f8fafc; font-weight: 600;">
-                <span style="color: #ef4444;">Overall %</span> = (<span style="color: #38bdf8;">Structural</span> &times; {{ $project->structural_weight }}%) + (<span style="color: #f59e0b;">Electrical</span> &times; {{ $project->electrical_weight }}%) + (<span style="color: #10b981;">Plumbing</span> &times; {{ $project->piping_weight }}%) + (<span style="color: #ec4899;">Design-Build</span> &times; {{ $project->finishing_weight }}%)
+                <span style="color: #ef4444;">Overall %</span> = (<span style="color: #38bdf8;">Structural</span> &times; <span id="formulaStructWeight">{{ $project->structural_weight }}%</span>) + (<span style="color: #f59e0b;">Electrical</span> &times; <span id="formulaElecWeight">{{ $project->electrical_weight }}%</span>) + (<span style="color: #10b981;">Plumbing</span> &times; <span id="formulaPipeWeight">{{ $project->piping_weight }}%</span>) + (<span style="color: #ec4899;">Design-Build</span> &times; <span id="formulaFinishWeight">{{ $project->finishing_weight }}%</span>)
             </div>
         </div>
         <div style="text-align: right;">
@@ -436,7 +436,7 @@
         <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: var(--radius-md); padding: 16px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                 <span style="font-weight: 700; font-size: 0.9rem; color: #38bdf8;">🏗️ Structural Works</span>
-                <span class="spec-chip" style="font-size: 0.65rem;">{{ $project->structural_weight }}% WEIGHT</span>
+                <span class="spec-chip" id="chipStructWeight" style="font-size: 0.65rem;">{{ $project->structural_weight }}% WEIGHT</span>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px;">
                 <span style="font-family: var(--font-mono); font-size: 1.5rem; font-weight: 800; color: #f8fafc;" id="kpiStructVal">{{ $project->structural_progress }}%</span>
@@ -455,7 +455,7 @@
         <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: var(--radius-md); padding: 16px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                 <span style="font-weight: 700; font-size: 0.9rem; color: #f59e0b;">⚡ Electrical Works</span>
-                <span class="spec-chip" style="font-size: 0.65rem;">{{ $project->electrical_weight }}% WEIGHT</span>
+                <span class="spec-chip" id="chipElecWeight" style="font-size: 0.65rem;">{{ $project->electrical_weight }}% WEIGHT</span>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px;">
                 <span style="font-family: var(--font-mono); font-size: 1.5rem; font-weight: 800; color: #f8fafc;" id="kpiElecVal">{{ $project->electrical_progress }}%</span>
@@ -474,7 +474,7 @@
         <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-md); padding: 16px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                 <span style="font-weight: 700; font-size: 0.9rem; color: #10b981;">🚰 Piping & Plumbing</span>
-                <span class="spec-chip" style="font-size: 0.65rem;">{{ $project->piping_weight }}% WEIGHT</span>
+                <span class="spec-chip" id="chipPipeWeight" style="font-size: 0.65rem;">{{ $project->piping_weight }}% WEIGHT</span>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px;">
                 <span style="font-family: var(--font-mono); font-size: 1.5rem; font-weight: 800; color: #f8fafc;" id="kpiPipeVal">{{ $project->piping_progress }}%</span>
@@ -493,7 +493,7 @@
         <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(236, 72, 153, 0.3); border-radius: var(--radius-md); padding: 16px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                 <span style="font-weight: 700; font-size: 0.9rem; color: #ec4899;">✨ Design-Build / Turnkey</span>
-                <span class="spec-chip" style="font-size: 0.65rem;">{{ $project->finishing_weight }}% WEIGHT</span>
+                <span class="spec-chip" id="chipFinishWeight" style="font-size: 0.65rem;">{{ $project->finishing_weight }}% WEIGHT</span>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px;">
                 <span style="font-family: var(--font-mono); font-size: 1.5rem; font-weight: 800; color: #f8fafc;" id="kpiFinishVal">{{ $project->finishing_progress }}%</span>
@@ -3645,6 +3645,12 @@
             if (secBadge && data.structural_done !== undefined) secBadge.innerText = `${data.structural_done} / ${data.structural_total} Tasks Done`;
             const secVal = document.getElementById('structSectionProgVal');
             if (secVal) secVal.innerText = data.structural_progress + '%';
+            if (data.structural_weight !== undefined) {
+                const fW = document.getElementById('formulaStructWeight');
+                if (fW) fW.innerText = data.structural_weight + '%';
+                const cW = document.getElementById('chipStructWeight');
+                if (cW) cW.innerText = data.structural_weight + '% WEIGHT';
+            }
         }
 
         // Electrical Trade Metrics
@@ -3661,6 +3667,12 @@
             if (secBadge && data.electrical_done !== undefined) secBadge.innerText = `${data.electrical_done} / ${data.electrical_total} Tasks Done`;
             const secVal = document.getElementById('elecSectionProgVal');
             if (secVal) secVal.innerText = data.electrical_progress + '%';
+            if (data.electrical_weight !== undefined) {
+                const fW = document.getElementById('formulaElecWeight');
+                if (fW) fW.innerText = data.electrical_weight + '%';
+                const cW = document.getElementById('chipElecWeight');
+                if (cW) cW.innerText = data.electrical_weight + '% WEIGHT';
+            }
         }
 
         // Piping Trade Metrics
@@ -3677,6 +3689,12 @@
             if (secBadge && data.piping_done !== undefined) secBadge.innerText = `${data.piping_done} / ${data.piping_total} Tasks Done`;
             const secVal = document.getElementById('pipeSectionProgVal');
             if (secVal) secVal.innerText = data.piping_progress + '%';
+            if (data.piping_weight !== undefined) {
+                const fW = document.getElementById('formulaPipeWeight');
+                if (fW) fW.innerText = data.piping_weight + '%';
+                const cW = document.getElementById('chipPipeWeight');
+                if (cW) cW.innerText = data.piping_weight + '% WEIGHT';
+            }
         }
 
         // Finishing Trade Metrics
@@ -3693,6 +3711,12 @@
             if (secBadge && data.finishing_done !== undefined) secBadge.innerText = `${data.finishing_done} / ${data.finishing_total} Tasks Done`;
             const secVal = document.getElementById('finishSectionProgVal');
             if (secVal) secVal.innerText = data.finishing_progress + '%';
+            if (data.finishing_weight !== undefined) {
+                const fW = document.getElementById('formulaFinishWeight');
+                if (fW) fW.innerText = data.finishing_weight + '%';
+                const cW = document.getElementById('chipFinishWeight');
+                if (cW) cW.innerText = data.finishing_weight + '% WEIGHT';
+            }
         }
     }
 

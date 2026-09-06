@@ -861,21 +861,25 @@ class ProjectController extends Controller
                 'timeline_phase_key' => $task->timeline_phase_key,
                 'timeline_month' => $task->timeline_month,
                 
+                'structural_weight' => $project->structural_weight,
                 'structural_progress' => $project->structural_progress,
                 'structural_done' => $project->structuralTasks()->where(function($q) { $q->where('progress', '>=', 100)->orWhere('status', 'completed'); })->count(),
                 'structural_total' => $project->structuralTasks()->count(),
                 'structural_contrib' => round(($project->structural_progress * $project->structural_weight) / 100, 1),
                 
+                'electrical_weight' => $project->electrical_weight,
                 'electrical_progress' => $project->electrical_progress,
                 'electrical_done' => $project->electricalTasks()->where(function($q) { $q->where('progress', '>=', 100)->orWhere('status', 'completed'); })->count(),
                 'electrical_total' => $project->electricalTasks()->count(),
                 'electrical_contrib' => round(($project->electrical_progress * $project->electrical_weight) / 100, 1),
                 
+                'piping_weight' => $project->piping_weight,
                 'piping_progress' => $project->piping_progress,
                 'piping_done' => $project->pipingTasks()->where(function($q) { $q->where('progress', '>=', 100)->orWhere('status', 'completed'); })->count(),
                 'piping_total' => $project->pipingTasks()->count(),
                 'piping_contrib' => round(($project->piping_progress * $project->piping_weight) / 100, 1),
                 
+                'finishing_weight' => $project->finishing_weight,
                 'finishing_progress' => $project->finishing_progress,
                 'finishing_done' => $project->finishingTasks()->where(function($q) { $q->where('progress', '>=', 100)->orWhere('status', 'completed'); })->count(),
                 'finishing_total' => $project->finishingTasks()->count(),
@@ -943,21 +947,25 @@ class ProjectController extends Controller
             'timeline_phase_key' => $task->timeline_phase_key,
             'timeline_month' => $task->timeline_month,
             
+            'structural_weight' => $project->structural_weight,
             'structural_progress' => $project->structural_progress,
             'structural_done' => $project->structuralTasks()->where(function($q) { $q->where('progress', '>=', 100)->orWhere('status', 'completed'); })->count(),
             'structural_total' => $project->structuralTasks()->count(),
             'structural_contrib' => round(($project->structural_progress * $project->structural_weight) / 100, 1),
             
+            'electrical_weight' => $project->electrical_weight,
             'electrical_progress' => $project->electrical_progress,
             'electrical_done' => $project->electricalTasks()->where(function($q) { $q->where('progress', '>=', 100)->orWhere('status', 'completed'); })->count(),
             'electrical_total' => $project->electricalTasks()->count(),
             'electrical_contrib' => round(($project->electrical_progress * $project->electrical_weight) / 100, 1),
             
+            'piping_weight' => $project->piping_weight,
             'piping_progress' => $project->piping_progress,
             'piping_done' => $project->pipingTasks()->where(function($q) { $q->where('progress', '>=', 100)->orWhere('status', 'completed'); })->count(),
             'piping_total' => $project->pipingTasks()->count(),
             'piping_contrib' => round(($project->piping_progress * $project->piping_weight) / 100, 1),
             
+            'finishing_weight' => $project->finishing_weight,
             'finishing_progress' => $project->finishing_progress,
             'finishing_done' => $project->finishingTasks()->where(function($q) { $q->where('progress', '>=', 100)->orWhere('status', 'completed'); })->count(),
             'finishing_total' => $project->finishingTasks()->count(),
