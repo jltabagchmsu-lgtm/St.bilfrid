@@ -30,25 +30,41 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware(['auth'])->group(function () {
 
     // =========================================================================
-    // 🏠 1. Dedicated Roofing Materials Transfer Portal (Roofing & Admin Access)
+    // 🏠 1. Dedicated Roofing Materials Transfer Portal
     // =========================================================================
-    Route::middleware(['role:roofing_transfer,admin'])->prefix('roofing-transfer')->group(function () {
-        Route::get('/', [RoofingTransferController::class, 'index'])->name('roofing.index');
-        Route::post('/dispatch-stock', [RoofingTransferController::class, 'dispatchFromStock'])->name('roofing.dispatchStock');
-        Route::post('/inter-project', [RoofingTransferController::class, 'transferInterProject'])->name('roofing.transferInterProject');
-        Route::post('/return-excess', [RoofingTransferController::class, 'returnExcessToStock'])->name('roofing.returnExcess');
-        Route::get('/voucher/{id}', [RoofingTransferController::class, 'printTransferVoucher'])->name('roofing.printVoucher');
+    Route::prefix('roofing-transfer')->group(function () {
+        // Read-only viewing and slip printing (Allowed for Roofing Officer & Admin)
+        Route::middleware(['role:roofing_transfer,admin'])->group(function () {
+            Route::get('/', [RoofingTransferController::class, 'index'])->name('roofing.index');
+            Route::get('/voucher/{id}', [RoofingTransferController::class, 'printTransferVoucher'])->name('roofing.printVoucher');
+        });
+
+        // Inventory mutations and transfers (Strictly Roofing Transfer Officer Only)
+        Route::middleware(['role:roofing_transfer'])->group(function () {
+            Route::post('/dispatch-stock', [RoofingTransferController::class, 'dispatchFromStock'])->name('roofing.dispatchStock');
+            Route::post('/inter-project', [RoofingTransferController::class, 'transferInterProject'])->name('roofing.transferInterProject');
+            Route::post('/return-excess', [RoofingTransferController::class, 'returnExcessToStock'])->name('roofing.returnExcess');
+            Route::post('/restock', [RoofingTransferController::class, 'restockStock'])->name('roofing.restockStock');
+        });
     });
 
     // =========================================================================
-    // 🚪 2. Dedicated Windows & Doors Transfer Portal (Windows/Doors & Admin Access)
+    // 🚪 2. Dedicated Windows & Doors Transfer Portal
     // =========================================================================
-    Route::middleware(['role:windows_doors_transfer,admin'])->prefix('windows-doors-transfer')->group(function () {
-        Route::get('/', [WindowsDoorsTransferController::class, 'index'])->name('windowsDoors.index');
-        Route::post('/dispatch-stock', [WindowsDoorsTransferController::class, 'dispatchFromStock'])->name('windowsDoors.dispatchStock');
-        Route::post('/inter-project', [WindowsDoorsTransferController::class, 'transferInterProject'])->name('windowsDoors.transferInterProject');
-        Route::post('/return-excess', [WindowsDoorsTransferController::class, 'returnExcessToStock'])->name('windowsDoors.returnExcess');
-        Route::get('/voucher/{id}', [WindowsDoorsTransferController::class, 'printTransferVoucher'])->name('windowsDoors.printVoucher');
+    Route::prefix('windows-doors-transfer')->group(function () {
+        // Read-only viewing and slip printing (Allowed for Windows/Doors Officer & Admin)
+        Route::middleware(['role:windows_doors_transfer,admin'])->group(function () {
+            Route::get('/', [WindowsDoorsTransferController::class, 'index'])->name('windowsDoors.index');
+            Route::get('/voucher/{id}', [WindowsDoorsTransferController::class, 'printTransferVoucher'])->name('windowsDoors.printVoucher');
+        });
+
+        // Inventory mutations and transfers (Strictly Windows & Doors Transfer Officer Only)
+        Route::middleware(['role:windows_doors_transfer'])->group(function () {
+            Route::post('/dispatch-stock', [WindowsDoorsTransferController::class, 'dispatchFromStock'])->name('windowsDoors.dispatchStock');
+            Route::post('/inter-project', [WindowsDoorsTransferController::class, 'transferInterProject'])->name('windowsDoors.transferInterProject');
+            Route::post('/return-excess', [WindowsDoorsTransferController::class, 'returnExcessToStock'])->name('windowsDoors.returnExcess');
+            Route::post('/restock', [WindowsDoorsTransferController::class, 'restockStock'])->name('windowsDoors.restockStock');
+        });
     });
 
     // =========================================================================

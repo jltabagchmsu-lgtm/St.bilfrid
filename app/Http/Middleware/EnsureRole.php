@@ -24,17 +24,22 @@ class EnsureRole
         $user = Auth::user();
         $userRole = $user->role ?? 'admin';
 
-        // Master admin has access to everything
-        if ($userRole === 'admin') {
-            return $next($request);
-        }
-
-        // Check if user's role is in the allowed list
+        // Check if user's role is in the allowed list for this route
         if (in_array($userRole, $roles)) {
             return $next($request);
         }
 
-        // If not authorized, redirect to their dedicated portal with a notice
+        // If user is Master Admin, allow only when 'admin' is in allowed roles or when roles list is empty
+        if ($userRole === 'admin') {
+            if (in_array('admin', $roles) || empty($roles)) {
+                return $next($request);
+            }
+            // Admin attempted an officer-only mutation action
+            return redirect()->back()
+                ->with('error', 'Action Blocked: Administrator account has View-Only auditing permissions for this trade portal. Material movements and restocking are strictly performed by the dedicated Transfer Officer.');
+        }
+
+        // If not authorized officer, redirect to their own portal with notice
         if ($userRole === 'roofing_transfer') {
             return redirect()->route('roofing.index')
                 ->with('error', 'Notice: Your account is dedicated solely to Roofing Materials Transfer operations.');

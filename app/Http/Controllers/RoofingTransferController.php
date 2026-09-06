@@ -120,6 +120,10 @@ class RoofingTransferController extends Controller
      */
     public function dispatchFromStock(Request $request)
     {
+        if (Auth::user()->isAdmin()) {
+            return redirect()->back()->with('error', 'Administrator accounts have View-Only auditing permissions for trade transfer portals. Changes must be executed by the Roofing Transfer Officer.');
+        }
+
         $validated = $request->validate([
             'material_id' => 'required|exists:materials,id',
             'destination_project_id' => 'required|exists:projects,id',
@@ -190,6 +194,10 @@ class RoofingTransferController extends Controller
      */
     public function transferInterProject(Request $request)
     {
+        if (Auth::user()->isAdmin()) {
+            return redirect()->back()->with('error', 'Administrator accounts have View-Only auditing permissions for trade transfer portals. Changes must be executed by the Roofing Transfer Officer.');
+        }
+
         $validated = $request->validate([
             'source_project_id' => 'required|exists:projects,id',
             'destination_project_id' => 'required|exists:projects,id|different:source_project_id',
@@ -266,6 +274,10 @@ class RoofingTransferController extends Controller
      */
     public function returnExcessToStock(Request $request)
     {
+        if (Auth::user()->isAdmin()) {
+            return redirect()->back()->with('error', 'Administrator accounts have View-Only auditing permissions for trade transfer portals. Changes must be executed by the Roofing Transfer Officer.');
+        }
+
         $validated = $request->validate([
             'project_material_id' => 'required|exists:project_materials,id',
             'return_qty' => 'required|numeric|min:0.01',
@@ -308,6 +320,48 @@ class RoofingTransferController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Successfully returned ' . number_format($qtyToReturn) . ' ' . $projectMaterial->material->unit . ' of ' . $projectMaterial->material->name . ' back into Central Warehouse Inventory! (Ref: ' . $transferRef . ')');
+    }
+
+    /**
+     * Restock roofing materials into Central Warehouse stock (Low Stock replenishment).
+     */
+    public function restockStock(Request $request)
+    {
+        if (Auth::user()->isAdmin()) {
+            return redirect()->back()->with('error', 'Administrator accounts have View-Only auditing permissions for trade transfer portals. Changes must be executed by the Roofing Transfer Officer.');
+        }
+
+        $validated = $request->validate([
+            'material_id' => 'required|exists:materials,id',
+            'restock_qty' => 'required|numeric|min:0.01',
+            'supplier_name' => 'nullable|string|max:255',
+            'unit_cost' => 'nullable|numeric|min:0',
+            'delivery_date' => 'required|date',
+            'notes' => 'nullable|string|max:500',
+        ]);
+
+        $material = Material::findOrFail($validated['material_id']);
+        $restockQty = (float) $validated['restock_qty'];
+
+        if (isset($validated['unit_cost']) && $validated['unit_cost'] > 0) {
+            $material->unit_cost = (float) $validated['unit_cost'];
+        }
+
+        $material->increment('stock_quantity', $restockQty);
+
+        $refNo = 'PO-ROOF-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -4));
+
+        InventoryLog::create([
+            'material_id' => $material->id,
+            'project_id' => null,
+            'transaction_type' => 'restock',
+            'quantity' => $restockQty,
+            'unit_cost' => $material->unit_cost,
+            'reference_no' => $refNo,
+            'notes' => 'Roofing Restock: +' . number_format($restockQty) . ' ' . $material->unit . ' of ' . $material->name . ($validated['supplier_name'] ? ' (Supplier: ' . $validated['supplier_name'] . ')' : '') . ($validated['notes'] ? ' - ' . $validated['notes'] : ''),
+        ]);
+
+        return redirect()->back()->with('success', 'Successfully restocked +' . number_format($restockQty) . ' ' . $material->unit . ' of ' . $material->name . ' into Central Warehouse! New Available Stock: ' . number_format($material->stock_quantity) . ' ' . $material->unit . ' (Ref: ' . $refNo . ')');
     }
 
     /**
