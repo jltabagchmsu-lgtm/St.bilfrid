@@ -391,8 +391,8 @@
                 <span class="info-value mono">{{ $project->start_date->format('M d, Y') }} &rarr; {{ $project->end_date->format('M d, Y') }}</span>
             </div>
             <div class="info-item">
-                <span class="info-label">Current Execution Phase:</span>
-                <span class="info-value" style="color: #ef4444;">{{ $project->current_phase ?? 'Phase 2: Substructure & Frame' }}</span>
+                <span class="info-label">Task Milestones Accomplished:</span>
+                <span class="info-value" style="color: #ef4444;">{{ $project->tasks()->where(function($q) { $q->where('progress', '>=', 100)->orWhere('status', 'completed'); })->count() }} / {{ $project->tasks()->count() }} Tasks Done ({{ $project->overall_progress }}%)</span>
             </div>
         </div>
 

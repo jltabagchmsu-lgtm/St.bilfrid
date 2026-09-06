@@ -3,21 +3,19 @@
         <thead>
             <tr>
                 <th style="width: 60px; text-align: center;">Done</th>
-                <th style="min-width: 250px;">{{ $tradeName ?? 'Task Description' }}</th>
-                <th style="width: 230px;">Timeline Phase</th>
-                <th style="min-width: 260px;">Aligned Construction Materials</th>
-                <th style="width: 160px; text-align: center;">Task Status</th>
-                <th style="width: 85px; text-align: right;">Action</th>
+                <th style="min-width: 280px;">{{ $tradeName ?? 'Task Description' }}</th>
+                <th style="min-width: 280px;">Aligned Construction Materials</th>
+                <th style="width: 170px; text-align: center;">Task Status</th>
+                <th style="width: 90px; text-align: right;">Action</th>
             </tr>
         </thead>
         <tbody>
             @forelse($tasks as $task)
                 @php
                     $isDone = $task->status === 'completed' || $task->progress >= 100;
-                    $phaseColor = $task->timeline_phase_badge_color;
                     $taskMats = $task->taskMaterials;
                 @endphp
-                <tr id="task-row-{{ $task->id }}" class="checklist-task-row" data-task-id="{{ $task->id }}" data-phase="{{ $task->timeline_phase_key }}" data-status="{{ $task->status }}" style="{{ $isDone ? 'background: rgba(16, 185, 129, 0.05);' : '' }}; transition: background 0.3s ease;">
+                <tr id="task-row-{{ $task->id }}" class="checklist-task-row" data-task-id="{{ $task->id }}" data-status="{{ $task->status }}" style="{{ $isDone ? 'background: rgba(16, 185, 129, 0.05);' : '' }}; transition: background 0.3s ease;">
                     
                     <!-- 1. Done Checkbox (Irreversible Completion Rule) -->
                     <td style="text-align: center; vertical-align: middle;" class="cell-done">
@@ -42,23 +40,7 @@
                         @endif
                     </td>
 
-                    <!-- 3. Timeline Schedule Phase Dropdown Choice (Spacious Layout) -->
-                    <td class="cell-timeline" style="vertical-align: middle;">
-                        <div style="display: flex; flex-direction: column; gap: 4px;">
-                            <select name="timeline_phase" class="form-select task-timeline-select" onchange="updateQuickTimelineAjax({{ $task->id }}, this.value, this)" style="padding: 4px 8px; font-size: 0.75rem; font-weight: 700; height: 30px; border-radius: 4px; background: rgba(15, 23, 42, 0.85); color: {{ $phaseColor }}; border-color: {{ $phaseColor }}55; width: 100%; max-width: 215px;">
-                                <option value="Phase 1: Mobilization & Substructure" {{ $task->timeline_phase_key === 'phase1' ? 'selected' : '' }}>Phase 1 (M1-2): Mobilization</option>
-                                <option value="Phase 2: Superstructure & Framing" {{ $task->timeline_phase_key === 'phase2' ? 'selected' : '' }}>Phase 2 (M3-5): Structure</option>
-                                <option value="Phase 3: MEP Rough-Ins & Enclosures" {{ $task->timeline_phase_key === 'phase3' ? 'selected' : '' }}>Phase 3 (M6-8): MEP Rough-in</option>
-                                <option value="Phase 4: Architectural Fit-Out & Finishes" {{ $task->timeline_phase_key === 'phase4' ? 'selected' : '' }}>Phase 4 (M9-11): Finishes</option>
-                                <option value="Phase 5: Commissioning & Handover" {{ $task->timeline_phase_key === 'phase5' ? 'selected' : '' }}>Phase 5 (M11-12): Handover</option>
-                            </select>
-                            <span style="font-family: var(--font-mono); font-size: 0.725rem; color: var(--text-muted);">
-                                📅 {{ $task->timeline_window_label }}
-                            </span>
-                        </div>
-                    </td>
-
-                    <!-- 4. Strictly Aligned Construction Materials -->
+                    <!-- 3. Strictly Aligned Construction Materials -->
                     <td class="cell-materials" style="vertical-align: middle;">
                         <div style="display: flex; flex-direction: column; gap: 4px;">
                             @forelse($taskMats as $mat)
@@ -78,7 +60,7 @@
                         </div>
                     </td>
 
-                    <!-- 5. Task Status Dropdown (Forward-Only Monotonic) -->
+                    <!-- 4. Task Status Dropdown (Forward-Only Monotonic) -->
                     <td style="text-align: center; vertical-align: middle;" class="cell-status">
                         @if($isDone)
                             <span class="badge badge-completed" style="font-size: 0.8rem; padding: 5px 12px; display: inline-flex; align-items: center; gap: 4px;" title="🔒 Permanent milestone: Completed and materials mobilized">
@@ -93,10 +75,10 @@
                         @endif
                     </td>
 
-                    <!-- 6. Actions (Edit / Delete) -->
+                    <!-- 5. Actions (Edit / Delete) -->
                     <td style="text-align: right; vertical-align: middle;" class="cell-actions">
                         <div style="display: inline-flex; gap: 4px; justify-content: flex-end;">
-                            <button type="button" class="btn-secondary" style="font-size: 0.75rem; padding: 4px 7px;" title="Edit Task" onclick="openEditTaskModal({{ $task->id }}, '{{ addslashes($task->task_name) }}', '{{ addslashes($task->category) }}', {{ $task->progress }}, '{{ $task->status }}', '{{ $task->assigned_personnel_id ?? '' }}', '{{ $task->start_date ? $task->start_date->format('Y-m-d') : '' }}', '{{ $task->due_date ? $task->due_date->format('Y-m-d') : '' }}', {{ $task->allocated_budget ?? 0 }}, '{{ addslashes($task->timeline_phase ?? '') }}', '{{ addslashes($task->timeline_month ?? '') }}')">
+                            <button type="button" class="btn-secondary" style="font-size: 0.75rem; padding: 4px 7px;" title="Edit Task" onclick="openEditTaskModal({{ $task->id }}, '{{ addslashes($task->task_name) }}', '{{ addslashes($task->category) }}', {{ $task->progress }}, '{{ $task->status }}', '{{ $task->assigned_personnel_id ?? '' }}', '{{ $task->start_date ? $task->start_date->format('Y-m-d') : '' }}', '{{ $task->due_date ? $task->due_date->format('Y-m-d') : '' }}', {{ $task->allocated_budget ?? 0 }})">
                                 ✏️
                             </button>
                             @if(!$isDone)
@@ -117,7 +99,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 24px;">
+                    <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 24px;">
                         No tasks in this discipline checklist yet. Click "+ Add Task" or use "⚡ Reset Standard Checklist".
                     </td>
                 </tr>

@@ -737,26 +737,62 @@ class Project extends Model
         return (float) $this->scopeItems()->sum('direct_cost');
     }
 
-    // Progression Bases & Mathematical Calculation
+    // Progression Bases & Mathematical Calculation from Tasks
     public function getCalculatedOverallProgressAttribute(): int
     {
+        $totalTasks = $this->tasks()->count();
+        if ($totalTasks === 0) {
+            return (int) ($this->attributes['overall_progress'] ?? 0);
+        }
+
+        $completedTasks = $this->tasks()->where(function($q) {
+            $q->where('progress', '>=', 100)->orWhere('status', 'completed');
+        })->count();
+
+        if ($completedTasks === $totalTasks && $totalTasks > 0) {
+            return 100;
+        }
+
         $wS = (int) ($this->structural_weight ?? 0);
         $wE = (int) ($this->electrical_weight ?? 0);
         $wP = (int) ($this->piping_weight ?? 0);
         $wF = (int) ($this->finishing_weight ?? 0);
-        $totalWeight = $wS + $wE + $wP + $wF;
 
-        if ($totalWeight <= 0) {
-            return 0;
+        $structCount = $this->structuralTasks()->count();
+        $elecCount = $this->electricalTasks()->count();
+        $pipeCount = $this->pipingTasks()->count();
+        $finishCount = $this->finishingTasks()->count();
+
+        $activeWeights = 0;
+        $weightedSum = 0;
+
+        if ($structCount > 0) {
+            $pS = (int) ($this->structural_progress ?? 0);
+            $weightedSum += ($pS * $wS);
+            $activeWeights += $wS;
+        }
+        if ($elecCount > 0) {
+            $pE = (int) ($this->electrical_progress ?? 0);
+            $weightedSum += ($pE * $wE);
+            $activeWeights += $wE;
+        }
+        if ($pipeCount > 0) {
+            $pP = (int) ($this->piping_progress ?? 0);
+            $weightedSum += ($pP * $wP);
+            $activeWeights += $wP;
+        }
+        if ($finishCount > 0) {
+            $pF = (int) ($this->finishing_progress ?? 0);
+            $weightedSum += ($pF * $wF);
+            $activeWeights += $wF;
         }
 
-        $pS = (int) ($this->structural_progress ?? 0);
-        $pE = (int) ($this->electrical_progress ?? 0);
-        $pP = (int) ($this->piping_progress ?? 0);
-        $pF = (int) ($this->finishing_progress ?? 0);
+        if ($activeWeights > 0) {
+            return min(100, (int) round($weightedSum / $activeWeights));
+        }
 
-        $weightedSum = ($pS * $wS) + ($pE * $wE) + ($pP * $wP) + ($pF * $wF);
-        return min(100, (int) round($weightedSum / $totalWeight));
+        // Direct average of all task progress
+        return min(100, (int) round($this->tasks()->avg('progress') ?? 0));
     }
 
     // Schedule & Timeline Calculations

@@ -84,7 +84,7 @@
                 <div style="font-size: 0.925rem; color: var(--text-secondary); margin-top: 6px; display: flex; gap: 20px; flex-wrap: wrap;">
                     <span>Client: <strong style="color: var(--text-primary);">{{ $project->client_name }}</strong></span>
                     <span>Location: <strong style="color: var(--text-primary);">{{ $project->location ?? 'Main Construction Site' }}</strong></span>
-                    <span>Phase: <strong style="color: #38bdf8;">{{ $project->current_phase ?? 'Phase 1: Mobilization & Earthworks' }}</strong></span>
+                    <span>Tasks: <strong style="color: #38bdf8;" id="headerTasksText">{{ $completedTasksCount }} / {{ $totalTasksCount }} Completed ({{ $project->overall_progress }}%)</strong></span>
                     <span>Timeline: <strong style="color: var(--text-primary);">{{ $project->start_date->format('M d, Y') }} &rarr; {{ $project->end_date->format('M d, Y') }}</strong></span>
                 </div>
                 @if($project->description)
@@ -97,7 +97,7 @@
 
         <div style="text-align: right; display: flex; flex-direction: column; gap: 8px;">
             <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Weighted Accomplishment</div>
-            <div style="font-family: var(--font-mono); font-size: 2.75rem; font-weight: 800; color: var(--primary-red); line-height: 1;">
+            <div style="font-family: var(--font-mono); font-size: 2.75rem; font-weight: 800; color: var(--primary-red); line-height: 1;" id="headerOverallProgressVal">
                 {{ $project->overall_progress }}%
             </div>
             <div style="font-size: 0.8rem; color: var(--text-secondary);">
@@ -185,8 +185,8 @@
 
         <div class="summary-block" style="border-left: 3px solid #ef4444;">
             <div class="summary-block-label">Trade Progression</div>
-            <div class="summary-block-val" style="color: #ef4444;">{{ $project->overall_progress }}%</div>
-            <div class="summary-block-sub">Struct {{ $project->structural_progress }}% | Elec {{ $project->electrical_progress }}% | Pipe {{ $project->piping_progress }}%</div>
+            <div class="summary-block-val" style="color: #ef4444;" id="sec1TradeProgVal">{{ $project->overall_progress }}%</div>
+            <div class="summary-block-sub" id="sec1TradeProgSub">Struct {{ $project->structural_progress }}% | Elec {{ $project->electrical_progress }}% | Pipe {{ $project->piping_progress }}%</div>
         </div>
 
         <div class="summary-block" style="border-left: 3px solid #14b8a6;">
@@ -366,11 +366,11 @@
         </div>
 
         <div class="summary-block" style="border-left: 3px solid #ec4899; background: rgba(15, 23, 42, 0.6);">
-            <div class="summary-block-label">Active Construction Phase</div>
-            <div class="summary-block-val" style="color: #ec4899; font-size: 1.1rem; line-height: 1.3;">
-                {{ $project->current_phase ?? 'Phase 1: Mobilization' }}
+            <div class="summary-block-label">Tasks & Milestones Progress</div>
+            <div class="summary-block-val" style="color: #ec4899; font-size: 1.1rem; line-height: 1.3;" id="schedTasksDoneVal">
+                {{ $completedTasksCount }} / {{ $totalTasksCount }} Tasks Completed
             </div>
-            <div class="summary-block-sub">{{ $project->overall_progress }}% Accomplished</div>
+            <div class="summary-block-sub" id="schedOverallProgSub">{{ $project->overall_progress }}% Accomplished</div>
         </div>
     </div>
 </div>
@@ -424,7 +424,7 @@
         </div>
         <div style="text-align: right;">
             <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Automated Overall Progress</div>
-            <div style="font-family: var(--font-mono); font-size: 1.6rem; font-weight: 800; color: #10b981;">
+            <div style="font-family: var(--font-mono); font-size: 1.6rem; font-weight: 800; color: #10b981;" id="sec4OverallProgressVal">
                 {{ $project->overall_progress }}%
             </div>
         </div>
@@ -509,7 +509,7 @@
         </div>
     </div>
 
-    <!-- Trade Checklist Tabs & Timeline Dropdown Choices Bar -->
+    <!-- Trade Checklist Tabs & Task Status Filter Bar -->
     <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px 16px; margin-bottom: 20px;">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
             
@@ -532,46 +532,39 @@
                 </button>
             </div>
 
-            <!-- Right: Dropdown Choices by Timeline -->
+            <!-- Right: Task Status Filter & Quick Jump -->
             <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
                 
-                <!-- Timeline Phase Filter Dropdown -->
+                <!-- Status Filter Dropdown -->
                 <div style="display: flex; align-items: center; gap: 6px;">
                     <label style="font-size: 0.775rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; white-space: nowrap;">
-                        📅 Timeline Phase:
+                        Task Status:
                     </label>
-                    <select id="timelinePhaseFilter" class="form-select" onchange="filterChecklistByTimeline(this.value)" style="padding: 6px 12px; font-size: 0.825rem; font-weight: 600; min-width: 220px; height: 34px; background: rgba(15, 23, 42, 0.9); border-color: rgba(56, 189, 248, 0.4); color: #38bdf8;">
-                        <option value="all">📅 All Timeline Phases ({{ $project->tasks->count() }} Tasks)</option>
-                        <option value="phase1">Phase 1: Mobilization & Substructure (M1-2)</option>
-                        <option value="phase2">Phase 2: Superstructure & Framing (M3-5)</option>
-                        <option value="phase3">Phase 3: MEP Rough-Ins & Enclosures (M6-8)</option>
-                        <option value="phase4">Phase 4: Architectural Fit-Out & Finishes (M9-11)</option>
-                        <option value="phase5">Phase 5: Commissioning & Handover (M11-12)</option>
-                        <option value="active">🟢 Active Timeline Window (In Progress)</option>
-                        <option value="completed">✅ Completed Milestones (100%)</option>
-                        <option value="upcoming">⏳ Upcoming Sprints (Not Started)</option>
+                    <select id="taskStatusFilter" class="form-select" onchange="filterChecklistByStatus(this.value)" style="padding: 6px 12px; font-size: 0.825rem; font-weight: 600; min-width: 170px; height: 34px; background: rgba(15, 23, 42, 0.9); border-color: rgba(56, 189, 248, 0.4); color: #38bdf8;">
+                        <option value="all">All Statuses ({{ $project->tasks->count() }})</option>
+                        <option value="in_progress">⚡ In Progress</option>
+                        <option value="completed">🔒 Completed (100%)</option>
+                        <option value="not_started">⏳ Not Started</option>
                     </select>
                 </div>
 
-                <!-- Dropdown Choice: Jump to Specific Task by Timeline -->
+                <!-- Dropdown Choice: Jump to Specific Task -->
                 <div style="display: flex; align-items: center; gap: 6px;">
                     <label style="font-size: 0.775rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; white-space: nowrap;">
-                        🎯 Timeline Task Jump:
+                        🎯 Jump to Task:
                     </label>
-                    <select id="taskTimelineJumpSelect" class="form-select" onchange="jumpToTaskByTimeline(this.value)" style="padding: 6px 12px; font-size: 0.825rem; font-weight: 600; max-width: 290px; height: 34px; background: rgba(15, 23, 42, 0.9); border-color: rgba(245, 158, 11, 0.4); color: #f8fafc;">
-                        <option value="">-- Choose Task by Timeline --</option>
+                    <select id="taskJumpSelect" class="form-select" onchange="jumpToTaskDirect(this.value)" style="padding: 6px 12px; font-size: 0.825rem; font-weight: 600; max-width: 280px; height: 34px; background: rgba(15, 23, 42, 0.9); border-color: rgba(245, 158, 11, 0.4); color: #f8fafc;">
+                        <option value="">-- Choose Task to Locate --</option>
                         
                         @php
-                            $groupedByPhase = $project->tasks->sortBy('sort_order')->groupBy(function($t) {
-                                return $t->timeline_phase ?? 'Phase 1: Mobilization & Substructure';
-                            });
+                            $groupedByCategory = $project->tasks->sortBy('sort_order')->groupBy('category');
                         @endphp
 
-                        @foreach($groupedByPhase as $phaseTitle => $pTasks)
-                            <optgroup label="{{ strtoupper($phaseTitle) }}">
-                                @foreach($pTasks as $pt)
-                                    <option value="{{ $pt->id }}">
-                                        {{ $pt->task_name }} [{{ $pt->progress }}%] ({{ $pt->timeline_window_label }})
+                        @foreach($groupedByCategory as $catTitle => $cTasks)
+                            <optgroup label="{{ strtoupper($catTitle) }}">
+                                @foreach($cTasks as $ct)
+                                    <option value="{{ $ct->id }}">
+                                        {{ $ct->task_name }} [{{ $ct->status_label }} - {{ $ct->progress }}%]
                                     </option>
                                 @endforeach
                             </optgroup>
@@ -1655,16 +1648,6 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="form-label">Current Construction Execution Phase</label>
-                <select name="current_phase" class="form-select" required>
-                    <option value="Phase 1: Mobilization & Earthworks" {{ ($project->current_phase ?? '') === 'Phase 1: Mobilization & Earthworks' ? 'selected' : '' }}>Phase 1: Mobilization & Earthworks</option>
-                    <option value="Phase 2: Substructure & Concrete Frame" {{ ($project->current_phase ?? '') === 'Phase 2: Substructure & Concrete Frame' ? 'selected' : '' }}>Phase 2: Substructure & Concrete Frame</option>
-                    <option value="Phase 3: MEP Rough-in & Conduits" {{ ($project->current_phase ?? '') === 'Phase 3: MEP Rough-in & Conduits' ? 'selected' : '' }}>Phase 3: MEP Rough-in & Conduits</option>
-                    <option value="Phase 4: Enclosure & Turnkey Finishes" {{ ($project->current_phase ?? '') === 'Phase 4: Enclosure & Turnkey Finishes' ? 'selected' : '' }}>Phase 4: Enclosure & Turnkey Finishes</option>
-                    <option value="Phase 5: Testing, Commissioning & Handover" {{ ($project->current_phase ?? '') === 'Phase 5: Testing, Commissioning & Handover' ? 'selected' : '' }}>Phase 5: Testing, Commissioning & Handover</option>
-                </select>
-            </div>
 
             <div class="form-group">
                 <label class="form-label">Schedule Clarifications & Phase Notes</label>
@@ -1765,8 +1748,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Milestone Phase <span style="color:#ef4444;">*</span></label>
-                    <input type="text" name="payment_stage" class="form-input" value="{{ $project->current_phase ?? 'Phase 1: Mobilization & Earthworks' }}" required>
+                    <label class="form-label">Billing Milestone / Stage <span style="color:#ef4444;">*</span></label>
+                    <input type="text" name="payment_stage" class="form-input" value="Milestone Progress Settlement" placeholder="e.g. 30% Mobilization Downpayment, 50% Structural Completion" required>
                 </div>
 
                 <div class="form-group">
@@ -1931,23 +1914,6 @@
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                 <div class="form-group">
-                    <label class="form-label">Timeline Schedule Phase</label>
-                    <select name="timeline_phase" id="addTaskTimelinePhase" class="form-select" required>
-                        <option value="Phase 1: Mobilization & Substructure">Phase 1: Mobilization & Substructure (M1-2)</option>
-                        <option value="Phase 2: Superstructure & Framing">Phase 2: Superstructure & Framing (M3-5)</option>
-                        <option value="Phase 3: MEP Rough-Ins & Enclosures">Phase 3: MEP Rough-Ins & Enclosures (M6-8)</option>
-                        <option value="Phase 4: Architectural Fit-Out & Finishes">Phase 4: Architectural Fit-Out & Finishes (M9-11)</option>
-                        <option value="Phase 5: Commissioning & Handover">Phase 5: Commissioning & Handover (M11-12)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Timeline Month / Period</label>
-                    <input type="text" name="timeline_month" id="addTaskTimelineMonth" class="form-input" placeholder="e.g. Month 1 - 2" value="Month 1 - 2">
-                </div>
-            </div>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-                <div class="form-group">
                     <label class="form-label">Task Status</label>
                     <select name="status" class="form-select">
                         <option value="not_started">Not Started (0%)</option>
@@ -2003,24 +1969,6 @@
                 <div class="form-group">
                     <label class="form-label">Task Progress (%)</label>
                     <input type="number" name="progress" id="editTaskProgressInput" class="form-input" min="0" max="100" required>
-                </div>
-            </div>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-                <div class="form-group">
-                    <label class="form-label">Timeline Schedule Phase</label>
-                    <select name="timeline_phase" id="editTaskTimelinePhase" class="form-select" required>
-                        <option value="Phase 1: Mobilization & Substructure">Phase 1: Mobilization & Substructure (M1-2)</option>
-                        <option value="Phase 2: Superstructure & Framing">Phase 2: Superstructure & Framing (M3-5)</option>
-                        <option value="Phase 3: MEP Rough-Ins & Enclosures">Phase 3: MEP Rough-Ins & Enclosures (M6-8)</option>
-                        <option value="Phase 4: Architectural Fit-Out & Finishes">Phase 4: Architectural Fit-Out & Finishes (M9-11)</option>
-                        <option value="Phase 5: Commissioning & Handover">Phase 5: Commissioning & Handover (M11-12)</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Timeline Month / Period</label>
-                    <input type="text" name="timeline_month" id="editTaskTimelineMonth" class="form-input" placeholder="e.g. Month 1 - 2">
                 </div>
             </div>
 
@@ -2360,15 +2308,6 @@
                         <option value="approved" {{ $project->status == 'approved' ? 'selected' : '' }}>Approved / Planned</option>
                         <option value="on_hold" {{ $project->status == 'on_hold' ? 'selected' : '' }}>On Hold</option>
                         <option value="completed" {{ $project->status == 'completed' ? 'selected' : '' }}>Completed / Turned Over</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Current Execution Phase</label>
-                    <select name="current_phase" class="form-select" required>
-                        @foreach(['Phase 1: Mobilization & Earthworks', 'Phase 2: Substructure & Concrete Frame', 'Phase 3: MEP Rough-in & Conduits', 'Phase 4: Enclosure & Turnkey Finishes', 'Phase 5: Commissioning & Handover'] as $ph)
-                            <option value="{{ $ph }}" {{ $project->current_phase == $ph ? 'selected' : '' }}>{{ $ph }}</option>
-                        @endforeach
                     </select>
                 </div>
             </div>
@@ -3144,7 +3083,7 @@
     }
 
     let currentDisciplineTab = 'all';
-    let currentTimelineFilter = 'all';
+    let currentStatusFilter = 'all';
 
     function switchChecklistTab(tab, btn) {
         currentDisciplineTab = tab;
@@ -3163,8 +3102,8 @@
         applyCombinedChecklistFilter();
     }
 
-    function filterChecklistByTimeline(filter) {
-        currentTimelineFilter = filter;
+    function filterChecklistByStatus(filter) {
+        currentStatusFilter = filter;
         applyCombinedChecklistFilter();
     }
 
@@ -3172,32 +3111,21 @@
         const rows = document.querySelectorAll('.checklist-task-row');
         
         rows.forEach(row => {
-            const phase = row.getAttribute('data-phase');
-            const status = row.getAttribute('data-status');
+            const status = row.getAttribute('data-status') || '';
             const progress = parseInt(row.getAttribute('data-progress')) || 0;
 
-            let matchesTimeline = false;
-            if (currentTimelineFilter === 'all') {
-                matchesTimeline = true;
-            } else if (currentTimelineFilter === 'phase1' && phase === 'phase1') {
-                matchesTimeline = true;
-            } else if (currentTimelineFilter === 'phase2' && phase === 'phase2') {
-                matchesTimeline = true;
-            } else if (currentTimelineFilter === 'phase3' && phase === 'phase3') {
-                matchesTimeline = true;
-            } else if (currentTimelineFilter === 'phase4' && phase === 'phase4') {
-                matchesTimeline = true;
-            } else if (currentTimelineFilter === 'phase5' && phase === 'phase5') {
-                matchesTimeline = true;
-            } else if (currentTimelineFilter === 'active' && progress > 0 && progress < 100) {
-                matchesTimeline = true;
-            } else if (currentTimelineFilter === 'completed' && (progress >= 100 || status === 'completed')) {
-                matchesTimeline = true;
-            } else if (currentTimelineFilter === 'upcoming' && progress === 0) {
-                matchesTimeline = true;
+            let matchesStatus = false;
+            if (currentStatusFilter === 'all') {
+                matchesStatus = true;
+            } else if (currentStatusFilter === 'completed') {
+                matchesStatus = (status === 'completed' || progress >= 100);
+            } else if (currentStatusFilter === 'in_progress') {
+                matchesStatus = (status === 'in_progress' || (progress > 0 && progress < 100));
+            } else if (currentStatusFilter === 'not_started') {
+                matchesStatus = (status === 'not_started' || progress === 0);
             }
 
-            row.style.display = matchesTimeline ? '' : 'none';
+            row.style.display = matchesStatus ? '' : 'none';
         });
 
         const secStruct = document.getElementById('chkSectionStructural');
@@ -3233,12 +3161,12 @@
         }
     }
 
-    function jumpToTaskByTimeline(taskId) {
+    function jumpToTaskDirect(taskId) {
         if (!taskId) return;
         
         // Reset filters so the row is visible
-        currentTimelineFilter = 'all';
-        const filterSelect = document.getElementById('timelinePhaseFilter');
+        currentStatusFilter = 'all';
+        const filterSelect = document.getElementById('taskStatusFilter');
         if (filterSelect) filterSelect.value = 'all';
         currentDisciplineTab = 'all';
 
@@ -3283,7 +3211,7 @@
         openModal('addTaskModal');
     }
 
-    function openEditTaskModal(taskId, name, category, progress, status, personnelId, startDate, dueDate, budget, timelinePhase, timelineMonth) {
+    function openEditTaskModal(taskId, name, category, progress, status, personnelId, startDate, dueDate, budget) {
         document.getElementById('editTaskForm').action = '/projects/tasks/' + taskId + '/update';
         document.getElementById('editTaskNameInput').value = name;
         document.getElementById('editTaskCategorySelect').value = category;
@@ -3316,14 +3244,6 @@
         const persSelect = document.getElementById('editTaskPersonnelSelect');
         if (persSelect) {
             persSelect.value = personnelId || '';
-        }
-        const phaseSelect = document.getElementById('editTaskTimelinePhase');
-        if (phaseSelect && timelinePhase) {
-            phaseSelect.value = timelinePhase;
-        }
-        const monthInput = document.getElementById('editTaskTimelineMonth');
-        if (monthInput) {
-            monthInput.value = timelineMonth || '';
         }
         openModal('editTaskModal');
     }
@@ -3667,7 +3587,41 @@
     function updateGlobalMetrics(data) {
         if (!data) return;
 
-        // Overall progress & Badge
+        // Header Metrics
+        const headerProgEl = document.getElementById('headerOverallProgressVal');
+        if (headerProgEl && data.overall_progress !== undefined) {
+            headerProgEl.innerText = data.overall_progress + '%';
+        }
+        const headerTasksEl = document.getElementById('headerTasksText');
+        if (headerTasksEl && data.total_completed !== undefined && data.total_tasks !== undefined) {
+            headerTasksEl.innerText = `${data.total_completed} / ${data.total_tasks} Completed (${data.overall_progress}%)`;
+        }
+
+        // Section 1: Executive Master Summary
+        const sec1Val = document.getElementById('sec1TradeProgVal');
+        if (sec1Val && data.overall_progress !== undefined) {
+            sec1Val.innerText = data.overall_progress + '%';
+        }
+        const sec1Sub = document.getElementById('sec1TradeProgSub');
+        if (sec1Sub && data.total_completed !== undefined && data.total_tasks !== undefined) {
+            sec1Sub.innerText = `${data.total_completed} / ${data.total_tasks} Tasks Finalized`;
+        }
+
+        // Section 3: Scheduled Tasks Summary Box
+        const schedDoneVal = document.getElementById('schedTasksDoneVal');
+        if (schedDoneVal && data.total_completed !== undefined && data.total_tasks !== undefined) {
+            schedDoneVal.innerText = `${data.total_completed} / ${data.total_tasks} Tasks Completed`;
+        }
+        const schedProgSub = document.getElementById('schedOverallProgSub');
+        if (schedProgSub && data.overall_progress !== undefined) {
+            schedProgSub.innerText = `${data.overall_progress}% Accomplished`;
+        }
+
+        // Section 4: Automated Overall Progress Box & Badges
+        const sec4ProgVal = document.getElementById('sec4OverallProgressVal');
+        if (sec4ProgVal && data.overall_progress !== undefined) {
+            sec4ProgVal.innerText = data.overall_progress + '%';
+        }
         const overallEl = document.getElementById('kpiOverallVal');
         if (overallEl && data.overall_progress !== undefined) {
             overallEl.innerText = data.overall_progress + '%';
@@ -3677,7 +3631,7 @@
             badgeEl.innerText = `${data.total_completed} / ${data.total_tasks} Tasks Completed (${data.overall_progress}%)`;
         }
 
-        // Structural
+        // Structural Trade Metrics
         if (data.structural_progress !== undefined) {
             const val = document.getElementById('kpiStructVal');
             if (val) val.innerText = data.structural_progress + '%';
@@ -3693,7 +3647,7 @@
             if (secVal) secVal.innerText = data.structural_progress + '%';
         }
 
-        // Electrical
+        // Electrical Trade Metrics
         if (data.electrical_progress !== undefined) {
             const val = document.getElementById('kpiElecVal');
             if (val) val.innerText = data.electrical_progress + '%';
@@ -3709,7 +3663,7 @@
             if (secVal) secVal.innerText = data.electrical_progress + '%';
         }
 
-        // Piping
+        // Piping Trade Metrics
         if (data.piping_progress !== undefined) {
             const val = document.getElementById('kpiPipeVal');
             if (val) val.innerText = data.piping_progress + '%';
@@ -3725,7 +3679,7 @@
             if (secVal) secVal.innerText = data.piping_progress + '%';
         }
 
-        // Finishing
+        // Finishing Trade Metrics
         if (data.finishing_progress !== undefined) {
             const val = document.getElementById('kpiFinishVal');
             if (val) val.innerText = data.finishing_progress + '%';

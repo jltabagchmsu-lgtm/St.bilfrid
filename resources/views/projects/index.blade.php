@@ -15,7 +15,7 @@
     <div class="panel-header">
         <div>
             <h3 class="panel-title">Approved Projects Monitoring Matrix</h3>
-            <span style="font-size: 0.85rem; color: var(--text-muted);">Tracking Blueprints, Execution Phases, Workforce Deployment, Weighted Progression, & Incurred Cost vs Budget</span>
+            <span style="font-size: 0.85rem; color: var(--text-muted);">Tracking Blueprints, Task Milestones, Workforce Deployment, Weighted Progression, & Incurred Cost vs Budget</span>
         </div>
         <span class="badge badge-in_progress">{{ $projects->count() }} Active Sites Monitored</span>
     </div>
@@ -24,7 +24,7 @@
         <thead>
             <tr>
                 <th>Design / Specs</th>
-                <th>Client & Phase</th>
+                <th>Client & Tasks</th>
                 <th>Land & Floor Area</th>
                 <th>Workforce Deployed</th>
                 <th>Schedule Health</th>
@@ -38,6 +38,8 @@
             @php 
                 $schedHealth = $prj->schedule_health_status; 
                 $heroPhoto = $prj->primaryPhoto ?? $prj->photos->first();
+                $completedTasks = $prj->tasks()->where(function($q) { $q->where('progress', '>=', 100)->orWhere('status', 'completed'); })->count();
+                $totalTasks = $prj->tasks()->count();
             @endphp
             <tr>
                 <td>
@@ -61,7 +63,7 @@
                 <td>
                     <strong>{{ $prj->client_name }}</strong>
                     <div style="font-size: 0.75rem; color: #38bdf8; margin-top: 3px; font-weight: 600;">
-                        {{ $prj->current_phase ?? 'Phase 1: Mobilization' }}
+                        {{ $completedTasks }} / {{ $totalTasks }} Tasks Done ({{ $prj->overall_progress }}%)
                     </div>
                 </td>
                 <td>
@@ -533,7 +535,7 @@
                 </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1.2fr 1fr 1fr 1.2fr; gap: 14px;">
+            <div style="display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 14px;">
                 <div class="form-group">
                     <label class="form-label">Project Classification</label>
                     <select name="project_type" id="edit_project_type" class="form-select" required>
@@ -564,17 +566,6 @@
                         <option value="approved">Approved / Planned</option>
                         <option value="on_hold">On Hold</option>
                         <option value="completed">Completed / Turned Over</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Execution Phase</label>
-                    <select name="current_phase" id="edit_current_phase" class="form-select" required>
-                        <option value="Phase 1: Mobilization & Earthworks">Phase 1: Mobilization & Earthworks</option>
-                        <option value="Phase 2: Substructure & Concrete Frame">Phase 2: Substructure & Concrete Frame</option>
-                        <option value="Phase 3: MEP Rough-in & Conduits">Phase 3: MEP Rough-in & Conduits</option>
-                        <option value="Phase 4: Enclosure & Turnkey Finishes">Phase 4: Enclosure & Turnkey Finishes</option>
-                        <option value="Phase 5: Commissioning & Handover">Phase 5: Commissioning & Handover</option>
                     </select>
                 </div>
             </div>
@@ -831,7 +822,6 @@
         document.getElementById('edit_project_type').value = project.project_type || 'Commercial Construction';
         document.getElementById('edit_finish_tier').value = project.finish_tier || 'standard';
         document.getElementById('edit_status').value = project.status || 'in_progress';
-        document.getElementById('edit_current_phase').value = project.current_phase || 'Phase 1: Mobilization & Earthworks';
         document.getElementById('edit_land_area_sqm').value = project.land_area_sqm || '';
         document.getElementById('edit_floor_area_sqm').value = project.floor_area_sqm || '';
         document.getElementById('edit_client_budget').value = project.client_budget || '';
