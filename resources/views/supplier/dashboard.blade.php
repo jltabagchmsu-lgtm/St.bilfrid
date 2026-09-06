@@ -12,12 +12,11 @@
         <h3 style="font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary);">
             Material Catalog & Order Statistics
         </h3>
-        <div style="display: flex; gap: 10px;">
-            <a href="{{ route('supplier.materials') }}" style="font-size: 0.8rem; color: #38bdf8; text-decoration: none; font-weight: 600;">
+        <div style="display: flex; gap: 8px;">
+            <a href="{{ route('supplier.materials') }}" class="btn-secondary" style="font-size: 0.8rem; padding: 6px 12px; text-decoration: none;">
                 Product Catalog &rarr;
             </a>
-            <span style="color: rgba(255,255,255,0.2);">&bull;</span>
-            <a href="{{ route('supplier.orders') }}" style="font-size: 0.8rem; color: #38bdf8; text-decoration: none; font-weight: 600;">
+            <a href="{{ route('supplier.orders') }}" class="btn-secondary" style="font-size: 0.8rem; padding: 6px 12px; text-decoration: none;">
                 Purchase Orders &rarr;
             </a>
         </div>
@@ -118,7 +117,7 @@
 </div>
 
 <!-- Main Section: Recent Purchase Orders & Catalog Highlights Grid -->
-<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
+<div style="display: grid; grid-template-columns: 1.55fr 1fr; gap: 24px;">
 
     <!-- Left Column: Recent Purchase Orders -->
     <div>
@@ -127,60 +126,60 @@
                 <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary);">Incoming Purchase Orders</h3>
                 <p style="font-size: 0.75rem; color: var(--text-muted);">Client procurement orders requiring supply & dispatch</p>
             </div>
-            <button type="button" onclick="openModal('addMaterialModal')" class="btn-primary" style="font-size: 0.8rem; padding: 8px 16px;">
-                + Add Product
-            </button>
+            <a href="{{ route('supplier.orders') }}" class="btn-secondary" style="font-size: 0.8rem; padding: 7px 14px; text-decoration: none;">
+                View All Orders &rarr;
+            </a>
         </div>
 
-        <div style="overflow-x: auto;">
-            <table class="grid-table">
+        <div style="overflow-x: auto; background: rgba(15, 23, 42, 0.65); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px;">
+            <table class="grid-table" style="border: none; background: transparent;">
                 <thead>
                     <tr>
-                        <th>PO Code</th>
-                        <th>Project Destination</th>
-                        <th>Required Date</th>
-                        <th>Order Items</th>
-                        <th>Total Value</th>
-                        <th>Fulfillment Status</th>
-                        <th>Action</th>
+                        <th style="white-space: nowrap; min-width: 140px;">PO Code</th>
+                        <th style="min-width: 170px;">Project Destination</th>
+                        <th style="white-space: nowrap; min-width: 110px;">Required Date</th>
+                        <th style="white-space: nowrap; min-width: 90px;">Order Items</th>
+                        <th style="white-space: nowrap; min-width: 130px;">Total Value</th>
+                        <th style="white-space: nowrap; min-width: 120px;">Fulfillment Status</th>
+                        <th style="white-space: nowrap; min-width: 85px; text-align: center;">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($recentOrders as $ord)
                         @php $badge = $ord->status_badge; @endphp
                         <tr>
-                            <td>
-                                <strong style="font-family: var(--font-mono); color: #38bdf8;">{{ $ord->order_code }}</strong>
-                                <div style="font-size: 0.7rem; color: var(--text-muted);">{{ $ord->created_at->format('M d, Y') }}</div>
+                            <td style="white-space: nowrap;">
+                                <div style="font-family: var(--font-mono); color: #38bdf8; font-size: 0.85rem; font-weight: 700; white-space: nowrap;">{{ $ord->order_code }}</div>
+                                <div style="font-size: 0.7rem; color: var(--text-muted); white-space: nowrap;">{{ $ord->created_at->format('M d, Y') }}</div>
                             </td>
                             <td>
-                                <div style="font-weight: 600; color: var(--text-primary);">
+                                <div style="font-weight: 600; color: var(--text-primary); font-size: 0.85rem;">
                                     {{ $ord->project ? $ord->project->title : 'Central Warehouse Depot' }}
                                 </div>
-                                <div style="font-size: 0.72rem; color: var(--text-muted); max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                <div style="font-size: 0.72rem; color: var(--text-muted); max-width: 190px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                     {{ $ord->delivery_location }}
                                 </div>
                             </td>
-                            <td>
-                                <span style="font-size: 0.8rem; font-family: var(--font-mono);">
+                            <td style="white-space: nowrap;">
+                                <span style="font-size: 0.8rem; font-family: var(--font-mono); white-space: nowrap;">
                                     {{ $ord->requested_delivery_date->format('M d, Y') }}
                                 </span>
                             </td>
-                            <td>
-                                <span style="font-size: 0.8rem; font-weight: 600;">{{ $ord->items->count() }} item(s)</span>
+                            <td style="white-space: nowrap;">
+                                <span style="font-size: 0.8rem; font-weight: 600; white-space: nowrap;">{{ $ord->items->count() }} item(s)</span>
                             </td>
-                            <td>
-                                <strong style="font-family: var(--font-mono); color: var(--text-primary);">
+                            <td style="white-space: nowrap;">
+                                <span style="font-family: var(--font-mono); color: var(--text-primary); font-size: 0.875rem; font-weight: 700; white-space: nowrap;">
                                     PHP {{ number_format($ord->total_amount, 2) }}
-                                </strong>
+                                </span>
                             </td>
-                            <td>
-                                <span class="pill-badge" style="background: {{ $badge['bg'] }}; color: {{ $badge['color'] }}; border: 1px solid {{ $badge['border'] }};">
+                            <td style="white-space: nowrap;">
+                                <span class="pill-badge" style="background: {{ $badge['bg'] }}; color: {{ $badge['color'] }}; border: 1px solid {{ $badge['border'] }}; white-space: nowrap;">
                                     {{ $badge['label'] }}
                                 </span>
                             </td>
-                            <td>
-                                <a href="{{ route('supplier.orders', ['search' => $ord->order_code]) }}" class="btn-secondary" style="padding: 6px 10px; font-size: 0.75rem;">
+                            <td style="white-space: nowrap; text-align: center;">
+                                <a href="{{ route('supplier.orders', ['search' => $ord->order_code]) }}" class="btn-secondary" style="padding: 5px 12px; font-size: 0.75rem; white-space: nowrap;">
                                     Fulfill
                                 </a>
                             </td>
@@ -199,14 +198,19 @@
 
     <!-- Right Column: Product Catalog Offerings & Supplier Profile -->
     <div>
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
             <div>
                 <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary);">Catalog Offerings</h3>
                 <p style="font-size: 0.75rem; color: var(--text-muted);">Active supply products and price rates</p>
             </div>
-            <a href="{{ route('supplier.materials') }}" style="font-size: 0.75rem; color: #38bdf8; text-decoration: none; font-weight: 600;">
-                View All ({{ $totalMaterials }})
-            </a>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <a href="{{ route('supplier.materials') }}" style="font-size: 0.75rem; color: #38bdf8; text-decoration: none; font-weight: 600;">
+                    View All ({{ $totalMaterials }})
+                </a>
+                <button type="button" onclick="openModal('addMaterialModal')" class="btn-primary" style="font-size: 0.75rem; padding: 6px 12px;">
+                    + Add Product
+                </button>
+            </div>
         </div>
 
         <div style="background: rgba(15, 23, 42, 0.65); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 16px;">

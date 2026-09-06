@@ -44,62 +44,62 @@
     <table class="grid-table">
         <thead>
             <tr>
-                <th>Order ID</th>
-                <th>Client / Project Destination</th>
-                <th>Materials Ordered</th>
-                <th>Order Date</th>
-                <th>Requested Delivery</th>
-                <th>Total Value (PHP)</th>
-                <th>Fulfillment Status</th>
-                <th>Actions</th>
+                <th style="white-space: nowrap; min-width: 140px;">Order ID</th>
+                <th style="min-width: 180px;">Client / Project Destination</th>
+                <th style="min-width: 200px;">Materials Ordered</th>
+                <th style="white-space: nowrap; min-width: 110px;">Order Date</th>
+                <th style="white-space: nowrap; min-width: 130px;">Requested Delivery</th>
+                <th style="white-space: nowrap; min-width: 130px;">Total Value (PHP)</th>
+                <th style="white-space: nowrap; min-width: 120px;">Fulfillment Status</th>
+                <th style="white-space: nowrap; min-width: 100px; text-align: center;">Actions</th>
             </tr>
         </thead>
         <tbody>
             @forelse($orders as $ord)
                 @php $badge = $ord->status_badge; @endphp
                 <tr>
-                    <td>
-                        <strong style="font-family: var(--font-mono); color: #38bdf8; font-size: 0.85rem;">{{ $ord->order_code }}</strong>
-                        <div style="font-size: 0.7rem; color: var(--text-muted);">PO Reference</div>
+                    <td style="white-space: nowrap;">
+                        <div style="font-family: var(--font-mono); color: #38bdf8; font-size: 0.85rem; font-weight: 700; white-space: nowrap;">{{ $ord->order_code }}</div>
+                        <div style="font-size: 0.7rem; color: var(--text-muted); white-space: nowrap;">PO Reference</div>
                     </td>
-                    <td style="max-width: 220px;">
+                    <td>
                         <div style="font-weight: 700; color: var(--text-primary); font-size: 0.85rem;">
                             {{ $ord->project ? $ord->project->title : 'Central Warehouse Depot' }}
                         </div>
-                        <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; max-width: 220px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                             {{ $ord->delivery_location }}
                         </div>
                     </td>
-                    <td style="max-width: 260px;">
-                        <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">
+                    <td>
+                        <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary); white-space: nowrap;">
                             {{ $ord->items->count() }} line item(s)
                         </div>
-                        <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; max-width: 240px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                             {{ $ord->items->pluck('material_name')->implode(', ') }}
                         </div>
                     </td>
-                    <td>
-                        <span style="font-size: 0.8rem; font-family: var(--font-mono);">
+                    <td style="white-space: nowrap;">
+                        <span style="font-size: 0.8rem; font-family: var(--font-mono); white-space: nowrap;">
                             {{ $ord->created_at->format('M d, Y') }}
                         </span>
                     </td>
-                    <td>
-                        <span style="font-size: 0.8rem; font-family: var(--font-mono); font-weight: 700; color: #38bdf8;">
+                    <td style="white-space: nowrap;">
+                        <span style="font-size: 0.8rem; font-family: var(--font-mono); font-weight: 700; color: #38bdf8; white-space: nowrap;">
                             {{ $ord->requested_delivery_date->format('M d, Y') }}
                         </span>
                     </td>
-                    <td>
-                        <strong style="font-family: var(--font-mono); color: var(--text-primary); font-size: 0.95rem;">
+                    <td style="white-space: nowrap;">
+                        <strong style="font-family: var(--font-mono); color: var(--text-primary); font-size: 0.95rem; white-space: nowrap;">
                             PHP {{ number_format($ord->total_amount, 2) }}
                         </strong>
                     </td>
-                    <td>
-                        <span class="pill-badge" style="background: {{ $badge['bg'] }}; color: {{ $badge['color'] }}; border: 1px solid {{ $badge['border'] }};">
+                    <td style="white-space: nowrap;">
+                        <span class="pill-badge" style="background: {{ $badge['bg'] }}; color: {{ $badge['color'] }}; border: 1px solid {{ $badge['border'] }}; white-space: nowrap;">
                             {{ $badge['label'] }}
                         </span>
                     </td>
-                    <td>
-                        <button type="button" onclick="openOrderModal({{ json_encode($ord->load(['items', 'logs.user', 'project', 'orderedBy'])) }})" class="btn-primary" style="padding: 6px 12px; font-size: 0.75rem;">
+                    <td style="white-space: nowrap; text-align: center;">
+                        <button type="button" onclick="openOrderModal({{ json_encode($ord->load(['items', 'logs.user', 'project', 'orderedBy'])) }})" class="btn-primary" style="padding: 6px 12px; font-size: 0.75rem; white-space: nowrap;">
                             Details & Status
                         </button>
                     </td>

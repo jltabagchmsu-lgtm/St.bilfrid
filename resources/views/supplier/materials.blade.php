@@ -60,23 +60,23 @@
     <table class="grid-table">
         <thead>
             <tr>
-                <th>Code</th>
-                <th>Product Details & Specifications</th>
-                <th>Category / Type</th>
-                <th>Unit</th>
-                <th>Unit Price (PHP)</th>
-                <th>MOQ</th>
-                <th>Catalog Status</th>
-                <th>Last Updated</th>
-                <th>Actions</th>
+                <th style="white-space: nowrap; min-width: 130px;">Code</th>
+                <th style="min-width: 220px;">Product Details & Specifications</th>
+                <th style="white-space: nowrap; min-width: 120px;">Category / Type</th>
+                <th style="white-space: nowrap; min-width: 80px;">Unit</th>
+                <th style="white-space: nowrap; min-width: 140px;">Unit Price (PHP)</th>
+                <th style="white-space: nowrap; min-width: 90px;">MOQ</th>
+                <th style="white-space: nowrap; min-width: 120px;">Catalog Status</th>
+                <th style="white-space: nowrap; min-width: 110px;">Last Updated</th>
+                <th style="white-space: nowrap; min-width: 90px; text-align: center;">Actions</th>
             </tr>
         </thead>
         <tbody>
             @forelse($materials as $mat)
                 @php $badge = $mat->status_badge; @endphp
                 <tr>
-                    <td>
-                        <strong style="font-family: var(--font-mono); color: #38bdf8; font-size: 0.8rem;">{{ $mat->material_code }}</strong>
+                    <td style="white-space: nowrap;">
+                        <strong style="font-family: var(--font-mono); color: #38bdf8; font-size: 0.85rem; white-space: nowrap;">{{ $mat->material_code }}</strong>
                     </td>
                     <td style="max-width: 320px;">
                         <div style="font-weight: 700; color: var(--text-primary); font-size: 0.875rem;">
@@ -88,40 +88,40 @@
                             </div>
                         @endif
                     </td>
-                    <td>
-                        <span class="pill-badge" style="background: rgba(255, 255, 255, 0.06); color: var(--text-secondary);">
+                    <td style="white-space: nowrap;">
+                        <span class="pill-badge" style="background: rgba(255, 255, 255, 0.06); color: var(--text-secondary); white-space: nowrap;">
                             {{ $mat->subcategory ?? 'General' }}
                         </span>
                     </td>
-                    <td>
-                        <span style="font-size: 0.8rem; font-family: var(--font-mono);">{{ $mat->unit }}</span>
+                    <td style="white-space: nowrap;">
+                        <span style="font-size: 0.8rem; font-family: var(--font-mono); white-space: nowrap;">{{ $mat->unit }}</span>
                     </td>
-                    <td>
-                        <strong style="font-family: var(--font-mono); color: var(--text-primary); font-size: 0.95rem;">
+                    <td style="white-space: nowrap;">
+                        <strong style="font-family: var(--font-mono); color: var(--text-primary); font-size: 0.95rem; white-space: nowrap;">
                             PHP {{ number_format($mat->unit_price, 2) }}
                         </strong>
                     </td>
-                    <td>
-                        <span style="font-size: 0.8rem; color: var(--text-secondary);">{{ $mat->min_order_qty }} {{ $mat->unit }}</span>
+                    <td style="white-space: nowrap;">
+                        <span style="font-size: 0.8rem; color: var(--text-secondary); white-space: nowrap;">{{ $mat->min_order_qty }} {{ $mat->unit }}</span>
                     </td>
-                    <td>
-                        <span class="pill-badge" style="background: {{ $badge['bg'] }}; color: {{ $badge['color'] }}; border: 1px solid {{ $badge['border'] }};">
+                    <td style="white-space: nowrap;">
+                        <span class="pill-badge" style="background: {{ $badge['bg'] }}; color: {{ $badge['color'] }}; border: 1px solid {{ $badge['border'] }}; white-space: nowrap;">
                             {{ $badge['label'] }}
                         </span>
                     </td>
-                    <td>
-                        <div style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">
+                    <td style="white-space: nowrap;">
+                        <div style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono); white-space: nowrap;">
                             {{ $mat->updated_at ? $mat->updated_at->format('M d, Y') : '-' }}
                         </div>
                     </td>
-                    <td>
-                        <div style="display: flex; align-items: center; gap: 6px;">
-                            <button type="button" onclick="openEditMaterialModal({{ json_encode($mat) }})" class="btn-secondary" style="padding: 5px 10px; font-size: 0.75rem;" title="Edit Specifications & Pricing">
+                    <td style="white-space: nowrap; text-align: center;">
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 6px;">
+                            <button type="button" onclick="openEditMaterialModal({{ json_encode($mat) }})" class="btn-secondary" style="padding: 5px 10px; font-size: 0.75rem; white-space: nowrap;" title="Edit Specifications & Pricing">
                                 Edit
                             </button>
                             <form action="{{ route('supplier.materials.destroy', $mat->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete or deactivate product {{ addslashes($mat->name) }}?');" style="display: inline;">
                                 @csrf
-                                <button type="submit" class="btn-secondary" style="padding: 5px 8px; font-size: 0.75rem; color: #ef4444; border-color: rgba(239, 68, 68, 0.3);" title="Delete / Deactivate">
+                                <button type="submit" class="btn-secondary" style="padding: 5px 8px; font-size: 0.75rem; color: #ef4444; border-color: rgba(239, 68, 68, 0.3); white-space: nowrap;" title="Delete / Deactivate">
                                     &times;
                                 </button>
                             </form>

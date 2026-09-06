@@ -363,6 +363,96 @@ body {
     border-color: rgba(255, 255, 255, 0.2);
 }
 
+/* ====================================================
+   Universal Form Controls & Inputs (Dark Theme)
+   ==================================================== */
+.input-field,
+.form-input,
+.form-control,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+input[type="tel"],
+input[type="url"],
+input[type="search"],
+select,
+textarea {
+    width: 100%;
+    background-color: rgba(15, 23, 42, 0.85) !important;
+    background: rgba(15, 23, 42, 0.85) !important;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
+    border-radius: var(--radius-sm, 8px);
+    padding: 10px 14px;
+    color: #f8fafc !important;
+    font-family: var(--font-sans) !important;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 12px center !important;
+    padding-right: 36px !important;
+    cursor: pointer;
+}
+
+.input-field:focus,
+.form-input:focus,
+.form-control:focus,
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+select:focus,
+textarea:focus {
+    border-color: #38bdf8 !important;
+    background-color: rgba(15, 23, 42, 0.98) !important;
+    background: rgba(15, 23, 42, 0.98) !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25), inset 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+.input-field:disabled,
+.input-field[readonly],
+input:disabled,
+input[readonly],
+select:disabled,
+textarea:disabled {
+    background-color: rgba(30, 41, 59, 0.55) !important;
+    background: rgba(30, 41, 59, 0.55) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    color: #94a3b8 !important;
+    cursor: not-allowed !important;
+    opacity: 0.8;
+}
+
+.input-field::placeholder,
+input::placeholder,
+textarea::placeholder {
+    color: #64748b !important;
+    opacity: 1;
+}
+
+select option {
+    background-color: #0f172a !important;
+    color: #f8fafc !important;
+    padding: 10px;
+}
+
 .main-body {
     padding: 28px 36px 60px 36px;
     flex: 1;
