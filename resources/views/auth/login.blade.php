@@ -195,36 +195,6 @@
             transform: translateY(0);
         }
 
-        .demo-helper-box {
-            margin-top: 24px;
-            padding: 14px 18px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px dashed rgba(255, 255, 255, 0.12);
-            border-radius: var(--radius-md);
-            text-align: center;
-        }
-
-        .btn-quick-fill {
-            background: rgba(56, 189, 248, 0.12);
-            color: #38bdf8;
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            padding: 6px 14px;
-            border-radius: var(--radius-sm);
-            font-size: 0.8rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            margin-top: 8px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .btn-quick-fill:hover {
-            background: rgba(56, 189, 248, 0.22);
-            border-color: #38bdf8;
-        }
-
         .login-error {
             background: rgba(239, 68, 68, 0.15);
             border: 1px solid rgba(239, 68, 68, 0.35);
@@ -290,8 +260,8 @@
                             name="email" 
                             id="emailInput" 
                             class="login-input" 
-                            placeholder="admin@newconstuc.firm" 
-                            value="{{ old('email', 'admin@newconstuc.firm') }}" 
+                            placeholder="Enter your email address" 
+                            value="{{ old('email') }}" 
                             required 
                             autofocus
                         >
@@ -332,42 +302,6 @@
                     <span>&rarr;</span>
                 </button>
             </form>
-
-            <div class="demo-helper-box" style="text-align: left; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1);">
-                <div style="font-size: 0.8rem; font-weight: 700; color: #f8fafc; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between;">
-                    <span>1-Click Fast Login Credentials:</span>
-                    <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: normal;">Click to auto-fill</span>
-                </div>
-                
-                <div style="display: flex; flex-direction: column; gap: 8px;">
-                    <!-- Master Admin -->
-                    <button type="button" class="btn-quick-fill" onclick="autoFillAdmin()" style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 8px 12px; background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3); color: #fca5a5; text-align: left;">
-                        <div>
-                            <div style="font-weight: 700; font-size: 0.8rem;">Master Administrator</div>
-                            <div style="font-family: var(--font-mono); font-size: 0.725rem; opacity: 0.8;">admin@newconstuc.firm &bull; admin123</div>
-                        </div>
-                        <span style="font-size: 0.75rem; background: rgba(239,68,68,0.25); padding: 3px 8px; border-radius: 4px;">Fill &rarr;</span>
-                    </button>
-
-                    <!-- Roofing Account -->
-                    <button type="button" class="btn-quick-fill" onclick="autoFillRoofing()" style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 8px 12px; background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3); color: #fcd34d; text-align: left;">
-                        <div>
-                            <div style="font-weight: 700; font-size: 0.8rem;">Roofing Transfer Officer</div>
-                            <div style="font-family: var(--font-mono); font-size: 0.725rem; opacity: 0.8;">roofing@newconstuc.firm &bull; roofing123</div>
-                        </div>
-                        <span style="font-size: 0.75rem; background: rgba(245,158,11,0.25); padding: 3px 8px; border-radius: 4px;">Fill &rarr;</span>
-                    </button>
-
-                    <!-- Windows & Doors Account -->
-                    <button type="button" class="btn-quick-fill" onclick="autoFillWindowsDoors()" style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 8px 12px; background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.3); color: #38bdf8; text-align: left;">
-                        <div>
-                            <div style="font-weight: 700; font-size: 0.8rem;">Windows & Doors Transfer Officer</div>
-                            <div style="font-family: var(--font-mono); font-size: 0.725rem; opacity: 0.8;">windows.doors@newconstuc.firm &bull; windows123</div>
-                        </div>
-                        <span style="font-size: 0.75rem; background: rgba(56,189,248,0.25); padding: 3px 8px; border-radius: 4px;">Fill &rarr;</span>
-                    </button>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -379,21 +313,6 @@
             } else {
                 pwd.type = 'password';
             }
-        }
-
-        function autoFillAdmin() {
-            document.getElementById('emailInput').value = 'admin@newconstuc.firm';
-            document.getElementById('passwordInput').value = 'admin123';
-        }
-
-        function autoFillRoofing() {
-            document.getElementById('emailInput').value = 'roofing@newconstuc.firm';
-            document.getElementById('passwordInput').value = 'roofing123';
-        }
-
-        function autoFillWindowsDoors() {
-            document.getElementById('emailInput').value = 'windows.doors@newconstuc.firm';
-            document.getElementById('passwordInput').value = 'windows123';
         }
     </script>
 </body>
