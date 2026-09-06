@@ -737,6 +737,8 @@
                                         'Structural' => '#38bdf8',
                                         'Electrical' => '#f59e0b',
                                         'Piping & Plumbing', 'Piping' => '#10b981',
+                                        'Roofing', 'Roofing & Metal Sheets' => '#f97316',
+                                        'Windows & Doors', 'Doors & Windows' => '#818cf8',
                                         default => '#ec4899',
                                     };
                                 @endphp
@@ -756,7 +758,13 @@
                             <td style="border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 12px;">
                                 <div style="display: flex; flex-wrap: wrap; gap: 4px;">
                                     @foreach($mat['task_names'] as $tName)
-                                        <span class="badge" style="font-size: 0.675rem; background: rgba(56, 189, 248, 0.1); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.25);">
+                                        @php
+                                            $isXferChip = str_contains($tName, 'Transfer') || str_contains($tName, 'Roofing') || str_contains($tName, 'Windows');
+                                            $chipBg = $isXferChip ? 'rgba(249, 115, 22, 0.12)' : 'rgba(56, 189, 248, 0.1)';
+                                            $chipColor = $isXferChip ? '#f97316' : '#38bdf8';
+                                            $chipBorder = $isXferChip ? 'rgba(249, 115, 22, 0.3)' : 'rgba(56, 189, 248, 0.25)';
+                                        @endphp
+                                        <span class="badge" style="font-size: 0.675rem; background: {{ $chipBg }}; color: {{ $chipColor }}; border: 1px solid {{ $chipBorder }};">
                                             {{ $tName }}
                                         </span>
                                     @endforeach
@@ -777,12 +785,95 @@
                     @empty
                         <tr id="emptyActiveMaterialsRow">
                             <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 24px;">
-                                No active materials accumulated yet. Check off tasks or advance tasks to "In Progress" in the checklist above to dynamically activate construction materials.
+                                No active materials accumulated yet. Check off tasks or advance tasks in the checklist, or dispatch materials from Roofing / Windows & Doors Transfer Portals.
                             </td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
+        </div>
+
+        <!-- Transferred Materials & Warehouse Dispatches Received Ledger -->
+        <div style="margin-top: 24px; background: rgba(10, 16, 30, 0.85); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: var(--radius-sm); padding: 18px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+                <div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <h4 style="margin: 0; font-size: 1.05rem; font-weight: 800; color: #f8fafc;">Material Transfers & Warehouse Dispatches Received</h4>
+                        <span class="badge badge-in_progress" style="font-size: 0.725rem;">{{ $incomingTransfers->count() }} Transfers Recorded</span>
+                    </div>
+                    <span style="font-size: 0.8rem; color: var(--text-muted);">
+                        Audit log of materials dispatched to this site from Roofing & Windows/Doors Portals and Central Warehouse.
+                    </span>
+                </div>
+            </div>
+
+            <div style="overflow-x: auto; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 6px;">
+                <table class="data-table" style="margin-bottom: 0; font-size: 0.8rem; width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: rgba(15, 23, 42, 0.95); border-bottom: 2px solid rgba(56, 189, 248, 0.3);">
+                            <th style="width: 110px; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 9px 10px;">Transfer Date</th>
+                            <th style="width: 170px; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 9px 10px;">Voucher Ref</th>
+                            <th style="min-width: 220px; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 9px 12px;">Transferred Material</th>
+                            <th style="width: 140px; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 9px 10px; text-align: right;">Quantity</th>
+                            <th style="width: 180px; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 9px 10px;">Dispatch Source</th>
+                            <th style="width: 160px; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 9px 10px;">Authorized By</th>
+                            <th style="width: 110px; text-align: center; padding: 9px 10px;">Voucher Slip</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($incomingTransfers as $xfer)
+                            @php
+                                $isRoofing = str_contains($xfer->transfer_reference_no, 'ROOF');
+                                $isWndr = str_contains($xfer->transfer_reference_no, 'WNDR');
+                                $voucherUrl = $isRoofing ? route('roofing.printVoucher', $xfer->id) : ($isWndr ? route('windowsDoors.printVoucher', $xfer->id) : '#');
+                                $catBadgeColor = $isRoofing ? '#f97316' : ($isWndr ? '#818cf8' : '#38bdf8');
+                            @endphp
+                            <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.06);">
+                                <td style="border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 10px; font-family: var(--font-mono); color: var(--text-secondary);">
+                                    {{ $xfer->transfer_date ? $xfer->transfer_date->format('M d, Y') : $xfer->created_at->format('M d, Y') }}
+                                </td>
+                                <td style="border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 10px; font-family: var(--font-mono); font-weight: 700; color: #38bdf8;">
+                                    {{ $xfer->transfer_reference_no }}
+                                </td>
+                                <td style="border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 12px;">
+                                    <strong style="color: #f8fafc;">{{ $xfer->material->name ?? 'Material' }}</strong>
+                                    <div style="font-size: 0.7rem; color: {{ $catBadgeColor }}; font-weight: 600;">
+                                        {{ $xfer->material->category ?? '' }}
+                                    </div>
+                                </td>
+                                <td style="border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 10px; text-align: right; font-family: var(--font-mono); font-weight: 700; color: #10b981;">
+                                    +{{ number_format($xfer->quantity_transferred) }} {{ $xfer->material->unit ?? 'units' }}
+                                </td>
+                                <td style="border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 10px; font-size: 0.75rem; color: #cbd5e1;">
+                                    @if($xfer->source_project_id && $xfer->source_project_id != $project->id && $xfer->sourceProject)
+                                        Inter-Project from {{ $xfer->sourceProject->project_code }}
+                                    @else
+                                        Central Warehouse Stock
+                                    @endif
+                                </td>
+                                <td style="border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 10px; font-size: 0.75rem; color: var(--text-secondary);">
+                                    {{ $xfer->authorized_by ?? 'Transfer Officer' }}
+                                </td>
+                                <td style="text-align: center; padding: 8px 10px;">
+                                    @if($voucherUrl !== '#')
+                                        <a href="{{ $voucherUrl }}" target="_blank" class="btn-secondary" style="font-size: 0.7rem; padding: 3px 8px; color: #38bdf8; border-color: rgba(56, 189, 248, 0.3);">
+                                            Slip &rarr;
+                                        </a>
+                                    @else
+                                        <span style="font-size: 0.7rem; color: var(--text-muted);">-</span>
+                                    @endif
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 18px; font-style: italic;">
+                                    No incoming material transfers recorded for this project yet. Dispatches made in the Roofing or Windows & Doors Transfer Portals will automatically appear here.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -3540,11 +3631,17 @@
             if (mat.category === 'Structural') catColor = '#38bdf8';
             else if (mat.category === 'Electrical') catColor = '#f59e0b';
             else if (mat.category === 'Piping & Plumbing' || mat.category === 'Piping') catColor = '#10b981';
+            else if (mat.category === 'Roofing' || mat.category === 'Roofing & Metal Sheets') catColor = '#f97316';
+            else if (mat.category === 'Windows & Doors' || mat.category === 'Doors & Windows') catColor = '#818cf8';
 
             let taskChips = '';
             if (mat.task_names && Array.isArray(mat.task_names)) {
                 mat.task_names.forEach(tName => {
-                    taskChips += `<span class="badge" style="font-size: 0.675rem; background: rgba(56, 189, 248, 0.1); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.25);">${tName}</span>`;
+                    const isXfer = tName.includes('Transfer') || tName.includes('Roofing') || tName.includes('Windows');
+                    const bg = isXfer ? 'rgba(249, 115, 22, 0.12)' : 'rgba(56, 189, 248, 0.1)';
+                    const col = isXfer ? '#f97316' : '#38bdf8';
+                    const bdr = isXfer ? 'rgba(249, 115, 22, 0.3)' : 'rgba(56, 189, 248, 0.25)';
+                    taskChips += `<span class="badge" style="font-size: 0.675rem; background: ${bg}; color: ${col}; border: 1px solid ${bdr};">${tName}</span>`;
                 });
             }
 

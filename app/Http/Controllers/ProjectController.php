@@ -11,6 +11,7 @@ use App\Models\Payment;
 use App\Models\ProjectPhoto;
 use App\Models\ProjectCost;
 use App\Models\InventoryLog;
+use App\Models\ProjectMaterialTransfer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
@@ -541,6 +542,12 @@ class ProjectController extends Controller
 
         $activeMaterialsData = $project->getActiveMaterialsData();
 
+        $incomingTransfers = ProjectMaterialTransfer::with(['sourceProject', 'destinationProject', 'material'])
+            ->where('destination_project_id', $project->id)
+            ->orderBy('transfer_date', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         return view('projects.show', compact(
             'project',
             'allPersonnel',
@@ -588,7 +595,8 @@ class ProjectController extends Controller
             'electricalDone',
             'pipingDone',
             'finishingDone',
-            'activeMaterialsData'
+            'activeMaterialsData',
+            'incomingTransfers'
         ));
     }
 

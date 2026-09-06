@@ -97,6 +97,16 @@ class Project extends Model
         return $this->hasMany(ProjectMaterial::class);
     }
 
+    public function materialTransfersReceived()
+    {
+        return $this->hasMany(ProjectMaterialTransfer::class, 'destination_project_id')->orderBy('transfer_date', 'desc')->orderBy('created_at', 'desc');
+    }
+
+    public function materialTransfersSent()
+    {
+        return $this->hasMany(ProjectMaterialTransfer::class, 'source_project_id')->orderBy('transfer_date', 'desc')->orderBy('created_at', 'desc');
+    }
+
     public function tasks()
     {
         return $this->hasMany(ProjectTask::class)->orderBy('sort_order')->orderBy('id');
@@ -184,7 +194,7 @@ class Project extends Model
 
     public function getActiveMaterialsData(): array
     {
-        // Active tasks: in_progress or completed
+        // 1. Active tasks: in_progress or completed
         $activeTasks = $this->tasks()
             ->where(function($q) {
                 $q->where('status', 'completed')
@@ -212,6 +222,7 @@ class Project extends Model
                     'total_cost' => 0.0,
                     'task_names' => [],
                     'is_all_completed' => true,
+                    'is_transfer' => false,
                 ];
             }
 
@@ -224,6 +235,62 @@ class Project extends Model
                 }
                 if ($tm->projectTask->status !== 'completed' && $tm->projectTask->progress < 100) {
                     $grouped[$key]['is_all_completed'] = false;
+                }
+            }
+        }
+
+        // 2. Direct Site Allocations & Trade Transfers (Roofing Portal, Windows & Doors Portal, Central Warehouse Dispatches)
+        $siteMaterials = $this->projectMaterials()->with('material')->get();
+        foreach ($siteMaterials as $pm) {
+            if (!$pm->material || $pm->allocated_qty <= 0) {
+                continue;
+            }
+
+            $matName = $pm->material->name;
+            $matUnit = $pm->material->unit;
+            $key = $matName . '|' . $matUnit;
+
+            // Check if there are transfer reference numbers received for this material
+            $transfers = ProjectMaterialTransfer::where('destination_project_id', $this->id)
+                ->where('material_id', $pm->material_id)
+                ->get();
+
+            $sourceLabel = 'Site Allocation';
+            if ($transfers->isNotEmpty()) {
+                $hasRoof = false;
+                $hasWndr = false;
+                $refNos = [];
+                foreach ($transfers as $xfer) {
+                    $refNos[] = $xfer->transfer_reference_no;
+                    if (str_contains($xfer->transfer_reference_no, 'ROOF')) $hasRoof = true;
+                    if (str_contains($xfer->transfer_reference_no, 'WNDR')) $hasWndr = true;
+                }
+                $shortRef = implode(', ', array_slice($refNos, -2));
+                if ($hasRoof) $sourceLabel = 'Transferred: Roofing Portal (' . $shortRef . ')';
+                elseif ($hasWndr) $sourceLabel = 'Transferred: Windows & Doors (' . $shortRef . ')';
+                else $sourceLabel = 'Transferred (' . $shortRef . ')';
+            }
+
+            if (!isset($grouped[$key])) {
+                $grouped[$key] = [
+                    'material_name' => $matName,
+                    'category' => $pm->material->category ?? 'Site Allocation',
+                    'unit' => $matUnit,
+                    'unit_cost' => (float) $pm->unit_price,
+                    'total_quantity' => (float) $pm->allocated_qty,
+                    'total_cost' => (float) ($pm->allocated_qty * $pm->unit_price),
+                    'task_names' => [$sourceLabel],
+                    'is_all_completed' => ($pm->remaining_qty <= 0),
+                    'is_transfer' => true,
+                ];
+            } else {
+                if (!in_array($sourceLabel, $grouped[$key]['task_names'])) {
+                    $grouped[$key]['task_names'][] = $sourceLabel;
+                }
+                if ($pm->allocated_qty > $grouped[$key]['total_quantity']) {
+                    $diff = $pm->allocated_qty - $grouped[$key]['total_quantity'];
+                    $grouped[$key]['total_quantity'] = (float) $pm->allocated_qty;
+                    $grouped[$key]['total_cost'] += ($diff * $pm->unit_price);
                 }
             }
         }

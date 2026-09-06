@@ -789,9 +789,16 @@
                         @endif
                         <td style="text-align: left;">
                             <strong style="color: #f8fafc; font-size: 0.95rem;">{{ $bm->material->name }}</strong>
-                            <div style="font-size: 0.775rem; color: var(--text-muted); margin-top: 2px;">
-                                <span class="badge" style="padding: 2px 6px; font-size: 0.7rem; background: rgba(255,255,255,0.06);">{{ $bm->material->category }}</span>
-                                &bull; {{ $bm->material->material_code }}
+                            <div style="font-size: 0.775rem; color: var(--text-muted); margin-top: 2px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                                @php
+                                    $isRoofingMat = str_contains(strtolower($bm->material->category ?? ''), 'roof');
+                                    $isWndrMat = str_contains(strtolower($bm->material->category ?? ''), 'door') || str_contains(strtolower($bm->material->category ?? ''), 'window');
+                                    $catBg = $isRoofingMat ? 'rgba(249, 115, 22, 0.15)' : ($isWndrMat ? 'rgba(129, 140, 248, 0.15)' : 'rgba(255,255,255,0.06)');
+                                    $catTxt = $isRoofingMat ? '#f97316' : ($isWndrMat ? '#818cf8' : 'var(--text-secondary)');
+                                    $catBdr = $isRoofingMat ? 'rgba(249, 115, 22, 0.3)' : ($isWndrMat ? 'rgba(129, 140, 248, 0.3)' : 'rgba(255,255,255,0.1)');
+                                @endphp
+                                <span class="badge" style="padding: 2px 7px; font-size: 0.7rem; background: {{ $catBg }}; color: {{ $catTxt }}; border: 1px solid {{ $catBdr }};">{{ $bm->material->category }}</span>
+                                <span style="font-family: var(--font-mono); font-size: 0.725rem;">{{ $bm->material->material_code }}</span>
                             </div>
                         </td>
                         <td style="text-align: right; color: var(--text-secondary);" class="col-num">
