@@ -122,6 +122,30 @@ class Project extends Model
         return $this->hasMany(ProjectTask::class)->whereIn('category', ['Finishing', 'Design-Build', 'Turnkey Finishing', 'Design-Build / Turnkey Finishing'])->orderBy('sort_order')->orderBy('id');
     }
 
+    public function getStructuralWeightAttribute($value): int
+    {
+        $v = (int) $value;
+        return $v > 0 ? $v : 40;
+    }
+
+    public function getElectricalWeightAttribute($value): int
+    {
+        $v = (int) $value;
+        return $v > 0 ? $v : 25;
+    }
+
+    public function getPipingWeightAttribute($value): int
+    {
+        $v = (int) $value;
+        return $v > 0 ? $v : 20;
+    }
+
+    public function getFinishingWeightAttribute($value): int
+    {
+        $v = (int) $value;
+        return $v > 0 ? $v : 15;
+    }
+
     public function recalculateTradeProgressFromTasks(): void
     {
         $structCount = $this->structuralTasks()->count();
@@ -135,6 +159,12 @@ class Project extends Model
 
         $finishCount = $this->finishingTasks()->count();
         $this->finishing_progress = $finishCount > 0 ? (int) round($this->finishingTasks()->avg('progress') ?? 0) : 0;
+
+        // Auto-heal weights if stored as 0 or empty in database
+        if (($this->attributes['structural_weight'] ?? 0) <= 0) $this->attributes['structural_weight'] = 40;
+        if (($this->attributes['electrical_weight'] ?? 0) <= 0) $this->attributes['electrical_weight'] = 25;
+        if (($this->attributes['piping_weight'] ?? 0) <= 0) $this->attributes['piping_weight'] = 20;
+        if (($this->attributes['finishing_weight'] ?? 0) <= 0) $this->attributes['finishing_weight'] = 15;
 
         $this->overall_progress = $this->calculated_overall_progress;
 
@@ -753,10 +783,17 @@ class Project extends Model
             return 100;
         }
 
-        $wS = (int) ($this->structural_weight ?? 0);
-        $wE = (int) ($this->electrical_weight ?? 0);
-        $wP = (int) ($this->piping_weight ?? 0);
-        $wF = (int) ($this->finishing_weight ?? 0);
+        $wS = (int) $this->structural_weight;
+        $wE = (int) $this->electrical_weight;
+        $wP = (int) $this->piping_weight;
+        $wF = (int) $this->finishing_weight;
+
+        if (($wS + $wE + $wP + $wF) <= 0) {
+            $wS = 40;
+            $wE = 25;
+            $wP = 20;
+            $wF = 15;
+        }
 
         $structCount = $this->structuralTasks()->count();
         $elecCount = $this->electricalTasks()->count();

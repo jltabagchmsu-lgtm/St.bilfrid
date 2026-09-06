@@ -89,10 +89,17 @@ class ProjectController extends Controller
         $validated['approved_loan_amount'] = $request->input('approved_loan_amount', ($validated['contract_budget'] * 0.80));
         $validated['client_equity_amount'] = $request->input('client_equity_amount', ($validated['contract_budget'] * 0.20));
         $validated['payment_first_policy'] = (bool) $request->input('payment_first_policy', 1);
-        $validated['structural_weight'] = $request->has('structural_weight') ? (int) $request->input('structural_weight') : 40;
-        $validated['electrical_weight'] = $request->has('electrical_weight') ? (int) $request->input('electrical_weight') : 25;
-        $validated['piping_weight'] = $request->has('piping_weight') ? (int) $request->input('piping_weight') : 20;
-        $validated['finishing_weight'] = $request->has('finishing_weight') ? (int) $request->input('finishing_weight') : 15;
+        $sW = (int) $request->input('structural_weight');
+        $eW = (int) $request->input('electrical_weight');
+        $pW = (int) $request->input('piping_weight');
+        $fW = (int) $request->input('finishing_weight');
+        if (($sW + $eW + $pW + $fW) <= 0) {
+            $sW = 40; $eW = 25; $pW = 20; $fW = 15;
+        }
+        $validated['structural_weight'] = $sW;
+        $validated['electrical_weight'] = $eW;
+        $validated['piping_weight'] = $pW;
+        $validated['finishing_weight'] = $fW;
         $validated['structural_progress'] = $request->input('structural_progress', 0);
         $validated['electrical_progress'] = $request->input('electrical_progress', 0);
         $validated['piping_progress'] = $request->input('piping_progress', 0);
@@ -233,10 +240,17 @@ class ProjectController extends Controller
         if (isset($validated['piping_progress'])) $project->piping_progress = $validated['piping_progress'];
         if (isset($validated['finishing_progress'])) $project->finishing_progress = $validated['finishing_progress'];
 
-        if (isset($validated['structural_weight'])) $project->structural_weight = $validated['structural_weight'];
-        if (isset($validated['electrical_weight'])) $project->electrical_weight = $validated['electrical_weight'];
-        if (isset($validated['piping_weight'])) $project->piping_weight = $validated['piping_weight'];
-        if (isset($validated['finishing_weight'])) $project->finishing_weight = $validated['finishing_weight'];
+        if (isset($validated['structural_weight'])) $project->structural_weight = (int) $validated['structural_weight'];
+        if (isset($validated['electrical_weight'])) $project->electrical_weight = (int) $validated['electrical_weight'];
+        if (isset($validated['piping_weight'])) $project->piping_weight = (int) $validated['piping_weight'];
+        if (isset($validated['finishing_weight'])) $project->finishing_weight = (int) $validated['finishing_weight'];
+
+        if (($project->structural_weight + $project->electrical_weight + $project->piping_weight + $project->finishing_weight) <= 0) {
+            $project->structural_weight = 40;
+            $project->electrical_weight = 25;
+            $project->piping_weight = 20;
+            $project->finishing_weight = 15;
+        }
 
         if (isset($validated['deployed_workers'])) $project->deployed_workers = $validated['deployed_workers'];
         if (isset($validated['deployed_skilled_workers'])) $project->deployed_skilled_workers = $validated['deployed_skilled_workers'];
@@ -624,6 +638,18 @@ class ProjectController extends Controller
             'finishing_weight' => 'required|integer|min:0|max:100',
             'schedule_notes' => 'nullable|string',
         ]);
+
+        $sW = (int) ($validated['structural_weight'] ?? 40);
+        $eW = (int) ($validated['electrical_weight'] ?? 25);
+        $pW = (int) ($validated['piping_weight'] ?? 20);
+        $fW = (int) ($validated['finishing_weight'] ?? 15);
+        if (($sW + $eW + $pW + $fW) <= 0) {
+            $sW = 40; $eW = 25; $pW = 20; $fW = 15;
+        }
+        $validated['structural_weight'] = $sW;
+        $validated['electrical_weight'] = $eW;
+        $validated['piping_weight'] = $pW;
+        $validated['finishing_weight'] = $fW;
 
         $project->update($validated);
         $project->overall_progress = $project->calculated_overall_progress;
