@@ -500,78 +500,71 @@
     </div>
 
     <!-- Trade Checklist Tabs & Task Status Filter Bar -->
-    <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px 20px; margin-bottom: 22px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
-            
-            <!-- Left: Discipline Filter Tabs -->
-            <div class="trade-tabs-nav">
-                <button type="button" id="tabBtnStructural" class="trade-nav-tab btn-tab active" onclick="switchChecklistTab('structural', this)">
-                    <span class="tab-dot" style="background: #dc2626;"></span>
-                    <span>Structural Works</span>
-                    <span class="tab-count-pill" id="tabCountStruct">{{ $structuralTasks->count() }}</span>
-                </button>
-                <button type="button" id="tabBtnElectrical" class="trade-nav-tab btn-tab" onclick="switchChecklistTab('electrical', this)">
-                    <span class="tab-dot" style="background: #b45309;"></span>
-                    <span>Electrical Works</span>
-                    <span class="tab-count-pill" id="tabCountElec">{{ $electricalTasks->count() }}</span>
-                </button>
-                <button type="button" id="tabBtnPiping" class="trade-nav-tab btn-tab" onclick="switchChecklistTab('piping', this)">
-                    <span class="tab-dot" style="background: #047857;"></span>
-                    <span>Piping & Plumbing</span>
-                    <span class="tab-count-pill" id="tabCountPipe">{{ $pipingTasks->count() }}</span>
-                </button>
-                <button type="button" id="tabBtnFinishing" class="trade-nav-tab btn-tab" onclick="switchChecklistTab('finishing', this)">
-                    <span class="tab-dot" style="background: #6d28d9;"></span>
-                    <span>Design-Build / Turnkey</span>
-                    <span class="tab-count-pill" id="tabCountFinish">{{ $finishingTasks->count() }}</span>
-                </button>
-                <button type="button" id="tabBtnAll" class="trade-nav-tab btn-tab" onclick="switchChecklistTab('all', this)">
-                    <span class="tab-dot" style="background: #475569;"></span>
-                    <span>All Disciplines</span>
-                    <span class="tab-count-pill" id="tabCountAll">{{ $project->tasks->count() }}</span>
-                </button>
+    <div class="section-filter-toolbar">
+        <!-- Left: Discipline Filter Tabs -->
+        <div class="discipline-tabs-bar">
+            <button type="button" id="tabBtnStructural" class="discipline-tab-btn active" onclick="switchChecklistTab('structural', this)">
+                <span class="discipline-dot" style="background: #dc2626;"></span>
+                <span>Structural Works</span>
+                <span class="discipline-count-badge" id="tabCountStruct">{{ $structuralTasks->count() }}</span>
+            </button>
+            <button type="button" id="tabBtnElectrical" class="discipline-tab-btn" onclick="switchChecklistTab('electrical', this)">
+                <span class="discipline-dot" style="background: #b45309;"></span>
+                <span>Electrical Works</span>
+                <span class="discipline-count-badge" id="tabCountElec">{{ $electricalTasks->count() }}</span>
+            </button>
+            <button type="button" id="tabBtnPiping" class="discipline-tab-btn" onclick="switchChecklistTab('piping', this)">
+                <span class="discipline-dot" style="background: #047857;"></span>
+                <span>Piping & Plumbing</span>
+                <span class="discipline-count-badge" id="tabCountPipe">{{ $pipingTasks->count() }}</span>
+            </button>
+            <button type="button" id="tabBtnFinishing" class="discipline-tab-btn" onclick="switchChecklistTab('finishing', this)">
+                <span class="discipline-dot" style="background: #6d28d9;"></span>
+                <span>Design-Build / Turnkey</span>
+                <span class="discipline-count-badge" id="tabCountFinish">{{ $finishingTasks->count() }}</span>
+            </button>
+            <button type="button" id="tabBtnAll" class="discipline-tab-btn" onclick="switchChecklistTab('all', this)">
+                <span class="discipline-dot" style="background: #475569;"></span>
+                <span>All Disciplines</span>
+                <span class="discipline-count-badge" id="tabCountAll">{{ $project->tasks->count() }}</span>
+            </button>
+        </div>
+
+        <!-- Right: Task Status Filter & Quick Jump -->
+        <div class="toolbar-controls-group">
+            <!-- Status Filter Dropdown -->
+            <div class="toolbar-control-item">
+                <label for="taskStatusFilter" class="toolbar-control-label">
+                    Task Status
+                </label>
+                <select id="taskStatusFilter" class="toolbar-select-input" onchange="filterChecklistByStatus(this.value)" style="min-width: 160px;">
+                    <option value="all">All Statuses ({{ $project->tasks->count() }})</option>
+                    <option value="in_progress">In Progress</option>
+                    <option value="completed">Completed (100%)</option>
+                    <option value="not_started">Not Started</option>
+                </select>
             </div>
 
-            <!-- Right: Task Status Filter & Quick Jump -->
-            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-                
-                <!-- Status Filter Dropdown -->
-                <div style="display: flex; align-items: center; gap: 6px;">
-                    <label style="font-size: 0.775rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; white-space: nowrap;">
-                        Task Status:
-                    </label>
-                    <select id="taskStatusFilter" class="form-select" onchange="filterChecklistByStatus(this.value)" style="padding: 6px 12px; font-size: 0.825rem; font-weight: 600; min-width: 170px; height: 36px; background: #ffffff; border-color: var(--border-color); color: var(--text-primary); border-radius: 6px;">
-                        <option value="all">All Statuses ({{ $project->tasks->count() }})</option>
-                        <option value="in_progress">In Progress</option>
-                        <option value="completed">Completed (100%)</option>
-                        <option value="not_started">Not Started</option>
-                    </select>
-                </div>
-
-                <!-- Dropdown Choice: Jump to Specific Task -->
-                <div style="display: flex; align-items: center; gap: 6px;">
-                    <label style="font-size: 0.775rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; white-space: nowrap;">
-                        Jump to Task:
-                    </label>
-                    <select id="taskJumpSelect" class="form-select" onchange="jumpToTaskDirect(this.value)" style="padding: 6px 12px; font-size: 0.825rem; font-weight: 600; max-width: 280px; height: 36px; background: #ffffff; border-color: var(--border-color); color: var(--text-primary); border-radius: 6px;">
-                        <option value="">-- Choose Task to Locate --</option>
-                        
-                        @php
-                            $groupedByCategory = $project->tasks->sortBy('sort_order')->groupBy('category');
-                        @endphp
-
-                        @foreach($groupedByCategory as $catTitle => $cTasks)
-                            <optgroup label="{{ strtoupper($catTitle) }}">
-                                @foreach($cTasks as $ct)
-                                    <option value="{{ $ct->id }}">
-                                        {{ $ct->task_name }} [{{ $ct->status_label }} - {{ $ct->progress }}%]
-                                    </option>
-                                @endforeach
-                            </optgroup>
-                        @endforeach
-                    </select>
-                </div>
-
+            <!-- Dropdown Choice: Jump to Specific Task -->
+            <div class="toolbar-control-item">
+                <label for="taskJumpSelect" class="toolbar-control-label">
+                    Jump to Task
+                </label>
+                <select id="taskJumpSelect" class="toolbar-select-input" onchange="jumpToTaskDirect(this.value)" style="max-width: 280px;">
+                    <option value="">-- Choose Task to Locate --</option>
+                    @php
+                        $groupedByCategory = $project->tasks->sortBy('sort_order')->groupBy('category');
+                    @endphp
+                    @foreach($groupedByCategory as $catTitle => $cTasks)
+                        <optgroup label="{{ strtoupper($catTitle) }}">
+                            @foreach($cTasks as $ct)
+                                <option value="{{ $ct->id }}">
+                                    {{ $ct->task_name }} [{{ $ct->status_label }} - {{ $ct->progress }}%]
+                                </option>
+                            @endforeach
+                        </optgroup>
+                    @endforeach
+                </select>
             </div>
         </div>
     </div>
@@ -1019,48 +1012,47 @@
         </div>
     </div>
 
-    <!-- DUPA Scope Items Interactive Navigator & Tab Carousel -->
+    <!-- All Scope Items / DUPA Scope Chips Matrix (Naturally Wrapping Multi-Row Grid) -->
     @if($project->scopeItems->count() > 0)
-        <div class="dupa-nav-toolbar">
-            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                <label style="font-size: 0.775rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; white-space: nowrap;">
-                    Scope Item Filter:
-                </label>
-                <select id="dupaScopeSelect" onchange="switchDupaScopeTab(this.value, document.getElementById('dupaTabBtn_' + this.value))" class="form-select" style="padding: 6px 12px; font-size: 0.825rem; font-weight: 700; min-width: 250px; height: 36px; background: #ffffff; border-color: var(--border-color); color: var(--text-primary); border-radius: 6px;">
-                    <option value="all">❖ All Scope Items ({{ $project->scopeItems->count() }})</option>
-                    @foreach($project->scopeItems as $item)
-                        <option value="{{ $item->id }}">ITEM {{ $item->item_number }}: {{ $item->item_name }} (₱{{ number_format($item->total_item_cost, 0) }})</option>
-                    @endforeach
-                </select>
-                <div style="display: inline-flex; gap: 4px;">
-                    <button type="button" class="btn-secondary" onclick="stepDupaScope(-1)" style="padding: 6px 11px; font-size: 0.8rem; height: 36px; font-weight: 700;" title="Previous Scope Item">&lsaquo; Prev</button>
-                    <button type="button" class="btn-secondary" onclick="stepDupaScope(1)" style="padding: 6px 11px; font-size: 0.8rem; height: 36px; font-weight: 700;" title="Next Scope Item">Next &rsaquo;</button>
+        <div class="scope-matrix-container">
+            <div class="scope-matrix-header">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 0.775rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.04em;">
+                        Scope Items Breakdown
+                    </span>
+                    <span class="discipline-count-badge" style="background: #f1f5f9; color: #475569;">{{ $project->scopeItems->count() }} Items</span>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 0.75rem; color: #64748b; font-weight: 600;">
+                        Total DUPA Cost: <strong style="font-family: var(--font-mono); color: #047857; font-weight: 700;">₱{{ number_format($project->grand_scope_cost ?: $project->contract_budget, 2) }}</strong>
+                    </span>
                 </div>
             </div>
 
-            <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">{{ $project->scopeItems->count() }} Breakdown Items</span>
-                <div style="display: inline-flex; gap: 4px;">
-                    <button type="button" class="btn-secondary" onclick="scrollDupaTabs(-250)" style="padding: 6px 10px; font-size: 0.8rem; height: 36px; font-weight: 700;" title="Scroll Left">&larr;</button>
-                    <button type="button" class="btn-secondary" onclick="scrollDupaTabs(250)" style="padding: 6px 10px; font-size: 0.8rem; height: 36px; font-weight: 700;" title="Scroll Right">&rarr;</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="dupa-tabs-container" id="dupaScopeTabsBar">
-            <button type="button" class="dupa-tab-btn active" onclick="switchDupaScopeTab('all', this)" id="dupaTabBtn_all">
-                <span class="dupa-item-num-chip">ALL</span>
-                <span>All Scope Items</span>
-                <span class="dupa-tab-cost">{{ $project->scopeItems->count() }} Items</span>
-            </button>
-            @foreach($project->scopeItems as $item)
-                <button type="button" class="dupa-tab-btn" onclick="switchDupaScopeTab({{ $item->id }}, this)" id="dupaTabBtn_{{ $item->id }}" data-item-id="{{ $item->id }}">
-                    <span class="dupa-item-num-chip">#{{ str_pad($item->item_number, 2, '0', STR_PAD_LEFT) }}</span>
-                    <span class="dupa-tab-title">{{ Str::title($item->item_name) }}</span>
-                    <span class="dupa-tab-cost">₱{{ number_format($item->total_item_cost, 0) }}</span>
+            <div class="scope-matrix-grid" id="dupaScopeTabsBar">
+                <!-- All Scope Items Chip -->
+                <button type="button" class="scope-chip-card active" onclick="switchDupaScopeTab('all', this)" id="dupaTabBtn_all">
+                    <div class="scope-chip-left">
+                        <span class="scope-chip-num">ALL</span>
+                        <span class="scope-chip-name">All Scope Items</span>
+                    </div>
+                    <span class="scope-chip-cost">{{ $project->scopeItems->count() }}</span>
                 </button>
-            @endforeach
+
+                <!-- Individual Scope Items Chips -->
+                @foreach($project->scopeItems as $item)
+                    <button type="button" class="scope-chip-card" onclick="switchDupaScopeTab({{ $item->id }}, this)" id="dupaTabBtn_{{ $item->id }}" data-item-id="{{ $item->id }}">
+                        <div class="scope-chip-left">
+                            <span class="scope-chip-num">ITEM {{ $item->item_number }}</span>
+                            <span class="scope-chip-name" title="{{ $item->item_name }}">{{ Str::title($item->item_name) }}</span>
+                        </div>
+                        <span class="scope-chip-cost">₱{{ number_format($item->total_item_cost, 0) }}</span>
+                    </button>
+                @endforeach
+            </div>
         </div>
+    @endif
 
         <div style="display: flex; flex-direction: column; gap: 16px;">
             @foreach($project->scopeItems as $item)
@@ -3291,7 +3283,7 @@
        DUPA SCOPE ITEM TAB SWITCHING & NAVIGATOR
        ==================================================== */
     function switchDupaScopeTab(targetItemId, btn) {
-        const tabBtns = document.querySelectorAll('#dupaScopeTabsBar .dupa-tab-btn');
+        const tabBtns = document.querySelectorAll('#dupaScopeTabsBar .scope-chip-card, #dupaScopeTabsBar .dupa-tab-btn, .scope-chip-card, .dupa-tab-btn');
         tabBtns.forEach(b => b.classList.remove('active'));
         
         let activeBtn = btn;
@@ -3300,7 +3292,6 @@
         }
         if (activeBtn) {
             activeBtn.classList.add('active');
-            activeBtn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
         }
 
         // Synchronize Dropdown Selector

@@ -395,46 +395,44 @@
     </div>
 
     @if($selectedProject && $selectedProject->scopeItems->count() > 0)
-        <!-- DUPA Scope Items Interactive Navigator & Tab Carousel -->
-        <div class="dupa-nav-toolbar">
-            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                <label style="font-size: 0.775rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; white-space: nowrap;">
-                    Scope Item Filter:
-                </label>
-                <select id="bomDupaScopeSelect" onchange="switchBomScopeItemTab(this.value, document.getElementById('bomDupaTabBtn_' + this.value))" class="form-select" style="padding: 6px 12px; font-size: 0.825rem; font-weight: 700; min-width: 250px; height: 36px; background: #ffffff; border-color: var(--border-color); color: var(--text-primary); border-radius: 6px;">
-                    <option value="all">❖ All Scope Items ({{ $selectedProject->scopeItems->count() }})</option>
-                    @foreach($selectedProject->scopeItems as $item)
-                        <option value="{{ $item->id }}">ITEM {{ $item->item_number }}: {{ $item->item_name }} (₱{{ number_format($item->total_item_cost, 0) }})</option>
-                    @endforeach
-                </select>
-                <div style="display: inline-flex; gap: 4px;">
-                    <button type="button" class="btn-secondary" onclick="stepBomDupaScope(-1)" style="padding: 6px 11px; font-size: 0.8rem; height: 36px; font-weight: 700;" title="Previous Scope Item">&lsaquo; Prev</button>
-                    <button type="button" class="btn-secondary" onclick="stepBomDupaScope(1)" style="padding: 6px 11px; font-size: 0.8rem; height: 36px; font-weight: 700;" title="Next Scope Item">Next &rsaquo;</button>
+        <!-- All Scope Items / DUPA Scope Chips Matrix (Naturally Wrapping Multi-Row Grid) -->
+        <div class="scope-matrix-container">
+            <div class="scope-matrix-header">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 0.775rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.04em;">
+                        Scope Items Breakdown
+                    </span>
+                    <span class="discipline-count-badge" style="background: #f1f5f9; color: #475569;">{{ $selectedProject->scopeItems->count() }} Items</span>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 0.75rem; color: #64748b; font-weight: 600;">
+                        Total DUPA Cost: <strong style="font-family: var(--font-mono); color: #047857; font-weight: 700;">₱{{ number_format($scopeGrandTotal, 2) }}</strong>
+                    </span>
                 </div>
             </div>
 
-            <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">{{ $selectedProject->scopeItems->count() }} Breakdown Items</span>
-                <div style="display: inline-flex; gap: 4px;">
-                    <button type="button" class="btn-secondary" onclick="scrollBomDupaTabs(-250)" style="padding: 6px 10px; font-size: 0.8rem; height: 36px; font-weight: 700;" title="Scroll Left">&larr;</button>
-                    <button type="button" class="btn-secondary" onclick="scrollBomDupaTabs(250)" style="padding: 6px 10px; font-size: 0.8rem; height: 36px; font-weight: 700;" title="Scroll Right">&rarr;</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="dupa-tabs-container" id="bomDupaScopeTabsBar">
-            <button type="button" class="dupa-tab-btn active" onclick="switchBomScopeItemTab('all', this)" id="bomDupaTabBtn_all">
-                <span class="dupa-item-num-chip">ALL</span>
-                <span>All Scope Items</span>
-                <span class="dupa-tab-cost">{{ $selectedProject->scopeItems->count() }} Items</span>
-            </button>
-            @foreach($selectedProject->scopeItems as $item)
-                <button type="button" class="dupa-tab-btn" onclick="switchBomScopeItemTab({{ $item->id }}, this)" id="bomDupaTabBtn_{{ $item->id }}" data-item-id="{{ $item->id }}">
-                    <span class="dupa-item-num-chip">#{{ str_pad($item->item_number, 2, '0', STR_PAD_LEFT) }}</span>
-                    <span class="dupa-tab-title">{{ Str::title($item->item_name) }}</span>
-                    <span class="dupa-tab-cost">₱{{ number_format($item->total_item_cost, 0) }}</span>
+            <div class="scope-matrix-grid" id="bomDupaScopeTabsBar">
+                <!-- All Scope Items Chip -->
+                <button type="button" class="scope-chip-card active" onclick="switchBomScopeItemTab('all', this)" id="bomDupaTabBtn_all">
+                    <div class="scope-chip-left">
+                        <span class="scope-chip-num">ALL</span>
+                        <span class="scope-chip-name">All Scope Items</span>
+                    </div>
+                    <span class="scope-chip-cost">{{ $selectedProject->scopeItems->count() }}</span>
                 </button>
-            @endforeach
+
+                <!-- Individual Scope Items Chips -->
+                @foreach($selectedProject->scopeItems as $item)
+                    <button type="button" class="scope-chip-card" onclick="switchBomScopeItemTab({{ $item->id }}, this)" id="bomDupaTabBtn_{{ $item->id }}" data-item-id="{{ $item->id }}">
+                        <div class="scope-chip-left">
+                            <span class="scope-chip-num">ITEM {{ $item->item_number }}</span>
+                            <span class="scope-chip-name" title="{{ $item->item_name }}">{{ Str::title($item->item_name) }}</span>
+                        </div>
+                        <span class="scope-chip-cost">₱{{ number_format($item->total_item_cost, 0) }}</span>
+                    </button>
+                @endforeach
+            </div>
         </div>
 
         <!-- Itemized Scope Accordion List (Matching Reference Screenshot) -->
@@ -1465,7 +1463,7 @@
 
     // DUPA Scope Item Tab Switching Logic & Navigator
     function switchBomScopeItemTab(targetItemId, btn) {
-        const tabBtns = document.querySelectorAll('#bomDupaScopeTabsBar .dupa-tab-btn');
+        const tabBtns = document.querySelectorAll('#bomDupaScopeTabsBar .scope-chip-card, #bomDupaScopeTabsBar .dupa-tab-btn, .scope-chip-card, .dupa-tab-btn');
         tabBtns.forEach(b => b.classList.remove('active'));
         
         let activeBtn = btn;
@@ -1474,7 +1472,6 @@
         }
         if (activeBtn) {
             activeBtn.classList.add('active');
-            activeBtn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
         }
 
         // Synchronize Dropdown Selector
