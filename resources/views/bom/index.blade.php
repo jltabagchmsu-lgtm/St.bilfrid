@@ -94,13 +94,13 @@
 
 @if($selectedProject)
 <!-- Individual Project Header Banner with Action Buttons -->
-<div class="glass-panel" style="padding: 20px 24px; margin-bottom: 24px; background: rgba(56, 189, 248, 0.04); border: 1px solid rgba(56, 189, 248, 0.25);">
+<div class="glass-panel" style="padding: 20px 24px; margin-bottom: 24px; background: rgba(3, 105, 161, 0.04); border: 1px solid rgba(3, 105, 161, 0.25);">
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
         <div style="display: flex; flex-direction: column; gap: 4px;">
             <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
                 <span class="badge badge-{{ $selectedProject->status }}" style="text-transform: capitalize;">{{ str_replace('_', ' ', $selectedProject->status) }}</span>
-                <span style="font-family: var(--font-mono); font-size: 0.9rem; color: #38bdf8; font-weight: 800;">{{ $selectedProject->project_code }}</span>
-                <span class="spec-chip" style="font-size: 0.75rem; color: #10b981; font-weight: 600;">
+                <span style="font-family: var(--font-mono); font-size: 0.9rem; color: #0369a1; font-weight: 800;">{{ $selectedProject->project_code }}</span>
+                <span class="spec-chip" style="font-size: 0.75rem; color: #047857; font-weight: 600;">
                     {{ $selectedProject->scopeItems->count() }} Scope Items &bull; {{ $masterMaterialsDistinctCount }} Materials Required
                 </span>
             </div>
@@ -114,12 +114,12 @@
             <!-- Auto-Allocate Scope to Site Tracker -->
             <form action="{{ route('bom.autoAllocateScope', $selectedProject->id) }}" method="POST" onsubmit="return confirm('Synchronize and auto-allocate all materials from the Scope BOM into the Site Tracker warehouse allocation?');">
                 @csrf
-                <button type="submit" class="btn-primary" style="font-size: 0.8rem; height: 36px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-color: #10b981; display: inline-flex; align-items: center; gap: 6px;" title="Sync all Scope BOM materials to Site Tracker">
+                <button type="submit" class="btn-primary" style="font-size: 0.8rem; height: 36px; background: #047857; border-color: #047857; display: inline-flex; align-items: center; gap: 6px;" title="Sync all Scope BOM materials to Site Tracker">
                     Sync Scope to Site Tracker
                 </button>
             </form>
 
-            <button class="btn-primary" style="font-size: 0.8rem; height: 36px; background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); border-color: #38bdf8; display: inline-flex; align-items: center; gap: 6px;" onclick="openModal('addScopeItemModal')">
+            <button class="btn-primary" style="font-size: 0.8rem; height: 36px; background: #0369a1; border-color: #0369a1; display: inline-flex; align-items: center; gap: 6px;" onclick="openModal('addScopeItemModal')">
                 + Add Scope Item
             </button>
         </div>
@@ -135,11 +135,11 @@
         Master Consolidated Materials Table
         <span class="badge" style="background: rgba(220, 38, 38, 0.1); color: var(--primary-red); font-size: 0.725rem;">{{ $masterMaterialsDistinctCount }} Materials</span>
     </button>
-    <button type="button" id="tabBtnScope" class="btn-tab" onclick="switchBomTab('scope')" style="padding: 10px 20px; font-size: 0.9rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: #f8fafc; color: var(--text-secondary); cursor: pointer; display: inline-flex; align-items: center; gap: 8px; height: 42px;">
+    <button type="button" id="tabBtnScope" class="btn-tab" onclick="switchBomTab('scope')" style="padding: 10px 20px; font-size: 0.9rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: #ffffff; color: var(--text-secondary); cursor: pointer; display: inline-flex; align-items: center; gap: 8px; height: 42px;">
         Itemized Scope BOM Breakdown (DUPA)
         <span class="badge" style="background: #e2e8f0; color: var(--text-secondary); font-size: 0.725rem;">{{ $selectedProject ? $selectedProject->scopeItems->count() : 0 }} Scope Items</span>
     </button>
-    <button type="button" id="tabBtnSite" class="btn-tab" onclick="switchBomTab('site')" style="padding: 10px 20px; font-size: 0.9rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: #f8fafc; color: var(--text-secondary); cursor: pointer; display: inline-flex; align-items: center; gap: 8px; height: 42px;">
+    <button type="button" id="tabBtnSite" class="btn-tab" onclick="switchBomTab('site')" style="padding: 10px 20px; font-size: 0.9rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: #ffffff; color: var(--text-secondary); cursor: pointer; display: inline-flex; align-items: center; gap: 8px; height: 42px;">
         Site Stock Allocations & Daily Usage
         <span class="badge" style="background: #e2e8f0; color: var(--text-secondary); font-size: 0.725rem;">{{ $projectMaterials->count() }} Site Items</span>
     </button>
@@ -151,30 +151,30 @@
 <div id="tabContentMaster" class="bom-tab-content">
     <!-- Top KPI Cards for Master Materials -->
     <div class="kpi-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-bottom: 24px;">
-        <div class="kpi-card" style="border-left: 3px solid #38bdf8;">
+        <div class="kpi-card" style="border-left: 3.5px solid #0369a1;">
             <div class="kpi-header">
                 <span class="kpi-title">Total Materials Direct Cost</span>
-                <span class="spec-chip" style="font-size: 0.65rem; color: #38bdf8;">MATERIALS SUM</span>
+                <span class="spec-chip" style="font-size: 0.65rem; color: #0369a1;">MATERIALS SUM</span>
             </div>
-            <div class="kpi-val col-num" style="color: #38bdf8;">₱{{ number_format($masterMaterialsTotalCost, 2) }}</div>
+            <div class="kpi-val col-num" style="color: #0369a1;">₱{{ number_format($masterMaterialsTotalCost, 2) }}</div>
             <div class="kpi-sub">Across All Scope Work Phases</div>
         </div>
 
-        <div class="kpi-card" style="border-left: 3px solid #10b981;">
+        <div class="kpi-card" style="border-left: 3.5px solid #047857;">
             <div class="kpi-header">
                 <span class="kpi-title">Distinct Material Items</span>
-                <span class="spec-chip" style="font-size: 0.65rem; color: #10b981;">TYPES</span>
+                <span class="spec-chip" style="font-size: 0.65rem; color: #047857;">TYPES</span>
             </div>
-            <div class="kpi-val col-num" style="color: #10b981;">{{ $masterMaterialsDistinctCount }}</div>
+            <div class="kpi-val col-num" style="color: #047857;">{{ $masterMaterialsDistinctCount }}</div>
             <div class="kpi-sub">Unique Engineering Specifications</div>
         </div>
 
-        <div class="kpi-card" style="border-left: 3px solid #f59e0b;">
+        <div class="kpi-card" style="border-left: 3.5px solid #b45309;">
             <div class="kpi-header">
                 <span class="kpi-title">Total Scope Line Entries</span>
-                <span class="spec-chip" style="font-size: 0.65rem; color: #f59e0b;">LINE ITEMS</span>
+                <span class="spec-chip" style="font-size: 0.65rem; color: #b45309;">LINE ITEMS</span>
             </div>
-            <div class="kpi-val col-num" style="color: #f59e0b;">{{ $masterMaterialsTotalLineCount }}</div>
+            <div class="kpi-val col-num" style="color: #b45309;">{{ $masterMaterialsTotalLineCount }}</div>
             <div class="kpi-sub">Phase Allocations Across Scope Items</div>
         </div>
 

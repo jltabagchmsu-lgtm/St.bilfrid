@@ -461,68 +461,74 @@
         </div>
 
         <!-- Piping Card -->
-        <div style="background: #fafbfc; border: 1px solid var(--border-color); border-top: 4px solid #059669; border-radius: var(--radius-md); padding: 16px; box-shadow: var(--card-shadow);">
+        <div style="background: #fafbfc; border: 1px solid var(--border-color); border-top: 4px solid #047857; border-radius: var(--radius-md); padding: 16px; box-shadow: var(--card-shadow);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                <span style="font-weight: 700; font-size: 0.9rem; color: #059669;">Piping & Plumbing</span>
+                <span style="font-weight: 700; font-size: 0.9rem; color: #047857;">Piping & Plumbing</span>
                 <span class="spec-chip" id="chipPipeWeight" style="font-size: 0.65rem;">{{ $project->piping_weight }}% WEIGHT</span>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px;">
                 <span style="font-family: var(--font-mono); font-size: 1.5rem; font-weight: 800; color: var(--text-primary);" id="kpiPipeVal">{{ $project->piping_progress }}%</span>
-                <span style="font-size: 0.75rem; color: #059669; font-weight: 600;" id="kpiPipeDone">{{ $pipingDone }} / {{ $pipingTasks->count() }} Tasks Done</span>
+                <span style="font-size: 0.75rem; color: #047857; font-weight: 700;" id="kpiPipeDone">{{ $pipingDone }} / {{ $pipingTasks->count() }} Tasks Done</span>
             </div>
             <div style="height: 6px; background: #f1f5f9; border-radius: 3px; overflow: hidden; margin-bottom: 6px;">
-                <div id="kpiPipeBar" style="width: {{ $project->piping_progress }}%; height: 100%; background: #059669; transition: width 0.4s ease;"></div>
+                <div id="kpiPipeBar" style="width: {{ $project->piping_progress }}%; height: 100%; background: #047857; transition: width 0.4s ease;"></div>
             </div>
             <div style="font-size: 0.7rem; color: var(--text-muted); display: flex; justify-content: space-between;">
                 <span>Contribution to Total:</span>
-                <strong style="color: #059669;" id="kpiPipeContrib">+{{ round(($project->piping_progress * $project->piping_weight) / 100, 1) }}%</strong>
+                <strong style="color: #047857;" id="kpiPipeContrib">+{{ round(($project->piping_progress * $project->piping_weight) / 100, 1) }}%</strong>
             </div>
         </div>
 
         <!-- Finishing Card -->
-        <div style="background: #fafbfc; border: 1px solid var(--border-color); border-top: 4px solid #7c3aed; border-radius: var(--radius-md); padding: 16px; box-shadow: var(--card-shadow);">
+        <div style="background: #fafbfc; border: 1px solid var(--border-color); border-top: 4px solid #6d28d9; border-radius: var(--radius-md); padding: 16px; box-shadow: var(--card-shadow);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                <span style="font-weight: 700; font-size: 0.9rem; color: #7c3aed;">Design-Build / Turnkey</span>
+                <span style="font-weight: 700; font-size: 0.9rem; color: #6d28d9;">Design-Build / Turnkey</span>
                 <span class="spec-chip" id="chipFinishWeight" style="font-size: 0.65rem;">{{ $project->finishing_weight }}% WEIGHT</span>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px;">
                 <span style="font-family: var(--font-mono); font-size: 1.5rem; font-weight: 800; color: var(--text-primary);" id="kpiFinishVal">{{ $project->finishing_progress }}%</span>
-                <span style="font-size: 0.75rem; color: #7c3aed; font-weight: 600;" id="kpiFinishDone">{{ $finishingDone }} / {{ $finishingTasks->count() }} Tasks Done</span>
+                <span style="font-size: 0.75rem; color: #6d28d9; font-weight: 700;" id="kpiFinishDone">{{ $finishingDone }} / {{ $finishingTasks->count() }} Tasks Done</span>
             </div>
             <div style="height: 6px; background: #f1f5f9; border-radius: 3px; overflow: hidden; margin-bottom: 6px;">
-                <div id="kpiFinishBar" style="width: {{ $project->finishing_progress }}%; height: 100%; background: #7c3aed; transition: width 0.4s ease;"></div>
+                <div id="kpiFinishBar" style="width: {{ $project->finishing_progress }}%; height: 100%; background: #6d28d9; transition: width 0.4s ease;"></div>
             </div>
             <div style="font-size: 0.7rem; color: var(--text-muted); display: flex; justify-content: space-between;">
                 <span>Contribution to Total:</span>
-                <strong style="color: #7c3aed;" id="kpiFinishContrib">+{{ round(($project->finishing_progress * $project->finishing_weight) / 100, 1) }}%</strong>
+                <strong style="color: #6d28d9;" id="kpiFinishContrib">+{{ round(($project->finishing_progress * $project->finishing_weight) / 100, 1) }}%</strong>
             </div>
         </div>
     </div>
 
     <!-- Trade Checklist Tabs & Task Status Filter Bar -->
-    <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px 16px; margin-bottom: 20px;">
+    <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px 20px; margin-bottom: 22px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
             
             <!-- Left: Discipline Filter Tabs -->
-            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                <button type="button" id="tabBtnStructural" class="btn-tab active" onclick="switchChecklistTab('structural', this)">
-                    <span style="width: 8px; height: 8px; border-radius: 50%; background: #dc2626; display: inline-block;"></span>
-                    Structural Works (<span id="tabCountStruct">{{ $structuralTasks->count() }}</span>)
+            <div class="trade-tabs-nav">
+                <button type="button" id="tabBtnStructural" class="trade-nav-tab btn-tab active" onclick="switchChecklistTab('structural', this)">
+                    <span class="tab-dot" style="background: #dc2626;"></span>
+                    <span>Structural Works</span>
+                    <span class="tab-count-pill" id="tabCountStruct">{{ $structuralTasks->count() }}</span>
                 </button>
-                <button type="button" id="tabBtnElectrical" class="btn-tab" onclick="switchChecklistTab('electrical', this)">
-                    <span style="width: 8px; height: 8px; border-radius: 50%; background: #d97706; display: inline-block;"></span>
-                    Electrical Works (<span id="tabCountElec">{{ $electricalTasks->count() }}</span>)
+                <button type="button" id="tabBtnElectrical" class="trade-nav-tab btn-tab" onclick="switchChecklistTab('electrical', this)">
+                    <span class="tab-dot" style="background: #b45309;"></span>
+                    <span>Electrical Works</span>
+                    <span class="tab-count-pill" id="tabCountElec">{{ $electricalTasks->count() }}</span>
                 </button>
-                <button type="button" id="tabBtnPiping" class="btn-tab" onclick="switchChecklistTab('piping', this)">
-                    <span style="width: 8px; height: 8px; border-radius: 50%; background: #059669; display: inline-block;"></span>
-                    Piping & Plumbing (<span id="tabCountPipe">{{ $pipingTasks->count() }}</span>)
+                <button type="button" id="tabBtnPiping" class="trade-nav-tab btn-tab" onclick="switchChecklistTab('piping', this)">
+                    <span class="tab-dot" style="background: #047857;"></span>
+                    <span>Piping & Plumbing</span>
+                    <span class="tab-count-pill" id="tabCountPipe">{{ $pipingTasks->count() }}</span>
                 </button>
-                <button type="button" id="tabBtnFinishing" class="btn-tab" onclick="switchChecklistTab('finishing', this)">
-                    <span style="width: 8px; height: 8px; border-radius: 50%; background: #7c3aed; display: inline-block;"></span>
-                    Design-Build / Turnkey (<span id="tabCountFinish">{{ $finishingTasks->count() }}</span>)
+                <button type="button" id="tabBtnFinishing" class="trade-nav-tab btn-tab" onclick="switchChecklistTab('finishing', this)">
+                    <span class="tab-dot" style="background: #6d28d9;"></span>
+                    <span>Design-Build / Turnkey</span>
+                    <span class="tab-count-pill" id="tabCountFinish">{{ $finishingTasks->count() }}</span>
                 </button>
-                <button type="button" id="tabBtnAll" class="btn-tab" onclick="switchChecklistTab('all', this)">
-                    All Disciplines (<span id="tabCountAll">{{ $project->tasks->count() }}</span>)
+                <button type="button" id="tabBtnAll" class="trade-nav-tab btn-tab" onclick="switchChecklistTab('all', this)">
+                    <span class="tab-dot" style="background: #475569;"></span>
+                    <span>All Disciplines</span>
+                    <span class="tab-count-pill" id="tabCountAll">{{ $project->tasks->count() }}</span>
                 </button>
             </div>
 
@@ -534,7 +540,7 @@
                     <label style="font-size: 0.775rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; white-space: nowrap;">
                         Task Status:
                     </label>
-                    <select id="taskStatusFilter" class="form-select" onchange="filterChecklistByStatus(this.value)" style="padding: 6px 12px; font-size: 0.825rem; font-weight: 600; min-width: 170px; height: 34px; background: #fafbfc; border-color: var(--border-color); color: var(--text-primary);">
+                    <select id="taskStatusFilter" class="form-select" onchange="filterChecklistByStatus(this.value)" style="padding: 6px 12px; font-size: 0.825rem; font-weight: 600; min-width: 170px; height: 36px; background: #ffffff; border-color: var(--border-color); color: var(--text-primary); border-radius: 6px;">
                         <option value="all">All Statuses ({{ $project->tasks->count() }})</option>
                         <option value="in_progress">In Progress</option>
                         <option value="completed">Completed (100%)</option>
@@ -547,7 +553,7 @@
                     <label style="font-size: 0.775rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; white-space: nowrap;">
                         Jump to Task:
                     </label>
-                    <select id="taskJumpSelect" class="form-select" onchange="jumpToTaskDirect(this.value)" style="padding: 6px 12px; font-size: 0.825rem; font-weight: 600; max-width: 280px; height: 34px; background: #fafbfc; border-color: var(--border-color); color: var(--text-primary);">
+                    <select id="taskJumpSelect" class="form-select" onchange="jumpToTaskDirect(this.value)" style="padding: 6px 12px; font-size: 0.825rem; font-weight: 600; max-width: 280px; height: 36px; background: #ffffff; border-color: var(--border-color); color: var(--text-primary); border-radius: 6px;">
                         <option value="">-- Choose Task to Locate --</option>
                         
                         @php
@@ -575,7 +581,7 @@
         
         <!-- 1. Structural Checklist Table -->
         <div class="checklist-section" id="chkSectionStructural" style="background: #fafbfc; border: 1px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--card-shadow); display: block;">
-            <div style="padding: 12px 18px; background: #f8fafc; border-bottom: 1px solid var(--border-color); border-top: 3px solid #dc2626; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+            <div style="padding: 14px 20px; background: #f8fafc; border-bottom: 1px solid var(--border-color); border-top: 3.5px solid #dc2626; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <span style="font-weight: 800; font-size: 1rem; color: #dc2626;">Structural Works Checklist</span>
                     <span class="badge badge-in_progress" style="font-size: 0.7rem;" id="structSectionDoneBadge">{{ $structuralDone }} / {{ $structuralTasks->count() }} Tasks Done</span>
@@ -591,50 +597,50 @@
 
         <!-- 2. Electrical Checklist Table -->
         <div class="checklist-section" id="chkSectionElectrical" style="background: #fafbfc; border: 1px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--card-shadow); display: none;">
-            <div style="padding: 12px 18px; background: #f8fafc; border-bottom: 1px solid var(--border-color); border-top: 3px solid #d97706; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+            <div style="padding: 14px 20px; background: #f8fafc; border-bottom: 1px solid var(--border-color); border-top: 3.5px solid #b45309; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <span style="font-weight: 800; font-size: 1rem; color: #d97706;">Electrical Works Checklist</span>
+                    <span style="font-weight: 800; font-size: 1rem; color: #b45309;">Electrical Works Checklist</span>
                     <span class="badge badge-in_progress" style="font-size: 0.7rem;" id="elecSectionDoneBadge">{{ $electricalDone }} / {{ $electricalTasks->count() }} Tasks Done</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <span style="font-size: 0.8rem; color: var(--text-muted);">Trade Progress:</span>
-                    <strong style="font-family: var(--font-mono); font-size: 1.1rem; color: #d97706;" id="elecSectionProgVal">{{ $project->electrical_progress }}%</strong>
-                    <button class="btn-primary" style="font-size: 0.725rem; padding: 4px 10px; background: #d97706; border-color: #d97706;" onclick="openAddSpecificTaskModal('Electrical')">+ Add Electrical Task</button>
+                    <strong style="font-family: var(--font-mono); font-size: 1.1rem; color: #b45309;" id="elecSectionProgVal">{{ $project->electrical_progress }}%</strong>
+                    <button class="btn-primary" style="font-size: 0.725rem; padding: 4px 10px; background: #b45309; border-color: #b45309;" onclick="openAddSpecificTaskModal('Electrical')">+ Add Electrical Task</button>
                 </div>
             </div>
-            @include('projects.partials.checklist_table', ['tasks' => $electricalTasks, 'tradeName' => 'Electrical Task', 'tradeColor' => '#d97706'])
+            @include('projects.partials.checklist_table', ['tasks' => $electricalTasks, 'tradeName' => 'Electrical Task', 'tradeColor' => '#b45309'])
         </div>
 
         <!-- 3. Piping & Plumbing Checklist Table -->
         <div class="checklist-section" id="chkSectionPiping" style="background: #fafbfc; border: 1px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--card-shadow); display: none;">
-            <div style="padding: 12px 18px; background: #f8fafc; border-bottom: 1px solid var(--border-color); border-top: 3px solid #059669; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+            <div style="padding: 14px 20px; background: #f8fafc; border-bottom: 1px solid var(--border-color); border-top: 3.5px solid #047857; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <span style="font-weight: 800; font-size: 1rem; color: #059669;">Piping & Plumbing Checklist</span>
+                    <span style="font-weight: 800; font-size: 1rem; color: #047857;">Piping & Plumbing Checklist</span>
                     <span class="badge badge-in_progress" style="font-size: 0.7rem;" id="pipeSectionDoneBadge">{{ $pipingDone }} / {{ $pipingTasks->count() }} Tasks Done</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <span style="font-size: 0.8rem; color: var(--text-muted);">Trade Progress:</span>
-                    <strong style="font-family: var(--font-mono); font-size: 1.1rem; color: #059669;" id="pipeSectionProgVal">{{ $project->piping_progress }}%</strong>
-                    <button class="btn-primary" style="font-size: 0.725rem; padding: 4px 10px; background: #059669; border-color: #059669;" onclick="openAddSpecificTaskModal('Piping & Plumbing')">+ Add Plumbing Task</button>
+                    <strong style="font-family: var(--font-mono); font-size: 1.1rem; color: #047857;" id="pipeSectionProgVal">{{ $project->piping_progress }}%</strong>
+                    <button class="btn-primary" style="font-size: 0.725rem; padding: 4px 10px; background: #047857; border-color: #047857;" onclick="openAddSpecificTaskModal('Piping & Plumbing')">+ Add Plumbing Task</button>
                 </div>
             </div>
-            @include('projects.partials.checklist_table', ['tasks' => $pipingTasks, 'tradeName' => 'Piping & Plumbing Task', 'tradeColor' => '#059669'])
+            @include('projects.partials.checklist_table', ['tasks' => $pipingTasks, 'tradeName' => 'Piping & Plumbing Task', 'tradeColor' => '#047857'])
         </div>
 
         <!-- 4. Design-Build / Turnkey Finishing Checklist Table -->
         <div class="checklist-section" id="chkSectionFinishing" style="background: #fafbfc; border: 1px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--card-shadow); display: none;">
-            <div style="padding: 12px 18px; background: #f8fafc; border-bottom: 1px solid var(--border-color); border-top: 3px solid #7c3aed; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+            <div style="padding: 14px 20px; background: #f8fafc; border-bottom: 1px solid var(--border-color); border-top: 3.5px solid #6d28d9; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <span style="font-weight: 800; font-size: 1rem; color: #7c3aed;">Design-Build / Turnkey Finishing Checklist</span>
+                    <span style="font-weight: 800; font-size: 1rem; color: #6d28d9;">Design-Build / Turnkey Finishing Checklist</span>
                     <span class="badge badge-in_progress" style="font-size: 0.7rem;" id="finishSectionDoneBadge">{{ $finishingDone }} / {{ $finishingTasks->count() }} Tasks Done</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <span style="font-size: 0.8rem; color: var(--text-muted);">Trade Progress:</span>
-                    <strong style="font-family: var(--font-mono); font-size: 1.1rem; color: #7c3aed;" id="finishSectionProgVal">{{ $project->finishing_progress }}%</strong>
-                    <button class="btn-primary" style="font-size: 0.725rem; padding: 4px 10px; background: #7c3aed; border-color: #7c3aed;" onclick="openAddSpecificTaskModal('Design-Build / Turnkey Finishing')">+ Add Finishing Task</button>
+                    <strong style="font-family: var(--font-mono); font-size: 1.1rem; color: #6d28d9;" id="finishSectionProgVal">{{ $project->finishing_progress }}%</strong>
+                    <button class="btn-primary" style="font-size: 0.725rem; padding: 4px 10px; background: #6d28d9; border-color: #6d28d9;" onclick="openAddSpecificTaskModal('Design-Build / Turnkey Finishing')">+ Add Finishing Task</button>
                 </div>
             </div>
-            @include('projects.partials.checklist_table', ['tasks' => $finishingTasks, 'tradeName' => 'Design-Build Task', 'tradeColor' => '#7c3aed'])
+            @include('projects.partials.checklist_table', ['tasks' => $finishingTasks, 'tradeName' => 'Design-Build Task', 'tradeColor' => '#6d28d9'])
         </div>
 
     </div>

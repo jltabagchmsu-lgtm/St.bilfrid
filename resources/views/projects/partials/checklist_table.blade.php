@@ -20,7 +20,7 @@
                     <!-- 1. Done Checkbox (Irreversible Completion Rule) -->
                     <td style="text-align: center; vertical-align: middle; border-right: 1px solid #f1f5f9; padding: 10px 8px;" class="cell-done">
                         @if($isDone)
-                            <span class="locked-done-badge" title="Irreversible Completion: This task is completed and permanently locked." style="display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 6px; background: rgba(16, 185, 129, 0.15); border: 1.5px solid #10b981; color: #059669; font-weight: 900; font-size: 0.75rem; cursor: not-allowed;">
+                            <span class="locked-done-badge" title="Irreversible Completion: This task is completed and permanently locked." style="display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 6px; background: rgba(4, 120, 87, 0.15); border: 1.5px solid #047857; color: #047857; font-weight: 900; font-size: 0.75rem; cursor: not-allowed;">
                                 OK
                             </span>
                         @else
@@ -51,7 +51,7 @@
                                                 <td style="padding: 6px 10px; color: var(--text-primary); font-weight: 600; border-right: 1px solid #e2e8f0;">
                                                     {{ $mat->material_name }}
                                                 </td>
-                                                <td style="padding: 6px 10px; text-align: right; width: 180px; font-family: var(--font-mono); font-weight: 700; color: {{ $isDone ? '#059669' : '#dc2626' }}; white-space: nowrap; background: #fafbfc;">
+                                                <td style="padding: 6px 10px; text-align: right; width: 180px; font-family: var(--font-mono); font-weight: 700; color: {{ $isDone ? '#047857' : '#dc2626' }}; white-space: nowrap; background: #fafbfc;">
                                                     {{ number_format($mat->quantity) }} {{ $mat->unit }} <span style="font-weight: normal; color: var(--text-muted); font-size: 0.7rem;">(₱{{ number_format($mat->total_cost, 2) }})</span>
                                                 </td>
                                             </tr>
