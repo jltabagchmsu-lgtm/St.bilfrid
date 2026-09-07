@@ -395,16 +395,43 @@
     </div>
 
     @if($selectedProject && $selectedProject->scopeItems->count() > 0)
-        <!-- DUPA Scope Items Interactive Tab Navigation Bar -->
+        <!-- DUPA Scope Items Interactive Navigator & Tab Carousel -->
+        <div class="dupa-nav-toolbar">
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <label style="font-size: 0.775rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; white-space: nowrap;">
+                    Scope Item Filter:
+                </label>
+                <select id="bomDupaScopeSelect" onchange="switchBomScopeItemTab(this.value, document.getElementById('bomDupaTabBtn_' + this.value))" class="form-select" style="padding: 6px 12px; font-size: 0.825rem; font-weight: 700; min-width: 250px; height: 36px; background: #ffffff; border-color: var(--border-color); color: var(--text-primary); border-radius: 6px;">
+                    <option value="all">❖ All Scope Items ({{ $selectedProject->scopeItems->count() }})</option>
+                    @foreach($selectedProject->scopeItems as $item)
+                        <option value="{{ $item->id }}">ITEM {{ $item->item_number }}: {{ $item->item_name }} (₱{{ number_format($item->total_item_cost, 0) }})</option>
+                    @endforeach
+                </select>
+                <div style="display: inline-flex; gap: 4px;">
+                    <button type="button" class="btn-secondary" onclick="stepBomDupaScope(-1)" style="padding: 6px 11px; font-size: 0.8rem; height: 36px; font-weight: 700;" title="Previous Scope Item">&lsaquo; Prev</button>
+                    <button type="button" class="btn-secondary" onclick="stepBomDupaScope(1)" style="padding: 6px 11px; font-size: 0.8rem; height: 36px; font-weight: 700;" title="Next Scope Item">Next &rsaquo;</button>
+                </div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">{{ $selectedProject->scopeItems->count() }} Breakdown Items</span>
+                <div style="display: inline-flex; gap: 4px;">
+                    <button type="button" class="btn-secondary" onclick="scrollBomDupaTabs(-250)" style="padding: 6px 10px; font-size: 0.8rem; height: 36px; font-weight: 700;" title="Scroll Left">&larr;</button>
+                    <button type="button" class="btn-secondary" onclick="scrollBomDupaTabs(250)" style="padding: 6px 10px; font-size: 0.8rem; height: 36px; font-weight: 700;" title="Scroll Right">&rarr;</button>
+                </div>
+            </div>
+        </div>
+
         <div class="dupa-tabs-container" id="bomDupaScopeTabsBar">
             <button type="button" class="dupa-tab-btn active" onclick="switchBomScopeItemTab('all', this)" id="bomDupaTabBtn_all">
+                <span class="dupa-item-num-chip">ALL</span>
                 <span>All Scope Items</span>
-                <span class="dupa-tab-cost">{{ $selectedProject->scopeItems->count() }}</span>
+                <span class="dupa-tab-cost">{{ $selectedProject->scopeItems->count() }} Items</span>
             </button>
             @foreach($selectedProject->scopeItems as $item)
-                <button type="button" class="dupa-tab-btn" onclick="switchBomScopeItemTab({{ $item->id }}, this)" id="bomDupaTabBtn_{{ $item->id }}">
-                    <span style="font-family: var(--font-mono); font-weight: 800; color: var(--primary-red);">ITEM {{ $item->item_number }}</span>
-                    <span>{{ Str::limit($item->item_name, 28) }}</span>
+                <button type="button" class="dupa-tab-btn" onclick="switchBomScopeItemTab({{ $item->id }}, this)" id="bomDupaTabBtn_{{ $item->id }}" data-item-id="{{ $item->id }}">
+                    <span class="dupa-item-num-chip">#{{ str_pad($item->item_number, 2, '0', STR_PAD_LEFT) }}</span>
+                    <span class="dupa-tab-title">{{ Str::title($item->item_name) }}</span>
                     <span class="dupa-tab-cost">₱{{ number_format($item->total_item_cost, 0) }}</span>
                 </button>
             @endforeach
@@ -1436,15 +1463,24 @@
         }
     }
 
-    // DUPA Scope Item Tab Switching Logic
+    // DUPA Scope Item Tab Switching Logic & Navigator
     function switchBomScopeItemTab(targetItemId, btn) {
         const tabBtns = document.querySelectorAll('#bomDupaScopeTabsBar .dupa-tab-btn');
         tabBtns.forEach(b => b.classList.remove('active'));
-        if (btn) {
-            btn.classList.add('active');
-        } else {
-            const defBtn = document.getElementById('bomDupaTabBtn_' + targetItemId);
-            if (defBtn) defBtn.classList.add('active');
+        
+        let activeBtn = btn;
+        if (!activeBtn) {
+            activeBtn = document.getElementById('bomDupaTabBtn_' + targetItemId);
+        }
+        if (activeBtn) {
+            activeBtn.classList.add('active');
+            activeBtn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+
+        // Synchronize Dropdown Selector
+        const select = document.getElementById('bomDupaScopeSelect');
+        if (select) {
+            select.value = targetItemId;
         }
 
         const cards = document.querySelectorAll('.bom-scope-card');
@@ -1456,6 +1492,24 @@
                 card.style.display = 'none';
             }
         });
+    }
+
+    function stepBomDupaScope(direction) {
+        const select = document.getElementById('bomDupaScopeSelect');
+        if (!select) return;
+        let newIndex = select.selectedIndex + direction;
+        if (newIndex < 0) newIndex = select.options.length - 1;
+        if (newIndex >= select.options.length) newIndex = 0;
+        select.selectedIndex = newIndex;
+        const targetVal = select.options[newIndex].value;
+        switchBomScopeItemTab(targetVal, document.getElementById('bomDupaTabBtn_' + targetVal));
+    }
+
+    function scrollBomDupaTabs(offset) {
+        const container = document.getElementById('bomDupaScopeTabsBar');
+        if (container) {
+            container.scrollBy({ left: offset, behavior: 'smooth' });
+        }
     }
 
     // Real-time Client-side Filter for Master Materials Table

@@ -1019,17 +1019,44 @@
         </div>
     </div>
 
-    <!-- DUPA Scope Items Interactive Tab Navigation Bar -->
+    <!-- DUPA Scope Items Interactive Navigator & Tab Carousel -->
     @if($project->scopeItems->count() > 0)
+        <div class="dupa-nav-toolbar">
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <label style="font-size: 0.775rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; white-space: nowrap;">
+                    Scope Item Filter:
+                </label>
+                <select id="dupaScopeSelect" onchange="switchDupaScopeTab(this.value, document.getElementById('dupaTabBtn_' + this.value))" class="form-select" style="padding: 6px 12px; font-size: 0.825rem; font-weight: 700; min-width: 250px; height: 36px; background: #ffffff; border-color: var(--border-color); color: var(--text-primary); border-radius: 6px;">
+                    <option value="all">❖ All Scope Items ({{ $project->scopeItems->count() }})</option>
+                    @foreach($project->scopeItems as $item)
+                        <option value="{{ $item->id }}">ITEM {{ $item->item_number }}: {{ $item->item_name }} (₱{{ number_format($item->total_item_cost, 0) }})</option>
+                    @endforeach
+                </select>
+                <div style="display: inline-flex; gap: 4px;">
+                    <button type="button" class="btn-secondary" onclick="stepDupaScope(-1)" style="padding: 6px 11px; font-size: 0.8rem; height: 36px; font-weight: 700;" title="Previous Scope Item">&lsaquo; Prev</button>
+                    <button type="button" class="btn-secondary" onclick="stepDupaScope(1)" style="padding: 6px 11px; font-size: 0.8rem; height: 36px; font-weight: 700;" title="Next Scope Item">Next &rsaquo;</button>
+                </div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">{{ $project->scopeItems->count() }} Breakdown Items</span>
+                <div style="display: inline-flex; gap: 4px;">
+                    <button type="button" class="btn-secondary" onclick="scrollDupaTabs(-250)" style="padding: 6px 10px; font-size: 0.8rem; height: 36px; font-weight: 700;" title="Scroll Left">&larr;</button>
+                    <button type="button" class="btn-secondary" onclick="scrollDupaTabs(250)" style="padding: 6px 10px; font-size: 0.8rem; height: 36px; font-weight: 700;" title="Scroll Right">&rarr;</button>
+                </div>
+            </div>
+        </div>
+
         <div class="dupa-tabs-container" id="dupaScopeTabsBar">
             <button type="button" class="dupa-tab-btn active" onclick="switchDupaScopeTab('all', this)" id="dupaTabBtn_all">
+                <span class="dupa-item-num-chip">ALL</span>
                 <span>All Scope Items</span>
-                <span class="dupa-tab-cost">{{ $project->scopeItems->count() }}</span>
+                <span class="dupa-tab-cost">{{ $project->scopeItems->count() }} Items</span>
             </button>
             @foreach($project->scopeItems as $item)
-                <button type="button" class="dupa-tab-btn" onclick="switchDupaScopeTab({{ $item->id }}, this)" id="dupaTabBtn_{{ $item->id }}">
-                    <span style="font-family: var(--font-mono); font-weight: 800; color: var(--primary-red);">ITEM {{ $item->item_number }}</span>
-                    <span>{{ Str::limit($item->item_name, 28) }}</span>
+                <button type="button" class="dupa-tab-btn" onclick="switchDupaScopeTab({{ $item->id }}, this)" id="dupaTabBtn_{{ $item->id }}" data-item-id="{{ $item->id }}">
+                    <span class="dupa-item-num-chip">#{{ str_pad($item->item_number, 2, '0', STR_PAD_LEFT) }}</span>
+                    <span class="dupa-tab-title">{{ Str::title($item->item_name) }}</span>
                     <span class="dupa-tab-cost">₱{{ number_format($item->total_item_cost, 0) }}</span>
                 </button>
             @endforeach
@@ -3261,16 +3288,25 @@
     }
 
     /* ====================================================
-       DUPA SCOPE ITEM TAB SWITCHING
+       DUPA SCOPE ITEM TAB SWITCHING & NAVIGATOR
        ==================================================== */
     function switchDupaScopeTab(targetItemId, btn) {
-        const tabBtns = document.querySelectorAll('.dupa-tab-btn');
+        const tabBtns = document.querySelectorAll('#dupaScopeTabsBar .dupa-tab-btn');
         tabBtns.forEach(b => b.classList.remove('active'));
-        if (btn) {
-            btn.classList.add('active');
-        } else {
-            const defBtn = document.getElementById('dupaTabBtn_' + targetItemId);
-            if (defBtn) defBtn.classList.add('active');
+        
+        let activeBtn = btn;
+        if (!activeBtn) {
+            activeBtn = document.getElementById('dupaTabBtn_' + targetItemId);
+        }
+        if (activeBtn) {
+            activeBtn.classList.add('active');
+            activeBtn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+
+        // Synchronize Dropdown Selector
+        const select = document.getElementById('dupaScopeSelect');
+        if (select) {
+            select.value = targetItemId;
         }
 
         const cards = document.querySelectorAll('.dupa-scope-card');
@@ -3282,6 +3318,24 @@
                 card.style.display = 'none';
             }
         });
+    }
+
+    function stepDupaScope(direction) {
+        const select = document.getElementById('dupaScopeSelect');
+        if (!select) return;
+        let newIndex = select.selectedIndex + direction;
+        if (newIndex < 0) newIndex = select.options.length - 1;
+        if (newIndex >= select.options.length) newIndex = 0;
+        select.selectedIndex = newIndex;
+        const targetVal = select.options[newIndex].value;
+        switchDupaScopeTab(targetVal, document.getElementById('dupaTabBtn_' + targetVal));
+    }
+
+    function scrollDupaTabs(offset) {
+        const container = document.getElementById('dupaScopeTabsBar');
+        if (container) {
+            container.scrollBy({ left: offset, behavior: 'smooth' });
+        }
     }
 
     function openAddSpecificTaskModal(category) {

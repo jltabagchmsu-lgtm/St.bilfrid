@@ -1738,44 +1738,49 @@ select option {
    Modern Dashboard Navigation & Filter Tabs (Polished UI Tabs)
    ==================================================== */
 .trade-tabs-nav {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    align-items: center;
-}
-
-.btn-tab, .trade-nav-tab {
-    padding: 10px 18px;
-    font-size: 0.875rem;
-    font-weight: 700;
-    border-radius: 6px;
-    border: 1px solid #cbd5e1;
-    background: #ffffff;
-    color: #334155;
-    cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     display: inline-flex;
     align-items: center;
-    gap: 9px;
-    min-height: 42px;
-    user-select: none;
+    gap: 6px;
+    background: #f1f5f9;
+    padding: 5px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    flex-wrap: wrap;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.trade-nav-tab, .btn-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    min-height: 40px;
+    border-radius: 7px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: #475569;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     white-space: nowrap;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    user-select: none;
+    text-decoration: none;
 }
 
-.btn-tab:hover, .trade-nav-tab:hover {
-    background: #f8fafc;
-    border-color: #94a3b8;
+.trade-nav-tab:hover, .btn-tab:hover {
+    background: #ffffff;
     color: #0f172a;
-    transform: translateY(-1px);
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+    border-color: #cbd5e1;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
 }
 
-.btn-tab.active, .trade-nav-tab.active {
-    background: var(--primary-gradient) !important;
-    color: #ffffff !important;
-    border-color: var(--primary-red) !important;
-    box-shadow: 0 3px 10px rgba(220, 38, 38, 0.28) !important;
+.trade-nav-tab.active, .btn-tab.active {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border: 1px solid #cbd5e1 !important;
+    border-bottom: 2.5px solid var(--primary-red) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
 }
 
 .tab-dot {
@@ -1784,6 +1789,7 @@ select option {
     border-radius: 50%;
     display: inline-block;
     flex-shrink: 0;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.9);
 }
 
 .tab-count-pill {
@@ -1791,36 +1797,52 @@ select option {
     align-items: center;
     justify-content: center;
     padding: 2px 8px;
-    border-radius: 12px;
+    border-radius: 9999px;
     font-size: 0.75rem;
     font-family: var(--font-mono);
-    font-weight: 700;
+    font-weight: 800;
     background: #e2e8f0;
     color: #334155;
     margin-left: 2px;
     transition: all 0.2s ease;
 }
 
-.btn-tab.active .tab-count-pill, .trade-nav-tab.active .tab-count-pill,
-.btn-tab.active span[id^="tabCount"], .trade-nav-tab.active span[id^="tabCount"] {
-    background: rgba(255, 255, 255, 0.25) !important;
-    color: #ffffff !important;
+.trade-nav-tab.active .tab-count-pill, .btn-tab.active .tab-count-pill,
+.trade-nav-tab.active span[id^="tabCount"], .btn-tab.active span[id^="tabCount"] {
+    background: #fee2e2 !important;
+    color: #dc2626 !important;
 }
 
-/* DUPA Scope Item Tabs Bar */
+/* ====================================================
+   DUPA Scope Item Tabs & Navigator Toolbar
+   ==================================================== */
+.dupa-nav-toolbar {
+    background: #f8fafc;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 12px 16px;
+    margin-bottom: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+}
+
 .dupa-tabs-container {
     display: flex;
-    gap: 8px;
+    gap: 10px;
     overflow-x: auto;
-    padding-bottom: 8px;
+    padding: 4px 2px 10px 2px;
     margin-bottom: 20px;
-    border-bottom: 1px solid var(--border-color);
     scrollbar-width: thin;
-    scrollbar-color: var(--border-color) transparent;
+    scrollbar-color: #cbd5e1 transparent;
+    -webkit-overflow-scrolling: touch;
 }
 
 .dupa-tabs-container::-webkit-scrollbar {
-    height: 5px;
+    height: 6px;
 }
 
 .dupa-tabs-container::-webkit-scrollbar-thumb {
@@ -1828,15 +1850,20 @@ select option {
     border-radius: 4px;
 }
 
+.dupa-tabs-container::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 4px;
+}
+
 .dupa-tab-btn {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 9px 16px;
-    background: #fafbfc;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-sm);
-    color: var(--text-secondary);
+    gap: 9px;
+    padding: 8px 14px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    color: #334155;
     font-size: 0.825rem;
     font-weight: 700;
     cursor: pointer;
@@ -1844,35 +1871,67 @@ select option {
     white-space: nowrap;
     user-select: none;
     flex-shrink: 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .dupa-tab-btn:hover {
-    background: var(--primary-red-light);
-    border-color: var(--primary-red-border);
-    color: var(--primary-red);
+    background: #f8fafc;
+    border-color: #94a3b8;
+    color: #0f172a;
     transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
 }
 
 .dupa-tab-btn.active {
-    background: var(--primary-gradient) !important;
-    border-color: var(--primary-red) !important;
-    color: #ffffff !important;
-    box-shadow: 0 4px 14px rgba(220, 38, 38, 0.3);
+    background: #ffffff !important;
+    border: 1.5px solid var(--primary-red) !important;
+    color: #0f172a !important;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15) !important;
+    transform: translateY(-1px);
 }
 
-.dupa-tab-btn.active .dupa-tab-cost {
-    background: rgba(255, 255, 255, 0.22) !important;
+.dupa-item-num-chip {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: #f1f5f9;
+    color: #475569;
+    transition: all 0.2s ease;
+}
+
+.dupa-tab-btn.active .dupa-item-num-chip {
+    background: var(--primary-red) !important;
     color: #ffffff !important;
+}
+
+.dupa-tab-title {
+    font-size: 0.825rem;
+    font-weight: 700;
+    color: #1e293b;
+    max-width: 260px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .dupa-tab-cost {
     font-family: var(--font-mono);
-    font-size: 0.725rem;
-    font-weight: 700;
-    padding: 2px 7px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 2px 8px;
     border-radius: 4px;
-    background: #f1f3f6;
-    color: var(--text-muted);
+    background: #ecfdf5;
+    color: #047857;
+    border: 1px solid #a7f3d0;
+    transition: all 0.2s ease;
+}
+
+.dupa-tab-btn.active .dupa-tab-cost {
+    background: #fef2f2 !important;
+    color: #dc2626 !important;
+    border-color: #fecaca !important;
 }
 
 /* Print Friendly Styles */
