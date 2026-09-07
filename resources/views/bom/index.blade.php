@@ -29,7 +29,7 @@
     .bom-aligned-table th {
         vertical-align: middle;
         padding: 12px 14px;
-        background: rgba(15, 23, 42, 0.85);
+        background: #f8fafc;
         color: var(--text-secondary);
         font-weight: 700;
         font-size: 0.8rem;
@@ -41,11 +41,12 @@
     .bom-aligned-table td {
         vertical-align: middle;
         padding: 11px 14px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        border-bottom: 1px solid var(--border-color);
         font-size: 0.85rem;
+        color: var(--text-primary);
     }
     .bom-aligned-table tbody tr:hover td {
-        background: rgba(56, 189, 248, 0.04);
+        background: #f8fafc;
     }
     .col-num {
         font-family: var(--font-mono);
@@ -130,17 +131,17 @@
      3-TAB NAVIGATION BAR FOR BILL OF MATERIALS
      ==================================================== -->
 <div style="display: flex; gap: 8px; margin-bottom: 24px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; flex-wrap: wrap;">
-    <button type="button" id="tabBtnMaster" class="btn-tab active" onclick="switchBomTab('master')" style="padding: 10px 20px; font-size: 0.9rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: rgba(56, 189, 248, 0.15); color: #38bdf8; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; height: 42px;">
+    <button type="button" id="tabBtnMaster" class="btn-tab active" onclick="switchBomTab('master')" style="padding: 10px 20px; font-size: 0.9rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid rgba(220, 38, 38, 0.3); background: #fef2f2; color: var(--primary-red); cursor: pointer; display: inline-flex; align-items: center; gap: 8px; height: 42px;">
         Master Consolidated Materials Table
-        <span class="badge" style="background: rgba(56, 189, 248, 0.3); color: #f8fafc; font-size: 0.725rem;">{{ $masterMaterialsDistinctCount }} Materials</span>
+        <span class="badge" style="background: rgba(220, 38, 38, 0.1); color: var(--primary-red); font-size: 0.725rem;">{{ $masterMaterialsDistinctCount }} Materials</span>
     </button>
-    <button type="button" id="tabBtnScope" class="btn-tab" onclick="switchBomTab('scope')" style="padding: 10px 20px; font-size: 0.9rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid transparent; background: rgba(15, 23, 42, 0.5); color: var(--text-secondary); cursor: pointer; display: inline-flex; align-items: center; gap: 8px; height: 42px;">
+    <button type="button" id="tabBtnScope" class="btn-tab" onclick="switchBomTab('scope')" style="padding: 10px 20px; font-size: 0.9rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: #f8fafc; color: var(--text-secondary); cursor: pointer; display: inline-flex; align-items: center; gap: 8px; height: 42px;">
         Itemized Scope BOM Breakdown (DUPA)
-        <span class="badge" style="background: rgba(255, 255, 255, 0.1); color: var(--text-secondary); font-size: 0.725rem;">{{ $selectedProject ? $selectedProject->scopeItems->count() : 0 }} Scope Items</span>
+        <span class="badge" style="background: #e2e8f0; color: var(--text-secondary); font-size: 0.725rem;">{{ $selectedProject ? $selectedProject->scopeItems->count() : 0 }} Scope Items</span>
     </button>
-    <button type="button" id="tabBtnSite" class="btn-tab" onclick="switchBomTab('site')" style="padding: 10px 20px; font-size: 0.9rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid transparent; background: rgba(15, 23, 42, 0.5); color: var(--text-secondary); cursor: pointer; display: inline-flex; align-items: center; gap: 8px; height: 42px;">
+    <button type="button" id="tabBtnSite" class="btn-tab" onclick="switchBomTab('site')" style="padding: 10px 20px; font-size: 0.9rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: #f8fafc; color: var(--text-secondary); cursor: pointer; display: inline-flex; align-items: center; gap: 8px; height: 42px;">
         Site Stock Allocations & Daily Usage
-        <span class="badge" style="background: rgba(255, 255, 255, 0.1); color: var(--text-secondary); font-size: 0.725rem;">{{ $projectMaterials->count() }} Site Items</span>
+        <span class="badge" style="background: #e2e8f0; color: var(--text-secondary); font-size: 0.725rem;">{{ $projectMaterials->count() }} Site Items</span>
     </button>
 </div>
 
@@ -216,28 +217,28 @@
 
         <!-- Category Filter Pills -->
         <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 18px; align-items: center;">
-            <button type="button" class="cat-pill active" onclick="filterMasterCategory('all', this)" style="padding: 6px 14px; font-size: 0.775rem; font-weight: 700; border-radius: 20px; border: 1px solid var(--border-color); background: rgba(56, 189, 248, 0.2); color: #38bdf8; cursor: pointer;">
+            <button type="button" class="cat-pill active" onclick="filterMasterCategory('all', this)" style="padding: 6px 14px; font-size: 0.775rem; font-weight: 700; border-radius: 20px; border: 1px solid rgba(220, 38, 38, 0.3); background: #fef2f2; color: var(--primary-red); cursor: pointer;">
                 All ({{ $masterMaterialsDistinctCount }})
             </button>
-            <button type="button" class="cat-pill" onclick="filterMasterCategory('Concrete & Masonry', this)" style="padding: 6px 14px; font-size: 0.775rem; font-weight: 600; border-radius: 20px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.05); color: var(--text-secondary); cursor: pointer;">
+            <button type="button" class="cat-pill" onclick="filterMasterCategory('Concrete & Masonry', this)" style="padding: 6px 14px; font-size: 0.775rem; font-weight: 600; border-radius: 20px; border: 1px solid var(--border-color); background: #f8fafc; color: var(--text-secondary); cursor: pointer;">
                 Concrete & Masonry
             </button>
-            <button type="button" class="cat-pill" onclick="filterMasterCategory('Rebar & Structural Steel', this)" style="padding: 6px 14px; font-size: 0.775rem; font-weight: 600; border-radius: 20px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.05); color: var(--text-secondary); cursor: pointer;">
+            <button type="button" class="cat-pill" onclick="filterMasterCategory('Rebar & Structural Steel', this)" style="padding: 6px 14px; font-size: 0.775rem; font-weight: 600; border-radius: 20px; border: 1px solid var(--border-color); background: #f8fafc; color: var(--text-secondary); cursor: pointer;">
                 Rebar & Steel
             </button>
-            <button type="button" class="cat-pill" onclick="filterMasterCategory('Formworks & Lumber', this)" style="padding: 6px 14px; font-size: 0.775rem; font-weight: 600; border-radius: 20px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.05); color: var(--text-secondary); cursor: pointer;">
+            <button type="button" class="cat-pill" onclick="filterMasterCategory('Formworks & Lumber', this)" style="padding: 6px 14px; font-size: 0.775rem; font-weight: 600; border-radius: 20px; border: 1px solid var(--border-color); background: #f8fafc; color: var(--text-secondary); cursor: pointer;">
                 Formworks & Lumber
             </button>
-            <button type="button" class="cat-pill" onclick="filterMasterCategory('Roofing & Metal Sheets', this)" style="padding: 6px 14px; font-size: 0.775rem; font-weight: 600; border-radius: 20px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.05); color: var(--text-secondary); cursor: pointer;">
+            <button type="button" class="cat-pill" onclick="filterMasterCategory('Roofing & Metal Sheets', this)" style="padding: 6px 14px; font-size: 0.775rem; font-weight: 600; border-radius: 20px; border: 1px solid var(--border-color); background: #f8fafc; color: var(--text-secondary); cursor: pointer;">
                 Roofing & Metal
             </button>
-            <button type="button" class="cat-pill" onclick="filterMasterCategory('Electrical Works', this)" style="padding: 6px 14px; font-size: 0.775rem; font-weight: 600; border-radius: 20px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.05); color: var(--text-secondary); cursor: pointer;">
+            <button type="button" class="cat-pill" onclick="filterMasterCategory('Electrical Works', this)" style="padding: 6px 14px; font-size: 0.775rem; font-weight: 600; border-radius: 20px; border: 1px solid var(--border-color); background: #f8fafc; color: var(--text-secondary); cursor: pointer;">
                 Electrical
             </button>
-            <button type="button" class="cat-pill" onclick="filterMasterCategory('Plumbing & Sanitary', this)" style="padding: 6px 14px; font-size: 0.775rem; font-weight: 600; border-radius: 20px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.05); color: var(--text-secondary); cursor: pointer;">
+            <button type="button" class="cat-pill" onclick="filterMasterCategory('Plumbing & Sanitary', this)" style="padding: 6px 14px; font-size: 0.775rem; font-weight: 600; border-radius: 20px; border: 1px solid var(--border-color); background: #f8fafc; color: var(--text-secondary); cursor: pointer;">
                 Plumbing
             </button>
-            <button type="button" class="cat-pill" onclick="filterMasterCategory('Architectural & Finishes', this)" style="padding: 6px 14px; font-size: 0.775rem; font-weight: 600; border-radius: 20px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.05); color: var(--text-secondary); cursor: pointer;">
+            <button type="button" class="cat-pill" onclick="filterMasterCategory('Architectural & Finishes', this)" style="padding: 6px 14px; font-size: 0.775rem; font-weight: 600; border-radius: 20px; border: 1px solid var(--border-color); background: #f8fafc; color: var(--text-secondary); cursor: pointer;">
                 Finishes & Hardware
             </button>
         </div>
@@ -247,15 +248,15 @@
             <table class="bom-aligned-table" id="masterMaterialsTable">
                 <thead>
                     <tr>
-                        <th style="width: 50px; text-align: center;">#</th>
-                        <th style="min-width: 240px; text-align: left;">Material Item & Specification</th>
-                        <th style="width: 160px; text-align: left;">Category</th>
-                        <th style="width: 140px; text-align: right;">Total Required Qty</th>
+                        <th style="width: 48px; text-align: center;">#</th>
+                        <th style="min-width: 240px; text-align: left;">Engineering Material Description</th>
+                        <th style="width: 160px; text-align: left;">Category / Trade</th>
+                        <th style="width: 130px; text-align: right;">Total Required</th>
                         <th style="width: 80px; text-align: left;">Unit</th>
-                        <th style="width: 140px; text-align: right;">Unit Price (@ ₱)</th>
-                        <th style="width: 150px; text-align: right;">Total Amount (₱)</th>
-                        <th style="min-width: 220px; text-align: left;">Scope Items Breakdown</th>
-                        <th style="width: 140px; text-align: right;">Central Warehouse</th>
+                        <th style="width: 120px; text-align: right;">Contract Price</th>
+                        <th style="width: 150px; text-align: right;">Total Amount</th>
+                        <th style="min-width: 200px; text-align: left;">Associated Scope Items</th>
+                        <th style="width: 130px; text-align: right;">Warehouse Stock</th>
                         <th style="width: 120px; text-align: center;">Site Status</th>
                     </tr>
                 </thead>
@@ -266,14 +267,14 @@
                                 {{ $item->index }}
                             </td>
                             <td style="text-align: left;">
-                                <strong style="color: #f8fafc; font-size: 0.925rem;">{{ $item->description }}</strong>
+                                <strong style="color: var(--text-primary); font-size: 0.925rem;">{{ $item->description }}</strong>
                             </td>
                             <td style="text-align: left;">
-                                <span class="spec-chip" style="font-size: 0.7rem; color: #38bdf8; padding: 3px 8px;">
+                                <span class="spec-chip" style="font-size: 0.7rem; color: var(--primary-red); padding: 3px 8px; border-color: rgba(220, 38, 38, 0.2); background: #fef2f2;">
                                     {{ $item->category }}
                                 </span>
                             </td>
-                            <td style="text-align: right; font-weight: 800; font-size: 0.95rem; color: #f8fafc;" class="col-num">
+                            <td style="text-align: right; font-weight: 800; font-size: 0.95rem; color: var(--text-primary);" class="col-num">
                                 {{ number_format($item->total_quantity, 2) }}
                             </td>
                             <td style="text-align: left; color: var(--text-secondary); font-size: 0.85rem;">
@@ -288,7 +289,7 @@
                             <td style="text-align: left;">
                                 <div style="display: flex; flex-wrap: wrap; gap: 4px;">
                                     @foreach($item->scope_items as $sc)
-                                        <span class="spec-chip" style="font-size: 0.675rem; background: rgba(15, 23, 42, 0.8); border-color: rgba(56, 189, 248, 0.2);" title="{{ $sc['item_name'] }}: {{ $sc['line_qty'] }} {{ $item->unit }}">
+                                        <span class="spec-chip" style="font-size: 0.675rem; background: #f8fafc; border-color: var(--border-color); color: var(--text-secondary);" title="{{ $sc['item_name'] }}: {{ $sc['line_qty'] }} {{ $item->unit }}">
                                             Item {{ $sc['item_number'] }} ({{ number_format($sc['line_qty']) }} {{ $item->unit }})
                                         </span>
                                     @endforeach
@@ -309,7 +310,7 @@
                                         Allocated: {{ number_format($item->site_allocated_qty) }}
                                     </span>
                                 @else
-                                    <span class="badge" style="font-size: 0.7rem; padding: 3px 8px; background: rgba(255,255,255,0.06); color: var(--text-muted);">
+                                    <span class="badge" style="font-size: 0.7rem; padding: 3px 8px; background: #f1f5f9; color: var(--text-muted);">
                                         Unallocated
                                     </span>
                                 @endif
@@ -318,7 +319,7 @@
                     @empty
                         <tr>
                             <td colspan="10" style="text-align: center; padding: 48px 20px; color: var(--text-muted);">
-                                <div style="font-size: 1.05rem; font-weight: 700; color: #f8fafc;">No Material Requirements in BOM Yet</div>
+                                <div style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary);">No Material Requirements in BOM Yet</div>
                                 <div style="font-size: 0.85rem; margin-top: 4px;">Add Scope Items and itemized materials to generate this Bill of Materials.</div>
                                 <div style="margin-top: 16px;">
                                     <button class="btn-primary" onclick="openModal('addScopeItemModal')">
@@ -331,11 +332,11 @@
                 </tbody>
                 @if($masterMaterialsList->count() > 0)
                     <tfoot>
-                        <tr style="background: rgba(0, 0, 0, 0.5); font-weight: 800; border-top: 2px solid var(--border-color);">
+                        <tr style="background: #f8fafc; font-weight: 800; border-top: 2px solid var(--border-color);">
                             <td colspan="3" style="text-align: right; text-transform: uppercase; color: var(--text-secondary); font-size: 0.85rem; padding-right: 16px;">
                                 Consolidated Materials Total:
                             </td>
-                            <td style="text-align: right; color: #f8fafc; font-size: 0.95rem;" class="col-num">
+                            <td style="text-align: right; color: var(--text-primary); font-size: 0.95rem;" class="col-num">
                                 {{ number_format($masterMaterialsList->sum('total_quantity'), 2) }}
                             </td>
                             <td></td>
@@ -360,31 +361,31 @@
 <div id="tabContentScope" class="bom-tab-content" style="display: none;">
     <!-- Scope Financial Breakdown Summary Strip -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 24px;">
-        <div class="summary-block" style="border-left: 3px solid #38bdf8; background: rgba(15, 23, 42, 0.6);">
+        <div class="summary-block" style="border-left: 3px solid #38bdf8; background: #fafbfc; border: 1px solid var(--border-color); box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
             <div class="summary-block-label">A. Materials Subtotal</div>
             <div class="summary-block-val col-num" style="color: #38bdf8;">₱{{ number_format($scopeMaterialsSubtotal, 2) }}</div>
             <div class="summary-block-sub">Itemized Materials Sum</div>
         </div>
 
-        <div class="summary-block" style="border-left: 3px solid #f59e0b; background: rgba(15, 23, 42, 0.6);">
+        <div class="summary-block" style="border-left: 3px solid #f59e0b; background: #fafbfc; border: 1px solid var(--border-color); box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
             <div class="summary-block-label">B. Labor Subtotal</div>
             <div class="summary-block-val col-num" style="color: #f59e0b;">₱{{ number_format($scopeLaborSubtotal, 2) }}</div>
             <div class="summary-block-sub">Excavation, Formwork, Trades</div>
         </div>
 
-        <div class="summary-block" style="border-left: 3px solid #ec4899; background: rgba(15, 23, 42, 0.6);">
+        <div class="summary-block" style="border-left: 3px solid #ec4899; background: #fafbfc; border: 1px solid var(--border-color); box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
             <div class="summary-block-label">C. Equipment Expense</div>
             <div class="summary-block-val col-num" style="color: #ec4899;">₱{{ number_format($scopeEquipmentSubtotal, 2) }}</div>
             <div class="summary-block-sub">Machinery & Tools Overhead</div>
         </div>
 
-        <div class="summary-block" style="border-left: 3px solid #64748b; background: rgba(15, 23, 42, 0.6);">
+        <div class="summary-block" style="border-left: 3px solid #64748b; background: #fafbfc; border: 1px solid var(--border-color); box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
             <div class="summary-block-label">Total Direct Cost (A+B+C)</div>
-            <div class="summary-block-val col-num" style="color: #f8fafc;">₱{{ number_format($scopeDirectCost, 2) }}</div>
+            <div class="summary-block-val col-num" style="color: var(--text-primary);">₱{{ number_format($scopeDirectCost, 2) }}</div>
             <div class="summary-block-sub">Base Project Direct Cost</div>
         </div>
 
-        <div class="summary-block" style="border-left: 3px solid #10b981; background: rgba(15, 23, 42, 0.6);">
+        <div class="summary-block" style="border-left: 3px solid #10b981; background: #fafbfc; border: 1px solid var(--border-color); box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
             <div class="summary-block-label">Grand Total Scope Cost</div>
             <div class="summary-block-val col-num" style="color: #10b981; font-size: 1.3rem;">
                 ₱{{ number_format($scopeGrandTotal, 2) }}
@@ -394,18 +395,33 @@
     </div>
 
     @if($selectedProject && $selectedProject->scopeItems->count() > 0)
+        <!-- DUPA Scope Items Interactive Tab Navigation Bar -->
+        <div class="dupa-tabs-container" id="bomDupaScopeTabsBar">
+            <button type="button" class="dupa-tab-btn active" onclick="switchBomScopeItemTab('all', this)" id="bomDupaTabBtn_all">
+                <span>All Scope Items</span>
+                <span class="dupa-tab-cost">{{ $selectedProject->scopeItems->count() }}</span>
+            </button>
+            @foreach($selectedProject->scopeItems as $item)
+                <button type="button" class="dupa-tab-btn" onclick="switchBomScopeItemTab({{ $item->id }}, this)" id="bomDupaTabBtn_{{ $item->id }}">
+                    <span style="font-family: var(--font-mono); font-weight: 800; color: var(--primary-red);">ITEM {{ $item->item_number }}</span>
+                    <span>{{ Str::limit($item->item_name, 28) }}</span>
+                    <span class="dupa-tab-cost">₱{{ number_format($item->total_item_cost, 0) }}</span>
+                </button>
+            @endforeach
+        </div>
+
         <!-- Itemized Scope Accordion List (Matching Reference Screenshot) -->
         <div style="display: flex; flex-direction: column; gap: 20px; margin-bottom: 28px;">
             @foreach($selectedProject->scopeItems as $item)
-                <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.25);">
+                <div class="bom-scope-card" id="bomScopeItem_{{ $item->id }}" data-item-id="{{ $item->id }}" style="background: #fafbfc; border: 1px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: all 0.2s ease;">
                     <!-- Scope Item Header -->
-                    <div style="padding: 16px 22px; background: rgba(0, 0, 0, 0.4); border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                    <div style="padding: 16px 22px; background: #f8fafc; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
                         <div>
                             <div style="display: flex; align-items: center; gap: 8px;">
-                                <span style="font-weight: 800; color: #ef4444; font-family: var(--font-mono); font-size: 1.05rem;">ITEM {{ $item->item_number }}.</span>
-                                <span style="font-weight: 800; font-size: 1.1rem; color: #f8fafc; text-transform: uppercase; letter-spacing: 0.02em;">{{ $item->item_name }}</span>
+                                <span style="font-weight: 800; color: var(--primary-red); font-family: var(--font-mono); font-size: 1.05rem;">ITEM {{ $item->item_number }}.</span>
+                                <span style="font-weight: 800; font-size: 1.1rem; color: var(--text-primary); text-transform: uppercase; letter-spacing: 0.02em;">{{ $item->item_name }}</span>
                                 @if($item->volume_or_area)
-                                    <span class="spec-chip" style="font-size: 0.75rem; color: #38bdf8; background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.3);">
+                                    <span class="spec-chip" style="font-size: 0.75rem; color: #0284c7; background: #f0f9ff; border-color: rgba(56, 189, 248, 0.3);">
                                         {{ $item->volume_or_area }}
                                     </span>
                                 @endif
@@ -423,7 +439,7 @@
                                 </div>
                             </div>
                             <div style="display: inline-flex; gap: 6px;">
-                                <button class="btn-primary" style="font-size: 0.75rem; padding: 5px 10px; background: #38bdf8; border-color: #38bdf8;" onclick="openAddScopeLineModal({{ $item->id }}, {{ $item->item_number }}, '{{ addslashes($item->item_name) }}')">
+                                <button class="btn-primary" style="font-size: 0.75rem; padding: 5px 10px; background: #0284c7; border-color: #0284c7;" onclick="openAddScopeLineModal({{ $item->id }}, {{ $item->item_number }}, '{{ addslashes($item->item_name) }}')">
                                     + Add Line
                                 </button>
                                 <button class="btn-secondary" style="font-size: 0.75rem; padding: 5px 8px;" onclick="openEditScopeItemModal({{ $item->id }}, {{ $item->item_number }}, '{{ addslashes($item->item_name) }}', '{{ addslashes($item->volume_or_area ?? '') }}', '{{ addslashes($item->notes ?? '') }}', {{ $item->contingency_percent ?? 0 }}, {{ $item->taxes_percent ?? 0 }}, {{ $item->profit_percent ?? 0 }})">
@@ -432,7 +448,7 @@
                                 <form action="{{ route('projects.scopeItems.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Delete Item {{ $item->item_number }} ({{ $item->item_name }}) and all its line items?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn-secondary" style="font-size: 0.75rem; padding: 5px 8px; color: #ef4444;" title="Delete Item">
+                                    <button type="submit" class="btn-secondary" style="font-size: 0.75rem; padding: 5px 8px; color: var(--primary-red);" title="Delete Item">
                                         &times;
                                     </button>
                                 </form>
@@ -443,9 +459,9 @@
                     <div style="padding: 18px 22px;">
                         <!-- A. Materials Breakdown Table (Exact Match to Screenshot) -->
                         @if($item->materials->count() > 0)
-                            <div style="font-weight: 700; font-size: 0.875rem; color: #38bdf8; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+                            <div style="font-weight: 700; font-size: 0.875rem; color: #0284c7; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
                                 <span>A. Materials Breakdown</span>
-                                <span class="col-num" style="font-size: 0.85rem; color: #38bdf8;">
+                                <span class="col-num" style="font-size: 0.85rem; color: #0284c7;">
                                     Subtotal: ₱{{ number_format($item->materials_subtotal, 2) }}
                                 </span>
                             </div>
@@ -463,28 +479,28 @@
                                 <tbody>
                                     @foreach($item->materials as $mat)
                                         <tr>
-                                            <td style="text-align: right; font-weight: 800; font-size: 0.9rem; color: #f8fafc;" class="col-num">
+                                            <td style="text-align: right; font-weight: 800; font-size: 0.9rem; color: var(--text-primary);" class="col-num">
                                                 {{ is_numeric($mat->quantity) && floor($mat->quantity) == $mat->quantity ? number_format($mat->quantity, 0) : number_format($mat->quantity, 2) }}
                                             </td>
                                             <td style="text-align: left; color: var(--text-secondary);">{{ $mat->unit }}</td>
                                             <td style="text-align: left;">
-                                                <strong style="color: #f8fafc;">{{ $mat->description }}</strong>
+                                                <strong style="color: var(--text-primary);">{{ $mat->description }}</strong>
                                             </td>
                                             <td style="text-align: right; color: var(--text-secondary);" class="col-num">
                                                 ₱{{ number_format($mat->unit_price, 2) }}
                                             </td>
-                                            <td style="text-align: right; font-weight: 800; color: #38bdf8; font-size: 0.9rem;" class="col-num">
+                                            <td style="text-align: right; font-weight: 800; color: #0284c7; font-size: 0.9rem;" class="col-num">
                                                 ₱{{ number_format($mat->total_cost, 2) }}
                                             </td>
                                             <td style="text-align: center;">
                                                 <div style="display: inline-flex; gap: 4px; justify-content: center; align-items: center;">
-                                                    <button type="button" style="background:none; border:none; color:#38bdf8; cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Edit Line" onclick="openEditScopeLineModal({{ $mat->id }}, 'material', '{{ addslashes($mat->description) }}', {{ $mat->quantity }}, '{{ addslashes($mat->unit) }}', {{ $mat->unit_price }})">
+                                                    <button type="button" style="background:none; border:none; color:#0284c7; cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Edit Line" onclick="openEditScopeLineModal({{ $mat->id }}, 'material', '{{ addslashes($mat->description) }}', {{ $mat->quantity }}, '{{ addslashes($mat->unit) }}', {{ $mat->unit_price }})">
                                                         Edit
                                                     </button>
                                                     <form action="{{ route('projects.scopeLines.destroy', $mat->id) }}" method="POST" onsubmit="return confirm('Delete material line: {{ $mat->description }}?');" style="display:inline;">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:0.9rem; padding: 2px 4px;" title="Delete Line">&times;</button>
+                                                        <button type="submit" style="background:none; border:none; color:var(--primary-red); cursor:pointer; font-size:0.9rem; padding: 2px 4px;" title="Delete Line">&times;</button>
                                                     </form>
                                                 </div>
                                             </td>
@@ -496,9 +512,9 @@
 
                         <!-- B. Labor Breakdown Table -->
                         @if($item->labors->count() > 0)
-                            <div style="font-weight: 700; font-size: 0.875rem; color: #f59e0b; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+                            <div style="font-weight: 700; font-size: 0.875rem; color: #d97706; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
                                 <span>B. Labor Breakdown</span>
-                                <span class="col-num" style="font-size: 0.85rem; color: #f59e0b;">
+                                <span class="col-num" style="font-size: 0.85rem; color: #d97706;">
                                     Subtotal: ₱{{ number_format($item->labor_subtotal, 2) }}
                                 </span>
                             </div>
@@ -516,26 +532,26 @@
                                 <tbody>
                                     @foreach($item->labors as $lab)
                                         <tr>
-                                            <td style="text-align: right; color: #f8fafc;" class="col-num">
+                                            <td style="text-align: right; color: var(--text-primary);" class="col-num">
                                                 {{ $lab->quantity > 1 ? $lab->quantity : '' }}
                                             </td>
                                             <td style="text-align: left; color: var(--text-secondary);">{{ $lab->unit }}</td>
-                                            <td style="text-align: left;"><strong style="color: #f8fafc;">{{ $lab->description }}</strong></td>
+                                            <td style="text-align: left;"><strong style="color: var(--text-primary);">{{ $lab->description }}</strong></td>
                                             <td style="text-align: right; color: var(--text-secondary);" class="col-num">
                                                 {{ $lab->unit_price > 0 ? '₱' . number_format($lab->unit_price, 2) : '-' }}
                                             </td>
-                                            <td style="text-align: right; font-weight: 800; color: #f59e0b; font-size: 0.9rem;" class="col-num">
+                                            <td style="text-align: right; font-weight: 800; color: #d97706; font-size: 0.9rem;" class="col-num">
                                                 ₱{{ number_format($lab->total_cost, 2) }}
                                             </td>
                                             <td style="text-align: center;">
                                                 <div style="display: inline-flex; gap: 4px; justify-content: center; align-items: center;">
-                                                    <button type="button" style="background:none; border:none; color:#38bdf8; cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Edit Line" onclick="openEditScopeLineModal({{ $lab->id }}, 'labor', '{{ addslashes($lab->description) }}', {{ $lab->quantity }}, '{{ addslashes($lab->unit) }}', {{ $lab->unit_price }})">
+                                                    <button type="button" style="background:none; border:none; color:#0284c7; cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Edit Line" onclick="openEditScopeLineModal({{ $lab->id }}, 'labor', '{{ addslashes($lab->description) }}', {{ $lab->quantity }}, '{{ addslashes($lab->unit) }}', {{ $lab->unit_price }})">
                                                         Edit
                                                     </button>
                                                     <form action="{{ route('projects.scopeLines.destroy', $lab->id) }}" method="POST" onsubmit="return confirm('Delete labor line: {{ $lab->description }}?');" style="display:inline;">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:0.9rem; padding: 2px 4px;" title="Delete Line">&times;</button>
+                                                        <button type="submit" style="background:none; border:none; color:var(--primary-red); cursor:pointer; font-size:0.9rem; padding: 2px 4px;" title="Delete Line">&times;</button>
                                                     </form>
                                                 </div>
                                             </td>
@@ -547,9 +563,9 @@
 
                         <!-- C. Equipment Expenses Table -->
                         @if($item->equipments->count() > 0)
-                            <div style="font-weight: 700; font-size: 0.875rem; color: #ec4899; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+                            <div style="font-weight: 700; font-size: 0.875rem; color: #db2777; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
                                 <span>C. Equipment Expense & Contingency</span>
-                                <span class="col-num" style="font-size: 0.85rem; color: #ec4899;">
+                                <span class="col-num" style="font-size: 0.85rem; color: #db2777;">
                                     Subtotal: ₱{{ number_format($item->equipment_subtotal, 2) }}
                                 </span>
                             </div>
@@ -564,19 +580,19 @@
                                 <tbody>
                                     @foreach($item->equipments as $eq)
                                         <tr>
-                                            <td style="text-align: left;"><strong style="color: #f8fafc;">{{ $eq->description }}</strong></td>
-                                            <td style="text-align: right; font-weight: 800; color: #ec4899; font-size: 0.9rem;" class="col-num">
+                                            <td style="text-align: left;"><strong style="color: var(--text-primary);">{{ $eq->description }}</strong></td>
+                                            <td style="text-align: right; font-weight: 800; color: #db2777; font-size: 0.9rem;" class="col-num">
                                                 ₱{{ number_format($eq->total_cost, 2) }}
                                             </td>
                                             <td style="text-align: center;">
                                                 <div style="display: inline-flex; gap: 4px; justify-content: center; align-items: center;">
-                                                    <button type="button" style="background:none; border:none; color:#38bdf8; cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Edit Line" onclick="openEditScopeLineModal({{ $eq->id }}, 'equipment', '{{ addslashes($eq->description) }}', {{ $eq->quantity }}, '{{ addslashes($eq->unit) }}', {{ $eq->unit_price }})">
+                                                    <button type="button" style="background:none; border:none; color:#0284c7; cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Edit Line" onclick="openEditScopeLineModal({{ $eq->id }}, 'equipment', '{{ addslashes($eq->description) }}', {{ $eq->quantity }}, '{{ addslashes($eq->unit) }}', {{ $eq->unit_price }})">
                                                         Edit
                                                     </button>
                                                     <form action="{{ route('projects.scopeLines.destroy', $eq->id) }}" method="POST" onsubmit="return confirm('Delete equipment line: {{ $eq->description }}?');" style="display:inline;">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:0.9rem; padding: 2px 4px;" title="Delete Line">&times;</button>
+                                                        <button type="submit" style="background:none; border:none; color:var(--primary-red); cursor:pointer; font-size:0.9rem; padding: 2px 4px;" title="Delete Line">&times;</button>
                                                     </form>
                                                 </div>
                                             </td>
@@ -588,10 +604,10 @@
 
                         <!-- Direct Cost & Markups Formula Calculation Strip (Aligned Columns) -->
                         <div style="display: flex; justify-content: flex-end; margin-top: 12px;">
-                            <div style="background: rgba(0, 0, 0, 0.45); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 14px 20px; min-width: 360px; font-size: 0.825rem;">
+                            <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 14px 20px; min-width: 360px; font-size: 0.825rem;">
                                 <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
                                     <strong>DIRECT COST (A+B+C):</strong>
-                                    <strong class="col-num" style="color: #f8fafc; font-size: 0.9rem;">₱{{ number_format($item->direct_cost, 2) }}</strong>
+                                    <strong class="col-num" style="color: var(--text-primary); font-size: 0.9rem;">₱{{ number_format($item->direct_cost, 2) }}</strong>
                                 </div>
                                 @if($item->contingency_percent > 0)
                                     <div style="display: flex; justify-content: space-between; color: var(--text-muted); margin-bottom: 3px;">
@@ -622,8 +638,8 @@
             @endforeach
         </div>
     @else
-        <div style="text-align: center; padding: 48px 20px; background: rgba(0, 0, 0, 0.2); border-radius: var(--radius-md); border: 1px dashed var(--border-color); margin-bottom: 28px;">
-            <h4 style="font-size: 1.15rem; font-weight: 700; color: #f8fafc; margin-bottom: 6px;">No Itemized Scope Items Created Yet</h4>
+        <div style="text-align: center; padding: 48px 20px; background: #f8fafc; border-radius: var(--radius-md); border: 1px dashed var(--border-color); margin-bottom: 28px;">
+            <h4 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">No Itemized Scope Items Created Yet</h4>
             <p style="font-size: 0.85rem; color: var(--text-muted); max-width: 540px; margin: 0 auto 16px auto;">
                 Generate an itemized Scope of Work Bill of Materials tailored specifically for <strong>{{ $selectedProject ? ($selectedProject->title ?: $selectedProject->project_code) : 'this project' }}</strong> (Foundation, Columns, Beams, Walls, Roofing, Plumbing, Electrical, Finishes) with itemized Materials (A), Labor (B), Equipment (C), and official Philippine markups.
             </p>
@@ -1356,11 +1372,11 @@
         <form id="bomReturnExcessForm" action="" method="POST">
             @csrf
 
-            <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 16px;">
+            <div style="background: #ecfdf5; border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 16px;">
                 <div style="font-size: 0.8rem; color: #10b981; font-weight: 700; text-transform: uppercase;">Inventory Reconciliation:</div>
-                <div style="font-weight: 700; font-size: 1rem; color: #f8fafc; margin: 4px 0;" id="bomRetMaterialName">Material</div>
+                <div style="font-weight: 700; font-size: 1rem; color: var(--text-primary); margin: 4px 0;" id="bomRetMaterialName">Material</div>
                 <div style="font-size: 0.8rem; color: var(--text-muted);">
-                    Unused Site Stock Available for Return: <strong id="bomRetMaxQty" style="color: #38bdf8; font-family: var(--font-mono);">0</strong>
+                    Unused Site Stock Available for Return: <strong id="bomRetMaxQty" style="color: #0284c7; font-family: var(--font-mono);">0</strong>
                 </div>
             </div>
 
@@ -1391,33 +1407,55 @@
         document.querySelectorAll('.bom-tab-content').forEach(el => el.style.display = 'none');
         document.querySelectorAll('.btn-tab').forEach(btn => {
             btn.classList.remove('active');
-            btn.style.background = 'rgba(15, 23, 42, 0.5)';
+            btn.style.background = '#f8fafc';
             btn.style.color = 'var(--text-secondary)';
-            btn.style.borderColor = 'transparent';
+            btn.style.borderColor = 'var(--border-color)';
         });
 
         if (tabName === 'master') {
             document.getElementById('tabContentMaster').style.display = 'block';
             const btn = document.getElementById('tabBtnMaster');
             btn.classList.add('active');
-            btn.style.background = 'rgba(56, 189, 248, 0.15)';
-            btn.style.color = '#38bdf8';
-            btn.style.borderColor = 'var(--border-color)';
+            btn.style.background = '#fef2f2';
+            btn.style.color = 'var(--primary-red)';
+            btn.style.borderColor = 'rgba(220, 38, 38, 0.3)';
         } else if (tabName === 'scope') {
             document.getElementById('tabContentScope').style.display = 'block';
             const btn = document.getElementById('tabBtnScope');
             btn.classList.add('active');
-            btn.style.background = 'rgba(239, 68, 68, 0.15)';
-            btn.style.color = '#ef4444';
-            btn.style.borderColor = 'var(--border-color)';
+            btn.style.background = '#fef2f2';
+            btn.style.color = 'var(--primary-red)';
+            btn.style.borderColor = 'rgba(220, 38, 38, 0.3)';
         } else if (tabName === 'site') {
             document.getElementById('tabContentSite').style.display = 'block';
             const btn = document.getElementById('tabBtnSite');
             btn.classList.add('active');
-            btn.style.background = 'rgba(16, 185, 129, 0.15)';
-            btn.style.color = '#10b981';
-            btn.style.borderColor = 'var(--border-color)';
+            btn.style.background = '#fef2f2';
+            btn.style.color = 'var(--primary-red)';
+            btn.style.borderColor = 'rgba(220, 38, 38, 0.3)';
         }
+    }
+
+    // DUPA Scope Item Tab Switching Logic
+    function switchBomScopeItemTab(targetItemId, btn) {
+        const tabBtns = document.querySelectorAll('#bomDupaScopeTabsBar .dupa-tab-btn');
+        tabBtns.forEach(b => b.classList.remove('active'));
+        if (btn) {
+            btn.classList.add('active');
+        } else {
+            const defBtn = document.getElementById('bomDupaTabBtn_' + targetItemId);
+            if (defBtn) defBtn.classList.add('active');
+        }
+
+        const cards = document.querySelectorAll('.bom-scope-card');
+        cards.forEach(card => {
+            const cardId = card.getAttribute('data-item-id');
+            if (targetItemId === 'all' || cardId == targetItemId) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
     }
 
     // Real-time Client-side Filter for Master Materials Table
@@ -1445,15 +1483,17 @@
     function filterMasterCategory(catName, btnEl) {
         document.querySelectorAll('.cat-pill').forEach(btn => {
             btn.classList.remove('active');
-            btn.style.background = 'rgba(255,255,255,0.05)';
+            btn.style.background = '#f8fafc';
             btn.style.color = 'var(--text-secondary)';
+            btn.style.borderColor = 'var(--border-color)';
             btn.removeAttribute('data-cat-val');
         });
 
         btnEl.classList.add('active');
         btnEl.setAttribute('data-cat-val', catName);
-        btnEl.style.background = 'rgba(56, 189, 248, 0.2)';
-        btnEl.style.color = '#38bdf8';
+        btnEl.style.background = '#fef2f2';
+        btnEl.style.color = 'var(--primary-red)';
+        btnEl.style.borderColor = 'rgba(220, 38, 38, 0.3)';
 
         filterMasterMaterials();
     }

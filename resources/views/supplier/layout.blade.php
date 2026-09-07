@@ -6,21 +6,22 @@
     <title>@yield('title', 'Supplier Portal - St. Bilfrid Dev. Corp')</title>
     <link rel="stylesheet" href="/css/app.css?v={{ file_exists(public_path('css/app.css')) ? filemtime(public_path('css/app.css')) : time() }}">
     <style>
-        .supplier-badge-wndr { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.35); }
-        .supplier-badge-roof { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.35); }
-        .supplier-badge-strc { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.35); }
+        .supplier-badge-wndr { background: #f0f9ff; color: #0284c7; border: 1px solid rgba(56, 189, 248, 0.35); }
+        .supplier-badge-roof { background: #fef2f2; color: var(--primary-red); border: 1px solid rgba(220, 38, 38, 0.35); }
+        .supplier-badge-strc { background: #ecfdf5; color: #059669; border: 1px solid rgba(16, 185, 129, 0.35); }
         
         .grid-table {
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border-color);
             border-radius: 12px;
             overflow: hidden;
-            background: rgba(15, 23, 42, 0.65);
+            background: #fafbfc;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
         .grid-table th {
-            background: rgba(30, 41, 59, 0.85);
+            background: #f8fafc;
             padding: 14px 16px;
             text-align: left;
             font-size: 0.75rem;
@@ -28,21 +29,21 @@
             text-transform: uppercase;
             letter-spacing: 0.05em;
             color: var(--text-secondary);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-            border-right: 1px solid rgba(255, 255, 255, 0.06);
+            border-bottom: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
         }
         .grid-table th:last-child { border-right: none; }
         .grid-table td {
             padding: 14px 16px;
             font-size: 0.85rem;
             color: var(--text-primary);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-            border-right: 1px solid rgba(255, 255, 255, 0.06);
+            border-bottom: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
             vertical-align: middle;
         }
         .grid-table td:last-child { border-right: none; }
         .grid-table tbody tr:last-child td { border-bottom: none; }
-        .grid-table tbody tr:hover { background: rgba(255, 255, 255, 0.025); }
+        .grid-table tbody tr:hover { background: #f8fafc; }
 
         .modal-backdrop {
             display: none;
@@ -51,8 +52,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(3, 7, 18, 0.8);
-            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
             z-index: 1000;
             align-items: center;
             justify-content: center;
@@ -60,18 +61,18 @@
         }
         .modal-backdrop.active { display: flex; }
         .modal-box {
-            background: #0f172a;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: #fafbfc;
+            border: 1px solid var(--border-color);
             border-radius: 16px;
             width: 100%;
             max-width: 680px;
             max-height: 90vh;
             overflow-y: auto;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
         }
         .modal-header {
             padding: 20px 24px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -79,11 +80,11 @@
         .modal-body { padding: 24px; }
         .modal-footer {
             padding: 16px 24px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid var(--border-color);
             display: flex;
             justify-content: flex-end;
             gap: 12px;
-            background: rgba(15, 23, 42, 0.4);
+            background: #f8fafc;
         }
 
         .pill-badge {
@@ -103,22 +104,22 @@
             font-size: 0.8rem;
             font-weight: 600;
             color: var(--text-secondary);
-            background: rgba(30, 41, 59, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
             text-decoration: none;
             transition: all 0.2s ease;
         }
         .filter-pill:hover, .filter-pill.active {
-            background: rgba(56, 189, 248, 0.15);
-            color: #38bdf8;
-            border-color: rgba(56, 189, 248, 0.4);
+            background: #fef2f2;
+            color: var(--primary-red);
+            border-color: rgba(220, 38, 38, 0.3);
         }
 
         .btn-topbar-back {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: rgba(255, 255, 255, 0.06);
+            background: #f8fafc;
             color: var(--text-secondary);
             border: 1px solid var(--border-color);
             padding: 7px 14px;
@@ -133,9 +134,9 @@
         }
 
         .btn-topbar-back:hover {
-            background: rgba(239, 68, 68, 0.12);
-            border-color: rgba(239, 68, 68, 0.35);
-            color: #fca5a5;
+            background: #fef2f2;
+            border-color: rgba(220, 38, 38, 0.35);
+            color: var(--primary-red);
             transform: translateX(-3px);
         }
 
@@ -149,7 +150,7 @@
             transform: scale(1.1);
         }
 
-        /* Form Inputs & Controls Dark Mode Styling */
+        /* Form Inputs & Controls Light Styling */
         .input-field,
         .form-input,
         .form-control,
@@ -164,17 +165,16 @@
         select,
         textarea {
             width: 100%;
-            background-color: rgba(15, 23, 42, 0.85) !important;
-            background: rgba(15, 23, 42, 0.85) !important;
-            border: 1px solid rgba(255, 255, 255, 0.14) !important;
+            background-color: #fafbfc !important;
+            background: #fafbfc !important;
+            border: 1px solid var(--border-color) !important;
             border-radius: 8px !important;
             padding: 10px 14px !important;
-            color: #f8fafc !important;
+            color: #0f172a !important;
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
             font-size: 0.875rem !important;
             line-height: 1.4 !important;
             outline: none !important;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3) !important;
             box-sizing: border-box !important;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
         }
@@ -192,11 +192,11 @@
         input[type="search"]:focus,
         select:focus,
         textarea:focus {
-            border-color: #38bdf8 !important;
-            background-color: rgba(15, 23, 42, 0.98) !important;
-            background: rgba(15, 23, 42, 0.98) !important;
-            color: #ffffff !important;
-            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25), inset 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+            border-color: var(--primary-red) !important;
+            background-color: #fafbfc !important;
+            background: #fafbfc !important;
+            color: #0f172a !important;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15) !important;
         }
 
         .input-field:disabled,
@@ -205,24 +205,24 @@
         input[readonly],
         select:disabled,
         textarea:disabled {
-            background-color: rgba(30, 41, 59, 0.55) !important;
-            background: rgba(30, 41, 59, 0.55) !important;
-            border-color: rgba(255, 255, 255, 0.08) !important;
-            color: #94a3b8 !important;
+            background-color: #f1f5f9 !important;
+            background: #f1f5f9 !important;
+            border-color: var(--border-color) !important;
+            color: #64748b !important;
             cursor: not-allowed !important;
-            opacity: 0.8 !important;
+            opacity: 0.9 !important;
         }
 
         .input-field::placeholder,
         input::placeholder,
         textarea::placeholder {
-            color: #64748b !important;
+            color: #94a3b8 !important;
             opacity: 1 !important;
         }
 
         select option {
-            background-color: #0f172a !important;
-            color: #f8fafc !important;
+            background-color: #fafbfc !important;
+            color: #0f172a !important;
         }
     </style>
     @stack('styles')
@@ -349,7 +349,7 @@
             </div>
 
             <div style="display: flex; align-items: center; gap: 16px;">
-                <div style="font-size: 0.8rem; color: var(--text-secondary); background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 14px; border-radius: 8px;">
+                <div style="font-size: 0.8rem; color: var(--text-secondary); background: #f8fafc; border: 1px solid var(--border-color); padding: 8px 14px; border-radius: 8px;">
                     <span style="color: var(--text-muted);">Contractor Client:</span> <strong style="color: var(--text-primary);">St. Bilfrid Dev. Corp</strong>
                 </div>
 

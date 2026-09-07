@@ -52,12 +52,12 @@
         <div style="display: flex; gap: 20px; align-items: flex-start;">
             @if($project->primaryPhoto || $project->photos->first())
                 @php $heroPhoto = $project->primaryPhoto ?? $project->photos->first(); @endphp
-                <div style="position: relative; width: 140px; height: 110px; border-radius: var(--radius-md); overflow: hidden; border: 2px solid var(--border-accent); box-shadow: 0 4px 15px rgba(0,0,0,0.5); flex-shrink: 0; cursor: pointer;" onclick="openLightbox('{{ $heroPhoto->file_path }}', '{{ addslashes($heroPhoto->title) }}', '{{ $heroPhoto->type_badge['label'] }}', {{ $heroPhoto->id }}, '{{ $heroPhoto->photo_type }}', '{{ addslashes($heroPhoto->description ?? '') }}', '{{ $heroPhoto->taken_at ? $heroPhoto->taken_at->format('Y-m-d') : '' }}', {{ $heroPhoto->is_primary ? 1 : 0 }})">
+                <div style="position: relative; width: 140px; height: 110px; border-radius: var(--radius-md); overflow: hidden; border: 2px solid var(--border-accent); box-shadow: 0 4px 15px rgba(0,0,0,0.1); flex-shrink: 0; cursor: pointer;" onclick="openLightbox('{{ $heroPhoto->file_path }}', '{{ addslashes($heroPhoto->title) }}', '{{ $heroPhoto->type_badge['label'] }}', {{ $heroPhoto->id }}, '{{ $heroPhoto->photo_type }}', '{{ addslashes($heroPhoto->description ?? '') }}', '{{ $heroPhoto->taken_at ? $heroPhoto->taken_at->format('Y-m-d') : '' }}', {{ $heroPhoto->is_primary ? 1 : 0 }})">
                     <img src="{{ $heroPhoto->file_path }}" alt="{{ $heroPhoto->title }}" style="width: 100%; height: 100%; object-fit: cover;">
                     <span style="position: absolute; bottom: 4px; left: 4px; font-size: 0.65rem; background: rgba(0,0,0,0.8); color: #fff; padding: 2px 6px; border-radius: 4px; font-weight: 700;">
                         {{ $heroPhoto->type_badge['icon'] }} {{ $heroPhoto->photo_type === 'blueprint' ? 'BLUEPRINT' : ($heroPhoto->photo_type === '3d_render' ? '3D DESIGN' : 'SITE PHOTO') }}
                     </span>
-                    <button type="button" onclick="event.stopPropagation(); openEditPhotoModal({{ $heroPhoto->id }}, '{{ addslashes($heroPhoto->title) }}', '{{ $heroPhoto->photo_type }}', '{{ addslashes($heroPhoto->description ?? '') }}', '{{ addslashes($heroPhoto->file_path) }}', '{{ $heroPhoto->taken_at ? $heroPhoto->taken_at->format('Y-m-d') : '' }}', {{ $heroPhoto->is_primary ? 1 : 0 }})" style="position: absolute; top: 4px; right: 4px; background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(255,255,255,0.3); color: #fff; border-radius: 4px; padding: 2px 6px; font-size: 0.65rem; cursor: pointer;" title="Edit this primary hero image">
+                    <button type="button" onclick="event.stopPropagation(); openEditPhotoModal({{ $heroPhoto->id }}, '{{ addslashes($heroPhoto->title) }}', '{{ $heroPhoto->photo_type }}', '{{ addslashes($heroPhoto->description ?? '') }}', '{{ addslashes($heroPhoto->file_path) }}', '{{ $heroPhoto->taken_at ? $heroPhoto->taken_at->format('Y-m-d') : '' }}', {{ $heroPhoto->is_primary ? 1 : 0 }})" style="position: absolute; top: 4px; right: 4px; background: var(--primary-red); border: 1px solid var(--primary-red-border); color: #fff; border-radius: 4px; padding: 2px 6px; font-size: 0.65rem; cursor: pointer;" title="Edit this primary hero image">
                         Edit
                     </button>
                 </div>
@@ -121,7 +121,7 @@
     <div class="summary-header-row">
         <div>
             <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-                <h2 style="font-size: 1.3rem; font-weight: 800; color: #f8fafc;">Project Executive Master Summary & Status Briefing</h2>
+                <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--text-primary);">Project Executive Master Summary & Status Briefing</h2>
                 <span class="badge badge-in_progress" style="font-size: 0.75rem;">Consolidated Snapshot</span>
             </div>
             <span style="font-size: 0.85rem; color: var(--text-muted);">
@@ -129,7 +129,7 @@
             </span>
         </div>
         <div style="display: flex; gap: 10px;">
-            <a href="{{ route('projects.printReport', $project->id) }}" target="_blank" class="btn-primary" style="font-size: 0.8rem; padding: 6px 14px; background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);">
+            <a href="{{ route('projects.printReport', $project->id) }}" target="_blank" class="btn-primary" style="font-size: 0.8rem; padding: 6px 14px;">
                 Print Accomplishment Report (Signed) &rarr;
             </a>
         </div>
@@ -137,9 +137,9 @@
 
     <!-- 8 Executive Summary Blocks Grid -->
     <div class="summary-metric-blocks">
-        <div class="summary-block" style="border-left: 3px solid #38bdf8;">
+        <div class="summary-block" style="border-left: 4px solid var(--primary-red);">
             <div class="summary-block-label">Total Contract Value</div>
-            <div class="summary-block-val" style="color: #f8fafc;">₱{{ number_format($project->contract_budget, 2) }}</div>
+            <div class="summary-block-val">₱{{ number_format($project->contract_budget, 2) }}</div>
             <div class="summary-block-sub">
                 @if($project->client_budget && $project->client_budget > 0)
                     Client Budget: ₱{{ number_format($project->client_budget, 2) }}
@@ -151,47 +151,47 @@
             </div>
         </div>
 
-        <div class="summary-block" style="border-left: 3px solid #10b981;">
+        <div class="summary-block" style="border-left: 4px solid #10b981;">
             <div class="summary-block-label">Cleared Cash Inflow</div>
-            <div class="summary-block-val" style="color: #10b981;">₱{{ number_format($totalPaid, 2) }}</div>
-            <div class="summary-block-sub">{{ $salesCollectionRate }}% Collection Rate</div>
+            <div class="summary-block-val" style="color: #059669;">₱{{ number_format($totalPaid, 2) }}</div>
+            <div class="summary-block-sub" style="color: #059669; font-weight: 700;">{{ $salesCollectionRate }}% Collection Rate</div>
         </div>
 
-        <div class="summary-block" style="border-left: 3px solid #f59e0b;">
+        <div class="summary-block" style="border-left: 4px solid #f59e0b;">
             <div class="summary-block-label">Actual Incurred Cost</div>
-            <div class="summary-block-val" style="color: #f59e0b;">₱{{ number_format($totalIncurredCost, 2) }}</div>
+            <div class="summary-block-val" style="color: #d97706;">₱{{ number_format($totalIncurredCost, 2) }}</div>
             <div class="summary-block-sub">Rate: ₱{{ number_format($costPerFloorSqm, 2) }}/m²</div>
         </div>
 
-        <div class="summary-block" style="border-left: 3px solid #38bdf8;">
+        <div class="summary-block" style="border-left: 4px solid #10b981;">
             <div class="summary-block-label">Projected Gross Margin</div>
-            <div class="summary-block-val" style="color: {{ $grossMargin >= 0 ? '#10b981' : '#ef4444' }};">
+            <div class="summary-block-val" style="color: {{ $grossMargin >= 0 ? '#059669' : '#dc2626' }};">
                 ₱{{ number_format($grossMargin, 2) }}
             </div>
-            <div class="summary-block-sub" style="color: #10b981; font-weight: 700;">{{ $grossMarginPercent }}% Profit Margin</div>
+            <div class="summary-block-sub" style="color: #059669; font-weight: 700;">{{ $grossMarginPercent }}% Profit Margin</div>
         </div>
 
-        <div class="summary-block" style="border-left: 3px solid #ec4899;">
+        <div class="summary-block" style="border-left: 4px solid var(--primary-red);">
             <div class="summary-block-label">Workforce Deployed</div>
-            <div class="summary-block-val" style="color: #ec4899;">{{ $totalDeployedManpower }} Headcount</div>
+            <div class="summary-block-val" style="color: var(--primary-red);">{{ $totalDeployedManpower }} Headcount</div>
             <div class="summary-block-sub">{{ $project->deployed_workers }} Workers, {{ $project->deployed_engineers }} Engr, {{ $project->deployed_operators }} Ops</div>
         </div>
 
-        <div class="summary-block" style="border-left: 3px solid #818cf8;">
+        <div class="summary-block" style="border-left: 4px solid #6366f1;">
             <div class="summary-block-label">Constructible Floor Space</div>
-            <div class="summary-block-val" style="color: #818cf8;">{{ number_format($project->floor_area_sqm) }} m²</div>
+            <div class="summary-block-val" style="color: #4f46e5;">{{ number_format($project->floor_area_sqm) }} m²</div>
             <div class="summary-block-sub">Land Area: {{ number_format($project->land_area_sqm) }} m²</div>
         </div>
 
-        <div class="summary-block" style="border-left: 3px solid #ef4444;">
+        <div class="summary-block" style="border-left: 4px solid var(--primary-red);">
             <div class="summary-block-label">Trade Progression</div>
-            <div class="summary-block-val" style="color: #ef4444;" id="sec1TradeProgVal">{{ $project->overall_progress }}%</div>
+            <div class="summary-block-val" style="color: var(--primary-red);" id="sec1TradeProgVal">{{ $project->overall_progress }}%</div>
             <div class="summary-block-sub" id="sec1TradeProgSub">Struct {{ $project->structural_progress }}% | Elec {{ $project->electrical_progress }}% | Pipe {{ $project->piping_progress }}%</div>
         </div>
 
-        <div class="summary-block" style="border-left: 3px solid #14b8a6;">
+        <div class="summary-block" style="border-left: 4px solid #0d9488;">
             <div class="summary-block-label">BOM Materials Allocated</div>
-            <div class="summary-block-val" style="color: #14b8a6;">₱{{ number_format($bomAllocatedValue, 2) }}</div>
+            <div class="summary-block-val" style="color: #0d9488;">₱{{ number_format($bomAllocatedValue, 2) }}</div>
             <div class="summary-block-sub">Consumed: ₱{{ number_format($bomConsumedValue, 2) }} | Ret: +₱{{ number_format($bomReturnedExcessValue, 2) }}</div>
         </div>
     </div>
@@ -200,10 +200,10 @@
 <!-- ====================================================
      SECTION 2: PROJECT BLUEPRINTS, 3D ARCHITECTURAL RENDERS & SITE PHOTOS GALLERY
      ==================================================== -->
-<div class="glass-panel" style="border: 1px solid rgba(236, 72, 153, 0.35); margin-bottom: 28px;">
+<div class="glass-panel" style="border: 1px solid var(--border-color); margin-bottom: 28px;">
     <div class="panel-header" style="margin-bottom: 16px;">
         <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: rgba(236, 72, 153, 0.2); display: grid; place-items: center; font-size: 0.8rem; font-weight: 800; color: #ec4899;">CAD</div>
+            <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: var(--primary-red-light); display: grid; place-items: center; font-size: 0.8rem; font-weight: 800; color: var(--primary-red);">CAD</div>
             <div>
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <h3 class="panel-title" style="font-size: 1.15rem;">Project Design, Technical Blueprints & Site Photos</h3>
@@ -214,7 +214,7 @@
                 </span>
             </div>
         </div>
-        <button class="btn-primary" style="font-size: 0.825rem; padding: 6px 14px; background: linear-gradient(135deg, #ec4899 0%, #be185d 100%); border-color: #ec4899;" onclick="openModal('uploadPhotoModal')">
+        <button class="btn-primary" style="font-size: 0.825rem; padding: 6px 14px;" onclick="openModal('uploadPhotoModal')">
             + Upload Blueprint / Design Photo
         </button>
     </div>
@@ -222,7 +222,7 @@
     @if($project->photos->count() > 0)
         <!-- Photo Gallery Category Filter Tabs -->
         <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
-            <button type="button" class="spec-chip active-gallery-filter" onclick="filterGalleryCategory('all', this)" style="cursor: pointer; font-size: 0.775rem; padding: 5px 12px; background: rgba(236, 72, 153, 0.2); color: #ec4899; border-color: #ec4899;">
+            <button type="button" class="spec-chip active-gallery-filter" onclick="filterGalleryCategory('all', this)" style="cursor: pointer; font-size: 0.775rem; padding: 5px 12px; background: var(--primary-red); color: #ffffff; border-color: var(--primary-red);">
                 All Media ({{ $project->photos->count() }})
             </button>
             <button type="button" class="spec-chip" onclick="filterGalleryCategory('blueprint', this)" style="cursor: pointer; font-size: 0.775rem; padding: 5px 12px;">
@@ -248,24 +248,24 @@
         <div id="projectPhotosGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px;">
             @foreach($project->photos as $photo)
                 @php $badge = $photo->type_badge; @endphp
-                <div class="gallery-photo-card" data-category="{{ $photo->photo_type }}" style="background: rgba(15, 23, 42, 0.85); border: 1px solid {{ $photo->is_primary ? '#ef4444' : 'var(--border-color)' }}; border-radius: var(--radius-md); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.3);" class="hover-lift">
+                <div class="gallery-photo-card" data-category="{{ $photo->photo_type }}" style="background: #fafbfc; border: 1px solid {{ $photo->is_primary ? 'var(--primary-red)' : 'var(--border-color)' }}; border-radius: var(--radius-md); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s; box-shadow: var(--card-shadow);">
                     <!-- Photo Image Preview Container -->
-                    <div style="position: relative; height: 175px; background: #000; cursor: pointer; overflow: hidden;" onclick="openLightbox('{{ $photo->file_path }}', '{{ addslashes($photo->title) }}', '{{ $badge['label'] }}', {{ $photo->id }}, '{{ $photo->photo_type }}', '{{ addslashes($photo->description ?? '') }}', '{{ $photo->taken_at ? $photo->taken_at->format('Y-m-d') : '' }}', {{ $photo->is_primary ? 1 : 0 }})">
+                    <div style="position: relative; height: 175px; background: #f1f5f9; cursor: pointer; overflow: hidden;" onclick="openLightbox('{{ $photo->file_path }}', '{{ addslashes($photo->title) }}', '{{ $badge['label'] }}', {{ $photo->id }}, '{{ $photo->photo_type }}', '{{ addslashes($photo->description ?? '') }}', '{{ $photo->taken_at ? $photo->taken_at->format('Y-m-d') : '' }}', {{ $photo->is_primary ? 1 : 0 }})">
                         <img src="{{ $photo->file_path }}" alt="{{ $photo->title }}" style="width: 100%; height: 100%; object-fit: cover;">
                         <span style="position: absolute; top: 8px; left: 8px; font-size: 0.65rem; background: {{ $badge['bg'] }}; color: {{ $badge['color'] }}; border: 1px solid {{ $badge['border'] }}; padding: 3px 8px; border-radius: 4px; font-weight: 700;">
                             {{ $badge['icon'] }} {{ strtoupper(str_replace('_', ' ', $photo->photo_type)) }}
                         </span>
                         @if($photo->is_primary)
-                            <span style="position: absolute; top: 8px; right: 8px; font-size: 0.65rem; background: #ef4444; color: #fff; padding: 3px 8px; border-radius: 4px; font-weight: 800; box-shadow: 0 2px 8px rgba(0,0,0,0.6);">
+                            <span style="position: absolute; top: 8px; right: 8px; font-size: 0.65rem; background: var(--primary-red); color: #fff; padding: 3px 8px; border-radius: 4px; font-weight: 800; box-shadow: 0 2px 8px rgba(220,38,38,0.4);">
                                 PRIMARY BANNER
                             </span>
                         @endif
                     </div>
 
                     <!-- Photo Details -->
-                    <div style="padding: 14px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div style="padding: 14px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; background: #fafbfc;">
                         <div>
-                            <div style="font-weight: 700; font-size: 0.95rem; color: #f8fafc; margin-bottom: 4px;">{{ $photo->title }}</div>
+                            <div style="font-weight: 700; font-size: 0.95rem; color: var(--text-primary); margin-bottom: 4px;">{{ $photo->title }}</div>
                             <div style="font-size: 0.775rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 8px;">
                                 {{ $photo->description ?? 'Project architectural reference media.' }}
                             </div>
@@ -277,14 +277,14 @@
                             </span>
                             <div style="display: flex; gap: 6px; align-items: center;">
                                 <!-- Edit Photo Button -->
-                                <button type="button" class="btn-secondary" style="font-size: 0.725rem; padding: 3px 8px; background: rgba(56, 189, 248, 0.1); color: #38bdf8; border-color: rgba(56, 189, 248, 0.3);" onclick="openEditPhotoModal({{ $photo->id }}, '{{ addslashes($photo->title) }}', '{{ $photo->photo_type }}', '{{ addslashes($photo->description ?? '') }}', '{{ addslashes($photo->file_path) }}', '{{ $photo->taken_at ? $photo->taken_at->format('Y-m-d') : '' }}', {{ $photo->is_primary ? 1 : 0 }})" title="Edit photo details, classification, or replace image">
+                                <button type="button" class="btn-secondary" style="font-size: 0.725rem; padding: 3px 8px; color: var(--primary-red); border-color: var(--primary-red-border);" onclick="openEditPhotoModal({{ $photo->id }}, '{{ addslashes($photo->title) }}', '{{ $photo->photo_type }}', '{{ addslashes($photo->description ?? '') }}', '{{ addslashes($photo->file_path) }}', '{{ $photo->taken_at ? $photo->taken_at->format('Y-m-d') : '' }}', {{ $photo->is_primary ? 1 : 0 }})" title="Edit photo details, classification, or replace image">
                                     Edit
                                 </button>
 
                                 @if(!$photo->is_primary)
                                     <form action="{{ route('projects.photos.primary', $photo->id) }}" method="POST" style="display:inline;">
                                         @csrf
-                                        <button type="submit" class="btn-secondary" style="font-size: 0.725rem; padding: 3px 8px; color: #f59e0b; border-color: rgba(245, 158, 11, 0.3);" title="Set as primary project hero photo">
+                                        <button type="submit" class="btn-secondary" style="font-size: 0.725rem; padding: 3px 8px; color: #d97706; border-color: #fcd34d;" title="Set as primary project hero photo">
                                             Set Banner
                                         </button>
                                     </form>
@@ -293,7 +293,7 @@
                                 <form action="{{ route('projects.photos.delete', $photo->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Remove photo {{ addslashes($photo->title) }} from project gallery?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn-secondary" style="font-size: 0.725rem; padding: 3px 6px; color: #ef4444; border-color: rgba(239, 68, 68, 0.3);" title="Delete photo">
+                                    <button type="submit" class="btn-secondary" style="font-size: 0.725rem; padding: 3px 6px; color: var(--primary-red); border-color: var(--primary-red-border);" title="Delete photo">
                                         Delete
                                     </button>
                                 </form>
@@ -304,9 +304,8 @@
             @endforeach
         </div>
     @else
-        <div style="text-align: center; padding: 36px 20px; background: rgba(0, 0, 0, 0.2); border-radius: var(--radius-md); border: 1px dashed var(--border-color);">
-            <div style="font-size: 2.5rem; margin-bottom: 10px; display:none;"></div>
-            <div style="font-size: 1.05rem; font-weight: 700; color: #f8fafc; margin-bottom: 4px;">No Blueprints or Architectural Photos Uploaded Yet</div>
+        <div style="text-align: center; padding: 36px 20px; background: #f8fafc; border-radius: var(--radius-md); border: 1px dashed var(--border-color);">
+            <div style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">No Blueprints or Architectural Photos Uploaded Yet</div>
             <div style="font-size: 0.85rem; color: var(--text-muted); max-width: 480px; margin: 0 auto 16px auto;">
                 Upload technical CAD drawings, 3D concept renders, client wish-list inspirations, or on-site actual progress photographs to monitor visual fidelity.
             </div>
@@ -320,10 +319,10 @@
 <!-- ====================================================
      SECTION 3: CLARIFIED PROJECT SCHEDULING & PHASE MATRIX PLANNER
      ==================================================== -->
-<div class="glass-panel" style="border: 1px solid rgba(56, 189, 248, 0.35); margin-bottom: 28px;">
+<div class="glass-panel" style="border: 1px solid var(--border-color); margin-bottom: 28px;">
     <div class="panel-header" style="margin-bottom: 18px;">
         <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: rgba(56, 189, 248, 0.2); display: grid; place-items: center; font-size: 0.8rem; font-weight: 800; color: #38bdf8;">SCH</div>
+            <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: var(--primary-red-light); display: grid; place-items: center; font-size: 0.8rem; font-weight: 800; color: var(--primary-red);">SCH</div>
             <div>
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <h3 class="panel-title" style="font-size: 1.15rem;">Project Master Scheduling & Execution Timeline</h3>
@@ -343,27 +342,27 @@
 
     <!-- 4 Schedule Metrics Grid -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
-        <div class="summary-block" style="border-left: 3px solid #38bdf8; background: rgba(15, 23, 42, 0.6);">
+        <div class="summary-block" style="border-left: 4px solid var(--primary-red);">
             <div class="summary-block-label">Total Scheduled Window</div>
-            <div class="summary-block-val" style="color: #f8fafc;">{{ $totalScheduleDays }} Days</div>
+            <div class="summary-block-val">{{ $totalScheduleDays }} Days</div>
             <div class="summary-block-sub">{{ $project->start_date->format('M d, Y') }} &rarr; {{ $project->end_date->format('M d, Y') }}</div>
         </div>
 
-        <div class="summary-block" style="border-left: 3px solid #f59e0b; background: rgba(15, 23, 42, 0.6);">
+        <div class="summary-block" style="border-left: 4px solid #f59e0b;">
             <div class="summary-block-label">Elapsed Site Days</div>
-            <div class="summary-block-val" style="color: #f59e0b;">{{ $elapsedDays }} Days</div>
+            <div class="summary-block-val" style="color: #d97706;">{{ $elapsedDays }} Days</div>
             <div class="summary-block-sub">{{ $scheduleProgressRatio }}% Timeline Consumed</div>
         </div>
 
-        <div class="summary-block" style="border-left: 3px solid #10b981; background: rgba(15, 23, 42, 0.6);">
+        <div class="summary-block" style="border-left: 4px solid #10b981;">
             <div class="summary-block-label">Days to Target Handover</div>
-            <div class="summary-block-val" style="color: #10b981;">{{ $remainingDays }} Days Left</div>
+            <div class="summary-block-val" style="color: #059669;">{{ $remainingDays }} Days Left</div>
             <div class="summary-block-sub">Target: {{ $project->end_date->format('M d, Y') }}</div>
         </div>
 
-        <div class="summary-block" style="border-left: 3px solid #ec4899; background: rgba(15, 23, 42, 0.6);">
+        <div class="summary-block" style="border-left: 4px solid #6366f1;">
             <div class="summary-block-label">Tasks & Milestones Progress</div>
-            <div class="summary-block-val" style="color: #ec4899; font-size: 1.1rem; line-height: 1.3;" id="schedTasksDoneVal">
+            <div class="summary-block-val" style="color: #4f46e5; font-size: 1.1rem; line-height: 1.3;" id="schedTasksDoneVal">
                 {{ $completedTasksCount }} / {{ $totalTasksCount }} Tasks Completed
             </div>
             <div class="summary-block-sub" id="schedOverallProgSub">{{ $project->overall_progress }}% Accomplished</div>
@@ -372,20 +371,17 @@
 </div>
 
 <!-- ====================================================
-     SECTION 4: PROGRESSION BASES & ENGINEERING WEIGHT FORMULA
-     ==================================================== -->
-<!-- ====================================================
      SECTION 4: PROJECT MONITORING & TRADE PROGRESSION (CHECKLIST METHOD)
      ==================================================== -->
-<div class="glass-panel" style="border: 1px solid rgba(56, 189, 248, 0.35); margin-bottom: 28px;">
+<div class="glass-panel" style="border: 1px solid var(--border-color); margin-bottom: 28px;">
     <div class="panel-header" style="margin-bottom: 16px; flex-wrap: wrap; gap: 14px;">
         <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 40px; height: 40px; border-radius: var(--radius-sm); background: rgba(56, 189, 248, 0.2); display: grid; place-items: center; font-size: 0.8rem; font-weight: 800; color: #38bdf8;">CHK</div>
+            <div style="width: 40px; height: 40px; border-radius: var(--radius-sm); background: var(--primary-red-light); display: grid; place-items: center; font-size: 0.8rem; font-weight: 800; color: var(--primary-red);">CHK</div>
             <div>
                 <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                     <h3 class="panel-title" style="font-size: 1.15rem;">Project Monitoring & Trade Progression (Checklist Method)</h3>
                     <span class="badge badge-in_progress">{{ $completedTasksCount }} / {{ $totalTasksCount }} Tasks Completed ({{ $project->overall_progress }}%)</span>
-                    <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 0.725rem; font-weight: 700; padding: 3px 8px;">Forward-Only Monotonic Progress</span>
+                    <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #059669; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 0.725rem; font-weight: 700; padding: 3px 8px;">Forward-Only Monotonic Progress</span>
                 </div>
                 <span style="font-size: 0.85rem; color: var(--text-muted);">
                     Checklist execution for Structural, Electrical, Piping & Plumbing, and Design-Build. Tasks and progress advance strictly forward-only; completed milestones are permanent and irreversible.
@@ -393,32 +389,32 @@
             </div>
         </div>
         <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
-            <button type="button" class="btn-secondary" style="font-size: 0.8rem; height: 36px; color: #10b981; border-color: rgba(16, 185, 129, 0.3); display: inline-flex; align-items: center; gap: 6px;" onclick="openChecklistJsonModal()">
+            <button type="button" class="btn-secondary" style="font-size: 0.8rem; height: 36px; color: #059669; border-color: rgba(16, 185, 129, 0.3); display: inline-flex; align-items: center; gap: 6px;" onclick="openChecklistJsonModal()">
                 Structured JSON State
             </button>
             <form action="{{ route('projects.resetChecklist', $project->id) }}" method="POST" onsubmit="return confirm('Reset and load the standard 53-item engineering checklist for Structural, Electrical, Piping, and Design-Build?');" style="display: inline;">
                 @csrf
-                <button type="submit" class="btn-secondary" style="font-size: 0.8rem; height: 36px; color: #38bdf8; border-color: rgba(56, 189, 248, 0.3); display: inline-flex; align-items: center; gap: 6px;">
+                <button type="submit" class="btn-secondary" style="font-size: 0.8rem; height: 36px; color: var(--text-secondary); border-color: var(--border-color); display: inline-flex; align-items: center; gap: 6px;">
                     Reset Standard Checklist (53 Tasks)
                 </button>
             </form>
-            <button class="btn-primary" style="font-size: 0.8rem; height: 36px; background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); border-color: #38bdf8; display: inline-flex; align-items: center; gap: 6px;" onclick="openAddSpecificTaskModal('Structural')">
+            <button class="btn-primary" style="font-size: 0.8rem; height: 36px; display: inline-flex; align-items: center; gap: 6px;" onclick="openAddSpecificTaskModal('Structural')">
                 + Add Checklist Task
             </button>
         </div>
     </div>
 
     <!-- Mathematical Formula Box -->
-    <div style="background: rgba(0,0,0,0.4); border: 1px solid var(--border-accent); border-radius: var(--radius-md); padding: 14px 18px; margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+    <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px 18px; margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
         <div>
             <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 4px;">Standard Engineering Weighting Formula (Calculated from Checklists):</div>
-            <div style="font-family: var(--font-mono); font-size: 0.95rem; color: #f8fafc; font-weight: 600;">
-                <span style="color: #ef4444;">Overall %</span> = (<span style="color: #38bdf8;">Structural</span> &times; <span id="formulaStructWeight">{{ $project->structural_weight }}%</span>) + (<span style="color: #f59e0b;">Electrical</span> &times; <span id="formulaElecWeight">{{ $project->electrical_weight }}%</span>) + (<span style="color: #10b981;">Plumbing</span> &times; <span id="formulaPipeWeight">{{ $project->piping_weight }}%</span>) + (<span style="color: #ec4899;">Design-Build</span> &times; <span id="formulaFinishWeight">{{ $project->finishing_weight }}%</span>)
+            <div style="font-family: var(--font-mono); font-size: 0.95rem; color: var(--text-primary); font-weight: 600;">
+                <span style="color: var(--primary-red); font-weight: 800;">Overall %</span> = (<span style="color: #dc2626; font-weight: 700;">Structural</span> &times; <span id="formulaStructWeight">{{ $project->structural_weight }}%</span>) + (<span style="color: #d97706; font-weight: 700;">Electrical</span> &times; <span id="formulaElecWeight">{{ $project->electrical_weight }}%</span>) + (<span style="color: #059669; font-weight: 700;">Plumbing</span> &times; <span id="formulaPipeWeight">{{ $project->piping_weight }}%</span>) + (<span style="color: #7c3aed; font-weight: 700;">Design-Build</span> &times; <span id="formulaFinishWeight">{{ $project->finishing_weight }}%</span>)
             </div>
         </div>
         <div style="text-align: right;">
-            <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Automated Overall Progress</div>
-            <div style="font-family: var(--font-mono); font-size: 1.6rem; font-weight: 800; color: #10b981;" id="sec4OverallProgressVal">
+            <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Automated Overall Progress</div>
+            <div style="font-family: var(--font-mono); font-size: 1.6rem; font-weight: 800; color: var(--primary-red);" id="sec4OverallProgressVal">
                 {{ $project->overall_progress }}%
             </div>
         </div>
@@ -427,102 +423,106 @@
     <!-- 4 Trade Summary Cards Grid -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 22px;">
         <!-- Structural Card -->
-        <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: var(--radius-md); padding: 16px;">
+        <div style="background: #fafbfc; border: 1px solid var(--border-color); border-top: 4px solid #dc2626; border-radius: var(--radius-md); padding: 16px; box-shadow: var(--card-shadow);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                <span style="font-weight: 700; font-size: 0.9rem; color: #38bdf8;">Structural Works</span>
+                <span style="font-weight: 700; font-size: 0.9rem; color: #dc2626;">Structural Works</span>
                 <span class="spec-chip" id="chipStructWeight" style="font-size: 0.65rem;">{{ $project->structural_weight }}% WEIGHT</span>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px;">
-                <span style="font-family: var(--font-mono); font-size: 1.5rem; font-weight: 800; color: #f8fafc;" id="kpiStructVal">{{ $project->structural_progress }}%</span>
-                <span style="font-size: 0.75rem; color: #38bdf8; font-weight: 600;" id="kpiStructDone">{{ $structuralDone }} / {{ $structuralTasks->count() }} Tasks Done</span>
+                <span style="font-family: var(--font-mono); font-size: 1.5rem; font-weight: 800; color: var(--text-primary);" id="kpiStructVal">{{ $project->structural_progress }}%</span>
+                <span style="font-size: 0.75rem; color: #dc2626; font-weight: 600;" id="kpiStructDone">{{ $structuralDone }} / {{ $structuralTasks->count() }} Tasks Done</span>
             </div>
-            <div style="height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; margin-bottom: 6px;">
-                <div id="kpiStructBar" style="width: {{ $project->structural_progress }}%; height: 100%; background: #38bdf8; transition: width 0.4s ease;"></div>
+            <div style="height: 6px; background: #f1f5f9; border-radius: 3px; overflow: hidden; margin-bottom: 6px;">
+                <div id="kpiStructBar" style="width: {{ $project->structural_progress }}%; height: 100%; background: #dc2626; transition: width 0.4s ease;"></div>
             </div>
             <div style="font-size: 0.7rem; color: var(--text-muted); display: flex; justify-content: space-between;">
                 <span>Contribution to Total:</span>
-                <strong style="color: #38bdf8;" id="kpiStructContrib">+{{ round(($project->structural_progress * $project->structural_weight) / 100, 1) }}%</strong>
+                <strong style="color: #dc2626;" id="kpiStructContrib">+{{ round(($project->structural_progress * $project->structural_weight) / 100, 1) }}%</strong>
             </div>
         </div>
 
         <!-- Electrical Card -->
-        <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: var(--radius-md); padding: 16px;">
+        <div style="background: #fafbfc; border: 1px solid var(--border-color); border-top: 4px solid #d97706; border-radius: var(--radius-md); padding: 16px; box-shadow: var(--card-shadow);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                <span style="font-weight: 700; font-size: 0.9rem; color: #f59e0b;">Electrical Works</span>
+                <span style="font-weight: 700; font-size: 0.9rem; color: #d97706;">Electrical Works</span>
                 <span class="spec-chip" id="chipElecWeight" style="font-size: 0.65rem;">{{ $project->electrical_weight }}% WEIGHT</span>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px;">
-                <span style="font-family: var(--font-mono); font-size: 1.5rem; font-weight: 800; color: #f8fafc;" id="kpiElecVal">{{ $project->electrical_progress }}%</span>
-                <span style="font-size: 0.75rem; color: #f59e0b; font-weight: 600;" id="kpiElecDone">{{ $electricalDone }} / {{ $electricalTasks->count() }} Tasks Done</span>
+                <span style="font-family: var(--font-mono); font-size: 1.5rem; font-weight: 800; color: var(--text-primary);" id="kpiElecVal">{{ $project->electrical_progress }}%</span>
+                <span style="font-size: 0.75rem; color: #d97706; font-weight: 600;" id="kpiElecDone">{{ $electricalDone }} / {{ $electricalTasks->count() }} Tasks Done</span>
             </div>
-            <div style="height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; margin-bottom: 6px;">
-                <div id="kpiElecBar" style="width: {{ $project->electrical_progress }}%; height: 100%; background: #f59e0b; transition: width 0.4s ease;"></div>
+            <div style="height: 6px; background: #f1f5f9; border-radius: 3px; overflow: hidden; margin-bottom: 6px;">
+                <div id="kpiElecBar" style="width: {{ $project->electrical_progress }}%; height: 100%; background: #d97706; transition: width 0.4s ease;"></div>
             </div>
             <div style="font-size: 0.7rem; color: var(--text-muted); display: flex; justify-content: space-between;">
                 <span>Contribution to Total:</span>
-                <strong style="color: #f59e0b;" id="kpiElecContrib">+{{ round(($project->electrical_progress * $project->electrical_weight) / 100, 1) }}%</strong>
+                <strong style="color: #d97706;" id="kpiElecContrib">+{{ round(($project->electrical_progress * $project->electrical_weight) / 100, 1) }}%</strong>
             </div>
         </div>
 
         <!-- Piping Card -->
-        <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-md); padding: 16px;">
+        <div style="background: #fafbfc; border: 1px solid var(--border-color); border-top: 4px solid #059669; border-radius: var(--radius-md); padding: 16px; box-shadow: var(--card-shadow);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                <span style="font-weight: 700; font-size: 0.9rem; color: #10b981;">Piping & Plumbing</span>
+                <span style="font-weight: 700; font-size: 0.9rem; color: #059669;">Piping & Plumbing</span>
                 <span class="spec-chip" id="chipPipeWeight" style="font-size: 0.65rem;">{{ $project->piping_weight }}% WEIGHT</span>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px;">
-                <span style="font-family: var(--font-mono); font-size: 1.5rem; font-weight: 800; color: #f8fafc;" id="kpiPipeVal">{{ $project->piping_progress }}%</span>
-                <span style="font-size: 0.75rem; color: #10b981; font-weight: 600;" id="kpiPipeDone">{{ $pipingDone }} / {{ $pipingTasks->count() }} Tasks Done</span>
+                <span style="font-family: var(--font-mono); font-size: 1.5rem; font-weight: 800; color: var(--text-primary);" id="kpiPipeVal">{{ $project->piping_progress }}%</span>
+                <span style="font-size: 0.75rem; color: #059669; font-weight: 600;" id="kpiPipeDone">{{ $pipingDone }} / {{ $pipingTasks->count() }} Tasks Done</span>
             </div>
-            <div style="height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; margin-bottom: 6px;">
-                <div id="kpiPipeBar" style="width: {{ $project->piping_progress }}%; height: 100%; background: #10b981; transition: width 0.4s ease;"></div>
+            <div style="height: 6px; background: #f1f5f9; border-radius: 3px; overflow: hidden; margin-bottom: 6px;">
+                <div id="kpiPipeBar" style="width: {{ $project->piping_progress }}%; height: 100%; background: #059669; transition: width 0.4s ease;"></div>
             </div>
             <div style="font-size: 0.7rem; color: var(--text-muted); display: flex; justify-content: space-between;">
                 <span>Contribution to Total:</span>
-                <strong style="color: #10b981;" id="kpiPipeContrib">+{{ round(($project->piping_progress * $project->piping_weight) / 100, 1) }}%</strong>
+                <strong style="color: #059669;" id="kpiPipeContrib">+{{ round(($project->piping_progress * $project->piping_weight) / 100, 1) }}%</strong>
             </div>
         </div>
 
         <!-- Finishing Card -->
-        <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(236, 72, 153, 0.3); border-radius: var(--radius-md); padding: 16px;">
+        <div style="background: #fafbfc; border: 1px solid var(--border-color); border-top: 4px solid #7c3aed; border-radius: var(--radius-md); padding: 16px; box-shadow: var(--card-shadow);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                <span style="font-weight: 700; font-size: 0.9rem; color: #ec4899;">Design-Build / Turnkey</span>
+                <span style="font-weight: 700; font-size: 0.9rem; color: #7c3aed;">Design-Build / Turnkey</span>
                 <span class="spec-chip" id="chipFinishWeight" style="font-size: 0.65rem;">{{ $project->finishing_weight }}% WEIGHT</span>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px;">
-                <span style="font-family: var(--font-mono); font-size: 1.5rem; font-weight: 800; color: #f8fafc;" id="kpiFinishVal">{{ $project->finishing_progress }}%</span>
-                <span style="font-size: 0.75rem; color: #ec4899; font-weight: 600;" id="kpiFinishDone">{{ $finishingDone }} / {{ $finishingTasks->count() }} Tasks Done</span>
+                <span style="font-family: var(--font-mono); font-size: 1.5rem; font-weight: 800; color: var(--text-primary);" id="kpiFinishVal">{{ $project->finishing_progress }}%</span>
+                <span style="font-size: 0.75rem; color: #7c3aed; font-weight: 600;" id="kpiFinishDone">{{ $finishingDone }} / {{ $finishingTasks->count() }} Tasks Done</span>
             </div>
-            <div style="height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; margin-bottom: 6px;">
-                <div id="kpiFinishBar" style="width: {{ $project->finishing_progress }}%; height: 100%; background: #ec4899; transition: width 0.4s ease;"></div>
+            <div style="height: 6px; background: #f1f5f9; border-radius: 3px; overflow: hidden; margin-bottom: 6px;">
+                <div id="kpiFinishBar" style="width: {{ $project->finishing_progress }}%; height: 100%; background: #7c3aed; transition: width 0.4s ease;"></div>
             </div>
             <div style="font-size: 0.7rem; color: var(--text-muted); display: flex; justify-content: space-between;">
                 <span>Contribution to Total:</span>
-                <strong style="color: #ec4899;" id="kpiFinishContrib">+{{ round(($project->finishing_progress * $project->finishing_weight) / 100, 1) }}%</strong>
+                <strong style="color: #7c3aed;" id="kpiFinishContrib">+{{ round(($project->finishing_progress * $project->finishing_weight) / 100, 1) }}%</strong>
             </div>
         </div>
     </div>
 
     <!-- Trade Checklist Tabs & Task Status Filter Bar -->
-    <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px 16px; margin-bottom: 20px;">
+    <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px 16px; margin-bottom: 20px;">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
             
             <!-- Left: Discipline Filter Tabs -->
-            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                <button type="button" class="btn-tab active" onclick="switchChecklistTab('all', this)" style="padding: 7px 14px; font-size: 0.825rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: rgba(56, 189, 248, 0.15); color: #38bdf8; cursor: pointer;">
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button type="button" id="tabBtnStructural" class="btn-tab active" onclick="switchChecklistTab('structural', this)">
+                    <span style="width: 8px; height: 8px; border-radius: 50%; background: #dc2626; display: inline-block;"></span>
+                    Structural Works (<span id="tabCountStruct">{{ $structuralTasks->count() }}</span>)
+                </button>
+                <button type="button" id="tabBtnElectrical" class="btn-tab" onclick="switchChecklistTab('electrical', this)">
+                    <span style="width: 8px; height: 8px; border-radius: 50%; background: #d97706; display: inline-block;"></span>
+                    Electrical Works (<span id="tabCountElec">{{ $electricalTasks->count() }}</span>)
+                </button>
+                <button type="button" id="tabBtnPiping" class="btn-tab" onclick="switchChecklistTab('piping', this)">
+                    <span style="width: 8px; height: 8px; border-radius: 50%; background: #059669; display: inline-block;"></span>
+                    Piping & Plumbing (<span id="tabCountPipe">{{ $pipingTasks->count() }}</span>)
+                </button>
+                <button type="button" id="tabBtnFinishing" class="btn-tab" onclick="switchChecklistTab('finishing', this)">
+                    <span style="width: 8px; height: 8px; border-radius: 50%; background: #7c3aed; display: inline-block;"></span>
+                    Design-Build / Turnkey (<span id="tabCountFinish">{{ $finishingTasks->count() }}</span>)
+                </button>
+                <button type="button" id="tabBtnAll" class="btn-tab" onclick="switchChecklistTab('all', this)">
                     All Disciplines (<span id="tabCountAll">{{ $project->tasks->count() }}</span>)
-                </button>
-                <button type="button" class="btn-tab" onclick="switchChecklistTab('structural', this)" style="padding: 7px 14px; font-size: 0.825rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid transparent; background: rgba(15, 23, 42, 0.5); color: var(--text-secondary); cursor: pointer;">
-                    Structural (<span id="tabCountStruct">{{ $structuralTasks->count() }}</span>)
-                </button>
-                <button type="button" class="btn-tab" onclick="switchChecklistTab('electrical', this)" style="padding: 7px 14px; font-size: 0.825rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid transparent; background: rgba(15, 23, 42, 0.5); color: var(--text-secondary); cursor: pointer;">
-                    Electrical (<span id="tabCountElec">{{ $electricalTasks->count() }}</span>)
-                </button>
-                <button type="button" class="btn-tab" onclick="switchChecklistTab('piping', this)" style="padding: 7px 14px; font-size: 0.825rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid transparent; background: rgba(15, 23, 42, 0.5); color: var(--text-secondary); cursor: pointer;">
-                    Piping (<span id="tabCountPipe">{{ $pipingTasks->count() }}</span>)
-                </button>
-                <button type="button" class="btn-tab" onclick="switchChecklistTab('finishing', this)" style="padding: 7px 14px; font-size: 0.825rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid transparent; background: rgba(15, 23, 42, 0.5); color: var(--text-secondary); cursor: pointer;">
-                    Design-Build (<span id="tabCountFinish">{{ $finishingTasks->count() }}</span>)
                 </button>
             </div>
 
@@ -534,7 +534,7 @@
                     <label style="font-size: 0.775rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; white-space: nowrap;">
                         Task Status:
                     </label>
-                    <select id="taskStatusFilter" class="form-select" onchange="filterChecklistByStatus(this.value)" style="padding: 6px 12px; font-size: 0.825rem; font-weight: 600; min-width: 170px; height: 34px; background: rgba(15, 23, 42, 0.9); border-color: rgba(56, 189, 248, 0.4); color: #38bdf8;">
+                    <select id="taskStatusFilter" class="form-select" onchange="filterChecklistByStatus(this.value)" style="padding: 6px 12px; font-size: 0.825rem; font-weight: 600; min-width: 170px; height: 34px; background: #fafbfc; border-color: var(--border-color); color: var(--text-primary);">
                         <option value="all">All Statuses ({{ $project->tasks->count() }})</option>
                         <option value="in_progress">In Progress</option>
                         <option value="completed">Completed (100%)</option>
@@ -547,7 +547,7 @@
                     <label style="font-size: 0.775rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; white-space: nowrap;">
                         Jump to Task:
                     </label>
-                    <select id="taskJumpSelect" class="form-select" onchange="jumpToTaskDirect(this.value)" style="padding: 6px 12px; font-size: 0.825rem; font-weight: 600; max-width: 280px; height: 34px; background: rgba(15, 23, 42, 0.9); border-color: rgba(245, 158, 11, 0.4); color: #f8fafc;">
+                    <select id="taskJumpSelect" class="form-select" onchange="jumpToTaskDirect(this.value)" style="padding: 6px 12px; font-size: 0.825rem; font-weight: 600; max-width: 280px; height: 34px; background: #fafbfc; border-color: var(--border-color); color: var(--text-primary);">
                         <option value="">-- Choose Task to Locate --</option>
                         
                         @php
@@ -574,67 +574,67 @@
     <div style="display: flex; flex-direction: column; gap: 20px;">
         
         <!-- 1. Structural Checklist Table -->
-        <div class="checklist-section" id="chkSectionStructural" style="background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: var(--radius-md); overflow: hidden;">
-            <div style="padding: 12px 18px; background: rgba(56, 189, 248, 0.08); border-bottom: 1px solid rgba(56, 189, 248, 0.2); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+        <div class="checklist-section" id="chkSectionStructural" style="background: #fafbfc; border: 1px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--card-shadow); display: block;">
+            <div style="padding: 12px 18px; background: #f8fafc; border-bottom: 1px solid var(--border-color); border-top: 3px solid #dc2626; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <span style="font-weight: 800; font-size: 1rem; color: #38bdf8;">Structural Works Checklist</span>
+                    <span style="font-weight: 800; font-size: 1rem; color: #dc2626;">Structural Works Checklist</span>
                     <span class="badge badge-in_progress" style="font-size: 0.7rem;" id="structSectionDoneBadge">{{ $structuralDone }} / {{ $structuralTasks->count() }} Tasks Done</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <span style="font-size: 0.8rem; color: var(--text-muted);">Trade Progress:</span>
-                    <strong style="font-family: var(--font-mono); font-size: 1.1rem; color: #38bdf8;" id="structSectionProgVal">{{ $project->structural_progress }}%</strong>
-                    <button class="btn-primary" style="font-size: 0.725rem; padding: 4px 8px; background: #38bdf8; border-color: #38bdf8;" onclick="openAddSpecificTaskModal('Structural')">+ Add Structural Task</button>
+                    <strong style="font-family: var(--font-mono); font-size: 1.1rem; color: #dc2626;" id="structSectionProgVal">{{ $project->structural_progress }}%</strong>
+                    <button class="btn-primary" style="font-size: 0.725rem; padding: 4px 10px;" onclick="openAddSpecificTaskModal('Structural')">+ Add Structural Task</button>
                 </div>
             </div>
-            @include('projects.partials.checklist_table', ['tasks' => $structuralTasks, 'tradeName' => 'Structural Task', 'tradeColor' => '#38bdf8'])
+            @include('projects.partials.checklist_table', ['tasks' => $structuralTasks, 'tradeName' => 'Structural Task', 'tradeColor' => '#dc2626'])
         </div>
 
         <!-- 2. Electrical Checklist Table -->
-        <div class="checklist-section" id="chkSectionElectrical" style="background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: var(--radius-md); overflow: hidden;">
-            <div style="padding: 12px 18px; background: rgba(245, 158, 11, 0.08); border-bottom: 1px solid rgba(245, 158, 11, 0.2); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+        <div class="checklist-section" id="chkSectionElectrical" style="background: #fafbfc; border: 1px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--card-shadow); display: none;">
+            <div style="padding: 12px 18px; background: #f8fafc; border-bottom: 1px solid var(--border-color); border-top: 3px solid #d97706; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <span style="font-weight: 800; font-size: 1rem; color: #f59e0b;">Electrical Works Checklist</span>
+                    <span style="font-weight: 800; font-size: 1rem; color: #d97706;">Electrical Works Checklist</span>
                     <span class="badge badge-in_progress" style="font-size: 0.7rem;" id="elecSectionDoneBadge">{{ $electricalDone }} / {{ $electricalTasks->count() }} Tasks Done</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <span style="font-size: 0.8rem; color: var(--text-muted);">Trade Progress:</span>
-                    <strong style="font-family: var(--font-mono); font-size: 1.1rem; color: #f59e0b;" id="elecSectionProgVal">{{ $project->electrical_progress }}%</strong>
-                    <button class="btn-primary" style="font-size: 0.725rem; padding: 4px 8px; background: #f59e0b; border-color: #f59e0b;" onclick="openAddSpecificTaskModal('Electrical')">+ Add Electrical Task</button>
+                    <strong style="font-family: var(--font-mono); font-size: 1.1rem; color: #d97706;" id="elecSectionProgVal">{{ $project->electrical_progress }}%</strong>
+                    <button class="btn-primary" style="font-size: 0.725rem; padding: 4px 10px; background: #d97706; border-color: #d97706;" onclick="openAddSpecificTaskModal('Electrical')">+ Add Electrical Task</button>
                 </div>
             </div>
-            @include('projects.partials.checklist_table', ['tasks' => $electricalTasks, 'tradeName' => 'Electrical Task', 'tradeColor' => '#f59e0b'])
+            @include('projects.partials.checklist_table', ['tasks' => $electricalTasks, 'tradeName' => 'Electrical Task', 'tradeColor' => '#d97706'])
         </div>
 
         <!-- 3. Piping & Plumbing Checklist Table -->
-        <div class="checklist-section" id="chkSectionPiping" style="background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: var(--radius-md); overflow: hidden;">
-            <div style="padding: 12px 18px; background: rgba(16, 185, 129, 0.08); border-bottom: 1px solid rgba(16, 185, 129, 0.2); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+        <div class="checklist-section" id="chkSectionPiping" style="background: #fafbfc; border: 1px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--card-shadow); display: none;">
+            <div style="padding: 12px 18px; background: #f8fafc; border-bottom: 1px solid var(--border-color); border-top: 3px solid #059669; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <span style="font-weight: 800; font-size: 1rem; color: #10b981;">Piping & Plumbing Checklist</span>
+                    <span style="font-weight: 800; font-size: 1rem; color: #059669;">Piping & Plumbing Checklist</span>
                     <span class="badge badge-in_progress" style="font-size: 0.7rem;" id="pipeSectionDoneBadge">{{ $pipingDone }} / {{ $pipingTasks->count() }} Tasks Done</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <span style="font-size: 0.8rem; color: var(--text-muted);">Trade Progress:</span>
-                    <strong style="font-family: var(--font-mono); font-size: 1.1rem; color: #10b981;" id="pipeSectionProgVal">{{ $project->piping_progress }}%</strong>
-                    <button class="btn-primary" style="font-size: 0.725rem; padding: 4px 8px; background: #10b981; border-color: #10b981;" onclick="openAddSpecificTaskModal('Piping & Plumbing')">+ Add Plumbing Task</button>
+                    <strong style="font-family: var(--font-mono); font-size: 1.1rem; color: #059669;" id="pipeSectionProgVal">{{ $project->piping_progress }}%</strong>
+                    <button class="btn-primary" style="font-size: 0.725rem; padding: 4px 10px; background: #059669; border-color: #059669;" onclick="openAddSpecificTaskModal('Piping & Plumbing')">+ Add Plumbing Task</button>
                 </div>
             </div>
-            @include('projects.partials.checklist_table', ['tasks' => $pipingTasks, 'tradeName' => 'Piping & Plumbing Task', 'tradeColor' => '#10b981'])
+            @include('projects.partials.checklist_table', ['tasks' => $pipingTasks, 'tradeName' => 'Piping & Plumbing Task', 'tradeColor' => '#059669'])
         </div>
 
         <!-- 4. Design-Build / Turnkey Finishing Checklist Table -->
-        <div class="checklist-section" id="chkSectionFinishing" style="background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(236, 72, 153, 0.25); border-radius: var(--radius-md); overflow: hidden;">
-            <div style="padding: 12px 18px; background: rgba(236, 72, 153, 0.08); border-bottom: 1px solid rgba(236, 72, 153, 0.2); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+        <div class="checklist-section" id="chkSectionFinishing" style="background: #fafbfc; border: 1px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--card-shadow); display: none;">
+            <div style="padding: 12px 18px; background: #f8fafc; border-bottom: 1px solid var(--border-color); border-top: 3px solid #7c3aed; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <span style="font-weight: 800; font-size: 1rem; color: #ec4899;">Design-Build / Turnkey Finishing Checklist</span>
+                    <span style="font-weight: 800; font-size: 1rem; color: #7c3aed;">Design-Build / Turnkey Finishing Checklist</span>
                     <span class="badge badge-in_progress" style="font-size: 0.7rem;" id="finishSectionDoneBadge">{{ $finishingDone }} / {{ $finishingTasks->count() }} Tasks Done</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <span style="font-size: 0.8rem; color: var(--text-muted);">Trade Progress:</span>
-                    <strong style="font-family: var(--font-mono); font-size: 1.1rem; color: #ec4899;" id="finishSectionProgVal">{{ $project->finishing_progress }}%</strong>
-                    <button class="btn-primary" style="font-size: 0.725rem; padding: 4px 8px; background: #ec4899; border-color: #ec4899;" onclick="openAddSpecificTaskModal('Design-Build / Turnkey Finishing')">+ Add Finishing Task</button>
+                    <strong style="font-family: var(--font-mono); font-size: 1.1rem; color: #7c3aed;" id="finishSectionProgVal">{{ $project->finishing_progress }}%</strong>
+                    <button class="btn-primary" style="font-size: 0.725rem; padding: 4px 10px; background: #7c3aed; border-color: #7c3aed;" onclick="openAddSpecificTaskModal('Design-Build / Turnkey Finishing')">+ Add Finishing Task</button>
                 </div>
             </div>
-            @include('projects.partials.checklist_table', ['tasks' => $finishingTasks, 'tradeName' => 'Design-Build Task', 'tradeColor' => '#ec4899'])
+            @include('projects.partials.checklist_table', ['tasks' => $finishingTasks, 'tradeName' => 'Design-Build Task', 'tradeColor' => '#7c3aed'])
         </div>
 
     </div>
@@ -642,14 +642,14 @@
     <!-- ====================================================
          ACTIVE PROJECT MATERIALS & REAL-TIME ACCUMULATION PANEL
          ==================================================== -->
-    <div id="activeProjectMaterialsSection" class="glass-panel" style="margin-top: 24px; background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-md); padding: 20px;">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 14px; margin-bottom: 18px; border-bottom: 1px solid rgba(16, 185, 129, 0.2); padding-bottom: 14px;">
+    <div id="activeProjectMaterialsSection" class="glass-panel" style="margin-top: 24px; background: #fafbfc; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; box-shadow: var(--card-shadow);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 14px; margin-bottom: 18px; border-bottom: 1px solid var(--border-color); padding-bottom: 14px;">
             <div style="display: flex; align-items: center; gap: 12px;">
-                <div style="width: 42px; height: 42px; border-radius: var(--radius-sm); background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); display: grid; place-items: center; font-size: 0.8rem; font-weight: 800; color: #10b981;">MAT</div>
+                <div style="width: 42px; height: 42px; border-radius: var(--radius-sm); background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); display: grid; place-items: center; font-size: 0.8rem; font-weight: 800; color: #059669;">MAT</div>
                 <div>
                     <div style="display: flex; align-items: center; gap: 8px;">
-                        <h4 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #f8fafc;">Active Project Materials & On-Site Resource Consumption</h4>
-                        <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 0.75rem;">
+                        <h4 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: var(--text-primary);">Active Project Materials & On-Site Resource Consumption</h4>
+                        <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #059669; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 0.75rem;">
                             Dynamically Accumulated from Active Tasks
                         </span>
                     </div>
@@ -661,7 +661,7 @@
 
             <!-- Search Filter for Active Materials -->
             <div style="display: flex; align-items: center; gap: 8px;">
-                <input type="text" id="activeMaterialSearchInput" onkeyup="filterActiveMaterialsTable(this.value)" placeholder="Filter active materials..." class="form-input" style="padding: 6px 12px; font-size: 0.825rem; width: 220px; height: 34px; background: rgba(0,0,0,0.4); border-color: rgba(255,255,255,0.15);">
+                <input type="text" id="activeMaterialSearchInput" onkeyup="filterActiveMaterialsTable(this.value)" placeholder="Filter active materials..." class="form-input" style="padding: 6px 12px; font-size: 0.825rem; width: 220px; height: 34px;">
                 <button type="button" class="btn-secondary" onclick="refreshActiveMaterialsAjax()" style="font-size: 0.775rem; padding: 6px 12px; height: 34px;" title="Refresh Active Materials">
                     Sync
                 </button>
@@ -670,33 +670,33 @@
 
         <!-- 4 Active Materials Summary KPI Cards -->
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 20px;">
-            <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-sm); padding: 12px 16px;">
+            <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 12px 16px;">
                 <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Active Material Items</div>
-                <div style="font-family: var(--font-mono); font-size: 1.4rem; font-weight: 800; color: #38bdf8;" id="activeMatCount">
+                <div style="font-family: var(--font-mono); font-size: 1.4rem; font-weight: 800; color: var(--primary-red);" id="activeMatCount">
                     {{ $activeMaterialsData['total_active_items'] }} Items
                 </div>
                 <div style="font-size: 0.7rem; color: var(--text-muted);">Distinct specifications active</div>
             </div>
 
-            <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-sm); padding: 12px 16px;">
+            <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 12px 16px;">
                 <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Total Active Quantity</div>
-                <div style="font-family: var(--font-mono); font-size: 1.4rem; font-weight: 800; color: #f59e0b;" id="activeMatUnits">
+                <div style="font-family: var(--font-mono); font-size: 1.4rem; font-weight: 800; color: #d97706;" id="activeMatUnits">
                     {{ number_format($activeMaterialsData['total_active_units']) }} Units
                 </div>
                 <div style="font-size: 0.7rem; color: var(--text-muted);">Cumulative units mobilized</div>
             </div>
 
-            <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-sm); padding: 12px 16px;">
-                <div style="font-size: 0.75rem; color: #10b981; text-transform: uppercase; font-weight: 700;">Accumulated Active Value</div>
-                <div style="font-family: var(--font-mono); font-size: 1.4rem; font-weight: 800; color: #10b981;" id="activeMatValue">
+            <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 12px 16px;">
+                <div style="font-size: 0.75rem; color: #059669; text-transform: uppercase; font-weight: 700;">Accumulated Active Value</div>
+                <div style="font-family: var(--font-mono); font-size: 1.4rem; font-weight: 800; color: #059669;" id="activeMatValue">
                     ₱{{ number_format($activeMaterialsData['total_active_value'], 2) }}
                 </div>
                 <div style="font-size: 0.7rem; color: var(--text-muted);">Total cost of active materials</div>
             </div>
 
-            <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-sm); padding: 12px 16px;">
+            <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 12px 16px;">
                 <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Active Task Sources</div>
-                <div style="font-family: var(--font-mono); font-size: 1.4rem; font-weight: 800; color: #f8fafc;" id="activeTasksCount">
+                <div style="font-family: var(--font-mono); font-size: 1.4rem; font-weight: 800; color: var(--text-primary);" id="activeTasksCount">
                     {{ $activeMaterialsData['active_tasks_count'] }} Tasks Active
                 </div>
                 <div style="font-size: 0.7rem; color: var(--text-muted);">
@@ -706,65 +706,59 @@
         </div>
 
         <!-- Active Materials Table -->
-        <div style="overflow-x: auto; max-height: 420px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
-            <table class="data-table" id="activeMaterialsTable" style="margin-bottom: 0; font-size: 0.825rem; width: 100%; border-collapse: collapse;">
-                <thead style="position: sticky; top: 0; background: #0f172a; z-index: 5; border-bottom: 2px solid rgba(16, 185, 129, 0.4);">
+        <div style="overflow-x: auto; max-height: 420px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: var(--radius-sm); background: #fafbfc;">
+            <table class="data-table custom-table" id="activeMaterialsTable" style="margin-bottom: 0; font-size: 0.825rem; width: 100%; border-collapse: collapse;">
+                <thead style="position: sticky; top: 0; background: #f8fafc; z-index: 5; border-bottom: 2px solid var(--border-color);">
                     <tr>
-                        <th style="width: 40px; text-align: center; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 10px 6px;">#</th>
-                        <th style="min-width: 220px; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 10px 12px;">Material Specification</th>
-                        <th style="width: 140px; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 10px 10px;">Discipline</th>
-                        <th style="width: 150px; text-align: right; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 10px 12px;">Accumulated Qty</th>
-                        <th style="width: 120px; text-align: right; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 10px 10px;">Unit Cost</th>
-                        <th style="width: 150px; text-align: right; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 10px 12px;">Total Cost</th>
-                        <th style="min-width: 250px; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 10px 12px;">Aligned Construction Task(s)</th>
+                        <th style="width: 40px; text-align: center; border-right: 1px solid var(--border-color); padding: 10px 6px;">#</th>
+                        <th style="min-width: 220px; border-right: 1px solid var(--border-color); padding: 10px 12px;">Material Specification</th>
+                        <th style="width: 140px; border-right: 1px solid var(--border-color); padding: 10px 10px;">Discipline</th>
+                        <th style="width: 150px; text-align: right; border-right: 1px solid var(--border-color); padding: 10px 12px;">Accumulated Qty</th>
+                        <th style="width: 120px; text-align: right; border-right: 1px solid var(--border-color); padding: 10px 10px;">Unit Cost</th>
+                        <th style="width: 150px; text-align: right; border-right: 1px solid var(--border-color); padding: 10px 12px;">Total Cost</th>
+                        <th style="min-width: 250px; border-right: 1px solid var(--border-color); padding: 10px 12px;">Aligned Construction Task(s)</th>
                         <th style="width: 150px; text-align: center; padding: 10px 8px;">Status</th>
                     </tr>
                 </thead>
                 <tbody id="activeMaterialsTableBody">
                     @forelse($activeMaterialsData['materials'] as $index => $mat)
-                        <tr class="active-mat-row" data-name="{{ strtolower($mat['material_name']) }}" data-category="{{ strtolower($mat['category']) }}" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
-                            <td style="text-align: center; color: var(--text-muted); font-family: var(--font-mono); border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 6px;">
+                        <tr class="active-mat-row" data-name="{{ strtolower($mat['material_name']) }}" data-category="{{ strtolower($mat['category']) }}" style="border-bottom: 1px solid #f1f5f9;">
+                            <td style="text-align: center; color: var(--text-muted); font-family: var(--font-mono); border-right: 1px solid #f1f5f9; padding: 8px 6px;">
                                 {{ $index + 1 }}
                             </td>
-                            <td style="border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 12px;">
-                                <strong style="color: #f8fafc; font-size: 0.875rem;">
+                            <td style="border-right: 1px solid #f1f5f9; padding: 8px 12px;">
+                                <strong style="color: var(--text-primary); font-size: 0.875rem;">
                                     {{ $mat['material_name'] }}
                                 </strong>
                             </td>
-                            <td style="border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 10px;">
+                            <td style="border-right: 1px solid #f1f5f9; padding: 8px 10px;">
                                 @php
                                     $catColor = match($mat['category']) {
-                                        'Structural' => '#38bdf8',
-                                        'Electrical' => '#f59e0b',
-                                        'Piping & Plumbing', 'Piping' => '#10b981',
-                                        'Roofing', 'Roofing & Metal Sheets' => '#f97316',
-                                        'Windows & Doors', 'Doors & Windows' => '#818cf8',
-                                        default => '#ec4899',
+                                        'Structural' => '#dc2626',
+                                        'Electrical' => '#d97706',
+                                        'Piping & Plumbing', 'Piping' => '#059669',
+                                        'Roofing', 'Roofing & Metal Sheets' => '#ea580c',
+                                        'Windows & Doors', 'Doors & Windows' => '#4f46e5',
+                                        default => '#7c3aed',
                                     };
                                 @endphp
                                 <span class="spec-chip" style="font-size: 0.7rem; color: {{ $catColor }}; border-color: {{ $catColor }}44;">
                                     {{ $mat['category'] }}
                                 </span>
                             </td>
-                            <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: #f8fafc; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 12px;">
+                            <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--text-primary); border-right: 1px solid #f1f5f9; padding: 8px 12px;">
                                 {{ number_format($mat['total_quantity']) }} {{ $mat['unit'] }}
                             </td>
-                            <td style="text-align: right; font-family: var(--font-mono); color: var(--text-muted); border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 10px;">
+                            <td style="text-align: right; font-family: var(--font-mono); color: var(--text-muted); border-right: 1px solid #f1f5f9; padding: 8px 10px;">
                                 ₱{{ number_format($mat['unit_cost'], 2) }}
                             </td>
-                            <td style="text-align: right; font-family: var(--font-mono); font-weight: 800; color: #10b981; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 12px;">
+                            <td style="text-align: right; font-family: var(--font-mono); font-weight: 800; color: #059669; border-right: 1px solid #f1f5f9; padding: 8px 12px;">
                                 ₱{{ number_format($mat['total_cost'], 2) }}
                             </td>
-                            <td style="border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 12px;">
+                            <td style="border-right: 1px solid #f1f5f9; padding: 8px 12px;">
                                 <div style="display: flex; flex-wrap: wrap; gap: 4px;">
                                     @foreach($mat['task_names'] as $tName)
-                                        @php
-                                            $isXferChip = str_contains($tName, 'Transfer') || str_contains($tName, 'Roofing') || str_contains($tName, 'Windows');
-                                            $chipBg = $isXferChip ? 'rgba(249, 115, 22, 0.12)' : 'rgba(56, 189, 248, 0.1)';
-                                            $chipColor = $isXferChip ? '#f97316' : '#38bdf8';
-                                            $chipBorder = $isXferChip ? 'rgba(249, 115, 22, 0.3)' : 'rgba(56, 189, 248, 0.25)';
-                                        @endphp
-                                        <span class="badge" style="font-size: 0.675rem; background: {{ $chipBg }}; color: {{ $chipColor }}; border: 1px solid {{ $chipBorder }};">
+                                        <span class="badge" style="font-size: 0.675rem; background: #fef2f2; color: var(--primary-red); border: 1px solid var(--primary-red-border);">
                                             {{ $tName }}
                                         </span>
                                     @endforeach
@@ -794,11 +788,11 @@
         </div>
 
         <!-- Transferred Materials & Warehouse Dispatches Received Ledger -->
-        <div style="margin-top: 24px; background: rgba(10, 16, 30, 0.85); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: var(--radius-sm); padding: 18px;">
+        <div style="margin-top: 24px; background: #fafbfc; border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 18px; box-shadow: var(--card-shadow);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
                 <div>
                     <div style="display: flex; align-items: center; gap: 8px;">
-                        <h4 style="margin: 0; font-size: 1.05rem; font-weight: 800; color: #f8fafc;">Material Transfers & Warehouse Dispatches Received</h4>
+                        <h4 style="margin: 0; font-size: 1.05rem; font-weight: 800; color: var(--text-primary);">Material Transfers & Warehouse Dispatches Received</h4>
                         <span class="badge badge-in_progress" style="font-size: 0.725rem;">{{ $incomingTransfers->count() }} Transfers Recorded</span>
                     </div>
                     <span style="font-size: 0.8rem; color: var(--text-muted);">
@@ -807,16 +801,16 @@
                 </div>
             </div>
 
-            <div style="overflow-x: auto; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 6px;">
-                <table class="data-table" style="margin-bottom: 0; font-size: 0.8rem; width: 100%; border-collapse: collapse;">
+            <div style="overflow-x: auto; border: 1px solid var(--border-color); border-radius: 6px;">
+                <table class="data-table custom-table" style="margin-bottom: 0; font-size: 0.8rem; width: 100%; border-collapse: collapse;">
                     <thead>
-                        <tr style="background: rgba(15, 23, 42, 0.95); border-bottom: 2px solid rgba(56, 189, 248, 0.3);">
-                            <th style="width: 110px; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 9px 10px;">Transfer Date</th>
-                            <th style="width: 170px; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 9px 10px;">Voucher Ref</th>
-                            <th style="min-width: 220px; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 9px 12px;">Transferred Material</th>
-                            <th style="width: 140px; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 9px 10px; text-align: right;">Quantity</th>
-                            <th style="width: 180px; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 9px 10px;">Dispatch Source</th>
-                            <th style="width: 160px; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 9px 10px;">Authorized By</th>
+                        <tr style="background: #f8fafc; border-bottom: 2px solid var(--border-color);">
+                            <th style="width: 110px; border-right: 1px solid var(--border-color); padding: 9px 10px;">Transfer Date</th>
+                            <th style="width: 170px; border-right: 1px solid var(--border-color); padding: 9px 10px;">Voucher Ref</th>
+                            <th style="min-width: 220px; border-right: 1px solid var(--border-color); padding: 9px 12px;">Transferred Material</th>
+                            <th style="width: 140px; border-right: 1px solid var(--border-color); padding: 9px 10px; text-align: right;">Quantity</th>
+                            <th style="width: 180px; border-right: 1px solid var(--border-color); padding: 9px 10px;">Dispatch Source</th>
+                            <th style="width: 160px; border-right: 1px solid var(--border-color); padding: 9px 10px;">Authorized By</th>
                             <th style="width: 110px; text-align: center; padding: 9px 10px;">Voucher Slip</th>
                         </tr>
                     </thead>
@@ -826,37 +820,37 @@
                                 $isRoofing = str_contains($xfer->transfer_reference_no, 'ROOF');
                                 $isWndr = str_contains($xfer->transfer_reference_no, 'WNDR');
                                 $voucherUrl = $isRoofing ? route('roofing.printVoucher', $xfer->id) : ($isWndr ? route('windowsDoors.printVoucher', $xfer->id) : '#');
-                                $catBadgeColor = $isRoofing ? '#f97316' : ($isWndr ? '#818cf8' : '#38bdf8');
+                                $catBadgeColor = $isRoofing ? '#ea580c' : ($isWndr ? '#4f46e5' : 'var(--primary-red)');
                             @endphp
-                            <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.06);">
-                                <td style="border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 10px; font-family: var(--font-mono); color: var(--text-secondary);">
+                            <tr style="border-bottom: 1px solid #f1f5f9;">
+                                <td style="border-right: 1px solid #f1f5f9; padding: 8px 10px; font-family: var(--font-mono); color: var(--text-secondary);">
                                     {{ $xfer->transfer_date ? $xfer->transfer_date->format('M d, Y') : $xfer->created_at->format('M d, Y') }}
                                 </td>
-                                <td style="border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 10px; font-family: var(--font-mono); font-weight: 700; color: #38bdf8;">
+                                <td style="border-right: 1px solid #f1f5f9; padding: 8px 10px; font-family: var(--font-mono); font-weight: 700; color: var(--primary-red);">
                                     {{ $xfer->transfer_reference_no }}
                                 </td>
-                                <td style="border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 12px;">
-                                    <strong style="color: #f8fafc;">{{ $xfer->material->name ?? 'Material' }}</strong>
+                                <td style="border-right: 1px solid #f1f5f9; padding: 8px 12px;">
+                                    <strong style="color: var(--text-primary);">{{ $xfer->material->name ?? 'Material' }}</strong>
                                     <div style="font-size: 0.7rem; color: {{ $catBadgeColor }}; font-weight: 600;">
                                         {{ $xfer->material->category ?? '' }}
                                     </div>
                                 </td>
-                                <td style="border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 10px; text-align: right; font-family: var(--font-mono); font-weight: 700; color: #10b981;">
+                                <td style="border-right: 1px solid #f1f5f9; padding: 8px 10px; text-align: right; font-family: var(--font-mono); font-weight: 700; color: #059669;">
                                     +{{ number_format($xfer->quantity_transferred) }} {{ $xfer->material->unit ?? 'units' }}
                                 </td>
-                                <td style="border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 10px; font-size: 0.75rem; color: #cbd5e1;">
+                                <td style="border-right: 1px solid #f1f5f9; padding: 8px 10px; font-size: 0.75rem; color: var(--text-secondary);">
                                     @if($xfer->source_project_id && $xfer->source_project_id != $project->id && $xfer->sourceProject)
                                         Inter-Project from {{ $xfer->sourceProject->project_code }}
                                     @else
                                         Central Warehouse Stock
                                     @endif
                                 </td>
-                                <td style="border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 10px; font-size: 0.75rem; color: var(--text-secondary);">
+                                <td style="border-right: 1px solid #f1f5f9; padding: 8px 10px; font-size: 0.75rem; color: var(--text-secondary);">
                                     {{ $xfer->authorized_by ?? 'Transfer Officer' }}
                                 </td>
                                 <td style="text-align: center; padding: 8px 10px;">
                                     @if($voucherUrl !== '#')
-                                        <a href="{{ $voucherUrl }}" target="_blank" class="btn-secondary" style="font-size: 0.7rem; padding: 3px 8px; color: #38bdf8; border-color: rgba(56, 189, 248, 0.3);">
+                                        <a href="{{ $voucherUrl }}" target="_blank" class="btn-secondary" style="font-size: 0.7rem; padding: 3px 8px; color: var(--primary-red); border-color: var(--primary-red-border);">
                                             Slip &rarr;
                                         </a>
                                     @else
@@ -881,10 +875,10 @@
 <!-- ====================================================
      SECTION 5: ON-SITE WORKFORCE & RESOURCE DEPLOYMENT HUB
      ==================================================== -->
-<div class="glass-panel" style="border: 1px solid rgba(56, 189, 248, 0.25); margin-bottom: 28px;">
+<div class="glass-panel" style="border: 1px solid var(--border-color); margin-bottom: 28px;">
     <div class="panel-header" style="margin-bottom: 16px;">
         <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: rgba(56, 189, 248, 0.2); display: grid; place-items: center; font-size: 0.75rem; font-weight: 800; color: #38bdf8;">
+            <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: var(--primary-red-light); display: grid; place-items: center; font-size: 0.75rem; font-weight: 800; color: var(--primary-red);">
                 SITE
             </div>
             <div>
@@ -905,7 +899,7 @@
     <!-- 7 Deployment Category Cards Grid -->
     <div class="manpower-grid" style="margin-bottom: 24px;">
         @foreach($manpowerBreakdown as $key => $item)
-            <div class="manpower-card" style="border-left: 3px solid {{ $item['color'] }};">
+            <div class="manpower-card" style="border-left: 4px solid {{ $item['color'] }};">
                 <div class="manpower-head">
                     <span class="spec-chip" style="font-size: 0.65rem; color: {{ $item['color'] }};">{{ strtoupper($key) }}</span>
                     <span class="manpower-count" style="color: {{ $item['color'] }};">{{ $item['count'] }}</span>
@@ -924,9 +918,9 @@
     </div>
 
     <!-- Assigned Licensed Engineers & Architects Roster -->
-    <div style="background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px;">
+    <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-            <div style="font-weight: 700; font-size: 0.95rem; color: #f8fafc;">Assigned Licensed Engineers & Lead Architects</div>
+            <div style="font-weight: 700; font-size: 0.95rem; color: var(--text-primary);">Assigned Licensed Engineers & Lead Architects</div>
             <button class="btn-secondary" style="font-size: 0.75rem; padding: 4px 10px;" onclick="openModal('assignPersonnelModal')">
                 + Assign Personnel
             </button>
@@ -935,13 +929,13 @@
         @if($project->personnel->count() > 0)
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;">
                 @foreach($project->personnel as $person)
-                    <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 12px; display: flex; align-items: center; gap: 12px;">
-                        <div style="width: 40px; height: 40px; border-radius: 50%; background: rgba(239, 68, 68, 0.15); display: grid; place-items: center; font-weight: 800; color: #ef4444; font-size: 0.85rem;">
+                    <div style="background: #fafbfc; border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 12px; display: flex; align-items: center; gap: 12px; box-shadow: var(--card-shadow);">
+                        <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary-red-light); display: grid; place-items: center; font-weight: 800; color: var(--primary-red); font-size: 0.85rem;">
                             {{ substr($person->name, 0, 2) }}
                         </div>
                         <div style="flex: 1;">
-                            <div style="font-weight: 700; font-size: 0.9rem; color: #f8fafc;">{{ $person->name }}</div>
-                            <div style="font-size: 0.75rem; color: #38bdf8;">{{ $person->pivot->assignment_role ?? $person->title }}</div>
+                            <div style="font-weight: 700; font-size: 0.9rem; color: var(--text-primary);">{{ $person->name }}</div>
+                            <div style="font-size: 0.75rem; color: var(--primary-red); font-weight: 600;">{{ $person->pivot->assignment_role ?? $person->title }}</div>
                             <div style="font-size: 0.7rem; color: var(--text-muted);">PRC Lic: {{ $person->license_no ?? 'N/A' }}</div>
                         </div>
                     </div>
@@ -955,19 +949,17 @@
     </div>
 </div>
 
-
-
 <!-- ====================================================
      SECTION 6B: ITEMIZED BILL OF MATERIALS & DETAILED COST ESTIMATES (DUPA ENGINE)
      ==================================================== -->
-<div class="glass-panel" style="border: 1px solid rgba(239, 68, 68, 0.35); margin-bottom: 28px;">
+<div class="glass-panel" style="border: 1px solid var(--border-color); margin-bottom: 28px;">
     <div class="panel-header" style="margin-bottom: 18px;">
         <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: rgba(239, 68, 68, 0.2); display: grid; place-items: center; font-size: 0.8rem; font-weight: 800; color: #ef4444;">BOM</div>
+            <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: var(--primary-red-light); display: grid; place-items: center; font-size: 0.8rem; font-weight: 800; color: var(--primary-red);">BOM</div>
             <div>
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <h3 class="panel-title" style="font-size: 1.15rem;">Itemized Bill of Materials & Detailed Unit Price Analysis (DUPA)</h3>
-                    <span class="badge badge-paid" style="background: rgba(239, 68, 68, 0.15); color: #ef4444; border-color: rgba(239, 68, 68, 0.3);">
+                    <span class="badge badge-paid" style="background: var(--primary-red-light); color: var(--primary-red); border-color: var(--primary-red-border);">
                         {{ $project->scopeItems->count() }} Scope Items
                     </span>
                 </div>
@@ -977,10 +969,10 @@
             </div>
         </div>
         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-            <a href="{{ route('projects.printBom', $project->id) }}" target="_blank" class="btn-secondary" style="font-size: 0.8rem; color: #10b981; border-color: rgba(16, 185, 129, 0.3);" title="Print official multi-page engineering document">
+            <a href="{{ route('projects.printBom', $project->id) }}" target="_blank" class="btn-secondary" style="font-size: 0.8rem; color: #059669; border-color: rgba(16, 185, 129, 0.3);" title="Print official multi-page engineering document">
                 Print Official BOM Document
             </a>
-            <button class="btn-primary" style="font-size: 0.8rem; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); border-color: #ef4444;" onclick="openModal('addScopeItemModal')">
+            <button class="btn-primary" style="font-size: 0.8rem;" onclick="openModal('addScopeItemModal')">
                 + Add Scope Item
             </button>
         </div>
@@ -988,52 +980,66 @@
 
     <!-- DUPA Financial Metrics Summary Cards -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 22px;">
-        <div class="summary-block" style="border-left: 3px solid #38bdf8; background: rgba(15, 23, 42, 0.6);">
+        <div class="summary-block" style="border-left: 4px solid var(--primary-red);">
             <div class="summary-block-label">A. Materials Subtotal</div>
-            <div class="summary-block-val" style="color: #38bdf8;">₱{{ number_format($project->total_scope_materials_cost, 2) }}</div>
+            <div class="summary-block-val" style="color: var(--primary-red);">₱{{ number_format($project->total_scope_materials_cost, 2) }}</div>
             <div class="summary-block-sub">Itemized Materials Sum</div>
         </div>
 
-        <div class="summary-block" style="border-left: 3px solid #f59e0b; background: rgba(15, 23, 42, 0.6);">
+        <div class="summary-block" style="border-left: 4px solid #f59e0b;">
             <div class="summary-block-label">B. Labor Subtotal</div>
-            <div class="summary-block-val" style="color: #f59e0b;">₱{{ number_format($project->total_scope_labor_cost, 2) }}</div>
+            <div class="summary-block-val" style="color: #d97706;">₱{{ number_format($project->total_scope_labor_cost, 2) }}</div>
             <div class="summary-block-sub">Excavation, Formwork, Trades</div>
         </div>
 
-        <div class="summary-block" style="border-left: 3px solid #ec4899; background: rgba(15, 23, 42, 0.6);">
+        <div class="summary-block" style="border-left: 4px solid #ec4899;">
             <div class="summary-block-label">C. Equipment Expense</div>
-            <div class="summary-block-val" style="color: #ec4899;">₱{{ number_format($project->total_scope_equipment_cost, 2) }}</div>
+            <div class="summary-block-val" style="color: #db2777;">₱{{ number_format($project->total_scope_equipment_cost, 2) }}</div>
             <div class="summary-block-sub">Machinery & Tools Overhead</div>
         </div>
 
-        <div class="summary-block" style="border-left: 3px solid #64748b; background: rgba(15, 23, 42, 0.6);">
+        <div class="summary-block" style="border-left: 4px solid #64748b;">
             <div class="summary-block-label">Total Direct Cost (A+B+C)</div>
-            <div class="summary-block-val" style="color: #f8fafc;">₱{{ number_format($project->total_scope_direct_cost, 2) }}</div>
+            <div class="summary-block-val">₱{{ number_format($project->total_scope_direct_cost, 2) }}</div>
             <div class="summary-block-sub">Base Project Expenditure</div>
         </div>
 
-        <div class="summary-block" style="border-left: 3px solid #10b981; background: rgba(15, 23, 42, 0.6);">
+        <div class="summary-block" style="border-left: 4px solid #10b981;">
             <div class="summary-block-label">Grand Total Scope Cost</div>
-            <div class="summary-block-val" style="color: #10b981; font-size: 1.3rem;">
+            <div class="summary-block-val" style="color: #059669; font-size: 1.3rem;">
                 ₱{{ number_format($project->grand_scope_cost ?: $project->contract_budget, 2) }}
             </div>
             <div class="summary-block-sub">With Contingency + Taxes + Profit</div>
         </div>
     </div>
 
-    <!-- Scope Items Accordion / Itemized Breakdown -->
+    <!-- DUPA Scope Items Interactive Tab Navigation Bar -->
     @if($project->scopeItems->count() > 0)
+        <div class="dupa-tabs-container" id="dupaScopeTabsBar">
+            <button type="button" class="dupa-tab-btn active" onclick="switchDupaScopeTab('all', this)" id="dupaTabBtn_all">
+                <span>All Scope Items</span>
+                <span class="dupa-tab-cost">{{ $project->scopeItems->count() }}</span>
+            </button>
+            @foreach($project->scopeItems as $item)
+                <button type="button" class="dupa-tab-btn" onclick="switchDupaScopeTab({{ $item->id }}, this)" id="dupaTabBtn_{{ $item->id }}">
+                    <span style="font-family: var(--font-mono); font-weight: 800; color: var(--primary-red);">ITEM {{ $item->item_number }}</span>
+                    <span>{{ Str::limit($item->item_name, 28) }}</span>
+                    <span class="dupa-tab-cost">₱{{ number_format($item->total_item_cost, 0) }}</span>
+                </button>
+            @endforeach
+        </div>
+
         <div style="display: flex; flex-direction: column; gap: 16px;">
             @foreach($project->scopeItems as $item)
-                <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden;">
+                <div class="dupa-scope-card" id="dupaScopeItem_{{ $item->id }}" data-item-id="{{ $item->id }}" style="background: #fafbfc; border: 1px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--card-shadow); transition: all 0.2s ease;">
                     <!-- Scope Item Header -->
-                    <div style="padding: 14px 18px; background: rgba(0, 0, 0, 0.35); border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                    <div style="padding: 14px 18px; background: #f8fafc; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
                         <div>
                             <div style="display: flex; align-items: center; gap: 8px;">
-                                <span style="font-weight: 800; color: #ef4444; font-family: var(--font-mono); font-size: 1rem;">ITEM {{ $item->item_number }}.</span>
-                                <span style="font-weight: 800; font-size: 1.05rem; color: #f8fafc; text-transform: uppercase;">{{ $item->item_name }}</span>
+                                <span style="font-weight: 800; color: var(--primary-red); font-family: var(--font-mono); font-size: 1rem;">ITEM {{ $item->item_number }}.</span>
+                                <span style="font-weight: 800; font-size: 1.05rem; color: var(--text-primary); text-transform: uppercase;">{{ $item->item_name }}</span>
                                 @if($item->volume_or_area)
-                                    <span class="spec-chip" style="font-size: 0.75rem; color: #38bdf8;">{{ $item->volume_or_area }}</span>
+                                    <span class="spec-chip" style="font-size: 0.75rem; color: var(--text-secondary);">{{ $item->volume_or_area }}</span>
                                 @endif
                             </div>
                             @if($item->notes)
@@ -1044,18 +1050,18 @@
                         <div style="display: flex; align-items: center; gap: 14px;">
                             <div style="text-align: right;">
                                 <div style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">Total Item Cost (with Markups)</div>
-                                <div style="font-family: var(--font-mono); font-weight: 800; font-size: 1.15rem; color: #10b981;">
+                                <div style="font-family: var(--font-mono); font-weight: 800; font-size: 1.15rem; color: #059669;">
                                     ₱{{ number_format($item->total_item_cost, 2) }}
                                 </div>
                             </div>
                             <div style="display: inline-flex; gap: 6px;">
-                                <button class="btn-primary" style="font-size: 0.75rem; padding: 5px 10px; background: #38bdf8; border-color: #38bdf8;" onclick="openAddScopeLineModal({{ $item->id }}, {{ $item->item_number }}, '{{ addslashes($item->item_name) }}')">
+                                <button class="btn-primary" style="font-size: 0.75rem; padding: 5px 10px;" onclick="openAddScopeLineModal({{ $item->id }}, {{ $item->item_number }}, '{{ addslashes($item->item_name) }}')">
                                     + Add Line
                                 </button>
                                 <form action="{{ route('projects.scopeItems.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Delete Item {{ $item->item_number }} ({{ $item->item_name }}) and all its line items?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn-secondary" style="font-size: 0.75rem; padding: 5px 8px; color: #ef4444;" title="Delete Item">
+                                    <button type="submit" class="btn-secondary" style="font-size: 0.75rem; padding: 5px 8px; color: var(--primary-red); border-color: var(--primary-red-border);" title="Delete Item">
                                         &times;
                                     </button>
                                 </form>
@@ -1066,11 +1072,11 @@
                     <div style="padding: 16px;">
                         <!-- A. Materials Table -->
                         @if($item->materials->count() > 0)
-                            <div style="font-weight: 700; font-size: 0.85rem; color: #38bdf8; margin-bottom: 6px; display: flex; justify-content: space-between;">
+                            <div style="font-weight: 700; font-size: 0.85rem; color: var(--primary-red); margin-bottom: 6px; display: flex; justify-content: space-between;">
                                 <span>A. Materials Breakdown</span>
                                 <span style="font-family: var(--font-mono);">Subtotal: ₱{{ number_format($item->materials_subtotal, 2) }}</span>
                             </div>
-                            <table class="data-table" style="margin-bottom: 14px; font-size: 0.825rem;">
+                            <table class="data-table custom-table" style="margin-bottom: 14px; font-size: 0.825rem;">
                                 <thead>
                                     <tr>
                                         <th style="width: 80px;">Qty</th>
@@ -1086,16 +1092,16 @@
                                         <tr>
                                             <td style="font-family: var(--font-mono); font-weight: 700;">{{ $mat->quantity }}</td>
                                             <td style="color: var(--text-secondary);">{{ $mat->unit }}</td>
-                                            <td><strong style="color: #f8fafc;">{{ $mat->description }}</strong></td>
+                                            <td><strong style="color: var(--text-primary);">{{ $mat->description }}</strong></td>
                                             <td style="font-family: var(--font-mono); text-align: right;">₱{{ number_format($mat->unit_price, 2) }}</td>
-                                            <td style="font-family: var(--font-mono); font-weight: 700; text-align: right; color: #38bdf8;">₱{{ number_format($mat->total_cost, 2) }}</td>
+                                            <td style="font-family: var(--font-mono); font-weight: 700; text-align: right; color: var(--primary-red);">₱{{ number_format($mat->total_cost, 2) }}</td>
                                             <td style="text-align: right;">
                                                 <div style="display: inline-flex; gap: 4px; justify-content: flex-end;">
-                                                    <button type="button" style="background:none; border:none; color:#38bdf8; cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Edit Line" onclick="openEditScopeLineModal({{ $mat->id }}, 'material', '{{ addslashes($mat->description) }}', {{ $mat->quantity }}, '{{ addslashes($mat->unit) }}', {{ $mat->unit_price }})"><i class="icon-edit">Edit</i></button>
+                                                    <button type="button" style="background:none; border:none; color:var(--text-secondary); cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Edit Line" onclick="openEditScopeLineModal({{ $mat->id }}, 'material', '{{ addslashes($mat->description) }}', {{ $mat->quantity }}, '{{ addslashes($mat->unit) }}', {{ $mat->unit_price }})"><i class="icon-edit">Edit</i></button>
                                                     <form action="{{ route('projects.scopeLines.destroy', $mat->id) }}" method="POST" onsubmit="return confirm('Delete this material line?');" style="display:inline;">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Delete Line">&times;</button>
+                                                        <button type="submit" style="background:none; border:none; color:var(--primary-red); cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Delete Line">&times;</button>
                                                     </form>
                                                 </div>
                                             </td>
@@ -1127,12 +1133,12 @@
                                         <tr>
                                             <td style="font-family: var(--font-mono);">{{ $lab->quantity > 1 ? $lab->quantity : '' }}</td>
                                             <td style="color: var(--text-secondary);">{{ $lab->unit }}</td>
-                                            <td><strong style="color: #f8fafc;">{{ $lab->description }}</strong></td>
+                                            <td><strong style="color: var(--text-primary);">{{ $lab->description }}</strong></td>
                                             <td style="font-family: var(--font-mono); text-align: right;">{{ $lab->unit_price > 0 ? '₱' . number_format($lab->unit_price, 2) : '-' }}</td>
-                                            <td style="font-family: var(--font-mono); font-weight: 700; text-align: right; color: #f59e0b;">₱{{ number_format($lab->total_cost, 2) }}</td>
+                                            <td style="font-family: var(--font-mono); font-weight: 700; text-align: right; color: #d97706;">₱{{ number_format($lab->total_cost, 2) }}</td>
                                             <td style="text-align: right;">
                                                 <div style="display: inline-flex; gap: 4px; justify-content: flex-end;">
-                                                    <button type="button" style="background:none; border:none; color:#38bdf8; cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Edit Line" onclick="openEditScopeLineModal({{ $lab->id }}, 'labor', '{{ addslashes($lab->description) }}', {{ $lab->quantity }}, '{{ addslashes($lab->unit) }}', {{ $lab->unit_price }})"><i class="icon-edit">Edit</i></button>
+                                                    <button type="button" style="background:none; border:none; color:var(--primary-red); cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Edit Line" onclick="openEditScopeLineModal({{ $lab->id }}, 'labor', '{{ addslashes($lab->description) }}', {{ $lab->quantity }}, '{{ addslashes($lab->unit) }}', {{ $lab->unit_price }})"><i class="icon-edit">Edit</i></button>
                                                     <form action="{{ route('projects.scopeLines.destroy', $lab->id) }}" method="POST" onsubmit="return confirm('Delete this labor line?');" style="display:inline;">
                                                         @csrf
                                                         @method('DELETE')
@@ -1148,7 +1154,7 @@
 
                         <!-- C. Equipment Expenses Table -->
                         @if($item->equipments->count() > 0)
-                            <div style="font-weight: 700; font-size: 0.85rem; color: #ec4899; margin-bottom: 6px; display: flex; justify-content: space-between;">
+                            <div style="font-weight: 700; font-size: 0.85rem; color: #7c3aed; margin-bottom: 6px; display: flex; justify-content: space-between;">
                                 <span>C. Equipment Expense</span>
                                 <span style="font-family: var(--font-mono);">Subtotal: ₱{{ number_format($item->equipment_subtotal, 2) }}</span>
                             </div>
@@ -1163,11 +1169,11 @@
                                 <tbody>
                                     @foreach($item->equipments as $eq)
                                         <tr>
-                                            <td><strong style="color: #f8fafc;">{{ $eq->description }}</strong></td>
-                                            <td style="font-family: var(--font-mono); font-weight: 700; text-align: right; color: #ec4899;">₱{{ number_format($eq->total_cost, 2) }}</td>
+                                            <td><strong style="color: var(--text-primary);">{{ $eq->description }}</strong></td>
+                                            <td style="font-family: var(--font-mono); font-weight: 700; text-align: right; color: #7c3aed;">₱{{ number_format($eq->total_cost, 2) }}</td>
                                             <td style="text-align: right;">
                                                 <div style="display: inline-flex; gap: 4px; justify-content: flex-end;">
-                                                    <button type="button" style="background:none; border:none; color:#38bdf8; cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Edit Line" onclick="openEditScopeLineModal({{ $eq->id }}, 'equipment', '{{ addslashes($eq->description) }}', {{ $eq->quantity }}, '{{ addslashes($eq->unit) }}', {{ $eq->unit_price }})"><i class="icon-edit">Edit</i></button>
+                                                    <button type="button" style="background:none; border:none; color:var(--primary-red); cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Edit Line" onclick="openEditScopeLineModal({{ $eq->id }}, 'equipment', '{{ addslashes($eq->description) }}', {{ $eq->quantity }}, '{{ addslashes($eq->unit) }}', {{ $eq->unit_price }})"><i class="icon-edit">Edit</i></button>
                                                     <form action="{{ route('projects.scopeLines.destroy', $eq->id) }}" method="POST" onsubmit="return confirm('Delete this equipment line?');" style="display:inline;">
                                                         @csrf
                                                         @method('DELETE')
@@ -1183,10 +1189,10 @@
 
                         <!-- Direct Cost & Markups Formula Calculation Strip -->
                         <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
-                            <div style="background: rgba(0, 0, 0, 0.4); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 12px 18px; min-width: 320px; font-size: 0.825rem;">
+                            <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 12px 18px; min-width: 320px; font-size: 0.825rem; color: var(--text-primary);">
                                 <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
                                     <strong>DIRECT COST (A+B+C):</strong>
-                                    <strong style="font-family: var(--font-mono);">₱{{ number_format($item->direct_cost, 2) }}</strong>
+                                    <strong style="font-family: var(--font-mono); color: var(--text-primary);">₱{{ number_format($item->direct_cost, 2) }}</strong>
                                 </div>
                                 @if($item->contingency_percent > 0)
                                 <div style="display: flex; justify-content: space-between; color: var(--text-muted); margin-bottom: 2px;">
@@ -1206,7 +1212,7 @@
                                     <span style="font-family: var(--font-mono);">₱{{ number_format($item->profit_amount, 2) }}</span>
                                 </div>
                                 @endif
-                                <div style="display: flex; justify-content: space-between; border-top: 1px solid #10b981; padding-top: 4px; font-weight: 800; color: #10b981; font-size: 0.95rem;">
+                                <div style="display: flex; justify-content: space-between; border-top: 1px solid #10b981; padding-top: 4px; font-weight: 800; color: #059669; font-size: 0.95rem;">
                                     <span>TOTAL ITEM COST:</span>
                                     <span style="font-family: var(--font-mono);">₱{{ number_format($item->total_item_cost, 2) }}</span>
                                 </div>
@@ -1217,9 +1223,9 @@
             @endforeach
         </div>
     @else
-        <div style="text-align: center; padding: 36px 20px; background: rgba(0, 0, 0, 0.2); border-radius: var(--radius-md); border: 1px dashed var(--border-color);">
+        <div style="text-align: center; padding: 36px 20px; background: #f8fafc; border-radius: var(--radius-md); border: 1px dashed var(--border-color);">
             <div style="font-size: 2.5rem; margin-bottom: 10px; display:none;"></div>
-            <div style="font-size: 1.05rem; font-weight: 700; color: #f8fafc; margin-bottom: 4px;">No Scope of Work Bill of Materials Items Created Yet</div>
+            <div style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">No Scope of Work Bill of Materials Items Created Yet</div>
             <div style="font-size: 0.85rem; color: var(--text-muted); max-width: 540px; margin: 0 auto 16px auto;">
                 Generate an itemized Scope of Work Bill of Materials tailored specifically for <strong>{{ $project->title ?: $project->project_code }}</strong> (Foundation, Columns, Beams, Walls, Roofing, Plumbing, Electrical, Finishes) with itemized Materials (A), Labor (B), Equipment (C), and official Philippine markups.
             </div>
@@ -1238,7 +1244,7 @@
 <div class="glass-panel" style="margin-bottom: 28px;">
     <div class="panel-header" style="margin-bottom: 16px;">
         <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: rgba(56, 189, 248, 0.2); display: grid; place-items: center; font-size: 0.8rem; font-weight: 800; color: #38bdf8;">TSK</div>
+            <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: var(--primary-red-light); display: grid; place-items: center; font-size: 0.8rem; font-weight: 800; color: var(--primary-red);">TSK</div>
             <div>
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <h3 class="panel-title" style="font-size: 1.15rem;">Task Tracking & Milestone Execution Matrix</h3>
@@ -1272,25 +1278,25 @@
                 @forelse($project->tasks as $task)
                     <tr>
                         <td>
-                            <strong style="color: #f8fafc;">{{ $task->task_name }}</strong>
+                            <strong style="color: var(--text-primary);">{{ $task->task_name }}</strong>
                             <div style="font-size: 0.75rem; color: var(--text-muted);">{{ $task->category }}</div>
                         </td>
                         <td>
-                            <span style="color: #38bdf8; font-weight: 600; font-size: 0.85rem;">
+                            <span style="color: var(--primary-red); font-weight: 600; font-size: 0.85rem;">
                                 {{ $task->assignedPersonnel->name ?? 'Unassigned' }}
                             </span>
                         </td>
-                        <td style="font-family: var(--font-mono); font-size: 0.8rem;">
+                        <td style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-secondary);">
                             {{ $task->start_date->format('M d') }} &rarr; {{ $task->due_date->format('M d, Y') }}
                         </td>
-                        <td style="font-family: var(--font-mono);">₱{{ number_format($task->allocated_budget, 2) }}</td>
-                        <td style="font-family: var(--font-mono); color: #f59e0b;">₱{{ number_format($task->actual_cost, 2) }}</td>
+                        <td style="font-family: var(--font-mono); color: var(--text-primary);">₱{{ number_format($task->allocated_budget, 2) }}</td>
+                        <td style="font-family: var(--font-mono); color: #d97706; font-weight: 700;">₱{{ number_format($task->actual_cost, 2) }}</td>
                         <td>
                             <div style="display: flex; align-items: center; gap: 8px;">
-                                <div style="flex: 1; height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; width: 60px;">
-                                    <div style="width: {{ $task->progress }}%; height: 100%; background: {{ $task->progress >= 100 ? '#10b981' : '#38bdf8' }};"></div>
+                                <div style="flex: 1; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; width: 60px;">
+                                    <div style="width: {{ $task->progress }}%; height: 100%; background: {{ $task->progress >= 100 ? '#059669' : 'var(--primary-red)' }};"></div>
                                 </div>
-                                <span style="font-family: var(--font-mono); font-size: 0.8rem; font-weight: 700;">{{ $task->progress }}%</span>
+                                <span style="font-family: var(--font-mono); font-size: 0.8rem; font-weight: 700; color: var(--text-primary);">{{ $task->progress }}%</span>
                             </div>
                         </td>
                         <td>
@@ -1320,7 +1326,7 @@
 <div class="glass-panel" style="margin-bottom: 28px;">
     <div class="panel-header" style="margin-bottom: 16px;">
         <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: rgba(16, 185, 129, 0.2); display: grid; place-items: center; font-size: 0.8rem; font-weight: 800; color: #10b981;">PAY</div>
+            <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: rgba(16, 185, 129, 0.15); display: grid; place-items: center; font-size: 0.8rem; font-weight: 800; color: #059669;">PAY</div>
             <div>
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <h3 class="panel-title" style="font-size: 1.15rem;">Project Billing, Financial Payments & Official Receipts (OR)</h3>
@@ -1335,7 +1341,7 @@
             <a href="{{ route('payments.index', ['project_id' => $project->id]) }}" class="btn-secondary" style="font-size: 0.825rem;">
                 Full Payments Hub &rarr;
             </a>
-            <button class="btn-primary" style="font-size: 0.825rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-color: #10b981;" onclick="openModal('addProjectPaymentModal')">
+            <button class="btn-primary" style="font-size: 0.825rem;" onclick="openModal('addProjectPaymentModal')">
                 + Record Payment & Issue OR
             </button>
         </div>
@@ -1343,38 +1349,28 @@
 
     <!-- Financial Billing Summary Matrix -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 20px;">
-        <div class="summary-block" style="border-left: 3px solid #38bdf8; background: rgba(0,0,0,0.3); padding: 12px 16px; border-radius: var(--radius-sm);">
-            <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Total Contract Value</div>
-            <div style="font-family: var(--font-mono); font-size: 1.25rem; font-weight: 800; color: #f8fafc; margin-top: 4px;">
-                ₱{{ number_format($project->contract_budget, 2) }}
-            </div>
-            <div style="font-size: 0.725rem; color: var(--text-secondary); margin-top: 2px;">Gross Agreed Budget</div>
+        <div class="summary-block" style="border-left: 4px solid var(--primary-red);">
+            <div class="summary-block-label">Total Contract Value</div>
+            <div class="summary-block-val">₱{{ number_format($project->contract_budget, 2) }}</div>
+            <div class="summary-block-sub">Gross Agreed Budget</div>
         </div>
 
-        <div class="summary-block" style="border-left: 3px solid #10b981; background: rgba(0,0,0,0.3); padding: 12px 16px; border-radius: var(--radius-sm);">
-            <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Total Settled / Paid</div>
-            <div style="font-family: var(--font-mono); font-size: 1.25rem; font-weight: 800; color: #10b981; margin-top: 4px;">
-                ₱{{ number_format($totalPaid, 2) }}
-            </div>
-            <div style="font-size: 0.725rem; color: #10b981; margin-top: 2px; font-weight: 600;">
-                {{ $salesCollectionRate }}% Collection Rate
-            </div>
+        <div class="summary-block" style="border-left: 4px solid #10b981;">
+            <div class="summary-block-label">Total Settled / Paid</div>
+            <div class="summary-block-val" style="color: #059669;">₱{{ number_format($totalPaid, 2) }}</div>
+            <div class="summary-block-sub" style="color: #059669; font-weight: 700;">{{ $salesCollectionRate }}% Collection Rate</div>
         </div>
 
-        <div class="summary-block" style="border-left: 3px solid #f59e0b; background: rgba(0,0,0,0.3); padding: 12px 16px; border-radius: var(--radius-sm);">
-            <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Remaining Balance</div>
-            <div style="font-family: var(--font-mono); font-size: 1.25rem; font-weight: 800; color: #f59e0b; margin-top: 4px;">
-                ₱{{ number_format($uncollectedBalance, 2) }}
-            </div>
-            <div style="font-size: 0.725rem; color: var(--text-secondary); margin-top: 2px;">Uncollected Receivable</div>
+        <div class="summary-block" style="border-left: 4px solid #f59e0b;">
+            <div class="summary-block-label">Remaining Balance</div>
+            <div class="summary-block-val" style="color: #d97706;">₱{{ number_format($uncollectedBalance, 2) }}</div>
+            <div class="summary-block-sub">Uncollected Receivable</div>
         </div>
 
-        <div class="summary-block" style="border-left: 3px solid #ec4899; background: rgba(0,0,0,0.3); padding: 12px 16px; border-radius: var(--radius-sm);">
-            <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Pending Invoices</div>
-            <div style="font-family: var(--font-mono); font-size: 1.25rem; font-weight: 800; color: #ec4899; margin-top: 4px;">
-                ₱{{ number_format($totalPending, 2) }}
-            </div>
-            <div style="font-size: 0.725rem; color: var(--text-secondary); margin-top: 2px;">Awaiting Client Settlement</div>
+        <div class="summary-block" style="border-left: 4px solid #ec4899;">
+            <div class="summary-block-label">Pending Invoices</div>
+            <div class="summary-block-val" style="color: #db2777;">₱{{ number_format($totalPending, 2) }}</div>
+            <div class="summary-block-sub">Awaiting Client Settlement</div>
         </div>
     </div>
 
@@ -1396,11 +1392,11 @@
                 @forelse($project->payments as $payment)
                     <tr>
                         <td>
-                            <strong style="color: #ef4444; font-family: var(--font-mono);">{{ $payment->effective_or_number }}</strong>
+                            <strong style="color: var(--primary-red); font-family: var(--font-mono);">{{ $payment->effective_or_number }}</strong>
                             <div style="font-size: 0.725rem; color: var(--text-muted);">Invoice: {{ $payment->invoice_no }}</div>
                         </td>
                         <td>
-                            <div style="font-weight: 700; color: #f8fafc; font-size: 0.85rem;">
+                            <div style="font-weight: 700; color: var(--text-primary); font-size: 0.85rem;">
                                 {{ $payment->payer_name ?? $project->client_name }}
                             </div>
                             <div style="font-size: 0.725rem; color: var(--text-muted);">
@@ -1408,30 +1404,22 @@
                             </div>
                         </td>
                         <td>
-                            <span style="font-weight: 700; color: #f8fafc;">{{ $payment->payment_stage }}</span>
+                            <span style="font-weight: 700; color: var(--text-primary);">{{ $payment->payment_stage }}</span>
                         </td>
-                        <td style="font-family: var(--font-mono); font-size: 0.95rem; font-weight: 800; color: {{ $payment->status === 'paid' ? '#10b981' : '#f59e0b' }};">
+                        <td style="font-family: var(--font-mono); font-size: 0.95rem; font-weight: 800; color: {{ $payment->status === 'paid' ? '#059669' : '#d97706' }};">
                             ₱{{ number_format($payment->amount, 2) }}
                         </td>
                         <td>
-                            <div style="font-family: var(--font-mono); font-size: 0.8rem;">
+                            <div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-secondary);">
                                 {{ $payment->payment_date->format('M d, Y') }}
                             </div>
                             <span class="spec-chip" style="font-size: 0.675rem; margin-top: 2px;">
-                                @if(str_contains(strtolower($payment->payment_method), 'check') || str_contains(strtolower($payment->payment_method), 'cheque'))
-                                    {{ $payment->payment_method }}
-                                @elseif(str_contains(strtolower($payment->payment_method), 'cash'))
-                                    {{ $payment->payment_method }}
-                                @elseif(str_contains(strtolower($payment->payment_method), 'online') || str_contains(strtolower($payment->payment_method), 'gcash') || str_contains(strtolower($payment->payment_method), 'maya'))
-                                    {{ $payment->payment_method }}
-                                @else
-                                    {{ $payment->payment_method }}
-                                @endif
+                                {{ $payment->payment_method }}
                             </span>
                         </td>
                         <td>
                             @if($payment->bank_reference)
-                                <span style="font-family: var(--font-mono); font-size: 0.8rem; color: #38bdf8;">{{ $payment->bank_reference }}</span>
+                                <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--primary-red);">{{ $payment->bank_reference }}</span>
                             @else
                                 <span style="font-size: 0.75rem; color: var(--text-muted);">&mdash;</span>
                             @endif
@@ -1441,14 +1429,14 @@
                         </td>
                         <td style="text-align: right;">
                             <div style="display: inline-flex; gap: 6px; align-items: center;">
-                                <a href="{{ route('payments.printReceipt', $payment->id) }}" target="_blank" class="btn-secondary" style="font-size: 0.725rem; padding: 4px 8px; color: #10b981; border-color: rgba(16,185,129,0.3);" title="Print Official Receipt Voucher">
+                                <a href="{{ route('payments.printReceipt', $payment->id) }}" target="_blank" class="btn-secondary" style="font-size: 0.725rem; padding: 4px 8px; color: #059669; border-color: rgba(16,185,129,0.3);" title="Print Official Receipt Voucher">
                                     Print OR
                                 </a>
                                 @if($payment->status !== 'paid')
                                     <form action="{{ route('payments.updateStatus', $payment->id) }}" method="POST" style="display: inline;">
                                         @csrf
                                         <input type="hidden" name="status" value="paid">
-                                        <button type="submit" class="btn-primary" style="font-size: 0.725rem; padding: 4px 8px; background: #10b981; border-color: #10b981;">
+                                        <button type="submit" class="btn-primary" style="font-size: 0.725rem; padding: 4px 8px;">
                                             Mark Paid
                                         </button>
                                     </form>
@@ -1458,7 +1446,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="9" style="text-align: center; color: var(--text-muted); padding: 24px;">
+                        <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 24px;">
                             No client payments or billing records created yet. Click "+ Record Payment & Issue OR" to log milestone settlements.
                         </td>
                     </tr>
@@ -1482,12 +1470,12 @@
     <div style="position: relative; padding-left: 20px; border-left: 2px solid var(--border-color); margin-left: 10px;">
         @foreach($milestones as $ms)
             <div style="position: relative; margin-bottom: 20px;">
-                <div style="position: absolute; left: -26px; top: 2px; width: 12px; height: 12px; border-radius: 50%; background: {{ $ms['status'] === 'completed' ? '#10b981' : '#f59e0b' }}; border: 2px solid var(--bg-main);"></div>
+                <div style="position: absolute; left: -26px; top: 2px; width: 12px; height: 12px; border-radius: 50%; background: {{ $ms['status'] === 'completed' ? '#059669' : '#d97706' }}; border: 2px solid #ffffff;"></div>
                 <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2px;">
-                    <div style="font-weight: 700; font-size: 0.9rem; color: #f8fafc;">{{ $ms['title'] }}</div>
+                    <div style="font-weight: 700; font-size: 0.9rem; color: var(--text-primary);">{{ $ms['title'] }}</div>
                     <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-secondary);">{{ $ms['date'] }}</div>
                 </div>
-                <div style="font-size: 0.75rem; color: #38bdf8; font-weight: 600; margin-bottom: 2px;">{{ $ms['type'] }}</div>
+                <div style="font-size: 0.75rem; color: var(--primary-red); font-weight: 600; margin-bottom: 2px;">{{ $ms['type'] }}</div>
                 <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4;">{{ $ms['description'] }}</div>
             </div>
         @endforeach
@@ -1505,7 +1493,7 @@
             <div style="display: flex; align-items: center; gap: 10px;">
                 
                 <div>
-                    <h3 style="font-weight: 700; margin: 0; font-size: 1.15rem; color: #f8fafc;">Upload Blueprint, 3D Render or Progress Photo</h3>
+                    <h3 style="font-weight: 700; margin: 0; font-size: 1.15rem; color: var(--text-primary);">Upload Blueprint, 3D Render or Progress Photo</h3>
                     <span style="font-size: 0.775rem; color: var(--text-muted);">Add technical CAD drawings, architectural renders, or on-site photographs</span>
                 </div>
             </div>
@@ -1516,12 +1504,12 @@
             @csrf
 
             <!-- Live Upload Preview Container -->
-            <div id="uploadPreviewWrap" style="display: none; gap: 16px; margin-bottom: 18px; padding: 14px; background: rgba(0,0,0,0.35); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: var(--radius-sm); align-items: center;">
-                <div style="width: 130px; height: 95px; border-radius: 6px; overflow: hidden; background: #000; border: 1px solid rgba(255,255,255,0.2); flex-shrink: 0;">
+            <div id="uploadPreviewWrap" style="display: none; gap: 16px; margin-bottom: 18px; padding: 14px; background: var(--bg-surface-alt); border: 1px solid var(--border-color); border-radius: var(--radius-sm); align-items: center;">
+                <div style="width: 130px; height: 95px; border-radius: 6px; overflow: hidden; background: #f8fafc; border: 1px solid var(--border-color); flex-shrink: 0;">
                     <img id="uploadPhotoPreviewImg" src="" alt="Selected Preview" style="width: 100%; height: 100%; object-fit: cover;">
                 </div>
                 <div style="flex: 1;">
-                    <div style="font-size: 0.75rem; color: #38bdf8; text-transform: uppercase; font-weight: 700; margin-bottom: 2px;">Image Preview Ready</div>
+                    <div style="font-size: 0.75rem; color: var(--primary-red); text-transform: uppercase; font-weight: 700; margin-bottom: 2px;">Image Preview Ready</div>
                     <div style="font-size: 0.8rem; color: var(--text-secondary);">This image will be stored in your project blueprint & photo repository.</div>
                 </div>
             </div>
@@ -1550,7 +1538,7 @@
                 </div>
             </div>
 
-            <div style="background: rgba(15, 23, 42, 0.6); padding: 14px; border: 1px dashed rgba(255, 255, 255, 0.15); border-radius: var(--radius-sm); margin-bottom: 16px;">
+            <div style="background: #f8fafc; padding: 14px; border: 1px dashed var(--border-color); border-radius: var(--radius-sm); margin-bottom: 16px;">
                 <div class="form-group" style="margin-bottom: 10px;">
                     <label class="form-label" style="font-size: 0.8rem;">Upload Image File (JPG, PNG, WebP up to 10MB)</label>
                     <input type="file" name="photo_file" class="form-input" accept="image/*" onchange="previewUploadPhotoFile(this)">
@@ -1567,16 +1555,16 @@
                 <textarea name="description" class="form-textarea" rows="2" placeholder="Engineering specifications, floor elevations, trade notes..."></textarea>
             </div>
 
-            <div class="form-group" style="display: flex; align-items: center; gap: 10px; padding: 10px; background: rgba(239, 68, 68, 0.08); border-radius: var(--radius-sm); border: 1px solid rgba(239, 68, 68, 0.2);">
-                <input type="checkbox" name="is_primary" id="chkPrimaryPhoto" value="1" style="width: 18px; height: 18px; accent-color: #ef4444; cursor: pointer;">
-                <label for="chkPrimaryPhoto" style="font-size: 0.85rem; color: #f8fafc; cursor: pointer; font-weight: 600;">
+            <div class="form-group" style="display: flex; align-items: center; gap: 10px; padding: 10px; background: var(--primary-red-light); border-radius: var(--radius-sm); border: 1px solid var(--primary-red-border);">
+                <input type="checkbox" name="is_primary" id="chkPrimaryPhoto" value="1" style="width: 18px; height: 18px; accent-color: var(--primary-red); cursor: pointer;">
+                <label for="chkPrimaryPhoto" style="font-size: 0.85rem; color: var(--text-primary); cursor: pointer; font-weight: 600;">
                     Set this as the Primary Profile Hero Banner Image for this project
                 </label>
             </div>
 
             <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 16px;">
                 <button type="button" class="btn-secondary" onclick="closeModal('uploadPhotoModal')">Cancel</button>
-                <button type="submit" class="btn-primary" style="background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);">
+                <button type="submit" class="btn-primary">
                     Upload Media to Gallery
                 </button>
             </div>
@@ -1591,7 +1579,7 @@
             <div style="display: flex; align-items: center; gap: 10px;">
                 
                 <div>
-                    <h3 style="font-weight: 700; margin: 0; font-size: 1.15rem; color: #f8fafc;">Edit Project Image & Blueprint Media</h3>
+                    <h3 style="font-weight: 700; margin: 0; font-size: 1.15rem; color: var(--text-primary);">Edit Project Image & Blueprint Media</h3>
                     <span style="font-size: 0.775rem; color: var(--text-muted);">Update specifications, change classification category, or replace the image/URL</span>
                 </div>
             </div>
@@ -1603,14 +1591,14 @@
             <input type="hidden" name="is_primary_submitted" value="1">
 
             <!-- Live Image Preview Card -->
-            <div style="display: flex; gap: 16px; margin-bottom: 18px; padding: 14px; background: rgba(0,0,0,0.35); border: 1px solid var(--border-color); border-radius: var(--radius-sm); align-items: center;">
-                <div style="width: 130px; height: 95px; border-radius: 6px; overflow: hidden; background: #000; border: 1px solid rgba(255,255,255,0.2); flex-shrink: 0; position: relative;">
+            <div style="display: flex; gap: 16px; margin-bottom: 18px; padding: 14px; background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-sm); align-items: center;">
+                <div style="width: 130px; height: 95px; border-radius: 6px; overflow: hidden; background: #fafbfc; border: 1px solid var(--border-color); flex-shrink: 0; position: relative;">
                     <img id="editPhotoPreviewImg" src="" alt="Photo Preview" style="width: 100%; height: 100%; object-fit: cover;">
                 </div>
                 <div style="flex: 1;">
                     <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 2px;">Active Image Preview</div>
-                    <div id="editPhotoPreviewTitle" style="font-size: 0.95rem; font-weight: 800; color: #f8fafc; margin-bottom: 4px;"></div>
-                    <div style="font-size: 0.75rem; color: #38bdf8;">
+                    <div id="editPhotoPreviewTitle" style="font-size: 0.95rem; font-weight: 800; color: var(--text-primary); margin-bottom: 4px;"></div>
+                    <div style="font-size: 0.75rem; color: var(--primary-red);">
                         Uploading a new image file or typing a new media URL below will instantly update this image preview.
                     </div>
                 </div>
@@ -1641,8 +1629,8 @@
             </div>
 
             <!-- Replace Image Controls -->
-            <div style="background: rgba(15, 23, 42, 0.6); padding: 14px; border: 1px dashed rgba(56, 189, 248, 0.4); border-radius: var(--radius-sm); margin-bottom: 16px;">
-                <div style="font-size: 0.825rem; font-weight: 700; color: #38bdf8; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+            <div style="background: #f8fafc; padding: 14px; border: 1px dashed var(--border-color); border-radius: var(--radius-sm); margin-bottom: 16px;">
+                <div style="font-size: 0.825rem; font-weight: 700; color: var(--primary-red); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
                     Replace Existing Image File or Web URL
                 </div>
 
@@ -1662,9 +1650,9 @@
                 <textarea id="editPhotoDescription" name="description" class="form-textarea" rows="2" placeholder="Engineering specifications, floor elevations, trade notes..."></textarea>
             </div>
 
-            <div class="form-group" style="display: flex; align-items: center; gap: 10px; padding: 10px; background: rgba(239, 68, 68, 0.08); border-radius: var(--radius-sm); border: 1px solid rgba(239, 68, 68, 0.2);">
-                <input type="checkbox" name="is_primary" id="editPhotoIsPrimary" value="1" style="width: 18px; height: 18px; accent-color: #ef4444; cursor: pointer;">
-                <label for="editPhotoIsPrimary" style="font-size: 0.85rem; color: #f8fafc; cursor: pointer; font-weight: 600;">
+            <div class="form-group" style="display: flex; align-items: center; gap: 10px; padding: 10px; background: var(--primary-red-light); border-radius: var(--radius-sm); border: 1px solid var(--primary-red-border);">
+                <input type="checkbox" name="is_primary" id="editPhotoIsPrimary" value="1" style="width: 18px; height: 18px; accent-color: var(--primary-red); cursor: pointer;">
+                <label for="editPhotoIsPrimary" style="font-size: 0.85rem; color: var(--text-primary); cursor: pointer; font-weight: 600;">
                     Set this as the Primary Profile Hero Banner Image for this project
                 </label>
             </div>
@@ -2103,14 +2091,14 @@
     <div class="modal-box modal-box-large" style="max-width: 820px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
             <div>
-                <h3 style="font-weight: 700; color: #10b981;">Structured Task Checklist State (JSON)</h3>
+                <h3 style="font-weight: 700; color: var(--text-primary);">Structured Task Checklist State (JSON)</h3>
                 <span style="font-size: 0.8rem; color: var(--text-muted);">Real-time computed data state with project metrics, completion %, and array of individual tasks</span>
             </div>
             <button onclick="closeModal('checklistJsonModal')" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer;">&times;</button>
         </div>
 
         <div style="position: relative; margin-bottom: 16px;">
-            <pre id="checklistJsonContent" style="background: #020617; border: 1px solid var(--border-accent); border-radius: var(--radius-sm); padding: 16px; font-family: var(--font-mono); font-size: 0.775rem; color: #38bdf8; max-height: 460px; overflow-y: auto; white-space: pre-wrap; word-break: break-word;">Loading checklist state JSON...</pre>
+            <pre id="checklistJsonContent" style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 16px; font-family: var(--font-mono); font-size: 0.775rem; color: var(--text-primary); max-height: 460px; overflow-y: auto; white-space: pre-wrap; word-break: break-word;">Loading checklist state JSON...</pre>
         </div>
 
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
@@ -2412,8 +2400,8 @@
             </div>
 
             <!-- Tripartite Loan Financing & Payment First Setup -->
-            <div style="margin-top: 14px; padding: 14px; background: rgba(0,0,0,0.25); border-radius: var(--radius-md); border: 1px solid var(--border-color);">
-                <div style="font-weight: 700; font-size: 0.85rem; color: #38bdf8; margin-bottom: 10px;">Bank & Pag-IBIG Tripartite Loan Financing & Escrow Setup</div>
+            <div style="margin-top: 14px; padding: 14px; background: var(--bg-surface-alt); border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                <div style="font-weight: 700; font-size: 0.85rem; color: var(--primary-red); margin-bottom: 10px;">Bank & Pag-IBIG Tripartite Loan Financing & Escrow Setup</div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
                     <div class="form-group">
                         <label class="form-label" style="font-size: 0.75rem;">Financing Channel</label>
@@ -2449,7 +2437,7 @@
                 </div>
 
                 <div style="margin-top: 8px;">
-                    <label style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: #f8fafc; cursor: pointer;">
+                    <label style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--text-primary); cursor: pointer;">
                         <input type="checkbox" name="payment_first_policy" value="1" {{ $project->payment_first_policy ? 'checked' : '' }}>
                         <span><strong>Enforce "Payment First Before Construct" Policy:</strong> Require cleared loan drawdowns prior to phase mobilization.</span>
                     </label>
@@ -2457,39 +2445,39 @@
             </div>
 
             <!-- Trade Weighting & Progress Bases -->
-            <div style="margin-top: 14px; padding: 14px; background: rgba(0,0,0,0.25); border-radius: var(--radius-md); border: 1px solid var(--border-color);">
-                <div style="font-weight: 700; font-size: 0.85rem; color: #f59e0b; margin-bottom: 10px;">Engineering Progression Formula Weights & Completion Progress</div>
+            <div style="margin-top: 14px; padding: 14px; background: #f8fafc; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                <div style="font-weight: 700; font-size: 0.85rem; color: #d97706; margin-bottom: 10px;">Engineering Progression Formula Weights & Completion Progress</div>
                 <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
                     <div class="form-group">
-                        <label class="form-label" style="font-size: 0.75rem; color: #38bdf8;">Structural Weight %</label>
+                        <label class="form-label" style="font-size: 0.75rem; color: #dc2626;">Structural Weight %</label>
                         <input type="number" name="structural_weight" class="form-input" value="{{ $project->structural_weight }}" min="0" max="100">
-                        <label class="form-label" style="font-size: 0.7rem; color: #38bdf8; margin-top: 4px;">Progress %</label>
+                        <label class="form-label" style="font-size: 0.7rem; color: #dc2626; margin-top: 4px;">Progress %</label>
                         <input type="number" name="structural_progress" class="form-input" value="{{ $project->structural_progress }}" min="0" max="100">
                     </div>
                     <div class="form-group">
-                        <label class="form-label" style="font-size: 0.75rem; color: #f59e0b;">Electrical Weight %</label>
+                        <label class="form-label" style="font-size: 0.75rem; color: #d97706;">Electrical Weight %</label>
                         <input type="number" name="electrical_weight" class="form-input" value="{{ $project->electrical_weight }}" min="0" max="100">
-                        <label class="form-label" style="font-size: 0.7rem; color: #f59e0b; margin-top: 4px;">Progress %</label>
+                        <label class="form-label" style="font-size: 0.7rem; color: #d97706; margin-top: 4px;">Progress %</label>
                         <input type="number" name="electrical_progress" class="form-input" value="{{ $project->electrical_progress }}" min="0" max="100">
                     </div>
                     <div class="form-group">
-                        <label class="form-label" style="font-size: 0.75rem; color: #10b981;">Piping Weight %</label>
+                        <label class="form-label" style="font-size: 0.75rem; color: #059669;">Piping Weight %</label>
                         <input type="number" name="piping_weight" class="form-input" value="{{ $project->piping_weight }}" min="0" max="100">
-                        <label class="form-label" style="font-size: 0.7rem; color: #10b981; margin-top: 4px;">Progress %</label>
+                        <label class="form-label" style="font-size: 0.7rem; color: #059669; margin-top: 4px;">Progress %</label>
                         <input type="number" name="piping_progress" class="form-input" value="{{ $project->piping_progress }}" min="0" max="100">
                     </div>
                     <div class="form-group">
-                        <label class="form-label" style="font-size: 0.75rem; color: #ec4899;">Finishing Weight %</label>
+                        <label class="form-label" style="font-size: 0.75rem; color: #7c3aed;">Finishing Weight %</label>
                         <input type="number" name="finishing_weight" class="form-input" value="{{ $project->finishing_weight }}" min="0" max="100">
-                        <label class="form-label" style="font-size: 0.7rem; color: #ec4899; margin-top: 4px;">Progress %</label>
+                        <label class="form-label" style="font-size: 0.7rem; color: #7c3aed; margin-top: 4px;">Progress %</label>
                         <input type="number" name="finishing_progress" class="form-input" value="{{ $project->finishing_progress }}" min="0" max="100">
                     </div>
                 </div>
             </div>
 
             <!-- Workforce Headcounts -->
-            <div style="margin-top: 14px; padding: 14px; background: rgba(0,0,0,0.25); border-radius: var(--radius-md); border: 1px solid var(--border-color);">
-                <div style="font-weight: 700; font-size: 0.85rem; color: #38bdf8; margin-bottom: 10px;">On-Site Workforce Deployment (Headcount)</div>
+            <div style="margin-top: 14px; padding: 14px; background: #f8fafc; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                <div style="font-weight: 700; font-size: 0.85rem; color: var(--primary-red); margin-bottom: 10px;">On-Site Workforce Deployment (Headcount)</div>
                 <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
                     <div class="form-group">
                         <label class="form-label" style="font-size: 0.75rem;">General Laborers</label>
@@ -2527,9 +2515,9 @@
             @php $assignedPersonnelIds = $project->personnel->pluck('id')->toArray(); @endphp
             <div style="margin-top: 14px;">
                 <label class="form-label">Assign Lead Engineers & Architects</label>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; max-height: 120px; overflow-y: auto; padding: 10px; background: rgba(0,0,0,0.3); border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; max-height: 120px; overflow-y: auto; padding: 10px; background: #f8fafc; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
                     @foreach($allPersonnel as $pers)
-                    <label style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--text-secondary); cursor: pointer;">
+                    <label style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--text-primary); cursor: pointer;">
                         <input type="checkbox" name="personnel_ids[]" value="{{ $pers->id }}" {{ in_array($pers->id, $assignedPersonnelIds) ? 'checked' : '' }}>
                         <span><strong>{{ $pers->name }}</strong> ({{ $pers->title }})</span>
                     </label>
@@ -2587,8 +2575,8 @@
             </div>
 
             <!-- Standard Philippine Markups -->
-            <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 14px; margin-top: 10px; margin-bottom: 16px;">
-                <div style="font-size: 0.75rem; font-weight: 700; color: #ef4444; text-transform: uppercase; margin-bottom: 8px;">
+            <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 14px; margin-top: 10px; margin-bottom: 16px;">
+                <div style="font-size: 0.75rem; font-weight: 700; color: var(--primary-red); text-transform: uppercase; margin-bottom: 8px;">
                     Standard Engineering Markups & Indirect Cost Factors (% of Direct Cost):
                 </div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
@@ -2609,7 +2597,7 @@
 
             <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px;">
                 <button type="button" class="btn-secondary" onclick="closeModal('addScopeItemModal')">Cancel</button>
-                <button type="submit" class="btn-primary" style="background: #ef4444; border-color: #ef4444;">Create Scope Item</button>
+                <button type="submit" class="btn-primary">Create Scope Item</button>
             </div>
         </form>
     </div>
@@ -2621,7 +2609,7 @@
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
             <div>
                 <h3 style="font-weight: 700;">Add Line Item to Scope</h3>
-                <span id="scopeLineHeaderLabel" style="font-size: 0.825rem; color: #38bdf8; font-weight: 600;">ITEM 1</span>
+                <span id="scopeLineHeaderLabel" style="font-size: 0.825rem; color: var(--primary-red); font-weight: 600;">ITEM 1</span>
             </div>
             <button onclick="closeModal('addScopeLineModal')" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer;">&times;</button>
         </div>
@@ -2661,14 +2649,14 @@
                 </div>
             </div>
 
-            <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: var(--radius-sm); padding: 12px 16px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+            <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 12px 16px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
                 <span style="font-size: 0.8rem; color: var(--text-muted);">Calculated Line Total Amount:</span>
-                <span id="lineCalculatedTotal" style="font-family: var(--font-mono); font-weight: 800; font-size: 1.15rem; color: #10b981;">₱ 0.00</span>
+                <span id="lineCalculatedTotal" style="font-family: var(--font-mono); font-weight: 800; font-size: 1.15rem; color: #059669;">₱ 0.00</span>
             </div>
 
             <div style="display: flex; justify-content: flex-end; gap: 12px;">
                 <button type="button" class="btn-secondary" onclick="closeModal('addScopeLineModal')">Cancel</button>
-                <button type="submit" class="btn-primary" style="background: #38bdf8; border-color: #38bdf8;">Add Line Item</button>
+                <button type="submit" class="btn-primary">Add Line Item</button>
             </div>
         </form>
     </div>
@@ -2678,7 +2666,7 @@
 <div class="modal-overlay" id="editScopeLineModal">
     <div class="modal-box modal-box-large">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h3 style="font-weight: 700; color: #38bdf8;">Edit Line Item Entry</h3>
+            <h3 style="font-weight: 700; color: var(--primary-red);">Edit Line Item Entry</h3>
             <button onclick="closeModal('editScopeLineModal')" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer;">&times;</button>
         </div>
 
@@ -2720,7 +2708,7 @@
 
             <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px;">
                 <button type="button" class="btn-secondary" onclick="closeModal('editScopeLineModal')">Cancel</button>
-                <button type="submit" class="btn-primary" style="background: #38bdf8; border-color: #38bdf8;">Save Line Changes</button>
+                <button type="submit" class="btn-primary">Save Line Changes</button>
             </div>
         </form>
     </div>
@@ -2731,7 +2719,7 @@
     <div class="modal-box">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
             <div>
-                <h3 style="font-weight: 700; color: #f59e0b;">Log Today's On-Site Material Consumption</h3>
+                <h3 style="font-weight: 700; color: #d97706;">Log Today's On-Site Material Consumption</h3>
                 <span style="font-size: 0.8rem; color: var(--text-muted);">Record materials used today to update remaining inventory for tomorrow</span>
             </div>
             <button onclick="closeModal('logDailyUsageModal')" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer;">&times;</button>
@@ -2741,7 +2729,7 @@
             @csrf
             <div class="form-group">
                 <label class="form-label">Material Name</label>
-                <div id="dailyUsageMatNameDisplay" style="font-weight: 800; font-size: 1rem; color: #f8fafc; padding: 8px 12px; background: rgba(0,0,0,0.3); border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                <div id="dailyUsageMatNameDisplay" style="font-weight: 800; font-size: 1rem; color: var(--text-primary); padding: 8px 12px; background: #f8fafc; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
                     Material Name
                 </div>
             </div>
@@ -2758,7 +2746,7 @@
                     </label>
                     <input type="number" step="0.01" name="quantity_used" id="dailyUsageQtyInput" class="form-input" placeholder="0.00" required>
                     <span style="font-size: 0.725rem; color: var(--text-muted);">
-                        Available On-Site: <strong id="dailyUsageMaxLabel" style="color: #38bdf8;">0</strong>
+                        Available On-Site: <strong id="dailyUsageMaxLabel" style="color: var(--primary-red);">0</strong>
                     </span>
                 </div>
             </div>
@@ -2781,7 +2769,7 @@
 
             <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px;">
                 <button type="button" class="btn-secondary" onclick="closeModal('logDailyUsageModal')">Cancel</button>
-                <button type="submit" class="btn-primary" style="background: #f59e0b; border-color: #f59e0b;">Save Daily Consumption Log</button>
+                <button type="submit" class="btn-primary" style="background: #d97706; border-color: #d97706;">Save Daily Consumption Log</button>
             </div>
         </form>
     </div>
@@ -2792,7 +2780,7 @@
     <div class="modal-box modal-box-large">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
             <div>
-                <h3 style="font-weight: 700; color: #38bdf8;">Transfer Surplus Material to Another Project</h3>
+                <h3 style="font-weight: 700; color: var(--primary-red);">Transfer Surplus Material to Another Project</h3>
                 <span style="font-size: 0.8rem; color: var(--text-muted);">Reallocate remaining unused materials to another active project or central inventory</span>
             </div>
             <button onclick="closeModal('transferMaterialModal')" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer;">&times;</button>
@@ -2802,7 +2790,7 @@
             @csrf
             <div class="form-group">
                 <label class="form-label">Material to Transfer</label>
-                <div id="transferMatNameDisplay" style="font-weight: 800; font-size: 1rem; color: #38bdf8; padding: 8px 12px; background: rgba(0,0,0,0.3); border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                <div id="transferMatNameDisplay" style="font-weight: 800; font-size: 1rem; color: var(--primary-red); padding: 8px 12px; background: #f8fafc; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
                     Material Name
                 </div>
             </div>
@@ -2841,7 +2829,7 @@
                     </label>
                     <input type="number" step="0.01" name="transfer_qty" id="transferQtyInput" class="form-input" placeholder="0.00" required>
                     <span style="font-size: 0.725rem; color: var(--text-muted);">
-                        Available Surplus: <strong id="transferMaxLabel" style="color: #10b981;">0</strong>
+                        Available Surplus: <strong id="transferMaxLabel" style="color: #059669;">0</strong>
                     </span>
                 </div>
 
@@ -2858,7 +2846,7 @@
 
             <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px;">
                 <button type="button" class="btn-secondary" onclick="closeModal('transferMaterialModal')">Cancel</button>
-                <button type="submit" class="btn-primary" style="background: #38bdf8; border-color: #38bdf8;">Confirm & Transfer Materials</button>
+                <button type="submit" class="btn-primary">Confirm & Transfer Materials</button>
             </div>
         </form>
     </div>
@@ -3147,22 +3135,25 @@
         openModal('updateTaskModal');
     }
 
-    let currentDisciplineTab = 'all';
+    let currentDisciplineTab = 'structural';
     let currentStatusFilter = 'all';
 
     function switchChecklistTab(tab, btn) {
         currentDisciplineTab = tab;
-        const tabs = document.querySelectorAll('.btn-tab');
+        const tabs = document.querySelectorAll('.checklist-discipline-tabs .btn-tab, #chkDisciplineTabsBar .btn-tab, [id^="tabBtn"]');
         tabs.forEach(t => {
             t.classList.remove('active');
-            t.style.background = 'rgba(15, 23, 42, 0.5)';
-            t.style.borderColor = 'transparent';
-            t.style.color = 'var(--text-secondary)';
+            t.style.background = '';
+            t.style.borderColor = '';
+            t.style.color = '';
         });
-        btn.classList.add('active');
-        btn.style.background = 'rgba(56, 189, 248, 0.15)';
-        btn.style.borderColor = 'var(--border-color)';
-        btn.style.color = '#38bdf8';
+
+        if (btn) {
+            btn.classList.add('active');
+        } else {
+            const defaultBtn = document.getElementById('tabBtn' + tab.charAt(0).toUpperCase() + tab.slice(1));
+            if (defaultBtn) defaultBtn.classList.add('active');
+        }
 
         applyCombinedChecklistFilter();
     }
@@ -3229,39 +3220,62 @@
     function jumpToTaskDirect(taskId) {
         if (!taskId) return;
         
-        // Reset filters so the row is visible
+        const row = document.getElementById('task-row-' + taskId);
+        if (!row) return;
+
+        // Detect parent section and auto-switch tab
+        const parentSection = row.closest('.checklist-section');
+        if (parentSection) {
+            if (parentSection.id === 'chkSectionStructural') {
+                switchChecklistTab('structural', document.getElementById('tabBtnStructural'));
+            } else if (parentSection.id === 'chkSectionElectrical') {
+                switchChecklistTab('electrical', document.getElementById('tabBtnElectrical'));
+            } else if (parentSection.id === 'chkSectionPiping') {
+                switchChecklistTab('piping', document.getElementById('tabBtnPiping'));
+            } else if (parentSection.id === 'chkSectionFinishing') {
+                switchChecklistTab('finishing', document.getElementById('tabBtnFinishing'));
+            }
+        }
+
+        // Reset filter so the row is visible
         currentStatusFilter = 'all';
         const filterSelect = document.getElementById('taskStatusFilter');
         if (filterSelect) filterSelect.value = 'all';
-        currentDisciplineTab = 'all';
-
-        const tabs = document.querySelectorAll('.btn-tab');
-        tabs.forEach(t => {
-            t.classList.remove('active');
-            t.style.background = 'rgba(15, 23, 42, 0.5)';
-            t.style.borderColor = 'transparent';
-            t.style.color = 'var(--text-secondary)';
-        });
-        if (tabs[0]) {
-            tabs[0].classList.add('active');
-            tabs[0].style.background = 'rgba(56, 189, 248, 0.15)';
-            tabs[0].style.borderColor = 'var(--border-color)';
-            tabs[0].style.color = '#38bdf8';
-        }
 
         applyCombinedChecklistFilter();
 
-        const row = document.getElementById('task-row-' + taskId);
-        if (row) {
-            row.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            row.style.transition = 'all 0.4s ease';
-            row.style.backgroundColor = 'rgba(56, 189, 248, 0.25)';
-            row.style.boxShadow = '0 0 15px rgba(56, 189, 248, 0.5)';
-            setTimeout(() => {
-                row.style.backgroundColor = '';
-                row.style.boxShadow = 'none';
-            }, 2500);
+        row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        row.style.transition = 'all 0.4s ease';
+        row.style.backgroundColor = 'var(--primary-red-light)';
+        row.style.boxShadow = '0 0 0 2px var(--primary-red-border)';
+        setTimeout(() => {
+            row.style.backgroundColor = '';
+            row.style.boxShadow = 'none';
+        }, 2500);
+    }
+
+    /* ====================================================
+       DUPA SCOPE ITEM TAB SWITCHING
+       ==================================================== */
+    function switchDupaScopeTab(targetItemId, btn) {
+        const tabBtns = document.querySelectorAll('.dupa-tab-btn');
+        tabBtns.forEach(b => b.classList.remove('active'));
+        if (btn) {
+            btn.classList.add('active');
+        } else {
+            const defBtn = document.getElementById('dupaTabBtn_' + targetItemId);
+            if (defBtn) defBtn.classList.add('active');
         }
+
+        const cards = document.querySelectorAll('.dupa-scope-card');
+        cards.forEach(card => {
+            const cardId = card.getAttribute('data-item-id');
+            if (targetItemId === 'all' || cardId == targetItemId) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
     }
 
     function openAddSpecificTaskModal(category) {
@@ -3346,14 +3360,15 @@
 
         const toast = document.createElement('div');
         toast.style.cssText = `
-            background: ${isError ? 'rgba(239, 68, 68, 0.95)' : 'rgba(15, 23, 42, 0.95)'};
-            color: ${isError ? '#ffffff' : '#38bdf8'};
-            border: 1px solid ${isError ? '#ef4444' : 'rgba(56, 189, 248, 0.4)'};
-            padding: 10px 16px;
+            background: ${isError ? 'var(--primary-red)' : '#ffffff'};
+            color: ${isError ? '#ffffff' : 'var(--text-primary)'};
+            border: 1px solid ${isError ? 'var(--primary-red)' : 'var(--border-color)'};
+            border-left: 4px solid ${isError ? '#b91c1c' : 'var(--primary-red)'};
+            padding: 12px 18px;
             border-radius: 8px;
             font-size: 0.85rem;
-            font-weight: 600;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            font-weight: 700;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             display: flex;
             align-items: center;
             gap: 10px;
@@ -3610,15 +3625,15 @@
                 : `<span class="badge badge-in_progress" style="font-size: 0.725rem;">In Consumption</span>`;
 
             html += `
-                <tr class="active-mat-row" data-name="${(mat.material_name || '').toLowerCase()}" data-category="${(mat.category || '').toLowerCase()}" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
-                    <td style="text-align: center; color: var(--text-muted); font-family: var(--font-mono); border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 6px;">${idx + 1}</td>
-                    <td style="border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 12px;"><strong style="color: #f8fafc; font-size: 0.875rem;">${mat.material_name}</strong></td>
-                    <td style="border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 10px;"><span class="spec-chip" style="font-size: 0.7rem; color: ${catColor}; border-color: ${catColor}44;">${mat.category}</span></td>
-                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: #f8fafc; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 12px;">${Number(mat.total_quantity).toLocaleString()} ${mat.unit}</td>
-                    <td style="text-align: right; font-family: var(--font-mono); color: var(--text-muted); border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 10px;">₱${Number(mat.unit_cost).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 800; color: #10b981; border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 12px;">₱${Number(mat.total_cost).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                    <td style="border-right: 1px solid rgba(255, 255, 255, 0.08); padding: 8px 12px;"><div style="display: flex; flex-wrap: wrap; gap: 4px;">${taskChips}</div></td>
-                    <td style="text-align: center; padding: 8px;">${statusBadge}</td>
+                <tr class="active-mat-row" data-name="${(mat.material_name || '').toLowerCase()}" data-category="${(mat.category || '').toLowerCase()}" style="border-bottom: 1px solid #f1f5f9;">
+                    <td style="text-align: center; color: var(--text-muted); font-family: var(--font-mono); border-right: 1px solid #f1f5f9; padding: 10px 8px;">${idx + 1}</td>
+                    <td style="border-right: 1px solid #f1f5f9; padding: 10px 14px;"><strong style="color: var(--text-primary); font-size: 0.875rem;">${mat.material_name}</strong></td>
+                    <td style="border-right: 1px solid #f1f5f9; padding: 10px 12px;"><span class="spec-chip" style="font-size: 0.7rem; color: ${catColor}; border-color: ${catColor}44;">${mat.category}</span></td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--text-primary); border-right: 1px solid #f1f5f9; padding: 10px 14px;">${Number(mat.total_quantity).toLocaleString()} ${mat.unit}</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--text-muted); border-right: 1px solid #f1f5f9; padding: 10px 12px;">₱${Number(mat.unit_cost).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 800; color: #059669; border-right: 1px solid #f1f5f9; padding: 10px 14px;">₱${Number(mat.total_cost).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                    <td style="border-right: 1px solid #f1f5f9; padding: 10px 14px;"><div style="display: flex; flex-wrap: wrap; gap: 4px;">${taskChips}</div></td>
+                    <td style="text-align: center; padding: 10px;">${statusBadge}</td>
                 </tr>
             `;
         });

@@ -136,7 +136,7 @@
         </div>
     </div>
 
-    <div style="overflow-x: auto; background: rgba(15, 23, 42, 0.65); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px;">
+    <div style="overflow-x: auto; background: #fafbfc; border: 1px solid var(--border-color); border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
         <table class="grid-table" style="border: none; background: transparent; width: 100%;">
             <thead>
                 <tr>
@@ -154,31 +154,30 @@
                     @php $badge = $ord->status_badge; @endphp
                     <tr>
                         <td style="white-space: nowrap;">
-                            <div style="font-family: var(--font-mono); color: #38bdf8; font-size: 0.875rem; font-weight: 700; white-space: nowrap;">{{ $ord->order_code }}</div>
-                            <div style="font-size: 0.7rem; color: var(--text-muted); white-space: nowrap; margin-top: 2px;">{{ $ord->created_at->format('M d, Y - h:i A') }}</div>
+                            <strong style="font-family: var(--font-mono); color: #0284c7; font-size: 0.85rem;">{{ $ord->order_code }}</strong>
                         </td>
                         <td>
-                            <div style="font-weight: 700; color: var(--text-primary); font-size: 0.875rem;">
+                            <div style="font-weight: 700; color: var(--text-primary); font-size: 0.85rem;">
                                 {{ $ord->project ? $ord->project->title : 'Central Warehouse Depot' }}
                             </div>
-                            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">
-                                {{ $ord->delivery_location }}
+                            <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">
+                                {{ Str::limit($ord->delivery_location, 35) }}
                             </div>
                         </td>
                         <td style="white-space: nowrap;">
-                            <span style="font-size: 0.825rem; font-family: var(--font-mono); color: var(--text-primary); font-weight: 600;">
+                            <span style="font-size: 0.8rem; font-family: var(--font-mono); color: var(--text-secondary);">
                                 {{ $ord->requested_delivery_date->format('M d, Y') }}
                             </span>
                         </td>
                         <td style="white-space: nowrap;">
-                            <span class="pill-badge" style="background: rgba(255, 255, 255, 0.06); color: var(--text-primary); border: 1px solid rgba(255, 255, 255, 0.1);">
-                                {{ $ord->items->count() }} line item(s)
+                            <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">
+                                {{ $ord->items->count() }} items
                             </span>
                         </td>
                         <td style="white-space: nowrap;">
-                            <span style="font-family: var(--font-mono); color: var(--text-primary); font-size: 0.95rem; font-weight: 800;">
+                            <strong style="font-family: var(--font-mono); color: var(--text-primary); font-size: 0.95rem;">
                                 PHP {{ number_format($ord->total_amount, 2) }}
-                            </span>
+                            </strong>
                         </td>
                         <td style="white-space: nowrap;">
                             <span class="pill-badge" style="background: {{ $badge['bg'] }}; color: {{ $badge['color'] }}; border: 1px solid {{ $badge['border'] }};">
@@ -186,15 +185,15 @@
                             </span>
                         </td>
                         <td style="white-space: nowrap; text-align: center;">
-                            <a href="{{ route('supplier.orders', ['search' => $ord->order_code]) }}" class="btn-primary" style="padding: 6px 14px; font-size: 0.78rem; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
-                                Fulfill & Chat
+                            <a href="{{ route('supplier.orders', ['search' => $ord->order_code]) }}" class="btn-primary" style="padding: 5px 10px; font-size: 0.75rem; text-decoration: none;">
+                                Manage &rarr;
                             </a>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" style="text-align: center; padding: 36px; color: var(--text-muted);">
-                            No incoming purchase orders received yet. Admin will place orders against your published catalog.
+                        <td colspan="7" style="text-align: center; padding: 32px; color: var(--text-muted);">
+                            No purchase orders logged yet.
                         </td>
                     </tr>
                 @endforelse
@@ -214,7 +213,7 @@
                 <p style="font-size: 0.75rem; color: var(--text-muted);">Active supply products and contracted rates</p>
             </div>
             <div style="display: flex; align-items: center; gap: 8px;">
-                <a href="{{ route('supplier.materials') }}" style="font-size: 0.78rem; color: #38bdf8; text-decoration: none; font-weight: 600;">
+                <a href="{{ route('supplier.materials') }}" style="font-size: 0.78rem; color: #0284c7; text-decoration: none; font-weight: 600;">
                     View All ({{ $totalMaterials }}) &rarr;
                 </a>
                 <button type="button" onclick="openModal('addMaterialModal')" class="btn-primary" style="font-size: 0.78rem; padding: 6px 14px;">
@@ -225,13 +224,13 @@
 
         <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
             @forelse($catalogHighlights as $mat)
-                <div style="background: rgba(15, 23, 42, 0.65); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 10px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between; min-height: 110px; transition: transform 0.2s ease, border-color 0.2s ease;" onmouseover="this.style.borderColor='rgba(56, 189, 248, 0.35)'" onmouseout="this.style.borderColor='rgba(255, 255, 255, 0.08)'">
+                <div style="background: #fafbfc; border: 1px solid var(--border-color); border-radius: 10px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between; min-height: 110px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: transform 0.2s ease, border-color 0.2s ease;" onmouseover="this.style.borderColor='rgba(220, 38, 38, 0.4)'" onmouseout="this.style.borderColor='var(--border-color)'">
                     <div>
                         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
-                            <span style="font-family: var(--font-mono); font-size: 0.7rem; color: #38bdf8; font-weight: 700;">
+                            <span style="font-family: var(--font-mono); font-size: 0.7rem; color: #0284c7; font-weight: 700;">
                                 {{ $mat->material_code }}
                             </span>
-                            <span class="pill-badge" style="background: rgba(255, 255, 255, 0.05); color: var(--text-muted); font-size: 0.68rem; padding: 2px 8px;">
+                            <span class="pill-badge" style="background: #f1f5f9; color: var(--text-muted); font-size: 0.68rem; padding: 2px 8px;">
                                 {{ $mat->subcategory ?? 'General' }}
                             </span>
                         </div>
@@ -239,10 +238,10 @@
                             {{ $mat->name }}
                         </div>
                     </div>
-                    <div style="display: flex; align-items: flex-end; justify-content: space-between; border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 8px; margin-top: 6px;">
+                    <div style="display: flex; align-items: flex-end; justify-content: space-between; border-top: 1px solid var(--border-color); padding-top: 8px; margin-top: 6px;">
                         <div>
                             <span style="font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase;">Unit Rate:</span>
-                            <div style="font-family: var(--font-mono); font-weight: 800; color: #38bdf8; font-size: 0.95rem;">
+                            <div style="font-family: var(--font-mono); font-weight: 800; color: #0284c7; font-size: 0.95rem;">
                                 PHP {{ number_format($mat->unit_price, 2) }}
                             </div>
                         </div>
@@ -252,7 +251,7 @@
                     </div>
                 </div>
             @empty
-                <div style="grid-column: span 2; text-align: center; padding: 32px; background: rgba(15, 23, 42, 0.65); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; color: var(--text-muted); font-size: 0.8rem;">
+                <div style="grid-column: span 2; text-align: center; padding: 32px; background: #fafbfc; border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-muted); font-size: 0.8rem;">
                     No catalog products registered yet. Click "+ Add Product" to publish items for Admin procurement.
                 </div>
             @endforelse
@@ -267,23 +266,23 @@
         </div>
 
         <!-- Supplier Organization Summary Card -->
-        <div style="background: rgba(15, 23, 42, 0.65); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 20px; margin-bottom: 18px;">
+        <div style="background: #fafbfc; border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; margin-bottom: 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(56, 189, 248, 0.15); display: grid; place-items: center; color: #38bdf8;">
+                    <div style="width: 40px; height: 40px; border-radius: 10px; background: #f0f9ff; display: grid; place-items: center; color: #0284c7;">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                     </div>
                     <div>
                         <h4 style="font-size: 0.98rem; font-weight: 800; color: var(--text-primary);">{{ $supplier->name }}</h4>
-                        <div style="font-size: 0.74rem; color: #38bdf8; font-weight: 600;">{{ $supplier->category }} Trade Partner</div>
+                        <div style="font-size: 0.74rem; color: #0284c7; font-weight: 600;">{{ $supplier->category }} Trade Partner</div>
                     </div>
                 </div>
-                <span class="pill-badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);">
+                <span class="pill-badge" style="background: #ecfdf5; color: #059669; border: 1px solid rgba(16, 185, 129, 0.3);">
                     {{ number_format($supplier->rating, 2) }} / 5.0 Approved
                 </span>
             </div>
 
-            <div style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.7; background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 12px; margin-bottom: 14px;">
+            <div style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.7; background: #f8fafc; border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; margin-bottom: 14px;">
                 <div><strong style="color: var(--text-muted);">Representative:</strong> {{ $supplier->contact_person ?? 'Engr. Danilo V. Tan' }}</div>
                 <div><strong style="color: var(--text-muted);">Phone Hotline:</strong> {{ $supplier->phone ?? '+63 (34) 495-7744' }}</div>
                 <div><strong style="color: var(--text-muted);">Email:</strong> {{ $supplier->email }}</div>

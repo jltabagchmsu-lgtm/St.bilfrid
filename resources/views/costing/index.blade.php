@@ -169,12 +169,12 @@
         <!-- Category Breakdown Cards Grid -->
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px;">
             @foreach($catSummary as $catName => $data)
-                <div style="background: rgba(0,0,0,0.3); padding: 14px 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); border-left: 4px solid {{ $data['color'] }};">
+                <div style="background: #fafbfc; padding: 14px 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); border-left: 4px solid {{ $data['color'] }}; box-shadow: var(--card-shadow);">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <span style="font-size: 0.825rem; font-weight: 700; color: {{ $data['color'] }};">{{ $catName }}</span>
                         <span style="font-size: 0.75rem; color: var(--text-muted);">{{ $data['count'] }} items</span>
                     </div>
-                    <div style="font-size: 1.15rem; font-weight: 800; font-family: var(--font-mono); color: #f8fafc; margin: 6px 0 2px 0;">
+                    <div style="font-size: 1.15rem; font-weight: 800; font-family: var(--font-mono); color: var(--text-primary); margin: 6px 0 2px 0;">
                         ₱{{ number_format($data['actual'], 2) }}
                     </div>
                     <div style="font-size: 0.75rem; color: var(--text-secondary); display: flex; justify-content: space-between;">

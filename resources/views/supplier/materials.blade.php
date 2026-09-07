@@ -7,7 +7,7 @@
 @section('content')
 
 <!-- Action & Filter Bar -->
-<div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 18px 20px; margin-bottom: 24px;">
+<div style="background: #fafbfc; border: 1px solid var(--border-color); border-radius: 12px; padding: 18px 20px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
     <form method="GET" action="{{ route('supplier.materials') }}" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
         <!-- Left: Search Box -->
         <div style="display: flex; align-items: center; gap: 10px; flex: 1; min-width: 260px;">
@@ -41,7 +41,7 @@
 
     <!-- Subcategory Pill Filters -->
     @if(isset($subcategories) && $subcategories->count() > 0)
-        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 16px; padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, 0.06);">
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border-color);">
             <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Categories:</span>
             <a href="{{ route('supplier.materials', array_merge(request()->except('subcategory'), ['subcategory' => 'all'])) }}" class="filter-pill {{ !request('subcategory') || request('subcategory') === 'all' ? 'active' : '' }}">
                 All ({{ $supplier->materials()->count() }})
@@ -76,7 +76,7 @@
                 @php $badge = $mat->status_badge; @endphp
                 <tr>
                     <td style="white-space: nowrap;">
-                        <strong style="font-family: var(--font-mono); color: #38bdf8; font-size: 0.85rem; white-space: nowrap;">{{ $mat->material_code }}</strong>
+                        <strong style="font-family: var(--font-mono); color: var(--primary-red); font-size: 0.85rem; white-space: nowrap;">{{ $mat->material_code }}</strong>
                     </td>
                     <td style="max-width: 320px;">
                         <div style="font-weight: 700; color: var(--text-primary); font-size: 0.875rem;">
@@ -89,7 +89,7 @@
                         @endif
                     </td>
                     <td style="white-space: nowrap;">
-                        <span class="pill-badge" style="background: rgba(255, 255, 255, 0.06); color: var(--text-secondary); white-space: nowrap;">
+                        <span class="pill-badge" style="background: #f1f5f9; color: var(--text-secondary); border: 1px solid var(--border-color); white-space: nowrap;">
                             {{ $mat->subcategory ?? 'General' }}
                         </span>
                     </td>
@@ -150,7 +150,7 @@
         <div class="modal-header">
             <div>
                 <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary);">Edit Product Specifications & Pricing</h3>
-                <p id="editMaterialCodeBadge" style="font-size: 0.75rem; color: #38bdf8; font-family: var(--font-mono); margin-top: 2px;"></p>
+                <p id="editMaterialCodeBadge" style="font-size: 0.75rem; color: var(--primary-red); font-family: var(--font-mono); margin-top: 2px;"></p>
             </div>
             <button type="button" onclick="closeModal('editMaterialModal')" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.25rem;">&times;</button>
         </div>

@@ -19,7 +19,7 @@
         .voucher-sheet {
             width: 100%;
             max-width: 820px;
-            background: #ffffff;
+            background: #fafbfc;
             border-radius: 8px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             padding: 45px 50px;
@@ -129,7 +129,7 @@
         }
 
         .item-table th {
-            background: #0f172a;
+            background: #dc2626;
             color: #ffffff;
             font-size: 0.75rem;
             text-transform: uppercase;
@@ -210,7 +210,7 @@
 <body>
 
     <div class="no-print-toolbar">
-        <button onclick="window.print()" style="background: #0f172a; color: #ffffff; border: none; padding: 10px 18px; border-radius: 6px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+        <button onclick="window.print()" style="background: #dc2626; color: #ffffff; border: none; padding: 10px 18px; border-radius: 6px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(220,38,38,0.25);">
             <span>Print Official Slip</span>
         </button>
         <button onclick="window.close()" style="background: #e2e8f0; color: #0f172a; border: 1px solid #cbd5e1; padding: 10px 16px; border-radius: 6px; font-weight: 600; cursor: pointer;">

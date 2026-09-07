@@ -26,7 +26,7 @@
         .receipt-container {
             max-width: 760px;
             margin: 0 auto;
-            background: #ffffff;
+            background: #fafbfc;
             border: 2px solid #cbd5e1;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
             border-radius: 8px;
@@ -58,7 +58,7 @@
         }
 
         .btn-back {
-            background: #ffffff;
+            background: #fafbfc;
             color: #334155;
             border: 1px solid #cbd5e1;
             padding: 10px 18px;
@@ -209,7 +209,7 @@
 
         @media print {
             body {
-                background: #ffffff;
+                background: #fafbfc;
                 padding: 0;
             }
             .print-actions {

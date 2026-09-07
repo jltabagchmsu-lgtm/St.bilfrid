@@ -37,7 +37,11 @@ class AppServiceProvider extends ServiceProvider
                 if (\Illuminate\Support\Facades\Schema::hasTable('projects')) {
                     $navProjects = \App\Models\Project::orderBy('status', 'asc')
                         ->orderBy('title', 'asc')
-                        ->get(['id', 'title', 'project_code', 'status']);
+                        ->get([
+                            'id', 'title', 'project_code', 'status', 'client_name', 'location',
+                            'overall_progress', 'contract_budget', 'spent_budget',
+                            'structural_progress', 'electrical_progress', 'piping_progress', 'finishing_progress'
+                        ]);
                     $view->with('navProjects', $navProjects);
                 }
             } catch (\Exception $e) {

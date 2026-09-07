@@ -11,19 +11,19 @@
     <a href="{{ route('admin.suppliers.materials', request()->except(['category', 'subcategory', 'page'])) }}" class="filter-pill {{ !request('category') || request('category') === 'all' ? 'active' : '' }}">
         All Trade Categories ({{ \App\Models\SupplierMaterial::where('is_active', true)->count() }})
     </a>
-    <a href="{{ route('admin.suppliers.materials', array_merge(request()->except(['subcategory', 'page']), ['category' => 'Windows & Doors'])) }}" class="filter-pill {{ request('category') === 'Windows & Doors' ? 'active' : '' }}" style="{{ request('category') === 'Windows & Doors' ? 'background: rgba(56, 189, 248, 0.15); color: #38bdf8; border-color: rgba(56, 189, 248, 0.4);' : '' }}">
+    <a href="{{ route('admin.suppliers.materials', array_merge(request()->except(['subcategory', 'page']), ['category' => 'Windows & Doors'])) }}" class="filter-pill {{ request('category') === 'Windows & Doors' ? 'active' : '' }}" style="{{ request('category') === 'Windows & Doors' ? 'background: var(--primary-red-light); color: var(--primary-red); border-color: rgba(220, 38, 38, 0.4);' : '' }}">
         Windows & Doors ({{ \App\Models\SupplierMaterial::where('category', 'Windows & Doors')->where('is_active', true)->count() }})
     </a>
-    <a href="{{ route('admin.suppliers.materials', array_merge(request()->except(['subcategory', 'page']), ['category' => 'Roofing'])) }}" class="filter-pill {{ request('category') === 'Roofing' ? 'active' : '' }}" style="{{ request('category') === 'Roofing' ? 'background: rgba(239, 68, 68, 0.15); color: #ef4444; border-color: rgba(239, 68, 68, 0.4);' : '' }}">
+    <a href="{{ route('admin.suppliers.materials', array_merge(request()->except(['subcategory', 'page']), ['category' => 'Roofing'])) }}" class="filter-pill {{ request('category') === 'Roofing' ? 'active' : '' }}" style="{{ request('category') === 'Roofing' ? 'background: var(--primary-red-light); color: var(--primary-red); border-color: rgba(220, 38, 38, 0.4);' : '' }}">
         Roofing Materials ({{ \App\Models\SupplierMaterial::where('category', 'Roofing')->where('is_active', true)->count() }})
     </a>
-    <a href="{{ route('admin.suppliers.materials', array_merge(request()->except(['subcategory', 'page']), ['category' => 'Structural & Masonry'])) }}" class="filter-pill {{ request('category') === 'Structural & Masonry' ? 'active' : '' }}" style="{{ request('category') === 'Structural & Masonry' ? 'background: rgba(16, 185, 129, 0.15); color: #10b981; border-color: rgba(16, 185, 129, 0.4);' : '' }}">
+    <a href="{{ route('admin.suppliers.materials', array_merge(request()->except(['subcategory', 'page']), ['category' => 'Structural & Masonry'])) }}" class="filter-pill {{ request('category') === 'Structural & Masonry' ? 'active' : '' }}" style="{{ request('category') === 'Structural & Masonry' ? 'background: rgba(16, 185, 129, 0.15); color: #059669; border-color: rgba(16, 185, 129, 0.4);' : '' }}">
         Structural & Masonry ({{ \App\Models\SupplierMaterial::where('category', 'Structural & Masonry')->where('is_active', true)->count() }})
     </a>
 </div>
 
 <!-- Search, Filter & Sorting Bar -->
-<div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 18px 20px; margin-bottom: 24px;">
+<div style="background: #fafbfc; border: 1px solid var(--border-color); border-radius: 12px; padding: 18px 20px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
     <form method="GET" action="{{ route('admin.suppliers.materials') }}" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
         @if(request('category'))
             <input type="hidden" name="category" value="{{ request('category') }}">
@@ -76,7 +76,7 @@
 
     <!-- Subcategory Pills -->
     @if(isset($subcategories) && $subcategories->count() > 0)
-        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.06);">
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border-color);">
             <span style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Subcategory:</span>
             <a href="{{ route('admin.suppliers.materials', array_merge(request()->except('subcategory'), ['subcategory' => 'all'])) }}" class="filter-pill {{ !request('subcategory') || request('subcategory') === 'all' ? 'active' : '' }}" style="font-size: 0.75rem; padding: 4px 10px;">
                 All
@@ -111,10 +111,10 @@
                 @php 
                     $badge = $mat->status_badge;
                     $catColor = match($mat->category) {
-                        'Windows & Doors' => '#38bdf8',
+                        'Windows & Doors' => '#dc2626',
                         'Roofing' => '#ef4444',
-                        'Structural & Masonry' => '#10b981',
-                        default => '#818cf8',
+                        'Structural & Masonry' => '#059669',
+                        default => '#dc2626',
                     };
                 @endphp
                 <tr>
@@ -122,12 +122,12 @@
                         <div style="font-weight: 700; color: var(--text-primary); font-size: 0.85rem;">
                             {{ $mat->supplier ? $mat->supplier->name : 'Supplier' }}
                         </div>
-                        <span class="pill-badge" style="background: rgba(255, 255, 255, 0.06); color: {{ $catColor }}; font-size: 0.68rem; margin-top: 3px;">
+                        <span class="pill-badge" style="background: var(--bg-surface-alt); color: {{ $catColor }}; font-size: 0.68rem; margin-top: 3px;">
                             {{ $mat->category }}
                         </span>
                     </td>
                     <td>
-                        <strong style="font-family: var(--font-mono); color: #38bdf8; font-size: 0.8rem;">
+                        <strong style="font-family: var(--font-mono); color: var(--primary-red); font-size: 0.8rem;">
                             {{ $mat->material_code }}
                         </strong>
                     </td>
@@ -169,7 +169,7 @@
                             <button type="button" onclick="orderSingleMaterial({{ json_encode($mat->load('supplier')) }})" class="btn-primary" style="padding: 6px 10px; font-size: 0.75rem; white-space: nowrap;">
                                 Order Item
                             </button>
-                            <button type="button" onclick="inquireSingleMaterial({{ json_encode($mat->load('supplier')) }})" class="btn-secondary" style="padding: 6px 10px; font-size: 0.75rem; color: #38bdf8; border-color: rgba(56, 189, 248, 0.3); white-space: nowrap;">
+                            <button type="button" onclick="inquireSingleMaterial({{ json_encode($mat->load('supplier')) }})" class="btn-secondary" style="padding: 6px 10px; font-size: 0.75rem; color: var(--primary-red); border-color: rgba(220, 38, 38, 0.3); white-space: nowrap;">
                                 Inquire / RFQ
                             </button>
                         </div>
@@ -197,7 +197,7 @@
         <div class="modal-header">
             <div>
                 <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary);">Generate Purchase Order to Supplier</h3>
-                <p id="qomSupplierHeader" style="font-size: 0.75rem; color: #38bdf8; margin-top: 2px;"></p>
+                <p id="qomSupplierHeader" style="font-size: 0.75rem; color: var(--primary-red); margin-top: 2px;"></p>
             </div>
             <button type="button" onclick="closeModal('quickOrderMaterialModal')" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.25rem;">&times;</button>
         </div>
@@ -208,12 +208,12 @@
 
             <div class="modal-body">
                 <!-- Selected Material Card -->
-                <div style="background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 10px; padding: 14px; margin-bottom: 16px;">
+                <div style="background: var(--bg-surface-alt); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px; margin-bottom: 16px;">
                     <div id="qomMaterialName" style="font-size: 0.95rem; font-weight: 700; color: var(--text-primary);"></div>
                     <div id="qomMaterialSpecs" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;"></div>
                     <div style="display: flex; gap: 16px; margin-top: 8px; font-size: 0.8rem;">
-                        <div><span style="color: var(--text-muted);">Unit Rate:</span> <strong id="qomUnitPriceDisplay" style="color: #38bdf8; font-family: var(--font-mono);"></strong></div>
-                        <div><span style="color: var(--text-muted);">Minimum Order:</span> <strong id="qomMoqDisplay" style="color: #10b981; font-family: var(--font-mono);"></strong></div>
+                        <div><span style="color: var(--text-muted);">Unit Rate:</span> <strong id="qomUnitPriceDisplay" style="color: var(--primary-red); font-family: var(--font-mono);"></strong></div>
+                        <div><span style="color: var(--text-muted);">Minimum Order:</span> <strong id="qomMoqDisplay" style="color: #059669; font-family: var(--font-mono);"></strong></div>
                     </div>
                 </div>
 
@@ -259,9 +259,9 @@
                     <textarea name="notes" rows="2" placeholder="e.g. Call Site Engineer upon arrival" class="input-field" style="width: 100%; resize: vertical;"></textarea>
                 </div>
 
-                <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;">
+                <div style="background: var(--bg-surface-alt); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;">
                     <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-secondary);">Total PO Valuation:</span>
-                    <strong id="qomTotalValuation" style="font-size: 1.25rem; font-weight: 800; color: #38bdf8; font-family: var(--font-mono);">PHP 0.00</strong>
+                    <strong id="qomTotalValuation" style="font-size: 1.25rem; font-weight: 800; color: var(--primary-red); font-family: var(--font-mono);">PHP 0.00</strong>
                 </div>
             </div>
             <div class="modal-footer">
@@ -278,7 +278,7 @@
         <div class="modal-header">
             <div>
                 <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary);">Send Material Inquiry / RFQ</h3>
-                <p id="inqSupplierHeader" style="font-size: 0.75rem; color: #38bdf8; margin-top: 2px;"></p>
+                <p id="inqSupplierHeader" style="font-size: 0.75rem; color: var(--primary-red); margin-top: 2px;"></p>
             </div>
             <button type="button" onclick="closeModal('inquireMaterialModal')" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.25rem;">&times;</button>
         </div>
@@ -289,11 +289,11 @@
 
             <div class="modal-body">
                 <!-- Selected Material Overview -->
-                <div style="background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 10px; padding: 14px; margin-bottom: 16px;">
+                <div style="background: var(--bg-surface-alt); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px; margin-bottom: 16px;">
                     <div id="inqMaterialName" style="font-size: 0.95rem; font-weight: 700; color: var(--text-primary);"></div>
                     <div id="inqMaterialSpecs" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;"></div>
                     <div style="display: flex; gap: 16px; margin-top: 8px; font-size: 0.8rem;">
-                        <div><span style="color: var(--text-muted);">Standard Rate:</span> <strong id="inqUnitPriceDisplay" style="color: #38bdf8; font-family: var(--font-mono);"></strong></div>
+                        <div><span style="color: var(--text-muted);">Standard Rate:</span> <strong id="inqUnitPriceDisplay" style="color: var(--primary-red); font-family: var(--font-mono);"></strong></div>
                     </div>
                 </div>
 

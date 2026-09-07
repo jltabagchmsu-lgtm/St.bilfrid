@@ -48,7 +48,7 @@
                             {{ $inq->material ? $inq->material->name : 'General Inquiry' }}
                         </div>
                         @if($inq->material)
-                            <div style="font-size: 0.72rem; color: #38bdf8; font-family: var(--font-mono); margin-top: 2px;">
+                            <div style="font-size: 0.72rem; color: var(--primary-red); font-family: var(--font-mono); margin-top: 2px;">
                                 {{ $inq->material->material_code }} (Catalog: PHP {{ number_format($inq->material->unit_price, 2) }}/{{ $inq->material->unit }})
                             </div>
                         @endif
@@ -81,7 +81,7 @@
                     </td>
                     <td style="white-space: nowrap;">
                         @if($inq->quoted_unit_price)
-                            <strong style="font-family: var(--font-mono); color: #10b981; font-size: 0.9rem;">
+                            <strong style="font-family: var(--font-mono); color: #059669; font-size: 0.9rem;">
                                 PHP {{ number_format($inq->quoted_unit_price, 2) }}
                             </strong>
                         @else
@@ -116,7 +116,7 @@
         <div class="modal-header">
             <div>
                 <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary);">Material Inquiry & RFQ Response</h3>
-                <p id="inqSubjectHeader" style="font-size: 0.8rem; color: #38bdf8; margin-top: 2px;"></p>
+                <p id="inqSubjectHeader" style="font-size: 0.8rem; color: var(--primary-red); margin-top: 2px;"></p>
             </div>
             <button type="button" onclick="closeModal('respondInquiryModal')" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.25rem;">&times;</button>
         </div>
@@ -125,7 +125,7 @@
             @csrf
             <div class="modal-body">
                 <!-- Inquiry Details Overview -->
-                <div style="background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 16px; margin-bottom: 20px;">
+                <div style="background: var(--bg-surface-alt); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; margin-bottom: 20px;">
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
                         <div>
                             <div style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Target Material</div>
@@ -133,12 +133,12 @@
                         </div>
                         <div>
                             <div style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Requested Quantity</div>
-                            <div id="inqQuantity" style="font-size: 0.85rem; font-weight: 700; color: #38bdf8; font-family: var(--font-mono); margin-top: 2px;"></div>
+                            <div id="inqQuantity" style="font-size: 0.85rem; font-weight: 700; color: var(--primary-red); font-family: var(--font-mono); margin-top: 2px;"></div>
                         </div>
                     </div>
                     <div>
                         <div style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Inquiry from St. Bilfrid Admin</div>
-                        <div id="inqMessageText" style="font-size: 0.85rem; color: #cbd5e1; margin-top: 4px; background: rgba(0,0,0,0.25); padding: 10px 12px; border-radius: 6px; line-height: 1.4;"></div>
+                        <div id="inqMessageText" style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px; background: #fafbfc; border: 1px solid var(--border-color); padding: 10px 12px; border-radius: 6px; line-height: 1.4;"></div>
                     </div>
                 </div>
 

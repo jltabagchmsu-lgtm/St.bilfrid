@@ -17,12 +17,12 @@
 
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 24px;">
         @foreach($personnel as $p)
-        <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div style="background: #fafbfc; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: var(--card-shadow);">
             <div>
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
                     <div>
                         <h4 style="font-size: 1.15rem; font-weight: 800; color: var(--text-primary);">{{ $p->name }}</h4>
-                        <div style="color: #38bdf8; font-size: 0.875rem; font-weight: 600;">{{ $p->title }}</div>
+                        <div style="color: var(--primary-red); font-size: 0.875rem; font-weight: 700;">{{ $p->title }}</div>
                     </div>
                     <span class="spec-chip" style="font-size: 0.75rem;">PRC: {{ $p->license_no ?? 'PENDING' }}</span>
                 </div>
@@ -34,7 +34,7 @@
                 </div>
             </div>
 
-            <div style="border-top: 1px solid rgba(255,255,255,0.06); margin-top: 12px; padding-top: 12px;">
+            <div style="border-top: 1px solid var(--border-color); margin-top: 12px; padding-top: 12px;">
                 <div style="font-size: 0.775rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px;">Active Project Involvement ({{ $p->projects->count() }})</div>
                 <div style="display: flex; flex-wrap: wrap; gap: 6px;">
                     @forelse($p->projects as $prj)

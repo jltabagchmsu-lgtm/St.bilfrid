@@ -109,24 +109,24 @@
         @foreach($suppliers as $sup)
             @php
                 $accentColor = match($sup->category) {
-                    'Windows & Doors' => '#38bdf8',
+                    'Windows & Doors' => '#dc2626',
                     'Roofing' => '#ef4444',
-                    'Structural & Masonry' => '#10b981',
-                    default => '#818cf8',
+                    'Structural & Masonry' => '#059669',
+                    default => '#dc2626',
                 };
             @endphp
             <div class="partner-card" style="border-top: 3px solid {{ $accentColor }};">
                 <div>
                     <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12px;">
                         <div>
-                            <span class="pill-badge" style="background: rgba(255, 255, 255, 0.06); color: {{ $accentColor }}; border: 1px solid {{ $accentColor }}40; font-size: 0.72rem;">
+                            <span class="pill-badge" style="background: var(--bg-surface-alt); color: {{ $accentColor }}; border: 1px solid {{ $accentColor }}40; font-size: 0.72rem;">
                                 {{ $sup->category }}
                             </span>
                             <h4 style="font-size: 1.1rem; font-weight: 800; color: var(--text-primary); margin-top: 8px;">
                                 {{ $sup->name }}
                             </h4>
                         </div>
-                        <span class="pill-badge" style="background: {{ $sup->status === 'active' ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)' }}; color: {{ $sup->status === 'active' ? '#10b981' : '#ef4444' }};">
+                        <span class="pill-badge" style="background: {{ $sup->status === 'active' ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)' }}; color: {{ $sup->status === 'active' ? '#059669' : 'var(--primary-red)' }};">
                             {{ ucfirst($sup->status) }}
                         </span>
                     </div>
@@ -139,7 +139,7 @@
                     </div>
 
                     <!-- Mini Stat Highlights -->
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 8px; padding: 10px; margin-bottom: 18px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: var(--bg-surface-alt); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; margin-bottom: 18px;">
                         <div>
                             <div style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">Catalog Items</div>
                             <div style="font-size: 1.15rem; font-weight: 800; color: var(--text-primary); font-family: var(--font-mono);">
@@ -148,14 +148,14 @@
                         </div>
                         <div>
                             <div style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">Rating</div>
-                            <div style="font-size: 1.15rem; font-weight: 800; color: #10b981; font-family: var(--font-mono);">
+                            <div style="font-size: 1.15rem; font-weight: 800; color: #059669; font-family: var(--font-mono);">
                                 {{ number_format($sup->rating, 2) }} / 5.0
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 14px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; border-top: 1px solid var(--border-color); padding-top: 14px;">
                     <a href="{{ route('admin.suppliers.materials', ['supplier_id' => $sup->id]) }}" class="btn-secondary" style="flex: 1; font-size: 0.75rem; justify-content: center; padding: 6px;">
                         Browse Catalog
                     </a>
@@ -164,7 +164,7 @@
                     </button>
                     <form action="{{ route('admin.suppliers.toggleStatus', $sup->id) }}" method="POST" style="display: inline;">
                         @csrf
-                        <button type="submit" class="btn-secondary" style="padding: 6px 8px; font-size: 0.75rem; color: {{ $sup->status === 'active' ? '#ef4444' : '#10b981' }};" title="{{ $sup->status === 'active' ? 'Deactivate Supplier Account' : 'Activate Supplier Account' }}">
+                        <button type="submit" class="btn-secondary" style="padding: 6px 8px; font-size: 0.75rem; color: {{ $sup->status === 'active' ? 'var(--primary-red)' : '#059669' }};" title="{{ $sup->status === 'active' ? 'Deactivate Supplier Account' : 'Activate Supplier Account' }}">
                             {{ $sup->status === 'active' ? 'Deactivate' : 'Activate' }}
                         </button>
                     </form>
@@ -181,7 +181,7 @@
             <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary);">Recent Procurement Orders</h3>
             <p style="font-size: 0.75rem; color: var(--text-muted);">Live status synchronization with trade suppliers</p>
         </div>
-        <a href="{{ route('admin.suppliers.orders') }}" style="font-size: 0.8rem; color: #38bdf8; text-decoration: none; font-weight: 600;">
+        <a href="{{ route('admin.suppliers.orders') }}" style="font-size: 0.8rem; color: var(--primary-red); text-decoration: none; font-weight: 600;">
             View Master Tracker &rarr;
         </a>
     </div>
@@ -205,7 +205,7 @@
                     @php $badge = $ord->status_badge; @endphp
                     <tr>
                         <td>
-                            <strong style="font-family: var(--font-mono); color: #38bdf8;">{{ $ord->order_code }}</strong>
+                            <strong style="font-family: var(--font-mono); color: var(--primary-red);">{{ $ord->order_code }}</strong>
                             <div style="font-size: 0.7rem; color: var(--text-muted);">{{ $ord->created_at->format('M d, Y') }}</div>
                         </td>
                         <td>
@@ -242,7 +242,7 @@
                                 @if($ord->status === 'delivered')
                                     <form action="{{ route('admin.suppliers.orders.receive', $ord->id) }}" method="POST" onsubmit="return confirm('Officially receive order materials and integrate into project BOM stock?');">
                                         @csrf
-                                        <button type="submit" class="btn-primary" style="padding: 5px 10px; font-size: 0.75rem; background: #10b981;">
+                                        <button type="submit" class="btn-primary" style="padding: 5px 10px; font-size: 0.75rem; background: #059669; border-color: #059669;">
                                             Accept & BOM Sync
                                         </button>
                                     </form>
@@ -346,14 +346,14 @@
                                 <input type="text" class="input-field po-subtotal-display" readonly placeholder="PHP 0.00" style="width: 100%; font-size: 0.8rem; font-family: var(--font-mono); opacity: 0.8;">
                             </div>
                             <div>
-                                <button type="button" onclick="removePoItemRow(this)" class="btn-secondary" style="padding: 6px; color: #ef4444; border-color: rgba(239, 68, 68, 0.3);">&times;</button>
+                                <button type="button" onclick="removePoItemRow(this)" class="btn-secondary" style="padding: 6px; color: var(--primary-red); border-color: rgba(220, 38, 38, 0.3);">&times;</button>
                             </div>
                         </div>
                     </div>
 
-                    <div style="display: flex; justify-content: flex-end; margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(255, 255, 255, 0.08);">
+                    <div style="display: flex; justify-content: flex-end; margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border-color);">
                         <div style="font-size: 0.9rem; font-weight: 700; color: var(--text-primary);">
-                            Estimated Total: <span id="poGrandTotalDisplay" style="color: #38bdf8; font-family: var(--font-mono); font-size: 1.1rem;">PHP 0.00</span>
+                            Estimated Total: <span id="poGrandTotalDisplay" style="color: var(--primary-red); font-family: var(--font-mono); font-size: 1.1rem;">PHP 0.00</span>
                         </div>
                     </div>
                 </div>
@@ -380,7 +380,7 @@
         <div class="modal-header">
             <div>
                 <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary);">Manage Supplier Record</h3>
-                <p id="editSupplierCodeBadge" style="font-size: 0.75rem; color: #38bdf8; font-family: var(--font-mono); margin-top: 2px;"></p>
+                <p id="editSupplierCodeBadge" style="font-size: 0.75rem; color: var(--primary-red); font-family: var(--font-mono); margin-top: 2px;"></p>
             </div>
             <button type="button" onclick="closeModal('editSupplierModal')" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.25rem;">&times;</button>
         </div>

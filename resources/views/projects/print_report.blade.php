@@ -26,7 +26,7 @@
         .report-page {
             max-width: 900px;
             margin: 0 auto;
-            background: #ffffff;
+            background: #fafbfc;
             border: 1px solid #cbd5e1;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
             border-radius: 8px;
@@ -57,7 +57,7 @@
         }
 
         .btn-back {
-            background: #ffffff;
+            background: #fafbfc;
             color: #334155;
             border: 1px solid #cbd5e1;
             padding: 10px 18px;
@@ -300,7 +300,7 @@
         /* Print Media Queries */
         @media print {
             body {
-                background: #ffffff;
+                background: #fafbfc;
                 padding: 0;
                 color: #000000;
             }

@@ -10,18 +10,18 @@
 @section('content')
 
 <!-- Estimator Formula Information Card -->
-<div class="glass-panel" style="padding: 24px 28px; margin-bottom: 28px; background: rgba(56, 189, 248, 0.04); border: 1px solid rgba(56, 189, 248, 0.25);">
+<div class="glass-panel" style="padding: 24px 28px; margin-bottom: 28px; background: #fafbfc; border: 1px solid var(--border-color); border-left: 4px solid var(--primary-red); box-shadow: var(--card-shadow);">
     <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px;">
         <div style="flex: 1; min-width: 320px;">
             <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-                <span class="spec-chip" style="color: #38bdf8; background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.3);">
+                <span class="spec-chip" style="color: var(--primary-red); background: var(--primary-red-light); border-color: rgba(220, 38, 38, 0.3);">
                     UNIT COST ESTIMATION
                 </span>
-                <span class="spec-chip" style="color: #10b981; background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.3);">
+                <span class="spec-chip" style="color: #059669; background: #ecfdf5; border-color: rgba(16, 185, 129, 0.3);">
                     ACCURATE CONTRACT BUDGETS
                 </span>
             </div>
-            <h4 style="font-size: 1.15rem; font-weight: 800; color: #f8fafc; margin-bottom: 6px;">
+            <h4 style="font-size: 1.15rem; font-weight: 800; color: var(--text-primary); margin-bottom: 6px;">
                 Automated Land & Floor Area Cost Estimation Engine (₱)
             </h4>
             <p style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.5;">
@@ -29,8 +29,8 @@
             </p>
         </div>
 
-        <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 12px 16px; font-size: 0.8rem; color: var(--text-muted); max-width: 360px;">
-            <strong style="color: #38bdf8;">Standard Rates Benchmark:</strong>
+        <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 12px 16px; font-size: 0.8rem; color: var(--text-secondary); max-width: 360px;">
+            <strong style="color: var(--primary-red);">Standard Rates Benchmark:</strong>
             <p style="margin-top: 4px; font-size: 0.775rem;">
                 Residential: ₱1,100/m² &bull; Commercial: ₱1,400/m² &bull; Industrial: ₱1,600/m² &bull; Renovation: ₱800/m² + Land Prep: ₱200/m².
             </p>
@@ -189,8 +189,8 @@
             </div>
 
             <!-- Live Calculated Cost Preview -->
-            <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 16px;">
-                <div style="font-size: 0.75rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; margin-bottom: 8px;">
+            <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 16px;">
+                <div style="font-size: 0.75rem; font-weight: 700; color: var(--primary-red); text-transform: uppercase; margin-bottom: 8px;">
                     Estimated Contract Value:
                 </div>
                 <div>
@@ -203,7 +203,7 @@
                 <textarea name="notes" class="form-textarea" rows="2" placeholder="Specify any unique structural or trade requirements..."></textarea>
             </div>
 
-            <div class="form-group" style="background: rgba(255,255,255,0.03); padding: 12px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+            <div class="form-group" style="background: #f8fafc; padding: 12px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
                 <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 0.9rem;">
                     <input type="checkbox" name="initialize_project_now" value="1" style="width: 18px; height: 18px; accent-color: var(--primary-red);" checked>
                     <span><strong>Initialize directly into Active Project Tracker</strong> upon calculation</span>

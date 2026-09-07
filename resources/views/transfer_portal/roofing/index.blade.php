@@ -27,18 +27,18 @@
 <div style="display: flex; flex-direction: column; gap: 24px;">
 
     <!-- Department Header & Role Indicator -->
-    <div class="card" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(15, 23, 42, 0.8) 100%); border: 1px solid rgba(239, 68, 68, 0.3); padding: 22px 26px; border-radius: var(--radius-lg); position: relative; overflow: hidden;">
+    <div class="card" style="background: #fafbfc; border: 1px solid var(--border-color); border-left: 4px solid var(--primary-red); padding: 22px 26px; border-radius: var(--radius-lg); position: relative; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; position: relative; z-index: 1;">
             <div>
                 <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px; flex-wrap: wrap;">
-                    <span style="background: rgba(239, 68, 68, 0.2); color: #fca5a5; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(239, 68, 68, 0.4); text-transform: uppercase; letter-spacing: 0.06em;">
+                    <span style="background: #fef2f2; color: var(--primary-red); font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(220, 38, 38, 0.3); text-transform: uppercase; letter-spacing: 0.06em;">
                         Roofing Trade Specialization
                     </span>
                     <span style="font-size: 0.8rem; color: var(--text-muted);">
                         Logged in as: <strong style="color: var(--text-primary);">{{ Auth::user()->name }}</strong> ({{ Auth::user()->email }})
                     </span>
                     @if(Auth::user()->isAdmin())
-                        <span class="badge" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; font-size: 0.75rem; font-weight: 700; border: 1px solid rgba(245, 158, 11, 0.4);">
+                        <span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #d97706; font-size: 0.75rem; font-weight: 700; border: 1px solid rgba(245, 158, 11, 0.3);">
                             Audit Mode: Read Only
                         </span>
                     @endif
@@ -60,13 +60,13 @@
 
     <!-- Admin View-Only Notice Banner -->
     @if(Auth::user()->isAdmin())
-    <div class="card" style="background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(148, 163, 184, 0.3); border-left: 5px solid #f59e0b; padding: 16px 20px; border-radius: var(--radius-md);">
+    <div class="card" style="background: #fafbfc; border: 1px solid var(--border-color); border-left: 5px solid #f59e0b; padding: 16px 20px; border-radius: var(--radius-md); box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
         <div style="display: flex; align-items: center; gap: 12px;">
             <div>
-                <div style="font-weight: 700; color: #fbbf24; font-size: 0.95rem;">
+                <div style="font-weight: 700; color: #d97706; font-size: 0.95rem;">
                     Master Administrator Audit & Monitoring Mode Active
                 </div>
-                <div style="font-size: 0.825rem; color: #cbd5e1; margin-top: 2px;">
+                <div style="font-size: 0.825rem; color: var(--text-secondary); margin-top: 2px;">
                     You have complete read-only visibility into Central Warehouse roofing stock levels, site allocations, low stock alerts, and verified voucher history. Modifying stock (dispatching, restocking, inter-site transferring, or returning excess) is restricted to the authorized <strong>Roofing Materials Transfer Officer</strong>.
                 </div>
             </div>
@@ -418,9 +418,9 @@
 <!-- Modal 0: Restock Warehouse Roofing Stock -->
 <div id="restockStockModal" class="modal" style="display: none;">
     <div class="modal-backdrop" onclick="closeModal('restockStockModal')"></div>
-    <div class="modal-content" style="max-width: 540px; background: #0f172a; border: 1px solid rgba(139, 92, 246, 0.4); border-radius: var(--radius-lg); padding: 28px; position: relative; z-index: 1000; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7);">
+    <div class="modal-content" style="max-width: 540px; background: #fafbfc; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 28px; position: relative; z-index: 1000; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 14px;">
-            <h3 style="font-size: 1.2rem; font-weight: 800; color: #f8fafc; display: flex; align-items: center; gap: 8px;">
+            <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
                 <span>Restock Roofing Inventory (Central Warehouse)</span>
             </h3>
             <button type="button" onclick="closeModal('restockStockModal')" style="background: none; border: none; color: var(--text-muted); font-size: 1.4rem; cursor: pointer;">&times;</button>
@@ -440,7 +440,7 @@
                         </option>
                     @endforeach
                 </select>
-                <div id="restockStockHint" style="font-size: 0.775rem; color: #a78bfa; margin-top: 4px;"></div>
+                <div id="restockStockHint" style="font-size: 0.775rem; color: var(--primary-red); margin-top: 4px;"></div>
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;">
@@ -482,7 +482,7 @@
 
             <div style="display: flex; justify-content: flex-end; gap: 10px;">
                 <button type="button" onclick="closeModal('restockStockModal')" class="btn-secondary" style="padding: 10px 18px;">Cancel</button>
-                <button type="submit" class="btn-primary" style="padding: 10px 22px; font-weight: 700; background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">
+                <button type="submit" class="btn-primary" style="padding: 10px 22px; font-weight: 700; background: var(--primary-red); border-color: var(--primary-red);">
                     Confirm Warehouse Restock
                 </button>
             </div>
@@ -493,9 +493,9 @@
 <!-- Modal 1: Dispatch Roofing Stock to Project Site -->
 <div id="dispatchStockModal" class="modal" style="display: none;">
     <div class="modal-backdrop" onclick="closeModal('dispatchStockModal')"></div>
-    <div class="modal-content" style="max-width: 540px; background: #0f172a; border: 1px solid rgba(239, 68, 68, 0.4); border-radius: var(--radius-lg); padding: 28px; position: relative; z-index: 1000; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7);">
+    <div class="modal-content" style="max-width: 540px; background: #fafbfc; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 28px; position: relative; z-index: 1000; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 14px;">
-            <h3 style="font-size: 1.2rem; font-weight: 800; color: #f8fafc; display: flex; align-items: center; gap: 8px;">
+            <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
                 <span>Dispatch Roofing Stock to Project Site</span>
             </h3>
             <button type="button" onclick="closeModal('dispatchStockModal')" style="background: none; border: none; color: var(--text-muted); font-size: 1.4rem; cursor: pointer;">&times;</button>
@@ -515,7 +515,7 @@
                         </option>
                     @endforeach
                 </select>
-                <div id="dispatchStockHint" style="font-size: 0.775rem; color: #38bdf8; margin-top: 4px;"></div>
+                <div id="dispatchStockHint" style="font-size: 0.775rem; color: var(--primary-red); margin-top: 4px;"></div>
             </div>
 
             <div class="form-group" style="margin-bottom: 16px;">
@@ -556,7 +556,7 @@
 
             <div style="display: flex; justify-content: flex-end; gap: 10px;">
                 <button type="button" onclick="closeModal('dispatchStockModal')" class="btn-secondary" style="padding: 10px 18px;">Cancel</button>
-                <button type="submit" class="btn-primary" style="padding: 10px 22px; font-weight: 700; background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);">
+                <button type="submit" class="btn-primary" style="padding: 10px 22px; font-weight: 700; background: var(--primary-red); border-color: var(--primary-red);">
                     Confirm Stock Dispatch
                 </button>
             </div>
@@ -567,9 +567,9 @@
 <!-- Modal 2: Inter-Project Transfer -->
 <div id="interProjectModal" class="modal" style="display: none;">
     <div class="modal-backdrop" onclick="closeModal('interProjectModal')"></div>
-    <div class="modal-content" style="max-width: 540px; background: #0f172a; border: 1px solid rgba(56, 189, 248, 0.4); border-radius: var(--radius-lg); padding: 28px; position: relative; z-index: 1000; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7);">
+    <div class="modal-content" style="max-width: 540px; background: #fafbfc; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 28px; position: relative; z-index: 1000; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 14px;">
-            <h3 style="font-size: 1.2rem; font-weight: 800; color: #f8fafc; display: flex; align-items: center; gap: 8px;">
+            <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
                 <span>Inter-Project Roofing Transfer</span>
             </h3>
             <button type="button" onclick="closeModal('interProjectModal')" style="background: none; border: none; color: var(--text-muted); font-size: 1.4rem; cursor: pointer;">&times;</button>
@@ -637,7 +637,7 @@
 
             <div style="display: flex; justify-content: flex-end; gap: 10px;">
                 <button type="button" onclick="closeModal('interProjectModal')" class="btn-secondary" style="padding: 10px 18px;">Cancel</button>
-                <button type="submit" class="btn-primary" style="padding: 10px 22px; font-weight: 700; background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);">
+                <button type="submit" class="btn-primary" style="padding: 10px 22px; font-weight: 700; background: var(--primary-red); border-color: var(--primary-red);">
                     Execute Inter-Project Transfer
                 </button>
             </div>
@@ -648,9 +648,9 @@
 <!-- Modal 3: Return Excess to Warehouse Stock -->
 <div id="returnExcessModal" class="modal" style="display: none;">
     <div class="modal-backdrop" onclick="closeModal('returnExcessModal')"></div>
-    <div class="modal-content" style="max-width: 500px; background: #0f172a; border: 1px solid rgba(16, 185, 129, 0.4); border-radius: var(--radius-lg); padding: 28px; position: relative; z-index: 1000; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7);">
+    <div class="modal-content" style="max-width: 500px; background: #fafbfc; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 28px; position: relative; z-index: 1000; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 14px;">
-            <h3 style="font-size: 1.2rem; font-weight: 800; color: #f8fafc; display: flex; align-items: center; gap: 8px;">
+            <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
                 <span>Return Excess Roofing to Warehouse</span>
             </h3>
             <button type="button" onclick="closeModal('returnExcessModal')" style="background: none; border: none; color: var(--text-muted); font-size: 1.4rem; cursor: pointer;">&times;</button>
@@ -662,9 +662,9 @@
 
             <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 14px; border-radius: var(--radius-md); margin-bottom: 16px;">
                 <div style="font-size: 0.8rem; color: var(--text-muted);">Returning Material:</div>
-                <div id="returnMaterialTitle" style="font-weight: 800; color: #f8fafc; font-size: 0.95rem; margin-top: 2px;"></div>
-                <div id="returnProjectTitle" style="font-size: 0.775rem; color: #38bdf8; margin-top: 2px;"></div>
-                <div id="returnMaxBalance" style="font-size: 0.775rem; color: #10b981; font-weight: 700; margin-top: 4px;"></div>
+                <div id="returnMaterialTitle" style="font-weight: 800; color: var(--text-primary); font-size: 0.95rem; margin-top: 2px;"></div>
+                <div id="returnProjectTitle" style="font-size: 0.775rem; color: var(--primary-red); margin-top: 2px;"></div>
+                <div id="returnMaxBalance" style="font-size: 0.775rem; color: #059669; font-weight: 700; margin-top: 4px;"></div>
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;">
@@ -718,7 +718,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.75);
+    background: rgba(15, 23, 42, 0.45);
     backdrop-filter: blur(8px);
 }
 </style>

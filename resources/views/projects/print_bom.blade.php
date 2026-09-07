@@ -47,7 +47,7 @@
         }
 
         .btn-back {
-            background: #ffffff;
+            background: #fafbfc;
             color: #334155;
             border: 1px solid #cbd5e1;
             padding: 10px 18px;
@@ -60,7 +60,7 @@
         .bom-page {
             max-width: 820px;
             margin: 0 auto 24px auto;
-            background: #ffffff;
+            background: #fafbfc;
             border: 1px solid #cbd5e1;
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
             padding: 36px 44px;
@@ -243,7 +243,7 @@
 
         @media print {
             body {
-                background: #ffffff;
+                background: #fafbfc;
                 padding: 0;
             }
             .print-actions {

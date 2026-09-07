@@ -9,9 +9,9 @@
 <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
 
     <!-- Left: Profile and Contact Details Form -->
-    <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 26px;">
+    <div style="background: #fafbfc; border: 1px solid var(--border-color); border-radius: 14px; padding: 26px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
         <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
-            <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(56, 189, 248, 0.12); display: grid; place-items: center; color: #38bdf8;">
+            <div style="width: 32px; height: 32px; border-radius: 8px; background: var(--primary-red-light); display: grid; place-items: center; color: var(--primary-red);">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
             </div>
             <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary);">
@@ -72,7 +72,7 @@
                 <textarea name="address" rows="3" placeholder="Enter physical warehouse location, staging yard, or pickup hub..." required class="input-field" style="width: 100%; resize: vertical;">{{ old('address', $supplier->address) }}</textarea>
             </div>
 
-            <div style="border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 22px; margin-bottom: 24px;">
+            <div style="border-top: 1px solid var(--border-color); padding-top: 22px; margin-bottom: 24px;">
                 <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
                     <div style="width: 28px; height: 28px; border-radius: 6px; background: rgba(245, 158, 11, 0.12); display: grid; place-items: center; color: #f59e0b;">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
@@ -118,37 +118,37 @@
 
     <!-- Right: Account Overview & Performance Scorecard -->
     <div>
-        <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 22px; margin-bottom: 20px;">
+        <div style="background: #fafbfc; border: 1px solid var(--border-color); border-radius: 14px; padding: 22px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
             <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 12px;">
                 Supplier Performance Scorecard
             </h3>
 
-            <div style="text-align: center; padding: 20px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
-                <div style="font-size: 2.5rem; font-weight: 800; color: #10b981; font-family: var(--font-mono); line-height: 1;">
+            <div style="text-align: center; padding: 20px 0; border-bottom: 1px solid var(--border-color);">
+                <div style="font-size: 2.5rem; font-weight: 800; color: #059669; font-family: var(--font-mono); line-height: 1;">
                     {{ number_format($supplier->rating, 2) }}
                 </div>
                 <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 6px;">
                     Out of 5.00 Quality Rating
                 </div>
                 <div style="margin-top: 10px;">
-                    <span class="pill-badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);">
+                    <span class="pill-badge" style="background: rgba(16, 185, 129, 0.15); color: #059669; border: 1px solid rgba(16, 185, 129, 0.3);">
                         Accredited Grade A Partner
                     </span>
                 </div>
             </div>
 
             <div style="margin-top: 16px; font-size: 0.825rem; color: var(--text-secondary);">
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.04);">
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border-color);">
                     <span style="color: var(--text-muted);">Supplier Code:</span>
-                    <strong style="font-family: var(--font-mono); color: #38bdf8;">{{ $supplier->code }}</strong>
+                    <strong style="font-family: var(--font-mono); color: var(--primary-red);">{{ $supplier->code }}</strong>
                 </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.04);">
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border-color);">
                     <span style="color: var(--text-muted);">Trade Status:</span>
-                    <span class="pill-badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">
+                    <span class="pill-badge" style="background: rgba(16, 185, 129, 0.15); color: #059669;">
                         {{ ucfirst($supplier->status) }}
                     </span>
                 </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.04);">
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border-color);">
                     <span style="color: var(--text-muted);">Materials Cataloged:</span>
                     <strong style="color: var(--text-primary); font-family: var(--font-mono);">{{ $supplier->materials()->count() }} items</strong>
                 </div>
@@ -159,9 +159,9 @@
             </div>
         </div>
 
-        <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 20px;">
+        <div style="background: #fafbfc; border: 1px solid var(--border-color); border-radius: 14px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
             <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary-red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
                 <h4 style="font-size: 0.875rem; font-weight: 700; color: var(--text-primary);">
                     Contractor Assistance
                 </h4>
