@@ -1052,7 +1052,6 @@
                 @endforeach
             </div>
         </div>
-    @endif
 
         <div style="display: flex; flex-direction: column; gap: 16px;">
             @foreach($project->scopeItems as $item)
