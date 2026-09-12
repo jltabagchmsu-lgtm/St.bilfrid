@@ -22,6 +22,8 @@ class PersonnelController extends Controller
             'phone' => 'nullable|string|max:50',
             'license_no' => 'nullable|string|max:100',
             'specialization' => 'nullable|string|max:255',
+            'license_expiry_date' => 'nullable|date',
+            'license_status' => 'nullable|string|in:active,expired,inactive,suspended',
         ]);
 
         Personnel::create($validated);

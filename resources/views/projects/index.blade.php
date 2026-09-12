@@ -765,6 +765,12 @@
         <form id="deleteProjectForm" action="" method="POST">
             @csrf
             @method('DELETE')
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px;">
+                    Please type <strong style="color: var(--primary-red); font-family: var(--font-mono);">DELETE</strong> to confirm permanent deletion:
+                </label>
+                <input type="text" name="confirmation" id="deleteProjectConfirmInput" class="form-input" placeholder="Type DELETE" required autocomplete="off" style="width: 100%;">
+            </div>
             <div style="display: flex; justify-content: flex-end; gap: 10px;">
                 <button type="button" class="btn-secondary" onclick="closeModal('deleteProjectModal')">Cancel</button>
                 <button type="submit" class="btn-primary" style="background: linear-gradient(135deg, #ef4444, #dc2626); border-color: #dc2626; color: white; font-weight: 700;">
@@ -801,6 +807,10 @@
         const titleEl = document.getElementById('deleteProjectTitleDisplay');
         if (titleEl) {
             titleEl.innerText = title || '';
+        }
+        const inputEl = document.getElementById('deleteProjectConfirmInput');
+        if (inputEl) {
+            inputEl.value = '';
         }
         openModal('deleteProjectModal');
     }

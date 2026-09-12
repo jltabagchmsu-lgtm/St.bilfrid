@@ -128,21 +128,26 @@
 @endif
 
 <!-- ====================================================
-     3-TAB NAVIGATION BAR FOR BILL OF MATERIALS
+     3-TAB NAVIGATION BAR FOR BILL OF MATERIALS (NN/g Standard Tabs)
      ==================================================== -->
-<div style="display: flex; gap: 8px; margin-bottom: 24px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; flex-wrap: wrap;">
-    <button type="button" id="tabBtnMaster" class="btn-tab active" onclick="switchBomTab('master')" style="padding: 10px 20px; font-size: 0.9rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid rgba(220, 38, 38, 0.3); background: #fef2f2; color: var(--primary-red); cursor: pointer; display: inline-flex; align-items: center; gap: 8px; height: 42px;">
-        Master Consolidated Materials Table
-        <span class="badge" style="background: rgba(220, 38, 38, 0.1); color: var(--primary-red); font-size: 0.725rem;">{{ $masterMaterialsDistinctCount }} Materials</span>
-    </button>
-    <button type="button" id="tabBtnScope" class="btn-tab" onclick="switchBomTab('scope')" style="padding: 10px 20px; font-size: 0.9rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: #ffffff; color: var(--text-secondary); cursor: pointer; display: inline-flex; align-items: center; gap: 8px; height: 42px;">
-        Itemized Scope BOM Breakdown (DUPA)
-        <span class="badge" style="background: #e2e8f0; color: var(--text-secondary); font-size: 0.725rem;">{{ $selectedProject ? $selectedProject->scopeItems->count() : 0 }} Scope Items</span>
-    </button>
-    <button type="button" id="tabBtnSite" class="btn-tab" onclick="switchBomTab('site')" style="padding: 10px 20px; font-size: 0.9rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: #ffffff; color: var(--text-secondary); cursor: pointer; display: inline-flex; align-items: center; gap: 8px; height: 42px;">
-        Site Stock Allocations & Daily Usage
-        <span class="badge" style="background: #e2e8f0; color: var(--text-secondary); font-size: 0.725rem;">{{ $projectMaterials->count() }} Site Items</span>
-    </button>
+<div class="nng-tabs-container" style="margin-bottom: 24px;">
+    <div class="nng-tabs-list">
+        <button type="button" id="tabBtnMaster" class="nng-tab-item active" onclick="switchBomTab('master')">
+            <span class="discipline-dot" style="background: var(--primary-red);"></span>
+            <span>Master Consolidated Materials</span>
+            <span class="nng-tab-badge">{{ $masterMaterialsDistinctCount }}</span>
+        </button>
+        <button type="button" id="tabBtnScope" class="nng-tab-item" onclick="switchBomTab('scope')">
+            <span class="discipline-dot" style="background: #0284c7;"></span>
+            <span>Itemized Scope Breakdown (DUPA)</span>
+            <span class="nng-tab-badge">{{ $selectedProject ? $selectedProject->scopeItems->count() : 0 }}</span>
+        </button>
+        <button type="button" id="tabBtnSite" class="nng-tab-item" onclick="switchBomTab('site')">
+            <span class="discipline-dot" style="background: #059669;"></span>
+            <span>Site Stock Allocations & Usage</span>
+            <span class="nng-tab-badge">{{ $projectMaterials->count() }}</span>
+        </button>
+    </div>
 </div>
 
 <!-- ====================================================
@@ -1427,37 +1432,25 @@
 
 @section('scripts')
 <script>
-    // Tab Switching Logic
+    // Tab Switching Logic (NN/g Standard Tabs)
     function switchBomTab(tabName) {
         document.querySelectorAll('.bom-tab-content').forEach(el => el.style.display = 'none');
-        document.querySelectorAll('.btn-tab').forEach(btn => {
+        document.querySelectorAll('#tabBtnMaster, #tabBtnScope, #tabBtnSite, .nng-tab-item, .btn-tab').forEach(btn => {
             btn.classList.remove('active');
-            btn.style.background = '#f8fafc';
-            btn.style.color = 'var(--text-secondary)';
-            btn.style.borderColor = 'var(--border-color)';
         });
 
         if (tabName === 'master') {
             document.getElementById('tabContentMaster').style.display = 'block';
             const btn = document.getElementById('tabBtnMaster');
-            btn.classList.add('active');
-            btn.style.background = '#fef2f2';
-            btn.style.color = 'var(--primary-red)';
-            btn.style.borderColor = 'rgba(220, 38, 38, 0.3)';
+            if (btn) btn.classList.add('active');
         } else if (tabName === 'scope') {
             document.getElementById('tabContentScope').style.display = 'block';
             const btn = document.getElementById('tabBtnScope');
-            btn.classList.add('active');
-            btn.style.background = '#fef2f2';
-            btn.style.color = 'var(--primary-red)';
-            btn.style.borderColor = 'rgba(220, 38, 38, 0.3)';
+            if (btn) btn.classList.add('active');
         } else if (tabName === 'site') {
             document.getElementById('tabContentSite').style.display = 'block';
             const btn = document.getElementById('tabBtnSite');
-            btn.classList.add('active');
-            btn.style.background = '#fef2f2';
-            btn.style.color = 'var(--primary-red)';
-            btn.style.borderColor = 'rgba(220, 38, 38, 0.3)';
+            if (btn) btn.classList.add('active');
         }
     }
 

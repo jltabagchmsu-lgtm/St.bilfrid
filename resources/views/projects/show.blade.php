@@ -28,9 +28,18 @@
     <button class="btn-secondary" style="font-size: 0.85rem;" onclick="openModal('addProjectPaymentModal')">
         + Payment / OR
     </button>
-    <form action="{{ route('projects.destroy', $project->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this project ({{ addslashes($project->project_code) }} - {{ addslashes($project->title) }}) and all associated records? This cannot be undone.');" style="display:inline;">
+    <form action="{{ route('projects.destroy', $project->id) }}" method="POST" onsubmit="
+        const text = prompt('DANGER: This will permanently erase this project and all associated records.\n\nPlease type DELETE to confirm:');
+        if (text !== 'DELETE') {
+            if (text !== null) alert('Deletion aborted: Confirmation text must exactly match DELETE.');
+            return false;
+        }
+        document.getElementById('showDeleteConfirmationInput').value = text;
+        return true;
+    " style="display:inline;">
         @csrf
         @method('DELETE')
+        <input type="hidden" name="confirmation" id="showDeleteConfirmationInput" value="">
         <button type="submit" class="btn-secondary" style="font-size: 0.85rem; color: #f87171; border-color: rgba(239,68,68,0.35);" title="Permanently Delete Project">
             Delete
         </button>
@@ -935,7 +944,18 @@
                         <div style="flex: 1;">
                             <div style="font-weight: 700; font-size: 0.9rem; color: var(--text-primary);">{{ $person->name }}</div>
                             <div style="font-size: 0.75rem; color: var(--primary-red); font-weight: 600;">{{ $person->pivot->assignment_role ?? $person->title }}</div>
-                            <div style="font-size: 0.7rem; color: var(--text-muted);">PRC Lic: {{ $person->license_no ?? 'N/A' }}</div>
+                            <div style="font-size: 0.7rem; color: var(--text-muted); display: flex; align-items: center; gap: 6px; margin-top: 3px; flex-wrap: wrap;">
+                                <span>PRC Lic: {{ $person->license_no ?? 'N/A' }}</span>
+                                @if($person->isLicenseExpired())
+                                    <span style="background: #fee2e2; color: #b91c1c; border: 1px solid #f87171; padding: 1px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 700;">
+                                        EXPIRED LICENSE
+                                    </span>
+                                @else
+                                    <span style="background: #dcfce7; color: #15803d; border: 1px solid #86efac; padding: 1px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 700;">
+                                        ACTIVE PRC
+                                    </span>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 @endforeach
@@ -2090,11 +2110,39 @@
             @csrf
             <div class="form-group">
                 <label class="form-label">Select Engineer / Architect</label>
-                <select name="personnel_id" class="form-select" required>
+                <select name="personnel_id" id="assignPersonnelSelect" class="form-select" required onchange="checkAssignPersonnelLicense(this)">
+                    <option value="">-- Choose Professional --</option>
                     @foreach($allPersonnel as $person)
-                        <option value="{{ $person->id }}">{{ $person->name }} &bull; {{ $person->title }} (PRC: {{ $person->license_no ?? 'N/A' }})</option>
+                        @php $isExp = $person->isLicenseExpired(); @endphp
+                        <option value="{{ $person->id }}"
+                                data-expired="{{ $isExp ? '1' : '0' }}"
+                                data-name="{{ $person->name }}"
+                                data-license="{{ $person->license_no ?? 'N/A' }}"
+                                data-expiry="{{ $person->license_expiry_date ? $person->license_expiry_date->format('M d, Y') : 'Inactive' }}"
+                        >
+                            {{ $person->name }} &bull; {{ $person->title }} (PRC: {{ $person->license_no ?? 'N/A' }})
+                            @if($isExp)
+                                &mdash; [EXPIRED LICENSE]
+                            @else
+                                &mdash; [ACTIVE PRC]
+                            @endif
+                        </option>
                     @endforeach
                 </select>
+            </div>
+
+            <!-- Dynamic Advisory Warning Badge / Notice for Expired License -->
+            <div id="assignLicenseExpiredAlert" style="display: none; background: #fef2f2; border: 1px solid #f87171; border-radius: 6px; padding: 12px; margin-top: 12px; margin-bottom: 12px;">
+                <div style="display: flex; align-items: flex-start; gap: 8px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" style="flex-shrink:0; margin-top: 2px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    <div>
+                        <div style="font-weight: 700; color: #991b1b; font-size: 0.85rem;">
+                            <span style="background:#dc2626; color:#fff; padding:2px 6px; border-radius:3px; font-size:0.7rem; font-weight:700; margin-right:4px;">ADVISORY WARNING</span>
+                            Expired / Inactive Engineering License Detected
+                        </div>
+                        <div id="assignLicenseExpiredMsg" style="font-size: 0.775rem; color: #b91c1c; margin-top: 3px;"></div>
+                    </div>
+                </div>
             </div>
 
             <div class="form-group">
@@ -3871,6 +3919,23 @@
         const disp = document.getElementById('projBomTotalValueDisp');
         if (disp) {
             disp.innerText = '₱ ' + total.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        }
+    }
+
+    function checkAssignPersonnelLicense(selectEl) {
+        const selectedOpt = selectEl.options[selectEl.selectedIndex];
+        const alertBox = document.getElementById('assignLicenseExpiredAlert');
+        const msgBox = document.getElementById('assignLicenseExpiredMsg');
+        if (!alertBox || !msgBox) return;
+
+        if (selectedOpt && selectedOpt.dataset.expired === '1') {
+            const name = selectedOpt.dataset.name;
+            const lic = selectedOpt.dataset.license;
+            const expiry = selectedOpt.dataset.expiry;
+            msgBox.innerHTML = `<strong>${name}</strong>'s professional license (PRC: <code>${lic}</code>) is marked as expired or inactive (${expiry}). Assignment to project roster is permitted for administrative/advisory roles, but statutory drawings and certified milestones require active PRC validation.`;
+            alertBox.style.display = 'block';
+        } else {
+            alertBox.style.display = 'none';
         }
     }
 </script>

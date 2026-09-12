@@ -202,9 +202,18 @@
                         <a href="{{ route('costing.index', ['project_id' => $cp->id]) }}" class="btn-secondary" style="font-size: 0.75rem; padding: 3px 6px; text-align: center;">
                             Costing Sheet
                         </a>
-                        <form action="{{ route('projects.destroy', $cp->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this completed project archive ({{ addslashes($cp->project_code) }} - {{ addslashes($cp->title) }})?');">
+                        <form action="{{ route('projects.destroy', $cp->id) }}" method="POST" onsubmit="
+                            const text = prompt('DANGER: Permanently delete project archive ({{ addslashes($cp->project_code) }})?\n\nType DELETE to confirm:');
+                            if (text !== 'DELETE') {
+                                if (text !== null) alert('Deletion aborted: Confirmation text must exactly match DELETE.');
+                                return false;
+                            }
+                            this.querySelector('input[name=confirmation]').value = text;
+                            return true;
+                        ">
                             @csrf
                             @method('DELETE')
+                            <input type="hidden" name="confirmation" value="">
                             <button type="submit" class="btn-secondary" style="font-size: 0.725rem; padding: 3px 6px; text-align: center; color: #f87171; width: 100%; border-color: rgba(239,68,68,0.25);">
                                 Delete
                             </button>

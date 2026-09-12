@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Payment;
 use App\Models\Project;
+use App\Http\Requests\PaymentRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -52,23 +53,9 @@ class PaymentController extends Controller
         ));
     }
 
-    public function store(Request $request)
+    public function store(PaymentRequest $request)
     {
-        $validated = $request->validate([
-            'project_id' => 'required|exists:projects,id',
-            'amount' => 'required|numeric|min:1',
-            'payment_date' => 'required|date',
-            'payment_stage' => 'required|string|max:255',
-            'payment_method' => 'required|string|max:100',
-            'status' => 'required|string|in:paid,pending,overdue',
-            'invoice_no' => 'nullable|string|max:100',
-            'official_receipt_no' => 'nullable|string|max:100',
-            'payer_name' => 'nullable|string|max:255',
-            'bank_reference' => 'nullable|string|max:100',
-            'received_by' => 'nullable|string|max:255',
-            'notes' => 'nullable|string',
-            'receipt_file' => 'nullable|file|mimes:jpg,jpeg,png,pdf,webp|max:10240',
-        ]);
+        $validated = $request->validated();
 
         $project = Project::findOrFail($validated['project_id']);
 

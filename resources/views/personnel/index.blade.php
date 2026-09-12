@@ -24,7 +24,20 @@
                         <h4 style="font-size: 1.15rem; font-weight: 800; color: var(--text-primary);">{{ $p->name }}</h4>
                         <div style="color: var(--primary-red); font-size: 0.875rem; font-weight: 700;">{{ $p->title }}</div>
                     </div>
-                    <span class="spec-chip" style="font-size: 0.75rem;">PRC: {{ $p->license_no ?? 'PENDING' }}</span>
+                    <div style="text-align: right;">
+                        <span class="spec-chip" style="font-size: 0.75rem;">PRC: {{ $p->license_no ?? 'PENDING' }}</span>
+                        <div style="margin-top: 4px;">
+                            @if($p->isLicenseExpired())
+                                <span style="background: #fee2e2; color: #b91c1c; border: 1px solid #f87171; padding: 2px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 700;">
+                                    EXPIRED ({{ $p->license_expiry_date ? $p->license_expiry_date->format('Y-m-d') : 'INACTIVE' }})
+                                </span>
+                            @else
+                                <span style="background: #dcfce7; color: #15803d; border: 1px solid #86efac; padding: 2px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 700;">
+                                    ACTIVE PRC
+                                </span>
+                            @endif
+                        </div>
+                    </div>
                 </div>
 
                 <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px;">
@@ -97,6 +110,21 @@
             <div class="form-group">
                 <label class="form-label">Engineering / Architectural Specialization</label>
                 <input type="text" name="specialization" class="form-input" placeholder="e.g. HVAC, Heavy Concrete Framework">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div class="form-group">
+                    <label class="form-label">License Expiration Date</label>
+                    <input type="date" name="license_expiry_date" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">License Status</label>
+                    <select name="license_status" class="form-select">
+                        <option value="active" selected>Active PRC</option>
+                        <option value="expired">Expired</option>
+                        <option value="inactive">Inactive / Suspended</option>
+                    </select>
+                </div>
             </div>
 
             <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">

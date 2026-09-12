@@ -75,3 +75,4 @@ $RECYCLE.BIN/
 /scratch/
 *.tmp
 *.bak
+.phpunit.result.cache

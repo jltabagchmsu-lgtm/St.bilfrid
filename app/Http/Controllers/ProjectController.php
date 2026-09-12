@@ -15,6 +15,7 @@ use App\Models\ProjectMaterialTransfer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class ProjectController extends Controller
 {
@@ -318,8 +319,25 @@ class ProjectController extends Controller
         return redirect()->route('projects.show', $project->id)->with('success', 'Project ' . $project->project_code . ' updated successfully! Loan & financing specs recalculated.');
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
+        $confirmationField = 'confirmation';
+        foreach (['confirmation', 'confirm', 'confirmation_text', 'confirm_text', 'delete_confirmation'] as $candidate) {
+            if ($request->exists($candidate)) {
+                $confirmationField = $candidate;
+                break;
+            }
+        }
+
+        $confirmationValue = $request->input($confirmationField);
+
+        if ($confirmationValue !== 'DELETE') {
+            throw ValidationException::withMessages([
+                $confirmationField => ['Project deletion aborted: Confirmation text must exactly match "DELETE".'],
+                'confirmation' => ['Project deletion aborted: Confirmation text must exactly match "DELETE".'],
+            ]);
+        }
+
         $project = Project::with(['photos', 'tasks', 'scopeItems.lines', 'projectMaterials', 'costs', 'payments'])->findOrFail($id);
         $projectCode = $project->project_code;
         $projectTitle = $project->title;
@@ -1192,7 +1210,20 @@ class ProjectController extends Controller
             'assignment_role' => 'required|string|max:255',
         ]);
 
+        $personnel = Personnel::findOrFail($validated['personnel_id']);
         $project->personnel()->attach($validated['personnel_id'], ['assignment_role' => $validated['assignment_role']]);
+
+        if ($personnel->isLicenseExpired()) {
+            $expiryInfo = $personnel->license_expiry_date
+                ? 'expired on ' . $personnel->license_expiry_date->format('M d, Y')
+                : 'inactive';
+            $licNo = $personnel->license_no ?? 'N/A';
+
+            return redirect()->back()->with(
+                'warning',
+                "Advisory Warning: {$personnel->name} was assigned as {$validated['assignment_role']}, but their engineering license ({$licNo}) is expired or inactive ({$expiryInfo}). Certified sign-offs require active PRC registration."
+            );
+        }
 
         return redirect()->back()->with('success', 'Professional successfully assigned to project!');
     }
