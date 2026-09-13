@@ -10,6 +10,79 @@
         .supplier-badge-roof { background: #fef2f2; color: var(--primary-red); border: 1px solid rgba(220, 38, 38, 0.35); }
         .supplier-badge-strc { background: #ecfdf5; color: #059669; border: 1px solid rgba(16, 185, 129, 0.35); }
         
+        .supplier-kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .supplier-kpi-card {
+            background: #fafbfc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md, 12px);
+            padding: 18px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .supplier-kpi-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(220, 38, 38, 0.4);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+        }
+        .supplier-kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--card-accent, var(--primary-gradient));
+        }
+        .supplier-kpi-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            gap: 10px;
+        }
+        .supplier-kpi-label {
+            font-size: 0.775rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            line-height: 1.2;
+        }
+        .supplier-kpi-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid transparent;
+            flex-shrink: 0;
+        }
+        .supplier-kpi-val {
+            font-size: 1.85rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            line-height: 1.1;
+            margin-bottom: 4px;
+            letter-spacing: -0.02em;
+        }
+        .supplier-kpi-sub {
+            font-size: 0.775rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            line-height: 1.3;
+        }
+        
         .grid-table {
             width: 100%;
             border-collapse: separate;

@@ -1,0 +1,1492 @@
+{
+    "suites": [
+        {
+            "title": "User Model - White Box Suite",
+            "description": "White-box unit and structural tests for App\\Models\\User",
+            "cases": [
+                {
+                    "title": "[WBT-001] User::isAdmin() - Branch Coverage: Empty Role (Null)",
+                    "description": "White-Box structural test for `User::isAdmin()`.\n\n**Test Category:** Branch Coverage: Empty Role (Null)\n**Tested Condition:** `role = null`\n**Expected Outcome:** `true`\n**Actual Outcome:** `true`\n**Execution Time:** 12.2 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute User::isAdmin() with condition: role = null",
+                            "expected_result": "Returns: true"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-002] User::isAdmin() - Branch Coverage: Role = admin",
+                    "description": "White-Box structural test for `User::isAdmin()`.\n\n**Test Category:** Branch Coverage: Role = admin\n**Tested Condition:** `role = admin`\n**Expected Outcome:** `true`\n**Actual Outcome:** `true`\n**Execution Time:** 0.07 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute User::isAdmin() with condition: role = admin",
+                            "expected_result": "Returns: true"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-003] User::isAdmin() - Branch Coverage: Role = roofing_transfer",
+                    "description": "White-Box structural test for `User::isAdmin()`.\n\n**Test Category:** Branch Coverage: Role = roofing_transfer\n**Tested Condition:** `role = roofing_transfer`\n**Expected Outcome:** `false`\n**Actual Outcome:** `false`\n**Execution Time:** 0.02 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute User::isAdmin() with condition: role = roofing_transfer",
+                            "expected_result": "Returns: false"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-004] User::isRoofingOfficer() - Branch Coverage: True Branch",
+                    "description": "White-Box structural test for `User::isRoofingOfficer()`.\n\n**Test Category:** Branch Coverage: True Branch\n**Tested Condition:** `role = roofing_transfer`\n**Expected Outcome:** `true`\n**Actual Outcome:** `true`\n**Execution Time:** 0.01 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute User::isRoofingOfficer() with condition: role = roofing_transfer",
+                            "expected_result": "Returns: true"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-005] User::isRoofingOfficer() - Branch Coverage: False Branch",
+                    "description": "White-Box structural test for `User::isRoofingOfficer()`.\n\n**Test Category:** Branch Coverage: False Branch\n**Tested Condition:** `role = admin`\n**Expected Outcome:** `false`\n**Actual Outcome:** `false`\n**Execution Time:** 0.01 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute User::isRoofingOfficer() with condition: role = admin",
+                            "expected_result": "Returns: false"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-006] User::isWindowsDoorsOfficer() - Branch Coverage: True Branch",
+                    "description": "White-Box structural test for `User::isWindowsDoorsOfficer()`.\n\n**Test Category:** Branch Coverage: True Branch\n**Tested Condition:** `role = windows_doors_transfer`\n**Expected Outcome:** `true`\n**Actual Outcome:** `true`\n**Execution Time:** 0.01 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute User::isWindowsDoorsOfficer() with condition: role = windows_doors_transfer",
+                            "expected_result": "Returns: true"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-007] User::isWindowsDoorsOfficer() - Branch Coverage: False Branch",
+                    "description": "White-Box structural test for `User::isWindowsDoorsOfficer()`.\n\n**Test Category:** Branch Coverage: False Branch\n**Tested Condition:** `role = roofing_transfer`\n**Expected Outcome:** `false`\n**Actual Outcome:** `false`\n**Execution Time:** 0.01 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute User::isWindowsDoorsOfficer() with condition: role = roofing_transfer",
+                            "expected_result": "Returns: false"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-008] User::isSupplier() - Branch Coverage: Role is supplier",
+                    "description": "White-Box structural test for `User::isSupplier()`.\n\n**Test Category:** Branch Coverage: Role is supplier\n**Tested Condition:** `role = supplier, supplier_id = null`\n**Expected Outcome:** `true`\n**Actual Outcome:** `true`\n**Execution Time:** 0.04 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute User::isSupplier() with condition: role = supplier, supplier_id = null",
+                            "expected_result": "Returns: true"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-009] User::isSupplier() - Branch Coverage: supplier_id is populated",
+                    "description": "White-Box structural test for `User::isSupplier()`.\n\n**Test Category:** Branch Coverage: supplier_id is populated\n**Tested Condition:** `role = null, supplier_id = 99`\n**Expected Outcome:** `true`\n**Actual Outcome:** `true`\n**Execution Time:** 0.02 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute User::isSupplier() with condition: role = null, supplier_id = 99",
+                            "expected_result": "Returns: true"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-010] User::isSupplier() - Branch Coverage: Neither supplier role nor id",
+                    "description": "White-Box structural test for `User::isSupplier()`.\n\n**Test Category:** Branch Coverage: Neither supplier role nor id\n**Tested Condition:** `role = admin, supplier_id = null`\n**Expected Outcome:** `false`\n**Actual Outcome:** `false`\n**Execution Time:** 0.02 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute User::isSupplier() with condition: role = admin, supplier_id = null",
+                            "expected_result": "Returns: false"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-011] User::getRoleTitleAttribute - Branch Coverage: Supplier Role with Supplier Object",
+                    "description": "White-Box structural test for `User::getRoleTitleAttribute`.\n\n**Test Category:** Branch Coverage: Supplier Role with Supplier Object\n**Tested Condition:** `supplier loaded with name & category`\n**Expected Outcome:** `Steel Corp (Structural & Masonry)`\n**Actual Outcome:** `Steel Corp (Structural & Masonry)`\n**Execution Time:** 0.23 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute User::getRoleTitleAttribute with condition: supplier loaded with name & category",
+                            "expected_result": "Returns: Steel Corp (Structural & Masonry)"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-012] User::getRoleTitleAttribute - Branch Coverage: Supplier Role without Supplier Object",
+                    "description": "White-Box structural test for `User::getRoleTitleAttribute`.\n\n**Test Category:** Branch Coverage: Supplier Role without Supplier Object\n**Tested Condition:** `supplier relation is null`\n**Expected Outcome:** `Supplier Account`\n**Actual Outcome:** `Supplier Account`\n**Execution Time:** 7.66 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute User::getRoleTitleAttribute with condition: supplier relation is null",
+                            "expected_result": "Returns: Supplier Account"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-013] User::getRoleTitleAttribute - Branch Coverage: Roofing Transfer Officer",
+                    "description": "White-Box structural test for `User::getRoleTitleAttribute`.\n\n**Test Category:** Branch Coverage: Roofing Transfer Officer\n**Tested Condition:** `role = roofing_transfer`\n**Expected Outcome:** `Roofing Transfer Officer`\n**Actual Outcome:** `Roofing Transfer Officer`\n**Execution Time:** 0.06 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute User::getRoleTitleAttribute with condition: role = roofing_transfer",
+                            "expected_result": "Returns: Roofing Transfer Officer"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-014] User::getRoleTitleAttribute - Branch Coverage: Windows & Doors Transfer Officer",
+                    "description": "White-Box structural test for `User::getRoleTitleAttribute`.\n\n**Test Category:** Branch Coverage: Windows & Doors Transfer Officer\n**Tested Condition:** `role = windows_doors_transfer`\n**Expected Outcome:** `Windows & Doors Transfer Officer`\n**Actual Outcome:** `Windows & Doors Transfer Officer`\n**Execution Time:** 0.02 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute User::getRoleTitleAttribute with condition: role = windows_doors_transfer",
+                            "expected_result": "Returns: Windows & Doors Transfer Officer"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-015] User::getRoleTitleAttribute - Branch Coverage: Default Master Administrator",
+                    "description": "White-Box structural test for `User::getRoleTitleAttribute`.\n\n**Test Category:** Branch Coverage: Default Master Administrator\n**Tested Condition:** `role = admin or null`\n**Expected Outcome:** `Master Administrator`\n**Actual Outcome:** `Master Administrator`\n**Execution Time:** 0.02 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute User::getRoleTitleAttribute with condition: role = admin or null",
+                            "expected_result": "Returns: Master Administrator"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-016] User::getPortalRouteAttribute - Branch Coverage: Supplier Portal Route",
+                    "description": "White-Box structural test for `User::getPortalRouteAttribute`.\n\n**Test Category:** Branch Coverage: Supplier Portal Route\n**Tested Condition:** `role = supplier`\n**Expected Outcome:** `http://localhost:8000/supplier/dashboard`\n**Actual Outcome:** `http://localhost:8000/supplier/dashboard`\n**Execution Time:** 0.16 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",
+                    "severity": "normal",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute User::getPortalRouteAttribute with condition: role = supplier",
+                            "expected_result": "Returns: http://localhost:8000/supplier/dashboard"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-017] User::getPortalRouteAttribute - Branch Coverage: Roofing Portal Route",
+                    "description": "White-Box structural test for `User::getPortalRouteAttribute`.\n\n**Test Category:** Branch Coverage: Roofing Portal Route\n**Tested Condition:** `role = roofing_transfer`\n**Expected Outcome:** `http://localhost:8000/roofing-transfer`\n**Actual Outcome:** `http://localhost:8000/roofing-transfer`\n**Execution Time:** 0.06 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",
+                    "severity": "normal",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute User::getPortalRouteAttribute with condition: role = roofing_transfer",
+                            "expected_result": "Returns: http://localhost:8000/roofing-transfer"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-018] User::getPortalRouteAttribute - Branch Coverage: Windows Portal Route",
+                    "description": "White-Box structural test for `User::getPortalRouteAttribute`.\n\n**Test Category:** Branch Coverage: Windows Portal Route\n**Tested Condition:** `role = windows_doors_transfer`\n**Expected Outcome:** `http://localhost:8000/windows-doors-transfer`\n**Actual Outcome:** `http://localhost:8000/windows-doors-transfer`\n**Execution Time:** 0.04 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",
+                    "severity": "normal",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute User::getPortalRouteAttribute with condition: role = windows_doors_transfer",
+                            "expected_result": "Returns: http://localhost:8000/windows-doors-transfer"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-019] User::getPortalRouteAttribute - Branch Coverage: Admin Default Dashboard Route",
+                    "description": "White-Box structural test for `User::getPortalRouteAttribute`.\n\n**Test Category:** Branch Coverage: Admin Default Dashboard Route\n**Tested Condition:** `role = admin`\n**Expected Outcome:** `http://localhost:8000`\n**Actual Outcome:** `http://localhost:8000`\n**Execution Time:** 0.04 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",
+                    "severity": "normal",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute User::getPortalRouteAttribute with condition: role = admin",
+                            "expected_result": "Returns: http://localhost:8000"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Supplier Model - White Box Suite",
+            "description": "White-box unit and structural tests for App\\Models\\Supplier",
+            "cases": [
+                {
+                    "title": "[WBT-020] Supplier::isActive() - Branch Coverage: status = active",
+                    "description": "White-Box structural test for `Supplier::isActive()`.\n\n**Test Category:** Branch Coverage: status = active\n**Tested Condition:** `status = active`\n**Expected Outcome:** `true`\n**Actual Outcome:** `true`\n**Execution Time:** 0.07 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Supplier` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute Supplier::isActive() with condition: status = active",
+                            "expected_result": "Returns: true"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-021] Supplier::isActive() - Branch Coverage: status = inactive",
+                    "description": "White-Box structural test for `Supplier::isActive()`.\n\n**Test Category:** Branch Coverage: status = inactive\n**Tested Condition:** `status = inactive`\n**Expected Outcome:** `false`\n**Actual Outcome:** `false`\n**Execution Time:** 0.02 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Supplier` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute Supplier::isActive() with condition: status = inactive",
+                            "expected_result": "Returns: false"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-022] Supplier::getCategoryColorAttribute - Branch Coverage: Windows & Doors",
+                    "description": "White-Box structural test for `Supplier::getCategoryColorAttribute`.\n\n**Test Category:** Branch Coverage: Windows & Doors\n**Tested Condition:** `category = Windows & Doors`\n**Expected Outcome:** `#38bdf8`\n**Actual Outcome:** `#38bdf8`\n**Execution Time:** 0.03 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Supplier` loaded.",
+                    "severity": "normal",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute Supplier::getCategoryColorAttribute with condition: category = Windows & Doors",
+                            "expected_result": "Returns: #38bdf8"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-023] Supplier::getCategoryColorAttribute - Branch Coverage: Roofing",
+                    "description": "White-Box structural test for `Supplier::getCategoryColorAttribute`.\n\n**Test Category:** Branch Coverage: Roofing\n**Tested Condition:** `category = Roofing`\n**Expected Outcome:** `#ef4444`\n**Actual Outcome:** `#ef4444`\n**Execution Time:** 0.02 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Supplier` loaded.",
+                    "severity": "normal",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute Supplier::getCategoryColorAttribute with condition: category = Roofing",
+                            "expected_result": "Returns: #ef4444"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-024] Supplier::getCategoryColorAttribute - Branch Coverage: Structural & Masonry",
+                    "description": "White-Box structural test for `Supplier::getCategoryColorAttribute`.\n\n**Test Category:** Branch Coverage: Structural & Masonry\n**Tested Condition:** `category = Structural & Masonry`\n**Expected Outcome:** `#10b981`\n**Actual Outcome:** `#10b981`\n**Execution Time:** 0.02 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Supplier` loaded.",
+                    "severity": "normal",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute Supplier::getCategoryColorAttribute with condition: category = Structural & Masonry",
+                            "expected_result": "Returns: #10b981"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-025] Supplier::getCategoryColorAttribute - Branch Coverage: Default Category",
+                    "description": "White-Box structural test for `Supplier::getCategoryColorAttribute`.\n\n**Test Category:** Branch Coverage: Default Category\n**Tested Condition:** `category = Plumbing`\n**Expected Outcome:** `#818cf8`\n**Actual Outcome:** `#818cf8`\n**Execution Time:** 0.02 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Supplier` loaded.",
+                    "severity": "normal",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute Supplier::getCategoryColorAttribute with condition: category = Plumbing",
+                            "expected_result": "Returns: #818cf8"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "SupplierMaterial Model - White Box Suite",
+            "description": "White-box unit and structural tests for App\\Models\\SupplierMaterial",
+            "cases": [
+                {
+                    "title": "[WBT-026] SupplierMaterial::getStatusBadgeAttribute - Branch Coverage: is_active = false",
+                    "description": "White-Box structural test for `SupplierMaterial::getStatusBadgeAttribute`.\n\n**Test Category:** Branch Coverage: is_active = false\n**Tested Condition:** `is_active = false, availability_status = available`\n**Expected Outcome:** `Unavailable`\n**Actual Outcome:** `Unavailable`\n**Execution Time:** 1.93 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `SupplierMaterial` loaded.",
+                    "severity": "normal",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute SupplierMaterial::getStatusBadgeAttribute with condition: is_active = false, availability_status = available",
+                            "expected_result": "Returns: Unavailable"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-027] SupplierMaterial::getStatusBadgeAttribute - Branch Coverage: availability_status = unavailable",
+                    "description": "White-Box structural test for `SupplierMaterial::getStatusBadgeAttribute`.\n\n**Test Category:** Branch Coverage: availability_status = unavailable\n**Tested Condition:** `is_active = true, availability_status = unavailable`\n**Expected Outcome:** `Unavailable`\n**Actual Outcome:** `Unavailable`\n**Execution Time:** 0.06 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `SupplierMaterial` loaded.",
+                    "severity": "normal",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute SupplierMaterial::getStatusBadgeAttribute with condition: is_active = true, availability_status = unavailable",
+                            "expected_result": "Returns: Unavailable"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-028] SupplierMaterial::getStatusBadgeAttribute - Branch Coverage: Active and Available",
+                    "description": "White-Box structural test for `SupplierMaterial::getStatusBadgeAttribute`.\n\n**Test Category:** Branch Coverage: Active and Available\n**Tested Condition:** `is_active = true, availability_status = available`\n**Expected Outcome:** `Available`\n**Actual Outcome:** `Available`\n**Execution Time:** 0.03 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `SupplierMaterial` loaded.",
+                    "severity": "normal",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute SupplierMaterial::getStatusBadgeAttribute with condition: is_active = true, availability_status = available",
+                            "expected_result": "Returns: Available"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "SupplierOrder Model - White Box Suite",
+            "description": "White-box unit and structural tests for App\\Models\\SupplierOrder",
+            "cases": [
+                {
+                    "title": "[WBT-029] SupplierOrder::getStatusBadgeAttribute - Branch Coverage: pending",
+                    "description": "White-Box structural test for `SupplierOrder::getStatusBadgeAttribute`.\n\n**Test Category:** Branch Coverage: pending\n**Tested Condition:** `status = pending`\n**Expected Outcome:** `Pending Approval`\n**Actual Outcome:** `Pending Approval`\n**Execution Time:** 1.65 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `SupplierOrder` loaded.",
+                    "severity": "normal",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute SupplierOrder::getStatusBadgeAttribute with condition: status = pending",
+                            "expected_result": "Returns: Pending Approval"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-030] SupplierOrder::getStatusBadgeAttribute - Branch Coverage: confirmed",
+                    "description": "White-Box structural test for `SupplierOrder::getStatusBadgeAttribute`.\n\n**Test Category:** Branch Coverage: confirmed\n**Tested Condition:** `status = confirmed`\n**Expected Outcome:** `Confirmed`\n**Actual Outcome:** `Confirmed`\n**Execution Time:** 0.07 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `SupplierOrder` loaded.",
+                    "severity": "normal",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute SupplierOrder::getStatusBadgeAttribute with condition: status = confirmed",
+                            "expected_result": "Returns: Confirmed"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-031] SupplierOrder::getStatusBadgeAttribute - Branch Coverage: processing",
+                    "description": "White-Box structural test for `SupplierOrder::getStatusBadgeAttribute`.\n\n**Test Category:** Branch Coverage: processing\n**Tested Condition:** `status = processing`\n**Expected Outcome:** `Processing`\n**Actual Outcome:** `Processing`\n**Execution Time:** 0.02 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `SupplierOrder` loaded.",
+                    "severity": "normal",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute SupplierOrder::getStatusBadgeAttribute with condition: status = processing",
+                            "expected_result": "Returns: Processing"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-032] SupplierOrder::getStatusBadgeAttribute - Branch Coverage: ready_for_delivery",
+                    "description": "White-Box structural test for `SupplierOrder::getStatusBadgeAttribute`.\n\n**Test Category:** Branch Coverage: ready_for_delivery\n**Tested Condition:** `status = ready_for_delivery`\n**Expected Outcome:** `Ready for Delivery`\n**Actual Outcome:** `Ready for Delivery`\n**Execution Time:** 0.02 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `SupplierOrder` loaded.",
+                    "severity": "normal",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute SupplierOrder::getStatusBadgeAttribute with condition: status = ready_for_delivery",
+                            "expected_result": "Returns: Ready for Delivery"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-033] SupplierOrder::getStatusBadgeAttribute - Branch Coverage: delivered",
+                    "description": "White-Box structural test for `SupplierOrder::getStatusBadgeAttribute`.\n\n**Test Category:** Branch Coverage: delivered\n**Tested Condition:** `status = delivered`\n**Expected Outcome:** `Delivered`\n**Actual Outcome:** `Delivered`\n**Execution Time:** 0.01 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `SupplierOrder` loaded.",
+                    "severity": "normal",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute SupplierOrder::getStatusBadgeAttribute with condition: status = delivered",
+                            "expected_result": "Returns: Delivered"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-034] SupplierOrder::getStatusBadgeAttribute - Branch Coverage: completed",
+                    "description": "White-Box structural test for `SupplierOrder::getStatusBadgeAttribute`.\n\n**Test Category:** Branch Coverage: completed\n**Tested Condition:** `status = completed`\n**Expected Outcome:** `Completed`\n**Actual Outcome:** `Completed`\n**Execution Time:** 0.01 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `SupplierOrder` loaded.",
+                    "severity": "normal",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute SupplierOrder::getStatusBadgeAttribute with condition: status = completed",
+                            "expected_result": "Returns: Completed"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-035] SupplierOrder::getStatusBadgeAttribute - Branch Coverage: cancelled",
+                    "description": "White-Box structural test for `SupplierOrder::getStatusBadgeAttribute`.\n\n**Test Category:** Branch Coverage: cancelled\n**Tested Condition:** `status = cancelled`\n**Expected Outcome:** `Cancelled`\n**Actual Outcome:** `Cancelled`\n**Execution Time:** 0.01 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `SupplierOrder` loaded.",
+                    "severity": "normal",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute SupplierOrder::getStatusBadgeAttribute with condition: status = cancelled",
+                            "expected_result": "Returns: Cancelled"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-036] SupplierOrder::syncToInventory() - Basis Path: Idempotency Check",
+                    "description": "White-Box structural test for `SupplierOrder::syncToInventory()`.\n\n**Test Category:** Basis Path: Idempotency Check\n**Tested Condition:** `is_synced_to_inventory = true`\n**Expected Outcome:** `false`\n**Actual Outcome:** `false`\n**Execution Time:** 0.07 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `SupplierOrder` loaded.",
+                    "severity": "critical",
+                    "priority": "high",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute SupplierOrder::syncToInventory() with condition: is_synced_to_inventory = true",
+                            "expected_result": "Returns: false"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-037] SupplierOrder::syncToInventory() - Basis Path: Execution & Material Sync",
+                    "description": "White-Box structural test for `SupplierOrder::syncToInventory()`.\n\n**Test Category:** Basis Path: Execution & Material Sync\n**Tested Condition:** `Delivery receipt sync to inventory`\n**Expected Outcome:** `true`\n**Actual Outcome:** `true`\n**Execution Time:** 48.48 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `SupplierOrder` loaded.",
+                    "severity": "critical",
+                    "priority": "high",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute SupplierOrder::syncToInventory() with condition: Delivery receipt sync to inventory",
+                            "expected_result": "Returns: true"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "InventoryLog Model - White Box Suite",
+            "description": "White-box unit and structural tests for App\\Models\\InventoryLog",
+            "cases": [
+                {
+                    "title": "[WBT-038] InventoryLog::getTransactionBadgeAttribute - Branch Coverage: excess_return",
+                    "description": "White-Box structural test for `InventoryLog::getTransactionBadgeAttribute`.\n\n**Test Category:** Branch Coverage: excess_return\n**Tested Condition:** `type = excess_return`\n**Expected Outcome:** `Excess Material Returned`\n**Actual Outcome:** `Excess Material Returned`\n**Execution Time:** 0.13 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `InventoryLog` loaded.",
+                    "severity": "normal",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute InventoryLog::getTransactionBadgeAttribute with condition: type = excess_return",
+                            "expected_result": "Returns: Excess Material Returned"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-039] InventoryLog::getTransactionBadgeAttribute - Branch Coverage: allocation",
+                    "description": "White-Box structural test for `InventoryLog::getTransactionBadgeAttribute`.\n\n**Test Category:** Branch Coverage: allocation\n**Tested Condition:** `type = allocation`\n**Expected Outcome:** `Site BOM Allocation`\n**Actual Outcome:** `Site BOM Allocation`\n**Execution Time:** 0.02 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `InventoryLog` loaded.",
+                    "severity": "normal",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute InventoryLog::getTransactionBadgeAttribute with condition: type = allocation",
+                            "expected_result": "Returns: Site BOM Allocation"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-040] InventoryLog::getTransactionBadgeAttribute - Branch Coverage: usage",
+                    "description": "White-Box structural test for `InventoryLog::getTransactionBadgeAttribute`.\n\n**Test Category:** Branch Coverage: usage\n**Tested Condition:** `type = usage`\n**Expected Outcome:** `Site Consumption Recorded`\n**Actual Outcome:** `Site Consumption Recorded`\n**Execution Time:** 0.02 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `InventoryLog` loaded.",
+                    "severity": "normal",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute InventoryLog::getTransactionBadgeAttribute with condition: type = usage",
+                            "expected_result": "Returns: Site Consumption Recorded"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-041] InventoryLog::getTransactionBadgeAttribute - Branch Coverage: restock",
+                    "description": "White-Box structural test for `InventoryLog::getTransactionBadgeAttribute`.\n\n**Test Category:** Branch Coverage: restock\n**Tested Condition:** `type = restock`\n**Expected Outcome:** `Warehouse Restock / PO`\n**Actual Outcome:** `Warehouse Restock / PO`\n**Execution Time:** 0.02 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `InventoryLog` loaded.",
+                    "severity": "normal",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute InventoryLog::getTransactionBadgeAttribute with condition: type = restock",
+                            "expected_result": "Returns: Warehouse Restock / PO"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-042] InventoryLog::getTransactionBadgeAttribute - Branch Coverage: default adjustment",
+                    "description": "White-Box structural test for `InventoryLog::getTransactionBadgeAttribute`.\n\n**Test Category:** Branch Coverage: default adjustment\n**Tested Condition:** `type = adjustment`\n**Expected Outcome:** `Inventory Adjustment`\n**Actual Outcome:** `Inventory Adjustment`\n**Execution Time:** 0.02 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `InventoryLog` loaded.",
+                    "severity": "normal",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute InventoryLog::getTransactionBadgeAttribute with condition: type = adjustment",
+                            "expected_result": "Returns: Inventory Adjustment"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Payment Model - White Box Suite",
+            "description": "White-box unit and structural tests for App\\Models\\Payment",
+            "cases": [
+                {
+                    "title": "[WBT-043] Payment::getReceiptUrlAttribute - Branch Coverage: null file",
+                    "description": "White-Box structural test for `Payment::getReceiptUrlAttribute`.\n\n**Test Category:** Branch Coverage: null file\n**Tested Condition:** `receipt_file = null`\n**Expected Outcome:** `null`\n**Actual Outcome:** `null`\n**Execution Time:** 1.56 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Payment` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute Payment::getReceiptUrlAttribute with condition: receipt_file = null",
+                            "expected_result": "Returns: null"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-044] Payment::getReceiptUrlAttribute - Branch Coverage: http URL",
+                    "description": "White-Box structural test for `Payment::getReceiptUrlAttribute`.\n\n**Test Category:** Branch Coverage: http URL\n**Tested Condition:** `receipt_file = https://example.com/receipt.pdf`\n**Expected Outcome:** `https://example.com/receipt.pdf`\n**Actual Outcome:** `https://example.com/receipt.pdf`\n**Execution Time:** 0.04 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Payment` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute Payment::getReceiptUrlAttribute with condition: receipt_file = https://example.com/receipt.pdf",
+                            "expected_result": "Returns: https://example.com/receipt.pdf"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-045] Payment::getReceiptUrlAttribute - Branch Coverage: root slash path",
+                    "description": "White-Box structural test for `Payment::getReceiptUrlAttribute`.\n\n**Test Category:** Branch Coverage: root slash path\n**Tested Condition:** `receipt_file = /uploads/doc.pdf`\n**Expected Outcome:** `/uploads/doc.pdf`\n**Actual Outcome:** `/uploads/doc.pdf`\n**Execution Time:** 0.03 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Payment` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute Payment::getReceiptUrlAttribute with condition: receipt_file = /uploads/doc.pdf",
+                            "expected_result": "Returns: /uploads/doc.pdf"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-046] Payment::getReceiptUrlAttribute - Branch Coverage: relative filename",
+                    "description": "White-Box structural test for `Payment::getReceiptUrlAttribute`.\n\n**Test Category:** Branch Coverage: relative filename\n**Tested Condition:** `receipt_file = sample.png`\n**Expected Outcome:** `/uploads/receipts/sample.png`\n**Actual Outcome:** `/uploads/receipts/sample.png`\n**Execution Time:** 0.03 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Payment` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute Payment::getReceiptUrlAttribute with condition: receipt_file = sample.png",
+                            "expected_result": "Returns: /uploads/receipts/sample.png"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-047] Payment::getEffectiveOrNumberAttribute - Branch Coverage: explicit OR",
+                    "description": "White-Box structural test for `Payment::getEffectiveOrNumberAttribute`.\n\n**Test Category:** Branch Coverage: explicit OR\n**Tested Condition:** `official_receipt_no = OR-999`\n**Expected Outcome:** `OR-999`\n**Actual Outcome:** `OR-999`\n**Execution Time:** 0.2 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Payment` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute Payment::getEffectiveOrNumberAttribute with condition: official_receipt_no = OR-999",
+                            "expected_result": "Returns: OR-999"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-048] Payment::getEffectiveOrNumberAttribute - Branch Coverage: fallback generated OR",
+                    "description": "White-Box structural test for `Payment::getEffectiveOrNumberAttribute`.\n\n**Test Category:** Branch Coverage: fallback generated OR\n**Tested Condition:** `official_receipt_no = null, date = 2026-09-01, id = 5`\n**Expected Outcome:** `OR-202609-0005`\n**Actual Outcome:** `OR-202609-0005`\n**Execution Time:** 0.89 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Payment` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute Payment::getEffectiveOrNumberAttribute with condition: official_receipt_no = null, date = 2026-09-01, id = 5",
+                            "expected_result": "Returns: OR-202609-0005"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-049] Payment::getFinancingTypeLabelAttribute - Branch Coverage: bank_loan",
+                    "description": "White-Box structural test for `Payment::getFinancingTypeLabelAttribute`.\n\n**Test Category:** Branch Coverage: bank_loan\n**Tested Condition:** `financing_type = bank_loan`\n**Expected Outcome:** `Bank Construction Loan`\n**Actual Outcome:** `Bank Construction Loan`\n**Execution Time:** 0.09 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Payment` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute Payment::getFinancingTypeLabelAttribute with condition: financing_type = bank_loan",
+                            "expected_result": "Returns: Bank Construction Loan"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-050] Payment::getFinancingTypeLabelAttribute - Branch Coverage: pagibig_loan",
+                    "description": "White-Box structural test for `Payment::getFinancingTypeLabelAttribute`.\n\n**Test Category:** Branch Coverage: pagibig_loan\n**Tested Condition:** `financing_type = pagibig_loan`\n**Expected Outcome:** `Pag-IBIG (HDMF) Loan`\n**Actual Outcome:** `Pag-IBIG (HDMF) Loan`\n**Execution Time:** 0.04 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Payment` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute Payment::getFinancingTypeLabelAttribute with condition: financing_type = pagibig_loan",
+                            "expected_result": "Returns: Pag-IBIG (HDMF) Loan"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-051] Payment::getFinancingTypeLabelAttribute - Branch Coverage: client_equity",
+                    "description": "White-Box structural test for `Payment::getFinancingTypeLabelAttribute`.\n\n**Test Category:** Branch Coverage: client_equity\n**Tested Condition:** `financing_type = client_equity`\n**Expected Outcome:** `Client Direct Equity`\n**Actual Outcome:** `Client Direct Equity`\n**Execution Time:** 0.02 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Payment` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute Payment::getFinancingTypeLabelAttribute with condition: financing_type = client_equity",
+                            "expected_result": "Returns: Client Direct Equity"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-052] Payment::getFinancingTypeLabelAttribute - Branch Coverage: cash_progress",
+                    "description": "White-Box structural test for `Payment::getFinancingTypeLabelAttribute`.\n\n**Test Category:** Branch Coverage: cash_progress\n**Tested Condition:** `financing_type = cash_progress`\n**Expected Outcome:** `Direct Progress Cash`\n**Actual Outcome:** `Direct Progress Cash`\n**Execution Time:** 0.02 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Payment` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute Payment::getFinancingTypeLabelAttribute with condition: financing_type = cash_progress",
+                            "expected_result": "Returns: Direct Progress Cash"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-053] Payment::getConstructionClearanceBadgeAttribute - Branch Coverage: status = paid",
+                    "description": "White-Box structural test for `Payment::getConstructionClearanceBadgeAttribute`.\n\n**Test Category:** Branch Coverage: status = paid\n**Tested Condition:** `status = paid, cleared = true`\n**Expected Outcome:** `true`\n**Actual Outcome:** `true`\n**Execution Time:** 0.03 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Payment` loaded.",
+                    "severity": "normal",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute Payment::getConstructionClearanceBadgeAttribute with condition: status = paid, cleared = true",
+                            "expected_result": "Returns: true"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-054] Payment::getConstructionClearanceBadgeAttribute - Branch Coverage: inspection_scheduled",
+                    "description": "White-Box structural test for `Payment::getConstructionClearanceBadgeAttribute`.\n\n**Test Category:** Branch Coverage: inspection_scheduled\n**Tested Condition:** `status = pending, inspection_scheduled`\n**Expected Outcome:** `false`\n**Actual Outcome:** `false`\n**Execution Time:** 0.05 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Payment` loaded.",
+                    "severity": "normal",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute Payment::getConstructionClearanceBadgeAttribute with condition: status = pending, inspection_scheduled",
+                            "expected_result": "Returns: false"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Personnel Model - White Box Suite",
+            "description": "White-box unit and structural tests for App\\Models\\Personnel",
+            "cases": [
+                {
+                    "title": "[WBT-055] Personnel::isLicenseExpired() - Branch Coverage: status = expired",
+                    "description": "White-Box structural test for `Personnel::isLicenseExpired()`.\n\n**Test Category:** Branch Coverage: status = expired\n**Tested Condition:** `license_status = expired`\n**Expected Outcome:** `true`\n**Actual Outcome:** `true`\n**Execution Time:** 1.22 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Personnel` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute Personnel::isLicenseExpired() with condition: license_status = expired",
+                            "expected_result": "Returns: true"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-056] Personnel::isLicenseExpired() - Branch Coverage: past expiry date",
+                    "description": "White-Box structural test for `Personnel::isLicenseExpired()`.\n\n**Test Category:** Branch Coverage: past expiry date\n**Tested Condition:** `license_status = active, expiry in past`\n**Expected Outcome:** `true`\n**Actual Outcome:** `true`\n**Execution Time:** 0.3 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Personnel` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute Personnel::isLicenseExpired() with condition: license_status = active, expiry in past",
+                            "expected_result": "Returns: true"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-057] Personnel::isLicenseExpired() - Branch Coverage: future expiry date",
+                    "description": "White-Box structural test for `Personnel::isLicenseExpired()`.\n\n**Test Category:** Branch Coverage: future expiry date\n**Tested Condition:** `license_status = active, expiry in future`\n**Expected Outcome:** `false`\n**Actual Outcome:** `false`\n**Execution Time:** 0.24 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Personnel` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute Personnel::isLicenseExpired() with condition: license_status = active, expiry in future",
+                            "expected_result": "Returns: false"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-058] Personnel::getLicenseStatusBadgeAttribute - Branch Coverage: expired badge",
+                    "description": "White-Box structural test for `Personnel::getLicenseStatusBadgeAttribute`.\n\n**Test Category:** Branch Coverage: expired badge\n**Tested Condition:** `expired license`\n**Expected Outcome:** `EXPIRED LICENSE`\n**Actual Outcome:** `EXPIRED LICENSE`\n**Execution Time:** 0.05 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Personnel` loaded.",
+                    "severity": "normal",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute Personnel::getLicenseStatusBadgeAttribute with condition: expired license",
+                            "expected_result": "Returns: EXPIRED LICENSE"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-059] Personnel::getLicenseStatusBadgeAttribute - Branch Coverage: active badge",
+                    "description": "White-Box structural test for `Personnel::getLicenseStatusBadgeAttribute`.\n\n**Test Category:** Branch Coverage: active badge\n**Tested Condition:** `active license`\n**Expected Outcome:** `ACTIVE`\n**Actual Outcome:** `ACTIVE`\n**Execution Time:** 0.17 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Personnel` loaded.",
+                    "severity": "normal",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute Personnel::getLicenseStatusBadgeAttribute with condition: active license",
+                            "expected_result": "Returns: ACTIVE"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "ProjectCost Model - White Box Suite",
+            "description": "White-box unit and structural tests for App\\Models\\ProjectCost",
+            "cases": [
+                {
+                    "title": "[WBT-060] ProjectCost::getVarianceAttribute - Calculation: estimated - actual",
+                    "description": "White-Box structural test for `ProjectCost::getVarianceAttribute`.\n\n**Test Category:** Calculation: estimated - actual\n**Tested Condition:** `estimated = 100000, actual = 80000`\n**Expected Outcome:** `20000`\n**Actual Outcome:** `20000`\n**Execution Time:** 1.63 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `ProjectCost` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute ProjectCost::getVarianceAttribute with condition: estimated = 100000, actual = 80000",
+                            "expected_result": "Returns: 20000"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-061] ProjectCost::getVariancePercentAttribute - Boundary Value: estimated <= 0",
+                    "description": "White-Box structural test for `ProjectCost::getVariancePercentAttribute`.\n\n**Test Category:** Boundary Value: estimated <= 0\n**Tested Condition:** `estimated = 0, actual = 5000`\n**Expected Outcome:** `0`\n**Actual Outcome:** `0`\n**Execution Time:** 0.2 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `ProjectCost` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute ProjectCost::getVariancePercentAttribute with condition: estimated = 0, actual = 5000",
+                            "expected_result": "Returns: 0"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-062] ProjectCost::getVariancePercentAttribute - Calculation: standard percent",
+                    "description": "White-Box structural test for `ProjectCost::getVariancePercentAttribute`.\n\n**Test Category:** Calculation: standard percent\n**Tested Condition:** `estimated = 200000, actual = 150000`\n**Expected Outcome:** `25`\n**Actual Outcome:** `25`\n**Execution Time:** 0.1 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `ProjectCost` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute ProjectCost::getVariancePercentAttribute with condition: estimated = 200000, actual = 150000",
+                            "expected_result": "Returns: 25"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "ProjectMaterial Model - White Box Suite",
+            "description": "White-box unit and structural tests for App\\Models\\ProjectMaterial",
+            "cases": [
+                {
+                    "title": "[WBT-063] ProjectMaterial::getRemainingQtyAttribute - Boundary & Calculation: remaining stock clamp",
+                    "description": "White-Box structural test for `ProjectMaterial::getRemainingQtyAttribute`.\n\n**Test Category:** Boundary & Calculation: remaining stock clamp\n**Tested Condition:** `allocated=100, used=60, excess=20`\n**Expected Outcome:** `20`\n**Actual Outcome:** `20`\n**Execution Time:** 2.36 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `ProjectMaterial` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute ProjectMaterial::getRemainingQtyAttribute with condition: allocated=100, used=60, excess=20",
+                            "expected_result": "Returns: 20"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-064] ProjectMaterial::getNetAllocatedQtyAttribute - Calculation: allocated - excess",
+                    "description": "White-Box structural test for `ProjectMaterial::getNetAllocatedQtyAttribute`.\n\n**Test Category:** Calculation: allocated - excess\n**Tested Condition:** `allocated=100, excess=20`\n**Expected Outcome:** `80`\n**Actual Outcome:** `80`\n**Execution Time:** 0.05 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `ProjectMaterial` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute ProjectMaterial::getNetAllocatedQtyAttribute with condition: allocated=100, excess=20",
+                            "expected_result": "Returns: 80"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-065] ProjectMaterial::getReturnedExcessValueAttribute - Calculation: excess * unit_price",
+                    "description": "White-Box structural test for `ProjectMaterial::getReturnedExcessValueAttribute`.\n\n**Test Category:** Calculation: excess * unit_price\n**Tested Condition:** `excess=15, unit_price=200`\n**Expected Outcome:** `3000`\n**Actual Outcome:** `3000`\n**Execution Time:** 0.06 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `ProjectMaterial` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute ProjectMaterial::getReturnedExcessValueAttribute with condition: excess=15, unit_price=200",
+                            "expected_result": "Returns: 3000"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "ProjectScopeItem Model - White Box Suite",
+            "description": "White-box unit and structural tests for App\\Models\\ProjectScopeItem",
+            "cases": [
+                {
+                    "title": "[WBT-066] ProjectScopeItem::recalculate() - Basis Path: Recalculate Scope Direct Costs & Markups",
+                    "description": "White-Box structural test for `ProjectScopeItem::recalculate()`.\n\n**Test Category:** Basis Path: Recalculate Scope Direct Costs & Markups\n**Tested Condition:** `Direct = 10000, Cont=5%, Tax=12%, Prof=10%`\n**Expected Outcome:** `12700`\n**Actual Outcome:** `12700`\n**Execution Time:** 7.8 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `ProjectScopeItem` loaded.",
+                    "severity": "critical",
+                    "priority": "high",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute ProjectScopeItem::recalculate() with condition: Direct = 10000, Cont=5%, Tax=12%, Prof=10%",
+                            "expected_result": "Returns: 12700"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "ProjectScopeLine Model - White Box Suite",
+            "description": "White-box unit and structural tests for App\\Models\\ProjectScopeLine",
+            "cases": [
+                {
+                    "title": "[WBT-067] ProjectScopeLine::getRemainingQuantityAttribute - Boundary Value: Line remaining clamp to 0",
+                    "description": "White-Box structural test for `ProjectScopeLine::getRemainingQuantityAttribute`.\n\n**Test Category:** Boundary Value: Line remaining clamp to 0\n**Tested Condition:** `qty=50, used=40, excess=20`\n**Expected Outcome:** `0`\n**Actual Outcome:** `0`\n**Execution Time:** 0.14 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `ProjectScopeLine` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute ProjectScopeLine::getRemainingQuantityAttribute with condition: qty=50, used=40, excess=20",
+                            "expected_result": "Returns: 0"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "ProjectTask Model - White Box Suite",
+            "description": "White-box unit and structural tests for App\\Models\\ProjectTask",
+            "cases": [
+                {
+                    "title": "[WBT-068] ProjectTask::getIsCompletedAttribute - Branch Coverage: progress >= 100",
+                    "description": "White-Box structural test for `ProjectTask::getIsCompletedAttribute`.\n\n**Test Category:** Branch Coverage: progress >= 100\n**Tested Condition:** `progress = 100`\n**Expected Outcome:** `true`\n**Actual Outcome:** `true`\n**Execution Time:** 1.65 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `ProjectTask` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute ProjectTask::getIsCompletedAttribute with condition: progress = 100",
+                            "expected_result": "Returns: true"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-069] ProjectTask::getStatusBadgeClassAttribute - Branch Coverage: In progress",
+                    "description": "White-Box structural test for `ProjectTask::getStatusBadgeClassAttribute`.\n\n**Test Category:** Branch Coverage: In progress\n**Tested Condition:** `progress = 30`\n**Expected Outcome:** `in_progress`\n**Actual Outcome:** `in_progress`\n**Execution Time:** 0.04 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `ProjectTask` loaded.",
+                    "severity": "normal",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute ProjectTask::getStatusBadgeClassAttribute with condition: progress = 30",
+                            "expected_result": "Returns: in_progress"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-070] ProjectTask::getTimelinePhaseKeyAttribute - Branch Coverage: Superstructure/Framing",
+                    "description": "White-Box structural test for `ProjectTask::getTimelinePhaseKeyAttribute`.\n\n**Test Category:** Branch Coverage: Superstructure/Framing\n**Tested Condition:** `phase = Phase 2: Superstructure`\n**Expected Outcome:** `phase2`\n**Actual Outcome:** `phase2`\n**Execution Time:** 0.03 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `ProjectTask` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute ProjectTask::getTimelinePhaseKeyAttribute with condition: phase = Phase 2: Superstructure",
+                            "expected_result": "Returns: phase2"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "ProjectTaskMaterial Model - White Box Suite",
+            "description": "White-box unit and structural tests for App\\Models\\ProjectTaskMaterial",
+            "cases": [
+                {
+                    "title": "[WBT-071] ProjectTaskMaterial::boot() Saving Auto-Calculation - Mutation: total_cost auto calculation",
+                    "description": "White-Box structural test for `ProjectTaskMaterial::boot() Saving Auto-Calculation`.\n\n**Test Category:** Mutation: total_cost auto calculation\n**Tested Condition:** `qty = 5, unit_cost = 400`\n**Expected Outcome:** `2000`\n**Actual Outcome:** `2000`\n**Execution Time:** 4.1 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `ProjectTaskMaterial` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute ProjectTaskMaterial::boot() Saving Auto-Calculation with condition: qty = 5, unit_cost = 400",
+                            "expected_result": "Returns: 2000"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Project Model - White Box Suite",
+            "description": "White-box unit and structural tests for App\\Models\\Project",
+            "cases": [
+                {
+                    "title": "[WBT-072] Project::getStructuralWeightAttribute - Boundary Value: Default fallback when 0",
+                    "description": "White-Box structural test for `Project::getStructuralWeightAttribute`.\n\n**Test Category:** Boundary Value: Default fallback when 0\n**Tested Condition:** `structural_weight = 0`\n**Expected Outcome:** `40`\n**Actual Outcome:** `40`\n**Execution Time:** 0.08 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Project` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute Project::getStructuralWeightAttribute with condition: structural_weight = 0",
+                            "expected_result": "Returns: 40"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-073] Project::recalculateTradeProgressFromTasks() - Basis Path: Trade calculation and overall weighted progress",
+                    "description": "White-Box structural test for `Project::recalculateTradeProgressFromTasks()`.\n\n**Test Category:** Basis Path: Trade calculation and overall weighted progress\n**Tested Condition:** `Weighted structural + electrical tasks`\n**Expected Outcome:** `75`\n**Actual Outcome:** `75`\n**Execution Time:** 6.13 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Project` loaded.",
+                    "severity": "critical",
+                    "priority": "high",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute Project::recalculateTradeProgressFromTasks() with condition: Weighted structural + electrical tasks",
+                            "expected_result": "Returns: 75"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-074] Project::getRemainingBudgetAttribute - Calculation: contract_budget - spent_budget",
+                    "description": "White-Box structural test for `Project::getRemainingBudgetAttribute`.\n\n**Test Category:** Calculation: contract_budget - spent_budget\n**Tested Condition:** `contract = 500000, spent = 200000`\n**Expected Outcome:** `300000`\n**Actual Outcome:** `300000`\n**Execution Time:** 0.19 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Project` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute Project::getRemainingBudgetAttribute with condition: contract = 500000, spent = 200000",
+                            "expected_result": "Returns: 300000"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-075] Project::getBudgetUsagePercentAttribute - Calculation: spent / contract * 100",
+                    "description": "White-Box structural test for `Project::getBudgetUsagePercentAttribute`.\n\n**Test Category:** Calculation: spent / contract * 100\n**Tested Condition:** `contract = 500000, spent = 200000`\n**Expected Outcome:** `40`\n**Actual Outcome:** `40`\n**Execution Time:** 0.08 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Project` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute Project::getBudgetUsagePercentAttribute with condition: contract = 500000, spent = 200000",
+                            "expected_result": "Returns: 40"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-076] Project::getTotalDeployedManpowerAttribute - Calculation: Sum of all 7 deployed roles",
+                    "description": "White-Box structural test for `Project::getTotalDeployedManpowerAttribute`.\n\n**Test Category:** Calculation: Sum of all 7 deployed roles\n**Tested Condition:** `workers=10, skilled=5, engineers=2, others=3`\n**Expected Outcome:** `20`\n**Actual Outcome:** `20`\n**Execution Time:** 0.19 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Project` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute Project::getTotalDeployedManpowerAttribute with condition: workers=10, skilled=5, engineers=2, others=3",
+                            "expected_result": "Returns: 20"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-077] Project::getCostHealthStatusAttribute - Branch Coverage: Overrun when incurred > budget",
+                    "description": "White-Box structural test for `Project::getCostHealthStatusAttribute`.\n\n**Test Category:** Branch Coverage: Overrun when incurred > budget\n**Tested Condition:** `budget = 100000, spent = 120000`\n**Expected Outcome:** `overrun`\n**Actual Outcome:** `overrun`\n**Execution Time:** 0.67 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Project` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute Project::getCostHealthStatusAttribute with condition: budget = 100000, spent = 120000",
+                            "expected_result": "Returns: overrun"
+                        }
+                    ]
+                },
+                {
+                    "title": "[WBT-078] Project::getScheduleHealthStatusAttribute - Branch Coverage: Completed Status",
+                    "description": "White-Box structural test for `Project::getScheduleHealthStatusAttribute`.\n\n**Test Category:** Branch Coverage: Completed Status\n**Tested Condition:** `status = completed`\n**Expected Outcome:** `completed`\n**Actual Outcome:** `completed`\n**Execution Time:** 0.33 ms",
+                    "preconditions": "Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Project` loaded.",
+                    "severity": "major",
+                    "priority": "medium",
+                    "type": "unit",
+                    "layer": "unit",
+                    "behavior": "positive",
+                    "automation": "automated",
+                    "status": "actual",
+                    "steps": [
+                        {
+                            "action": "Execute Project::getScheduleHealthStatusAttribute with condition: status = completed",
+                            "expected_result": "Returns: completed"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

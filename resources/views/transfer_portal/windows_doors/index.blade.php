@@ -75,47 +75,71 @@
     @endif
 
     <!-- KPI Metric Summary Cards -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px;">
-        <div class="card" style="padding: 20px; border-left: 4px solid #38bdf8;">
-            <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Warehouse Doors & Windows Stock</div>
-            <div style="font-size: 1.8rem; font-weight: 800; color: #f8fafc; margin-top: 8px;">
-                {{ number_format($totalWarehouseStockUnits) }}
-                <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-secondary);">units/sets</span>
+    <div class="supplier-kpi-grid">
+        <!-- 1. Warehouse Stock -->
+        <div class="supplier-kpi-card" style="--card-accent: linear-gradient(90deg, #38bdf8, #0284c7);">
+            <div class="supplier-kpi-header">
+                <span class="supplier-kpi-label">Warehouse Stock</span>
+                <div class="supplier-kpi-icon" style="background: rgba(56, 189, 248, 0.12); color: #0284c7; border-color: rgba(56, 189, 248, 0.25);">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="3" x2="12" y2="21"></line><line x1="3" y1="12" x2="21" y2="12"></line></svg>
+                </div>
             </div>
-            <div style="font-size: 0.775rem; color: #10b981; margin-top: 6px; font-weight: 600;">
+            <div class="supplier-kpi-val" style="color: #0284c7;">
+                {{ number_format($totalWarehouseStockUnits) }}
+                <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary);">units/sets</span>
+            </div>
+            <div class="supplier-kpi-sub" style="color: #059669; font-weight: 700;">
                 Valuation: ₱{{ number_format($totalWarehouseValuation, 2) }}
             </div>
         </div>
 
-        <div class="card" style="padding: 20px; border-left: 4px solid #8b5cf6;">
-            <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Allocated to Projects</div>
-            <div style="font-size: 1.8rem; font-weight: 800; color: #8b5cf6; margin-top: 8px;">
-                {{ number_format($totalAllocatedUnits) }}
-                <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-secondary);">units/sets</span>
+        <!-- 2. Allocated to Projects -->
+        <div class="supplier-kpi-card" style="--card-accent: linear-gradient(90deg, #8b5cf6, #6d28d9);">
+            <div class="supplier-kpi-header">
+                <span class="supplier-kpi-label">Allocated to Projects</span>
+                <div class="supplier-kpi-icon" style="background: rgba(139, 92, 246, 0.12); color: #7c3aed; border-color: rgba(139, 92, 246, 0.25);">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                </div>
             </div>
-            <div style="font-size: 0.775rem; color: var(--text-secondary); margin-top: 6px;">
+            <div class="supplier-kpi-val" style="color: #7c3aed;">
+                {{ number_format($totalAllocatedUnits) }}
+                <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary);">units/sets</span>
+            </div>
+            <div class="supplier-kpi-sub">
                 Active site allocations
             </div>
         </div>
 
-        <div class="card" style="padding: 20px; border-left: 4px solid #f59e0b;">
-            <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Installed / Fitted</div>
-            <div style="font-size: 1.8rem; font-weight: 800; color: #f59e0b; margin-top: 8px;">
-                {{ number_format($totalUsedUnits) }}
-                <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-secondary);">units/sets</span>
+        <!-- 3. Installed / Fitted -->
+        <div class="supplier-kpi-card" style="--card-accent: linear-gradient(90deg, #f59e0b, #d97706);">
+            <div class="supplier-kpi-header">
+                <span class="supplier-kpi-label">Installed / Fitted</span>
+                <div class="supplier-kpi-icon" style="background: rgba(245, 158, 11, 0.12); color: #d97706; border-color: rgba(245, 158, 11, 0.25);">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                </div>
             </div>
-            <div style="font-size: 0.775rem; color: var(--text-secondary); margin-top: 6px;">
+            <div class="supplier-kpi-val" style="color: #d97706;">
+                {{ number_format($totalUsedUnits) }}
+                <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary);">units/sets</span>
+            </div>
+            <div class="supplier-kpi-sub">
                 Verified on-site installation
             </div>
         </div>
 
-        <div class="card" style="padding: 20px; border-left: 4px solid #10b981;">
-            <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Remaining Unused Site Balance</div>
-            <div style="font-size: 1.8rem; font-weight: 800; color: #10b981; margin-top: 8px;">
-                {{ number_format($totalRemainingOnSite) }}
-                <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-secondary);">units/sets</span>
+        <!-- 4. Remaining Unused Site Balance -->
+        <div class="supplier-kpi-card" style="--card-accent: linear-gradient(90deg, #10b981, #059669);">
+            <div class="supplier-kpi-header">
+                <span class="supplier-kpi-label">Remaining Site Balance</span>
+                <div class="supplier-kpi-icon" style="background: rgba(16, 185, 129, 0.12); color: #059669; border-color: rgba(16, 185, 129, 0.25);">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                </div>
             </div>
-            <div style="font-size: 0.775rem; color: #38bdf8; margin-top: 6px; font-weight: 600;">
+            <div class="supplier-kpi-val" style="color: #059669;">
+                {{ number_format($totalRemainingOnSite) }}
+                <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary);">units/sets</span>
+            </div>
+            <div class="supplier-kpi-sub" style="color: #0284c7; font-weight: 600;">
                 Eligible for transfer or return
             </div>
         </div>
@@ -385,7 +409,7 @@
                         <td>
                             <div style="font-weight: 700; color: var(--text-primary);">{{ $xf->material->name ?? 'Door/Window Item' }}</div>
                         </td>
-                        <td style="text-align: right; font-family: var(--font-mono); font-weight: 800; font-size: 0.95rem; color: #f8fafc;">
+                        <td style="text-align: right; font-family: var(--font-mono); font-weight: 800; font-size: 0.95rem; color: var(--text-primary);">
                             {{ number_format($xf->quantity_transferred) }} <span style="font-size: 0.75rem; color: var(--text-muted);">{{ $xf->material->unit ?? 'units' }}</span>
                         </td>
                         <td style="font-size: 0.8rem; color: var(--text-secondary);">

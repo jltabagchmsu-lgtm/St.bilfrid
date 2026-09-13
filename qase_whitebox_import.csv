@@ -1,0 +1,547 @@
+Suite,Title,Description,Pre-conditions,Post-conditions,Severity,Priority,Type,Layer,Behavior,"Automation status",Status,"Step Action","Step Result"
+"User Model - White Box Suite","[WBT-001] User::isAdmin() - Branch Coverage: Empty Role (Null)","White-Box structural test for `User::isAdmin()`.
+
+**Test Category:** Branch Coverage: Empty Role (Null)
+**Tested Condition:** `role = null`
+**Expected Outcome:** `true`
+**Actual Outcome:** `true`
+**Execution Time:** 12.2 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: role = null","Evaluates to `true` with exact state integrity."
+"User Model - White Box Suite","[WBT-002] User::isAdmin() - Branch Coverage: Role = admin","White-Box structural test for `User::isAdmin()`.
+
+**Test Category:** Branch Coverage: Role = admin
+**Tested Condition:** `role = admin`
+**Expected Outcome:** `true`
+**Actual Outcome:** `true`
+**Execution Time:** 0.07 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: role = admin","Evaluates to `true` with exact state integrity."
+"User Model - White Box Suite","[WBT-003] User::isAdmin() - Branch Coverage: Role = roofing_transfer","White-Box structural test for `User::isAdmin()`.
+
+**Test Category:** Branch Coverage: Role = roofing_transfer
+**Tested Condition:** `role = roofing_transfer`
+**Expected Outcome:** `false`
+**Actual Outcome:** `false`
+**Execution Time:** 0.02 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: role = roofing_transfer","Evaluates to `false` with exact state integrity."
+"User Model - White Box Suite","[WBT-004] User::isRoofingOfficer() - Branch Coverage: True Branch","White-Box structural test for `User::isRoofingOfficer()`.
+
+**Test Category:** Branch Coverage: True Branch
+**Tested Condition:** `role = roofing_transfer`
+**Expected Outcome:** `true`
+**Actual Outcome:** `true`
+**Execution Time:** 0.01 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: role = roofing_transfer","Evaluates to `true` with exact state integrity."
+"User Model - White Box Suite","[WBT-005] User::isRoofingOfficer() - Branch Coverage: False Branch","White-Box structural test for `User::isRoofingOfficer()`.
+
+**Test Category:** Branch Coverage: False Branch
+**Tested Condition:** `role = admin`
+**Expected Outcome:** `false`
+**Actual Outcome:** `false`
+**Execution Time:** 0.01 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: role = admin","Evaluates to `false` with exact state integrity."
+"User Model - White Box Suite","[WBT-006] User::isWindowsDoorsOfficer() - Branch Coverage: True Branch","White-Box structural test for `User::isWindowsDoorsOfficer()`.
+
+**Test Category:** Branch Coverage: True Branch
+**Tested Condition:** `role = windows_doors_transfer`
+**Expected Outcome:** `true`
+**Actual Outcome:** `true`
+**Execution Time:** 0.01 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: role = windows_doors_transfer","Evaluates to `true` with exact state integrity."
+"User Model - White Box Suite","[WBT-007] User::isWindowsDoorsOfficer() - Branch Coverage: False Branch","White-Box structural test for `User::isWindowsDoorsOfficer()`.
+
+**Test Category:** Branch Coverage: False Branch
+**Tested Condition:** `role = roofing_transfer`
+**Expected Outcome:** `false`
+**Actual Outcome:** `false`
+**Execution Time:** 0.01 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: role = roofing_transfer","Evaluates to `false` with exact state integrity."
+"User Model - White Box Suite","[WBT-008] User::isSupplier() - Branch Coverage: Role is supplier","White-Box structural test for `User::isSupplier()`.
+
+**Test Category:** Branch Coverage: Role is supplier
+**Tested Condition:** `role = supplier, supplier_id = null`
+**Expected Outcome:** `true`
+**Actual Outcome:** `true`
+**Execution Time:** 0.04 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: role = supplier, supplier_id = null","Evaluates to `true` with exact state integrity."
+"User Model - White Box Suite","[WBT-009] User::isSupplier() - Branch Coverage: supplier_id is populated","White-Box structural test for `User::isSupplier()`.
+
+**Test Category:** Branch Coverage: supplier_id is populated
+**Tested Condition:** `role = null, supplier_id = 99`
+**Expected Outcome:** `true`
+**Actual Outcome:** `true`
+**Execution Time:** 0.02 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: role = null, supplier_id = 99","Evaluates to `true` with exact state integrity."
+"User Model - White Box Suite","[WBT-010] User::isSupplier() - Branch Coverage: Neither supplier role nor id","White-Box structural test for `User::isSupplier()`.
+
+**Test Category:** Branch Coverage: Neither supplier role nor id
+**Tested Condition:** `role = admin, supplier_id = null`
+**Expected Outcome:** `false`
+**Actual Outcome:** `false`
+**Execution Time:** 0.02 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: role = admin, supplier_id = null","Evaluates to `false` with exact state integrity."
+"User Model - White Box Suite","[WBT-011] User::getRoleTitleAttribute - Branch Coverage: Supplier Role with Supplier Object","White-Box structural test for `User::getRoleTitleAttribute`.
+
+**Test Category:** Branch Coverage: Supplier Role with Supplier Object
+**Tested Condition:** `supplier loaded with name & category`
+**Expected Outcome:** `Steel Corp (Structural & Masonry)`
+**Actual Outcome:** `Steel Corp (Structural & Masonry)`
+**Execution Time:** 0.23 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: supplier loaded with name & category","Evaluates to `Steel Corp (Structural & Masonry)` with exact state integrity."
+"User Model - White Box Suite","[WBT-012] User::getRoleTitleAttribute - Branch Coverage: Supplier Role without Supplier Object","White-Box structural test for `User::getRoleTitleAttribute`.
+
+**Test Category:** Branch Coverage: Supplier Role without Supplier Object
+**Tested Condition:** `supplier relation is null`
+**Expected Outcome:** `Supplier Account`
+**Actual Outcome:** `Supplier Account`
+**Execution Time:** 7.66 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: supplier relation is null","Evaluates to `Supplier Account` with exact state integrity."
+"User Model - White Box Suite","[WBT-013] User::getRoleTitleAttribute - Branch Coverage: Roofing Transfer Officer","White-Box structural test for `User::getRoleTitleAttribute`.
+
+**Test Category:** Branch Coverage: Roofing Transfer Officer
+**Tested Condition:** `role = roofing_transfer`
+**Expected Outcome:** `Roofing Transfer Officer`
+**Actual Outcome:** `Roofing Transfer Officer`
+**Execution Time:** 0.06 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: role = roofing_transfer","Evaluates to `Roofing Transfer Officer` with exact state integrity."
+"User Model - White Box Suite","[WBT-014] User::getRoleTitleAttribute - Branch Coverage: Windows & Doors Transfer Officer","White-Box structural test for `User::getRoleTitleAttribute`.
+
+**Test Category:** Branch Coverage: Windows & Doors Transfer Officer
+**Tested Condition:** `role = windows_doors_transfer`
+**Expected Outcome:** `Windows & Doors Transfer Officer`
+**Actual Outcome:** `Windows & Doors Transfer Officer`
+**Execution Time:** 0.02 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: role = windows_doors_transfer","Evaluates to `Windows & Doors Transfer Officer` with exact state integrity."
+"User Model - White Box Suite","[WBT-015] User::getRoleTitleAttribute - Branch Coverage: Default Master Administrator","White-Box structural test for `User::getRoleTitleAttribute`.
+
+**Test Category:** Branch Coverage: Default Master Administrator
+**Tested Condition:** `role = admin or null`
+**Expected Outcome:** `Master Administrator`
+**Actual Outcome:** `Master Administrator`
+**Execution Time:** 0.02 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: role = admin or null","Evaluates to `Master Administrator` with exact state integrity."
+"User Model - White Box Suite","[WBT-016] User::getPortalRouteAttribute - Branch Coverage: Supplier Portal Route","White-Box structural test for `User::getPortalRouteAttribute`.
+
+**Test Category:** Branch Coverage: Supplier Portal Route
+**Tested Condition:** `role = supplier`
+**Expected Outcome:** `http://localhost:8000/supplier/dashboard`
+**Actual Outcome:** `http://localhost:8000/supplier/dashboard`
+**Execution Time:** 0.16 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",,normal,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: role = supplier","Evaluates to `http://localhost:8000/supplier/dashboard` with exact state integrity."
+"User Model - White Box Suite","[WBT-017] User::getPortalRouteAttribute - Branch Coverage: Roofing Portal Route","White-Box structural test for `User::getPortalRouteAttribute`.
+
+**Test Category:** Branch Coverage: Roofing Portal Route
+**Tested Condition:** `role = roofing_transfer`
+**Expected Outcome:** `http://localhost:8000/roofing-transfer`
+**Actual Outcome:** `http://localhost:8000/roofing-transfer`
+**Execution Time:** 0.06 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",,normal,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: role = roofing_transfer","Evaluates to `http://localhost:8000/roofing-transfer` with exact state integrity."
+"User Model - White Box Suite","[WBT-018] User::getPortalRouteAttribute - Branch Coverage: Windows Portal Route","White-Box structural test for `User::getPortalRouteAttribute`.
+
+**Test Category:** Branch Coverage: Windows Portal Route
+**Tested Condition:** `role = windows_doors_transfer`
+**Expected Outcome:** `http://localhost:8000/windows-doors-transfer`
+**Actual Outcome:** `http://localhost:8000/windows-doors-transfer`
+**Execution Time:** 0.04 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",,normal,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: role = windows_doors_transfer","Evaluates to `http://localhost:8000/windows-doors-transfer` with exact state integrity."
+"User Model - White Box Suite","[WBT-019] User::getPortalRouteAttribute - Branch Coverage: Admin Default Dashboard Route","White-Box structural test for `User::getPortalRouteAttribute`.
+
+**Test Category:** Branch Coverage: Admin Default Dashboard Route
+**Tested Condition:** `role = admin`
+**Expected Outcome:** `http://localhost:8000`
+**Actual Outcome:** `http://localhost:8000`
+**Execution Time:** 0.04 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `User` loaded.",,normal,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: role = admin","Evaluates to `http://localhost:8000` with exact state integrity."
+"Supplier Model - White Box Suite","[WBT-020] Supplier::isActive() - Branch Coverage: status = active","White-Box structural test for `Supplier::isActive()`.
+
+**Test Category:** Branch Coverage: status = active
+**Tested Condition:** `status = active`
+**Expected Outcome:** `true`
+**Actual Outcome:** `true`
+**Execution Time:** 0.07 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Supplier` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: status = active","Evaluates to `true` with exact state integrity."
+"Supplier Model - White Box Suite","[WBT-021] Supplier::isActive() - Branch Coverage: status = inactive","White-Box structural test for `Supplier::isActive()`.
+
+**Test Category:** Branch Coverage: status = inactive
+**Tested Condition:** `status = inactive`
+**Expected Outcome:** `false`
+**Actual Outcome:** `false`
+**Execution Time:** 0.02 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Supplier` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: status = inactive","Evaluates to `false` with exact state integrity."
+"Supplier Model - White Box Suite","[WBT-022] Supplier::getCategoryColorAttribute - Branch Coverage: Windows & Doors","White-Box structural test for `Supplier::getCategoryColorAttribute`.
+
+**Test Category:** Branch Coverage: Windows & Doors
+**Tested Condition:** `category = Windows & Doors`
+**Expected Outcome:** `#38bdf8`
+**Actual Outcome:** `#38bdf8`
+**Execution Time:** 0.03 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Supplier` loaded.",,normal,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: category = Windows & Doors","Evaluates to `#38bdf8` with exact state integrity."
+"Supplier Model - White Box Suite","[WBT-023] Supplier::getCategoryColorAttribute - Branch Coverage: Roofing","White-Box structural test for `Supplier::getCategoryColorAttribute`.
+
+**Test Category:** Branch Coverage: Roofing
+**Tested Condition:** `category = Roofing`
+**Expected Outcome:** `#ef4444`
+**Actual Outcome:** `#ef4444`
+**Execution Time:** 0.02 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Supplier` loaded.",,normal,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: category = Roofing","Evaluates to `#ef4444` with exact state integrity."
+"Supplier Model - White Box Suite","[WBT-024] Supplier::getCategoryColorAttribute - Branch Coverage: Structural & Masonry","White-Box structural test for `Supplier::getCategoryColorAttribute`.
+
+**Test Category:** Branch Coverage: Structural & Masonry
+**Tested Condition:** `category = Structural & Masonry`
+**Expected Outcome:** `#10b981`
+**Actual Outcome:** `#10b981`
+**Execution Time:** 0.02 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Supplier` loaded.",,normal,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: category = Structural & Masonry","Evaluates to `#10b981` with exact state integrity."
+"Supplier Model - White Box Suite","[WBT-025] Supplier::getCategoryColorAttribute - Branch Coverage: Default Category","White-Box structural test for `Supplier::getCategoryColorAttribute`.
+
+**Test Category:** Branch Coverage: Default Category
+**Tested Condition:** `category = Plumbing`
+**Expected Outcome:** `#818cf8`
+**Actual Outcome:** `#818cf8`
+**Execution Time:** 0.02 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Supplier` loaded.",,normal,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: category = Plumbing","Evaluates to `#818cf8` with exact state integrity."
+"SupplierMaterial Model - White Box Suite","[WBT-026] SupplierMaterial::getStatusBadgeAttribute - Branch Coverage: is_active = false","White-Box structural test for `SupplierMaterial::getStatusBadgeAttribute`.
+
+**Test Category:** Branch Coverage: is_active = false
+**Tested Condition:** `is_active = false, availability_status = available`
+**Expected Outcome:** `Unavailable`
+**Actual Outcome:** `Unavailable`
+**Execution Time:** 1.93 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `SupplierMaterial` loaded.",,normal,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: is_active = false, availability_status = available","Evaluates to `Unavailable` with exact state integrity."
+"SupplierMaterial Model - White Box Suite","[WBT-027] SupplierMaterial::getStatusBadgeAttribute - Branch Coverage: availability_status = unavailable","White-Box structural test for `SupplierMaterial::getStatusBadgeAttribute`.
+
+**Test Category:** Branch Coverage: availability_status = unavailable
+**Tested Condition:** `is_active = true, availability_status = unavailable`
+**Expected Outcome:** `Unavailable`
+**Actual Outcome:** `Unavailable`
+**Execution Time:** 0.06 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `SupplierMaterial` loaded.",,normal,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: is_active = true, availability_status = unavailable","Evaluates to `Unavailable` with exact state integrity."
+"SupplierMaterial Model - White Box Suite","[WBT-028] SupplierMaterial::getStatusBadgeAttribute - Branch Coverage: Active and Available","White-Box structural test for `SupplierMaterial::getStatusBadgeAttribute`.
+
+**Test Category:** Branch Coverage: Active and Available
+**Tested Condition:** `is_active = true, availability_status = available`
+**Expected Outcome:** `Available`
+**Actual Outcome:** `Available`
+**Execution Time:** 0.03 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `SupplierMaterial` loaded.",,normal,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: is_active = true, availability_status = available","Evaluates to `Available` with exact state integrity."
+"SupplierOrder Model - White Box Suite","[WBT-029] SupplierOrder::getStatusBadgeAttribute - Branch Coverage: pending","White-Box structural test for `SupplierOrder::getStatusBadgeAttribute`.
+
+**Test Category:** Branch Coverage: pending
+**Tested Condition:** `status = pending`
+**Expected Outcome:** `Pending Approval`
+**Actual Outcome:** `Pending Approval`
+**Execution Time:** 1.65 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `SupplierOrder` loaded.",,normal,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: status = pending","Evaluates to `Pending Approval` with exact state integrity."
+"SupplierOrder Model - White Box Suite","[WBT-030] SupplierOrder::getStatusBadgeAttribute - Branch Coverage: confirmed","White-Box structural test for `SupplierOrder::getStatusBadgeAttribute`.
+
+**Test Category:** Branch Coverage: confirmed
+**Tested Condition:** `status = confirmed`
+**Expected Outcome:** `Confirmed`
+**Actual Outcome:** `Confirmed`
+**Execution Time:** 0.07 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `SupplierOrder` loaded.",,normal,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: status = confirmed","Evaluates to `Confirmed` with exact state integrity."
+"SupplierOrder Model - White Box Suite","[WBT-031] SupplierOrder::getStatusBadgeAttribute - Branch Coverage: processing","White-Box structural test for `SupplierOrder::getStatusBadgeAttribute`.
+
+**Test Category:** Branch Coverage: processing
+**Tested Condition:** `status = processing`
+**Expected Outcome:** `Processing`
+**Actual Outcome:** `Processing`
+**Execution Time:** 0.02 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `SupplierOrder` loaded.",,normal,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: status = processing","Evaluates to `Processing` with exact state integrity."
+"SupplierOrder Model - White Box Suite","[WBT-032] SupplierOrder::getStatusBadgeAttribute - Branch Coverage: ready_for_delivery","White-Box structural test for `SupplierOrder::getStatusBadgeAttribute`.
+
+**Test Category:** Branch Coverage: ready_for_delivery
+**Tested Condition:** `status = ready_for_delivery`
+**Expected Outcome:** `Ready for Delivery`
+**Actual Outcome:** `Ready for Delivery`
+**Execution Time:** 0.02 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `SupplierOrder` loaded.",,normal,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: status = ready_for_delivery","Evaluates to `Ready for Delivery` with exact state integrity."
+"SupplierOrder Model - White Box Suite","[WBT-033] SupplierOrder::getStatusBadgeAttribute - Branch Coverage: delivered","White-Box structural test for `SupplierOrder::getStatusBadgeAttribute`.
+
+**Test Category:** Branch Coverage: delivered
+**Tested Condition:** `status = delivered`
+**Expected Outcome:** `Delivered`
+**Actual Outcome:** `Delivered`
+**Execution Time:** 0.01 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `SupplierOrder` loaded.",,normal,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: status = delivered","Evaluates to `Delivered` with exact state integrity."
+"SupplierOrder Model - White Box Suite","[WBT-034] SupplierOrder::getStatusBadgeAttribute - Branch Coverage: completed","White-Box structural test for `SupplierOrder::getStatusBadgeAttribute`.
+
+**Test Category:** Branch Coverage: completed
+**Tested Condition:** `status = completed`
+**Expected Outcome:** `Completed`
+**Actual Outcome:** `Completed`
+**Execution Time:** 0.01 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `SupplierOrder` loaded.",,normal,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: status = completed","Evaluates to `Completed` with exact state integrity."
+"SupplierOrder Model - White Box Suite","[WBT-035] SupplierOrder::getStatusBadgeAttribute - Branch Coverage: cancelled","White-Box structural test for `SupplierOrder::getStatusBadgeAttribute`.
+
+**Test Category:** Branch Coverage: cancelled
+**Tested Condition:** `status = cancelled`
+**Expected Outcome:** `Cancelled`
+**Actual Outcome:** `Cancelled`
+**Execution Time:** 0.01 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `SupplierOrder` loaded.",,normal,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: status = cancelled","Evaluates to `Cancelled` with exact state integrity."
+"SupplierOrder Model - White Box Suite","[WBT-036] SupplierOrder::syncToInventory() - Basis Path: Idempotency Check","White-Box structural test for `SupplierOrder::syncToInventory()`.
+
+**Test Category:** Basis Path: Idempotency Check
+**Tested Condition:** `is_synced_to_inventory = true`
+**Expected Outcome:** `false`
+**Actual Outcome:** `false`
+**Execution Time:** 0.07 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `SupplierOrder` loaded.",,critical,high,unit,unit,positive,automated,actual,"Execute white-box verification under condition: is_synced_to_inventory = true","Evaluates to `false` with exact state integrity."
+"SupplierOrder Model - White Box Suite","[WBT-037] SupplierOrder::syncToInventory() - Basis Path: Execution & Material Sync","White-Box structural test for `SupplierOrder::syncToInventory()`.
+
+**Test Category:** Basis Path: Execution & Material Sync
+**Tested Condition:** `Delivery receipt sync to inventory`
+**Expected Outcome:** `true`
+**Actual Outcome:** `true`
+**Execution Time:** 48.48 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `SupplierOrder` loaded.",,critical,high,unit,unit,positive,automated,actual,"Execute white-box verification under condition: Delivery receipt sync to inventory","Evaluates to `true` with exact state integrity."
+"InventoryLog Model - White Box Suite","[WBT-038] InventoryLog::getTransactionBadgeAttribute - Branch Coverage: excess_return","White-Box structural test for `InventoryLog::getTransactionBadgeAttribute`.
+
+**Test Category:** Branch Coverage: excess_return
+**Tested Condition:** `type = excess_return`
+**Expected Outcome:** `Excess Material Returned`
+**Actual Outcome:** `Excess Material Returned`
+**Execution Time:** 0.13 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `InventoryLog` loaded.",,normal,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: type = excess_return","Evaluates to `Excess Material Returned` with exact state integrity."
+"InventoryLog Model - White Box Suite","[WBT-039] InventoryLog::getTransactionBadgeAttribute - Branch Coverage: allocation","White-Box structural test for `InventoryLog::getTransactionBadgeAttribute`.
+
+**Test Category:** Branch Coverage: allocation
+**Tested Condition:** `type = allocation`
+**Expected Outcome:** `Site BOM Allocation`
+**Actual Outcome:** `Site BOM Allocation`
+**Execution Time:** 0.02 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `InventoryLog` loaded.",,normal,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: type = allocation","Evaluates to `Site BOM Allocation` with exact state integrity."
+"InventoryLog Model - White Box Suite","[WBT-040] InventoryLog::getTransactionBadgeAttribute - Branch Coverage: usage","White-Box structural test for `InventoryLog::getTransactionBadgeAttribute`.
+
+**Test Category:** Branch Coverage: usage
+**Tested Condition:** `type = usage`
+**Expected Outcome:** `Site Consumption Recorded`
+**Actual Outcome:** `Site Consumption Recorded`
+**Execution Time:** 0.02 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `InventoryLog` loaded.",,normal,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: type = usage","Evaluates to `Site Consumption Recorded` with exact state integrity."
+"InventoryLog Model - White Box Suite","[WBT-041] InventoryLog::getTransactionBadgeAttribute - Branch Coverage: restock","White-Box structural test for `InventoryLog::getTransactionBadgeAttribute`.
+
+**Test Category:** Branch Coverage: restock
+**Tested Condition:** `type = restock`
+**Expected Outcome:** `Warehouse Restock / PO`
+**Actual Outcome:** `Warehouse Restock / PO`
+**Execution Time:** 0.02 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `InventoryLog` loaded.",,normal,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: type = restock","Evaluates to `Warehouse Restock / PO` with exact state integrity."
+"InventoryLog Model - White Box Suite","[WBT-042] InventoryLog::getTransactionBadgeAttribute - Branch Coverage: default adjustment","White-Box structural test for `InventoryLog::getTransactionBadgeAttribute`.
+
+**Test Category:** Branch Coverage: default adjustment
+**Tested Condition:** `type = adjustment`
+**Expected Outcome:** `Inventory Adjustment`
+**Actual Outcome:** `Inventory Adjustment`
+**Execution Time:** 0.02 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `InventoryLog` loaded.",,normal,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: type = adjustment","Evaluates to `Inventory Adjustment` with exact state integrity."
+"Payment Model - White Box Suite","[WBT-043] Payment::getReceiptUrlAttribute - Branch Coverage: null file","White-Box structural test for `Payment::getReceiptUrlAttribute`.
+
+**Test Category:** Branch Coverage: null file
+**Tested Condition:** `receipt_file = null`
+**Expected Outcome:** `null`
+**Actual Outcome:** `null`
+**Execution Time:** 1.56 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Payment` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: receipt_file = null","Evaluates to `null` with exact state integrity."
+"Payment Model - White Box Suite","[WBT-044] Payment::getReceiptUrlAttribute - Branch Coverage: http URL","White-Box structural test for `Payment::getReceiptUrlAttribute`.
+
+**Test Category:** Branch Coverage: http URL
+**Tested Condition:** `receipt_file = https://example.com/receipt.pdf`
+**Expected Outcome:** `https://example.com/receipt.pdf`
+**Actual Outcome:** `https://example.com/receipt.pdf`
+**Execution Time:** 0.04 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Payment` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: receipt_file = https://example.com/receipt.pdf","Evaluates to `https://example.com/receipt.pdf` with exact state integrity."
+"Payment Model - White Box Suite","[WBT-045] Payment::getReceiptUrlAttribute - Branch Coverage: root slash path","White-Box structural test for `Payment::getReceiptUrlAttribute`.
+
+**Test Category:** Branch Coverage: root slash path
+**Tested Condition:** `receipt_file = /uploads/doc.pdf`
+**Expected Outcome:** `/uploads/doc.pdf`
+**Actual Outcome:** `/uploads/doc.pdf`
+**Execution Time:** 0.03 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Payment` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: receipt_file = /uploads/doc.pdf","Evaluates to `/uploads/doc.pdf` with exact state integrity."
+"Payment Model - White Box Suite","[WBT-046] Payment::getReceiptUrlAttribute - Branch Coverage: relative filename","White-Box structural test for `Payment::getReceiptUrlAttribute`.
+
+**Test Category:** Branch Coverage: relative filename
+**Tested Condition:** `receipt_file = sample.png`
+**Expected Outcome:** `/uploads/receipts/sample.png`
+**Actual Outcome:** `/uploads/receipts/sample.png`
+**Execution Time:** 0.03 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Payment` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: receipt_file = sample.png","Evaluates to `/uploads/receipts/sample.png` with exact state integrity."
+"Payment Model - White Box Suite","[WBT-047] Payment::getEffectiveOrNumberAttribute - Branch Coverage: explicit OR","White-Box structural test for `Payment::getEffectiveOrNumberAttribute`.
+
+**Test Category:** Branch Coverage: explicit OR
+**Tested Condition:** `official_receipt_no = OR-999`
+**Expected Outcome:** `OR-999`
+**Actual Outcome:** `OR-999`
+**Execution Time:** 0.2 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Payment` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: official_receipt_no = OR-999","Evaluates to `OR-999` with exact state integrity."
+"Payment Model - White Box Suite","[WBT-048] Payment::getEffectiveOrNumberAttribute - Branch Coverage: fallback generated OR","White-Box structural test for `Payment::getEffectiveOrNumberAttribute`.
+
+**Test Category:** Branch Coverage: fallback generated OR
+**Tested Condition:** `official_receipt_no = null, date = 2026-09-01, id = 5`
+**Expected Outcome:** `OR-202609-0005`
+**Actual Outcome:** `OR-202609-0005`
+**Execution Time:** 0.89 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Payment` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: official_receipt_no = null, date = 2026-09-01, id = 5","Evaluates to `OR-202609-0005` with exact state integrity."
+"Payment Model - White Box Suite","[WBT-049] Payment::getFinancingTypeLabelAttribute - Branch Coverage: bank_loan","White-Box structural test for `Payment::getFinancingTypeLabelAttribute`.
+
+**Test Category:** Branch Coverage: bank_loan
+**Tested Condition:** `financing_type = bank_loan`
+**Expected Outcome:** `Bank Construction Loan`
+**Actual Outcome:** `Bank Construction Loan`
+**Execution Time:** 0.09 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Payment` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: financing_type = bank_loan","Evaluates to `Bank Construction Loan` with exact state integrity."
+"Payment Model - White Box Suite","[WBT-050] Payment::getFinancingTypeLabelAttribute - Branch Coverage: pagibig_loan","White-Box structural test for `Payment::getFinancingTypeLabelAttribute`.
+
+**Test Category:** Branch Coverage: pagibig_loan
+**Tested Condition:** `financing_type = pagibig_loan`
+**Expected Outcome:** `Pag-IBIG (HDMF) Loan`
+**Actual Outcome:** `Pag-IBIG (HDMF) Loan`
+**Execution Time:** 0.04 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Payment` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: financing_type = pagibig_loan","Evaluates to `Pag-IBIG (HDMF) Loan` with exact state integrity."
+"Payment Model - White Box Suite","[WBT-051] Payment::getFinancingTypeLabelAttribute - Branch Coverage: client_equity","White-Box structural test for `Payment::getFinancingTypeLabelAttribute`.
+
+**Test Category:** Branch Coverage: client_equity
+**Tested Condition:** `financing_type = client_equity`
+**Expected Outcome:** `Client Direct Equity`
+**Actual Outcome:** `Client Direct Equity`
+**Execution Time:** 0.02 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Payment` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: financing_type = client_equity","Evaluates to `Client Direct Equity` with exact state integrity."
+"Payment Model - White Box Suite","[WBT-052] Payment::getFinancingTypeLabelAttribute - Branch Coverage: cash_progress","White-Box structural test for `Payment::getFinancingTypeLabelAttribute`.
+
+**Test Category:** Branch Coverage: cash_progress
+**Tested Condition:** `financing_type = cash_progress`
+**Expected Outcome:** `Direct Progress Cash`
+**Actual Outcome:** `Direct Progress Cash`
+**Execution Time:** 0.02 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Payment` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: financing_type = cash_progress","Evaluates to `Direct Progress Cash` with exact state integrity."
+"Payment Model - White Box Suite","[WBT-053] Payment::getConstructionClearanceBadgeAttribute - Branch Coverage: status = paid","White-Box structural test for `Payment::getConstructionClearanceBadgeAttribute`.
+
+**Test Category:** Branch Coverage: status = paid
+**Tested Condition:** `status = paid, cleared = true`
+**Expected Outcome:** `true`
+**Actual Outcome:** `true`
+**Execution Time:** 0.03 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Payment` loaded.",,normal,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: status = paid, cleared = true","Evaluates to `true` with exact state integrity."
+"Payment Model - White Box Suite","[WBT-054] Payment::getConstructionClearanceBadgeAttribute - Branch Coverage: inspection_scheduled","White-Box structural test for `Payment::getConstructionClearanceBadgeAttribute`.
+
+**Test Category:** Branch Coverage: inspection_scheduled
+**Tested Condition:** `status = pending, inspection_scheduled`
+**Expected Outcome:** `false`
+**Actual Outcome:** `false`
+**Execution Time:** 0.05 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Payment` loaded.",,normal,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: status = pending, inspection_scheduled","Evaluates to `false` with exact state integrity."
+"Personnel Model - White Box Suite","[WBT-055] Personnel::isLicenseExpired() - Branch Coverage: status = expired","White-Box structural test for `Personnel::isLicenseExpired()`.
+
+**Test Category:** Branch Coverage: status = expired
+**Tested Condition:** `license_status = expired`
+**Expected Outcome:** `true`
+**Actual Outcome:** `true`
+**Execution Time:** 1.22 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Personnel` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: license_status = expired","Evaluates to `true` with exact state integrity."
+"Personnel Model - White Box Suite","[WBT-056] Personnel::isLicenseExpired() - Branch Coverage: past expiry date","White-Box structural test for `Personnel::isLicenseExpired()`.
+
+**Test Category:** Branch Coverage: past expiry date
+**Tested Condition:** `license_status = active, expiry in past`
+**Expected Outcome:** `true`
+**Actual Outcome:** `true`
+**Execution Time:** 0.3 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Personnel` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: license_status = active, expiry in past","Evaluates to `true` with exact state integrity."
+"Personnel Model - White Box Suite","[WBT-057] Personnel::isLicenseExpired() - Branch Coverage: future expiry date","White-Box structural test for `Personnel::isLicenseExpired()`.
+
+**Test Category:** Branch Coverage: future expiry date
+**Tested Condition:** `license_status = active, expiry in future`
+**Expected Outcome:** `false`
+**Actual Outcome:** `false`
+**Execution Time:** 0.24 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Personnel` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: license_status = active, expiry in future","Evaluates to `false` with exact state integrity."
+"Personnel Model - White Box Suite","[WBT-058] Personnel::getLicenseStatusBadgeAttribute - Branch Coverage: expired badge","White-Box structural test for `Personnel::getLicenseStatusBadgeAttribute`.
+
+**Test Category:** Branch Coverage: expired badge
+**Tested Condition:** `expired license`
+**Expected Outcome:** `EXPIRED LICENSE`
+**Actual Outcome:** `EXPIRED LICENSE`
+**Execution Time:** 0.05 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Personnel` loaded.",,normal,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: expired license","Evaluates to `EXPIRED LICENSE` with exact state integrity."
+"Personnel Model - White Box Suite","[WBT-059] Personnel::getLicenseStatusBadgeAttribute - Branch Coverage: active badge","White-Box structural test for `Personnel::getLicenseStatusBadgeAttribute`.
+
+**Test Category:** Branch Coverage: active badge
+**Tested Condition:** `active license`
+**Expected Outcome:** `ACTIVE`
+**Actual Outcome:** `ACTIVE`
+**Execution Time:** 0.17 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Personnel` loaded.",,normal,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: active license","Evaluates to `ACTIVE` with exact state integrity."
+"ProjectCost Model - White Box Suite","[WBT-060] ProjectCost::getVarianceAttribute - Calculation: estimated - actual","White-Box structural test for `ProjectCost::getVarianceAttribute`.
+
+**Test Category:** Calculation: estimated - actual
+**Tested Condition:** `estimated = 100000, actual = 80000`
+**Expected Outcome:** `20000`
+**Actual Outcome:** `20000`
+**Execution Time:** 1.63 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `ProjectCost` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: estimated = 100000, actual = 80000","Evaluates to `20000` with exact state integrity."
+"ProjectCost Model - White Box Suite","[WBT-061] ProjectCost::getVariancePercentAttribute - Boundary Value: estimated <= 0","White-Box structural test for `ProjectCost::getVariancePercentAttribute`.
+
+**Test Category:** Boundary Value: estimated <= 0
+**Tested Condition:** `estimated = 0, actual = 5000`
+**Expected Outcome:** `0`
+**Actual Outcome:** `0`
+**Execution Time:** 0.2 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `ProjectCost` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: estimated = 0, actual = 5000","Evaluates to `0` with exact state integrity."
+"ProjectCost Model - White Box Suite","[WBT-062] ProjectCost::getVariancePercentAttribute - Calculation: standard percent","White-Box structural test for `ProjectCost::getVariancePercentAttribute`.
+
+**Test Category:** Calculation: standard percent
+**Tested Condition:** `estimated = 200000, actual = 150000`
+**Expected Outcome:** `25`
+**Actual Outcome:** `25`
+**Execution Time:** 0.1 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `ProjectCost` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: estimated = 200000, actual = 150000","Evaluates to `25` with exact state integrity."
+"ProjectMaterial Model - White Box Suite","[WBT-063] ProjectMaterial::getRemainingQtyAttribute - Boundary & Calculation: remaining stock clamp","White-Box structural test for `ProjectMaterial::getRemainingQtyAttribute`.
+
+**Test Category:** Boundary & Calculation: remaining stock clamp
+**Tested Condition:** `allocated=100, used=60, excess=20`
+**Expected Outcome:** `20`
+**Actual Outcome:** `20`
+**Execution Time:** 2.36 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `ProjectMaterial` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: allocated=100, used=60, excess=20","Evaluates to `20` with exact state integrity."
+"ProjectMaterial Model - White Box Suite","[WBT-064] ProjectMaterial::getNetAllocatedQtyAttribute - Calculation: allocated - excess","White-Box structural test for `ProjectMaterial::getNetAllocatedQtyAttribute`.
+
+**Test Category:** Calculation: allocated - excess
+**Tested Condition:** `allocated=100, excess=20`
+**Expected Outcome:** `80`
+**Actual Outcome:** `80`
+**Execution Time:** 0.05 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `ProjectMaterial` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: allocated=100, excess=20","Evaluates to `80` with exact state integrity."
+"ProjectMaterial Model - White Box Suite","[WBT-065] ProjectMaterial::getReturnedExcessValueAttribute - Calculation: excess * unit_price","White-Box structural test for `ProjectMaterial::getReturnedExcessValueAttribute`.
+
+**Test Category:** Calculation: excess * unit_price
+**Tested Condition:** `excess=15, unit_price=200`
+**Expected Outcome:** `3000`
+**Actual Outcome:** `3000`
+**Execution Time:** 0.06 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `ProjectMaterial` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: excess=15, unit_price=200","Evaluates to `3000` with exact state integrity."
+"ProjectScopeItem Model - White Box Suite","[WBT-066] ProjectScopeItem::recalculate() - Basis Path: Recalculate Scope Direct Costs & Markups","White-Box structural test for `ProjectScopeItem::recalculate()`.
+
+**Test Category:** Basis Path: Recalculate Scope Direct Costs & Markups
+**Tested Condition:** `Direct = 10000, Cont=5%, Tax=12%, Prof=10%`
+**Expected Outcome:** `12700`
+**Actual Outcome:** `12700`
+**Execution Time:** 7.8 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `ProjectScopeItem` loaded.",,critical,high,unit,unit,positive,automated,actual,"Execute white-box verification under condition: Direct = 10000, Cont=5%, Tax=12%, Prof=10%","Evaluates to `12700` with exact state integrity."
+"ProjectScopeLine Model - White Box Suite","[WBT-067] ProjectScopeLine::getRemainingQuantityAttribute - Boundary Value: Line remaining clamp to 0","White-Box structural test for `ProjectScopeLine::getRemainingQuantityAttribute`.
+
+**Test Category:** Boundary Value: Line remaining clamp to 0
+**Tested Condition:** `qty=50, used=40, excess=20`
+**Expected Outcome:** `0`
+**Actual Outcome:** `0`
+**Execution Time:** 0.14 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `ProjectScopeLine` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: qty=50, used=40, excess=20","Evaluates to `0` with exact state integrity."
+"ProjectTask Model - White Box Suite","[WBT-068] ProjectTask::getIsCompletedAttribute - Branch Coverage: progress >= 100","White-Box structural test for `ProjectTask::getIsCompletedAttribute`.
+
+**Test Category:** Branch Coverage: progress >= 100
+**Tested Condition:** `progress = 100`
+**Expected Outcome:** `true`
+**Actual Outcome:** `true`
+**Execution Time:** 1.65 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `ProjectTask` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: progress = 100","Evaluates to `true` with exact state integrity."
+"ProjectTask Model - White Box Suite","[WBT-069] ProjectTask::getStatusBadgeClassAttribute - Branch Coverage: In progress","White-Box structural test for `ProjectTask::getStatusBadgeClassAttribute`.
+
+**Test Category:** Branch Coverage: In progress
+**Tested Condition:** `progress = 30`
+**Expected Outcome:** `in_progress`
+**Actual Outcome:** `in_progress`
+**Execution Time:** 0.04 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `ProjectTask` loaded.",,normal,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: progress = 30","Evaluates to `in_progress` with exact state integrity."
+"ProjectTask Model - White Box Suite","[WBT-070] ProjectTask::getTimelinePhaseKeyAttribute - Branch Coverage: Superstructure/Framing","White-Box structural test for `ProjectTask::getTimelinePhaseKeyAttribute`.
+
+**Test Category:** Branch Coverage: Superstructure/Framing
+**Tested Condition:** `phase = Phase 2: Superstructure`
+**Expected Outcome:** `phase2`
+**Actual Outcome:** `phase2`
+**Execution Time:** 0.03 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `ProjectTask` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: phase = Phase 2: Superstructure","Evaluates to `phase2` with exact state integrity."
+"ProjectTaskMaterial Model - White Box Suite","[WBT-071] ProjectTaskMaterial::boot() Saving Auto-Calculation - Mutation: total_cost auto calculation","White-Box structural test for `ProjectTaskMaterial::boot() Saving Auto-Calculation`.
+
+**Test Category:** Mutation: total_cost auto calculation
+**Tested Condition:** `qty = 5, unit_cost = 400`
+**Expected Outcome:** `2000`
+**Actual Outcome:** `2000`
+**Execution Time:** 4.1 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `ProjectTaskMaterial` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: qty = 5, unit_cost = 400","Evaluates to `2000` with exact state integrity."
+"Project Model - White Box Suite","[WBT-072] Project::getStructuralWeightAttribute - Boundary Value: Default fallback when 0","White-Box structural test for `Project::getStructuralWeightAttribute`.
+
+**Test Category:** Boundary Value: Default fallback when 0
+**Tested Condition:** `structural_weight = 0`
+**Expected Outcome:** `40`
+**Actual Outcome:** `40`
+**Execution Time:** 0.08 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Project` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: structural_weight = 0","Evaluates to `40` with exact state integrity."
+"Project Model - White Box Suite","[WBT-073] Project::recalculateTradeProgressFromTasks() - Basis Path: Trade calculation and overall weighted progress","White-Box structural test for `Project::recalculateTradeProgressFromTasks()`.
+
+**Test Category:** Basis Path: Trade calculation and overall weighted progress
+**Tested Condition:** `Weighted structural + electrical tasks`
+**Expected Outcome:** `75`
+**Actual Outcome:** `75`
+**Execution Time:** 6.13 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Project` loaded.",,critical,high,unit,unit,positive,automated,actual,"Execute white-box verification under condition: Weighted structural + electrical tasks","Evaluates to `75` with exact state integrity."
+"Project Model - White Box Suite","[WBT-074] Project::getRemainingBudgetAttribute - Calculation: contract_budget - spent_budget","White-Box structural test for `Project::getRemainingBudgetAttribute`.
+
+**Test Category:** Calculation: contract_budget - spent_budget
+**Tested Condition:** `contract = 500000, spent = 200000`
+**Expected Outcome:** `300000`
+**Actual Outcome:** `300000`
+**Execution Time:** 0.19 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Project` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: contract = 500000, spent = 200000","Evaluates to `300000` with exact state integrity."
+"Project Model - White Box Suite","[WBT-075] Project::getBudgetUsagePercentAttribute - Calculation: spent / contract * 100","White-Box structural test for `Project::getBudgetUsagePercentAttribute`.
+
+**Test Category:** Calculation: spent / contract * 100
+**Tested Condition:** `contract = 500000, spent = 200000`
+**Expected Outcome:** `40`
+**Actual Outcome:** `40`
+**Execution Time:** 0.08 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Project` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: contract = 500000, spent = 200000","Evaluates to `40` with exact state integrity."
+"Project Model - White Box Suite","[WBT-076] Project::getTotalDeployedManpowerAttribute - Calculation: Sum of all 7 deployed roles","White-Box structural test for `Project::getTotalDeployedManpowerAttribute`.
+
+**Test Category:** Calculation: Sum of all 7 deployed roles
+**Tested Condition:** `workers=10, skilled=5, engineers=2, others=3`
+**Expected Outcome:** `20`
+**Actual Outcome:** `20`
+**Execution Time:** 0.19 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Project` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: workers=10, skilled=5, engineers=2, others=3","Evaluates to `20` with exact state integrity."
+"Project Model - White Box Suite","[WBT-077] Project::getCostHealthStatusAttribute - Branch Coverage: Overrun when incurred > budget","White-Box structural test for `Project::getCostHealthStatusAttribute`.
+
+**Test Category:** Branch Coverage: Overrun when incurred > budget
+**Tested Condition:** `budget = 100000, spent = 120000`
+**Expected Outcome:** `overrun`
+**Actual Outcome:** `overrun`
+**Execution Time:** 0.67 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Project` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: budget = 100000, spent = 120000","Evaluates to `overrun` with exact state integrity."
+"Project Model - White Box Suite","[WBT-078] Project::getScheduleHealthStatusAttribute - Branch Coverage: Completed Status","White-Box structural test for `Project::getScheduleHealthStatusAttribute`.
+
+**Test Category:** Branch Coverage: Completed Status
+**Tested Condition:** `status = completed`
+**Expected Outcome:** `completed`
+**Actual Outcome:** `completed`
+**Execution Time:** 0.33 ms","Laravel Bootstrap with SQLite Database in transaction state. Eloquent model `Project` loaded.",,major,medium,unit,unit,positive,automated,actual,"Execute white-box verification under condition: status = completed","Evaluates to `completed` with exact state integrity."

@@ -1,0 +1,79 @@
+Test_ID,Model,Feature_Or_Method,Test_Type,Condition_Or_Input,Expected_Outcome,Actual_Outcome,Result,Execution_Time_ms
+WBT-001,User,isAdmin(),"Branch Coverage: Empty Role (Null)","role = null",true,true,PASS,12.2
+WBT-002,User,isAdmin(),"Branch Coverage: Role = admin","role = admin",true,true,PASS,0.07
+WBT-003,User,isAdmin(),"Branch Coverage: Role = roofing_transfer","role = roofing_transfer",false,false,PASS,0.02
+WBT-004,User,isRoofingOfficer(),"Branch Coverage: True Branch","role = roofing_transfer",true,true,PASS,0.01
+WBT-005,User,isRoofingOfficer(),"Branch Coverage: False Branch","role = admin",false,false,PASS,0.01
+WBT-006,User,isWindowsDoorsOfficer(),"Branch Coverage: True Branch","role = windows_doors_transfer",true,true,PASS,0.01
+WBT-007,User,isWindowsDoorsOfficer(),"Branch Coverage: False Branch","role = roofing_transfer",false,false,PASS,0.01
+WBT-008,User,isSupplier(),"Branch Coverage: Role is supplier","role = supplier, supplier_id = null",true,true,PASS,0.04
+WBT-009,User,isSupplier(),"Branch Coverage: supplier_id is populated","role = null, supplier_id = 99",true,true,PASS,0.02
+WBT-010,User,isSupplier(),"Branch Coverage: Neither supplier role nor id","role = admin, supplier_id = null",false,false,PASS,0.02
+WBT-011,User,getRoleTitleAttribute,"Branch Coverage: Supplier Role with Supplier Object","supplier loaded with name & category","Steel Corp (Structural & Masonry)","Steel Corp (Structural & Masonry)",PASS,0.23
+WBT-012,User,getRoleTitleAttribute,"Branch Coverage: Supplier Role without Supplier Object","supplier relation is null","Supplier Account","Supplier Account",PASS,7.66
+WBT-013,User,getRoleTitleAttribute,"Branch Coverage: Roofing Transfer Officer","role = roofing_transfer","Roofing Transfer Officer","Roofing Transfer Officer",PASS,0.06
+WBT-014,User,getRoleTitleAttribute,"Branch Coverage: Windows & Doors Transfer Officer","role = windows_doors_transfer","Windows & Doors Transfer Officer","Windows & Doors Transfer Officer",PASS,0.02
+WBT-015,User,getRoleTitleAttribute,"Branch Coverage: Default Master Administrator","role = admin or null","Master Administrator","Master Administrator",PASS,0.02
+WBT-016,User,getPortalRouteAttribute,"Branch Coverage: Supplier Portal Route","role = supplier",http://localhost:8000/supplier/dashboard,http://localhost:8000/supplier/dashboard,PASS,0.16
+WBT-017,User,getPortalRouteAttribute,"Branch Coverage: Roofing Portal Route","role = roofing_transfer",http://localhost:8000/roofing-transfer,http://localhost:8000/roofing-transfer,PASS,0.06
+WBT-018,User,getPortalRouteAttribute,"Branch Coverage: Windows Portal Route","role = windows_doors_transfer",http://localhost:8000/windows-doors-transfer,http://localhost:8000/windows-doors-transfer,PASS,0.04
+WBT-019,User,getPortalRouteAttribute,"Branch Coverage: Admin Default Dashboard Route","role = admin",http://localhost:8000,http://localhost:8000,PASS,0.04
+WBT-020,Supplier,isActive(),"Branch Coverage: status = active","status = active",true,true,PASS,0.07
+WBT-021,Supplier,isActive(),"Branch Coverage: status = inactive","status = inactive",false,false,PASS,0.02
+WBT-022,Supplier,getCategoryColorAttribute,"Branch Coverage: Windows & Doors","category = Windows & Doors",#38bdf8,#38bdf8,PASS,0.03
+WBT-023,Supplier,getCategoryColorAttribute,"Branch Coverage: Roofing","category = Roofing",#ef4444,#ef4444,PASS,0.02
+WBT-024,Supplier,getCategoryColorAttribute,"Branch Coverage: Structural & Masonry","category = Structural & Masonry",#10b981,#10b981,PASS,0.02
+WBT-025,Supplier,getCategoryColorAttribute,"Branch Coverage: Default Category","category = Plumbing",#818cf8,#818cf8,PASS,0.02
+WBT-026,SupplierMaterial,getStatusBadgeAttribute,"Branch Coverage: is_active = false","is_active = false, availability_status = available",Unavailable,Unavailable,PASS,1.93
+WBT-027,SupplierMaterial,getStatusBadgeAttribute,"Branch Coverage: availability_status = unavailable","is_active = true, availability_status = unavailable",Unavailable,Unavailable,PASS,0.06
+WBT-028,SupplierMaterial,getStatusBadgeAttribute,"Branch Coverage: Active and Available","is_active = true, availability_status = available",Available,Available,PASS,0.03
+WBT-029,SupplierOrder,getStatusBadgeAttribute,"Branch Coverage: pending","status = pending","Pending Approval","Pending Approval",PASS,1.65
+WBT-030,SupplierOrder,getStatusBadgeAttribute,"Branch Coverage: confirmed","status = confirmed",Confirmed,Confirmed,PASS,0.07
+WBT-031,SupplierOrder,getStatusBadgeAttribute,"Branch Coverage: processing","status = processing",Processing,Processing,PASS,0.02
+WBT-032,SupplierOrder,getStatusBadgeAttribute,"Branch Coverage: ready_for_delivery","status = ready_for_delivery","Ready for Delivery","Ready for Delivery",PASS,0.02
+WBT-033,SupplierOrder,getStatusBadgeAttribute,"Branch Coverage: delivered","status = delivered",Delivered,Delivered,PASS,0.01
+WBT-034,SupplierOrder,getStatusBadgeAttribute,"Branch Coverage: completed","status = completed",Completed,Completed,PASS,0.01
+WBT-035,SupplierOrder,getStatusBadgeAttribute,"Branch Coverage: cancelled","status = cancelled",Cancelled,Cancelled,PASS,0.01
+WBT-036,SupplierOrder,syncToInventory(),"Basis Path: Idempotency Check","is_synced_to_inventory = true",false,false,PASS,0.07
+WBT-037,SupplierOrder,syncToInventory(),"Basis Path: Execution & Material Sync","Delivery receipt sync to inventory",true,true,PASS,48.48
+WBT-038,InventoryLog,getTransactionBadgeAttribute,"Branch Coverage: excess_return","type = excess_return","Excess Material Returned","Excess Material Returned",PASS,0.13
+WBT-039,InventoryLog,getTransactionBadgeAttribute,"Branch Coverage: allocation","type = allocation","Site BOM Allocation","Site BOM Allocation",PASS,0.02
+WBT-040,InventoryLog,getTransactionBadgeAttribute,"Branch Coverage: usage","type = usage","Site Consumption Recorded","Site Consumption Recorded",PASS,0.02
+WBT-041,InventoryLog,getTransactionBadgeAttribute,"Branch Coverage: restock","type = restock","Warehouse Restock / PO","Warehouse Restock / PO",PASS,0.02
+WBT-042,InventoryLog,getTransactionBadgeAttribute,"Branch Coverage: default adjustment","type = adjustment","Inventory Adjustment","Inventory Adjustment",PASS,0.02
+WBT-043,Payment,getReceiptUrlAttribute,"Branch Coverage: null file","receipt_file = null",null,null,PASS,1.56
+WBT-044,Payment,getReceiptUrlAttribute,"Branch Coverage: http URL","receipt_file = https://example.com/receipt.pdf",https://example.com/receipt.pdf,https://example.com/receipt.pdf,PASS,0.04
+WBT-045,Payment,getReceiptUrlAttribute,"Branch Coverage: root slash path","receipt_file = /uploads/doc.pdf",/uploads/doc.pdf,/uploads/doc.pdf,PASS,0.03
+WBT-046,Payment,getReceiptUrlAttribute,"Branch Coverage: relative filename","receipt_file = sample.png",/uploads/receipts/sample.png,/uploads/receipts/sample.png,PASS,0.03
+WBT-047,Payment,getEffectiveOrNumberAttribute,"Branch Coverage: explicit OR","official_receipt_no = OR-999",OR-999,OR-999,PASS,0.2
+WBT-048,Payment,getEffectiveOrNumberAttribute,"Branch Coverage: fallback generated OR","official_receipt_no = null, date = 2026-09-01, id = 5",OR-202609-0005,OR-202609-0005,PASS,0.89
+WBT-049,Payment,getFinancingTypeLabelAttribute,"Branch Coverage: bank_loan","financing_type = bank_loan","Bank Construction Loan","Bank Construction Loan",PASS,0.09
+WBT-050,Payment,getFinancingTypeLabelAttribute,"Branch Coverage: pagibig_loan","financing_type = pagibig_loan","Pag-IBIG (HDMF) Loan","Pag-IBIG (HDMF) Loan",PASS,0.04
+WBT-051,Payment,getFinancingTypeLabelAttribute,"Branch Coverage: client_equity","financing_type = client_equity","Client Direct Equity","Client Direct Equity",PASS,0.02
+WBT-052,Payment,getFinancingTypeLabelAttribute,"Branch Coverage: cash_progress","financing_type = cash_progress","Direct Progress Cash","Direct Progress Cash",PASS,0.02
+WBT-053,Payment,getConstructionClearanceBadgeAttribute,"Branch Coverage: status = paid","status = paid, cleared = true",true,true,PASS,0.03
+WBT-054,Payment,getConstructionClearanceBadgeAttribute,"Branch Coverage: inspection_scheduled","status = pending, inspection_scheduled",false,false,PASS,0.05
+WBT-055,Personnel,isLicenseExpired(),"Branch Coverage: status = expired","license_status = expired",true,true,PASS,1.22
+WBT-056,Personnel,isLicenseExpired(),"Branch Coverage: past expiry date","license_status = active, expiry in past",true,true,PASS,0.3
+WBT-057,Personnel,isLicenseExpired(),"Branch Coverage: future expiry date","license_status = active, expiry in future",false,false,PASS,0.24
+WBT-058,Personnel,getLicenseStatusBadgeAttribute,"Branch Coverage: expired badge","expired license","EXPIRED LICENSE","EXPIRED LICENSE",PASS,0.05
+WBT-059,Personnel,getLicenseStatusBadgeAttribute,"Branch Coverage: active badge","active license",ACTIVE,ACTIVE,PASS,0.17
+WBT-060,ProjectCost,getVarianceAttribute,"Calculation: estimated - actual","estimated = 100000, actual = 80000",20000,20000,PASS,1.63
+WBT-061,ProjectCost,getVariancePercentAttribute,"Boundary Value: estimated <= 0","estimated = 0, actual = 5000",0,0,PASS,0.2
+WBT-062,ProjectCost,getVariancePercentAttribute,"Calculation: standard percent","estimated = 200000, actual = 150000",25,25,PASS,0.1
+WBT-063,ProjectMaterial,getRemainingQtyAttribute,"Boundary & Calculation: remaining stock clamp","allocated=100, used=60, excess=20",20,20,PASS,2.36
+WBT-064,ProjectMaterial,getNetAllocatedQtyAttribute,"Calculation: allocated - excess","allocated=100, excess=20",80,80,PASS,0.05
+WBT-065,ProjectMaterial,getReturnedExcessValueAttribute,"Calculation: excess * unit_price","excess=15, unit_price=200",3000,3000,PASS,0.06
+WBT-066,ProjectScopeItem,recalculate(),"Basis Path: Recalculate Scope Direct Costs & Markups","Direct = 10000, Cont=5%, Tax=12%, Prof=10%",12700,12700,PASS,7.8
+WBT-067,ProjectScopeLine,getRemainingQuantityAttribute,"Boundary Value: Line remaining clamp to 0","qty=50, used=40, excess=20",0,0,PASS,0.14
+WBT-068,ProjectTask,getIsCompletedAttribute,"Branch Coverage: progress >= 100","progress = 100",true,true,PASS,1.65
+WBT-069,ProjectTask,getStatusBadgeClassAttribute,"Branch Coverage: In progress","progress = 30",in_progress,in_progress,PASS,0.04
+WBT-070,ProjectTask,getTimelinePhaseKeyAttribute,"Branch Coverage: Superstructure/Framing","phase = Phase 2: Superstructure",phase2,phase2,PASS,0.03
+WBT-071,ProjectTaskMaterial,"boot() Saving Auto-Calculation","Mutation: total_cost auto calculation","qty = 5, unit_cost = 400",2000,2000,PASS,4.1
+WBT-072,Project,getStructuralWeightAttribute,"Boundary Value: Default fallback when 0","structural_weight = 0",40,40,PASS,0.08
+WBT-073,Project,recalculateTradeProgressFromTasks(),"Basis Path: Trade calculation and overall weighted progress","Weighted structural + electrical tasks",75,75,PASS,6.13
+WBT-074,Project,getRemainingBudgetAttribute,"Calculation: contract_budget - spent_budget","contract = 500000, spent = 200000",300000,300000,PASS,0.19
+WBT-075,Project,getBudgetUsagePercentAttribute,"Calculation: spent / contract * 100","contract = 500000, spent = 200000",40,40,PASS,0.08
+WBT-076,Project,getTotalDeployedManpowerAttribute,"Calculation: Sum of all 7 deployed roles","workers=10, skilled=5, engineers=2, others=3",20,20,PASS,0.19
+WBT-077,Project,getCostHealthStatusAttribute,"Branch Coverage: Overrun when incurred > budget","budget = 100000, spent = 120000",overrun,overrun,PASS,0.67
+WBT-078,Project,getScheduleHealthStatusAttribute,"Branch Coverage: Completed Status","status = completed",completed,completed,PASS,0.33
