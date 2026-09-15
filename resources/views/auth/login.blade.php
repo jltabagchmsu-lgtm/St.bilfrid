@@ -119,11 +119,15 @@
             display: flex;
             align-items: center;
             pointer-events: none;
+            z-index: 5;
         }
 
-        .login-input {
+        .login-input,
+        input.login-input,
+        .input-icon-wrapper input {
             width: 100%;
-            padding: 13px 14px 13px 42px;
+            padding: 13px 14px 13px 44px !important;
+            padding-left: 44px !important;
             background: #fafbfc !important;
             border: 1px solid #cbd5e1 !important;
             border-radius: var(--radius-md);
@@ -133,7 +137,8 @@
             transition: all 0.2s ease;
         }
 
-        .login-input:focus {
+        .login-input:focus,
+        .input-icon-wrapper input:focus {
             outline: none;
             border-color: var(--primary-red) !important;
             background: #fafbfc !important;
@@ -260,6 +265,7 @@
                             name="email" 
                             id="emailInput" 
                             class="login-input" 
+                            style="padding-left: 44px !important;"
                             placeholder="Enter your email address" 
                             value="{{ old('email') }}" 
                             required 
@@ -284,6 +290,7 @@
                             name="password" 
                             id="passwordInput" 
                             class="login-input" 
+                            style="padding-left: 44px !important;"
                             placeholder="••••••••" 
                             required
                         >

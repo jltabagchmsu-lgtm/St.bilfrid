@@ -242,7 +242,7 @@
             background: #fafbfc !important;
             border: 1px solid var(--border-color) !important;
             border-radius: 8px !important;
-            padding: 10px 14px !important;
+            padding: 10px 14px;
             color: #0f172a !important;
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
             font-size: 0.875rem !important;
@@ -250,6 +250,12 @@
             outline: none !important;
             box-sizing: border-box !important;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+
+        .search-input-with-icon,
+        input.search-input-with-icon,
+        .input-with-icon {
+            padding-left: 38px !important;
         }
 
         .input-field:focus,
