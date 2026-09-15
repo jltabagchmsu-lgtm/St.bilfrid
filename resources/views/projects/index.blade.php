@@ -155,10 +155,10 @@
     </table>
 </div>
 
-<!-- Modal 1: Initialize New Real Project (Landscape 2-Column Layout) -->
+<!-- Modal 1: Initialize New Real Project (Multi-Step Wizard Flow) -->
 <div class="modal-overlay" id="createProjectModal">
-    <div class="modal-box modal-box-landscape" style="max-width: 1260px; width: 96vw; max-height: 92vh; display: flex; flex-direction: column; padding: 24px 28px;">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 16px; border-bottom: 1px solid var(--border-color); margin-bottom: 18px;">
+    <div class="modal-box modal-box-landscape" style="max-width: 1260px; width: 96vw; max-height: 92vh; display: flex; flex-direction: column; padding: 22px 28px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 12px; border-bottom: 1px solid var(--border-color); margin-bottom: 14px;">
             <div>
                 <h3 style="font-weight: 800; font-size: 1.25rem; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
                     <span style="color: var(--primary-red);">+</span> Initialize Real Construction Project
@@ -170,342 +170,430 @@
             <button type="button" onclick="closeModal('createProjectModal')" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer; line-height: 1;">&times;</button>
         </div>
 
-        <form action="{{ route('projects.store') }}" method="POST" enctype="multipart/form-data" style="display: flex; flex-direction: column; flex: 1; overflow: hidden;">
+        <!-- Sleek Step Progress Stepper Bar -->
+        <div class="project-modal-stepper" style="display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 14px; padding: 8px 14px; background: #f8fafc; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+            <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
+                <!-- Step 1 Tab -->
+                <div id="createStepPill1" onclick="goToCreateProjectStep(1)" style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 6px 14px; border-radius: 8px; background: rgba(225, 29, 72, 0.08); border: 1.5px solid var(--primary-red); transition: all 0.2s ease;">
+                    <div class="step-badge" style="width: 22px; height: 22px; border-radius: 50%; background: var(--primary-red); color: #fff; font-size: 0.75rem; font-weight: 800; display: flex; align-items: center; justify-content: center;">1</div>
+                    <div>
+                        <div class="step-title" style="font-size: 0.75rem; font-weight: 800; color: var(--primary-red); letter-spacing: 0.02em;">1. PROJECT IDENTIFICATION & ARCHITECTURAL PLAN</div>
+                        <div style="font-size: 0.65rem; color: var(--text-secondary);">Identity, classification, floor plan preset & schedule</div>
+                    </div>
+                </div>
+
+                <div style="color: var(--text-muted); font-size: 1rem; font-weight: 700;">➔</div>
+
+                <!-- Step 2 Tab -->
+                <div id="createStepPill2" onclick="goToCreateProjectStep(2)" style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 6px 14px; border-radius: 8px; background: #ffffff; border: 1.5px solid var(--border-color); opacity: 0.8; transition: all 0.2s ease;">
+                    <div class="step-badge" style="width: 22px; height: 22px; border-radius: 50%; background: #e2e8f0; color: #64748b; font-size: 0.75rem; font-weight: 800; display: flex; align-items: center; justify-content: center;">2</div>
+                    <div>
+                        <div class="step-title" style="font-size: 0.75rem; font-weight: 800; color: var(--text-secondary); letter-spacing: 0.02em;">2. SIZING TARGETS, COSTING & MOBILIZATION</div>
+                        <div style="font-size: 0.65rem; color: var(--text-muted);">Contract budget, feasibility engine & workforce</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span id="stepCounterBadge" style="font-size: 0.7rem; font-weight: 700; background: #e0f2fe; color: #0369a1; padding: 4px 10px; border-radius: 20px; border: 1px solid #bae6fd;">
+                    Step 1 of 2
+                </span>
+            </div>
+        </div>
+
+        <form id="createProjectForm" action="{{ route('projects.store') }}" method="POST" enctype="multipart/form-data" style="display: flex; flex-direction: column; flex: 1; overflow: hidden;">
             @csrf
             
-            <div style="display: grid; grid-template-columns: 1.15fr 1fr; gap: 24px; overflow-y: auto; padding-right: 8px; padding-bottom: 8px; flex: 1; align-items: start;">
-                
-                <!-- LEFT COLUMN: Architectural Layout & Project Identity -->
-                <div style="display: flex; flex-direction: column; gap: 16px;">
+            <!-- =========================================================================
+                 STEP 1: Project Identity, Classification, Architectural Layout & Schedule
+                 ========================================================================= -->
+            <div id="createProjectStep1" style="display: flex; flex-direction: column; flex: 1; overflow: hidden;">
+                <div style="display: grid; grid-template-columns: 1.15fr 1fr; gap: 20px; overflow-y: auto; padding-right: 6px; padding-bottom: 6px; flex: 1; align-items: start;">
                     
-                    <!-- 1. Project Identification Card -->
-                    <div style="background: #fafbfc; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
-                        <div style="font-size: 0.775rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
-                            <span style="width: 6px; height: 6px; border-radius: 50%; background: var(--primary-red); display: inline-block;"></span>
-                            1. Project Identification & Service Classification
-                        </div>
-
-                        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 12px; margin-bottom: 12px;">
-                            <div class="form-group" style="margin-bottom: 0;">
-                                <label class="form-label" style="font-size: 0.75rem;">Project Title <span style="color: var(--primary-red);">*</span></label>
-                                <input type="text" name="title" class="form-input" placeholder="e.g. Nexus Multi-Specialty Medical Complex" required style="font-size: 0.85rem;">
-                            </div>
-                            <div class="form-group" style="margin-bottom: 0;">
-                                <label class="form-label" style="font-size: 0.75rem;">Project Code (Optional)</label>
-                                <input type="text" name="project_code" class="form-input" placeholder="e.g. PRJ-2026-NEXUS" style="font-size: 0.85rem;">
-                            </div>
-                        </div>
-
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
-                            <div class="form-group" style="margin-bottom: 0;">
-                                <label class="form-label" style="font-size: 0.75rem;">Client / Developer Name <span style="color: var(--primary-red);">*</span></label>
-                                <input type="text" name="client_name" class="form-input" placeholder="e.g. Apex Health Systems Inc." required style="font-size: 0.85rem;">
-                            </div>
-                            <div class="form-group" style="margin-bottom: 0;">
-                                <label class="form-label" style="font-size: 0.75rem;">Site Location / Address</label>
-                                <input type="text" name="location" class="form-input" placeholder="e.g. North Triangle Commercial District, QC" style="font-size: 0.85rem;">
-                            </div>
-                        </div>
-
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                            <div class="form-group" style="margin-bottom: 0;">
-                                <label class="form-label" style="font-size: 0.75rem;">Project Classification / Service Type <span style="color: var(--primary-red);">*</span></label>
-                                <select name="project_type" id="modalInputProjectType" class="form-select" onchange="recalculateProjectModalCosting()" required style="font-size: 0.8rem;">
-                                    <option value="Residential Build" selected>Residential Build (₱1,100 / m² Floor Base)</option>
-                                    <option value="Commercial Construction">Commercial Construction (₱1,400 / m² Floor Base)</option>
-                                    <option value="Industrial Complex">Industrial Complex (₱1,600 / m² Floor Base)</option>
-                                    <option value="High-Rise Development">High-Rise Development (₱1,800 / m² Floor Base)</option>
-                                    <option value="Renovation & Overhaul">Renovation & Overhaul (₱800 / m² Floor Base)</option>
-                                    <option value="Interior Fit-Out & Turnkey">Interior Fit-Out & Turnkey (₱950 / m² Floor Base)</option>
-                                </select>
+                    <!-- LEFT COLUMN OF STEP 1: Identification & Schedule -->
+                    <div style="display: flex; flex-direction: column; gap: 14px;">
+                        
+                        <!-- 1. Project Identification Card -->
+                        <div style="background: #fafbfc; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+                            <div style="font-size: 0.775rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+                                <span style="width: 6px; height: 6px; border-radius: 50%; background: var(--primary-red); display: inline-block;"></span>
+                                1. Project Identification & Service Classification
                             </div>
 
-                            <div class="form-group" style="margin-bottom: 0;">
-                                <label class="form-label" style="font-size: 0.75rem;">Finishing & Quality Tier</label>
-                                <select name="finish_tier" id="modalInputFinishTier" class="form-select" onchange="recalculateProjectModalCosting()" style="font-size: 0.8rem;">
-                                    <option value="standard" selected>Standard / Basic Quality (1.00x Base)</option>
-                                    <option value="executive">Semi-Custom / Executive (1.25x Multiplier)</option>
-                                    <option value="luxury">Premium Luxury / High-End (1.50x Multiplier)</option>
-                                </select>
+                            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 12px; margin-bottom: 12px;">
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label class="form-label" style="font-size: 0.75rem;">Project Title <span style="color: var(--primary-red);">*</span></label>
+                                    <input type="text" name="title" class="form-input" placeholder="e.g. Nexus Multi-Specialty Medical Complex" required style="font-size: 0.85rem;">
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label class="form-label" style="font-size: 0.75rem;">Project Code (Optional)</label>
+                                    <input type="text" name="project_code" class="form-input" placeholder="e.g. PRJ-2026-NEXUS" style="font-size: 0.85rem;">
+                                </div>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label class="form-label" style="font-size: 0.75rem;">Client / Developer Name <span style="color: var(--primary-red);">*</span></label>
+                                    <input type="text" name="client_name" class="form-input" placeholder="e.g. Apex Health Systems Inc." required style="font-size: 0.85rem;">
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label class="form-label" style="font-size: 0.75rem;">Site Location / Address</label>
+                                    <input type="text" name="location" class="form-input" placeholder="e.g. North Triangle Commercial District, QC" style="font-size: 0.85rem;">
+                                </div>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label class="form-label" style="font-size: 0.75rem;">Project Classification / Service Type <span style="color: var(--primary-red);">*</span></label>
+                                    <select name="project_type" id="modalInputProjectType" class="form-select" onchange="recalculateProjectModalCosting()" required style="font-size: 0.8rem;">
+                                        <option value="Residential Build" selected>Residential Build (₱1,100 / m² Floor Base)</option>
+                                        <option value="Commercial Construction">Commercial Construction (₱1,400 / m² Floor Base)</option>
+                                        <option value="Industrial Complex">Industrial Complex (₱1,600 / m² Floor Base)</option>
+                                        <option value="High-Rise Development">High-Rise Development (₱1,800 / m² Floor Base)</option>
+                                        <option value="Renovation & Overhaul">Renovation & Overhaul (₱800 / m² Floor Base)</option>
+                                        <option value="Interior Fit-Out & Turnkey">Interior Fit-Out & Turnkey (₱950 / m² Floor Base)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label class="form-label" style="font-size: 0.75rem;">Finishing & Quality Tier</label>
+                                    <select name="finish_tier" id="modalInputFinishTier" class="form-select" onchange="recalculateProjectModalCosting()" style="font-size: 0.8rem;">
+                                        <option value="standard" selected>Standard / Basic Quality (1.00x Base)</option>
+                                        <option value="executive">Semi-Custom / Executive (1.25x Multiplier)</option>
+                                        <option value="luxury">Premium Luxury / High-End (1.50x Multiplier)</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
+
+                        <!-- 3. Project Schedule & Assigned Lead Personnel -->
+                        <div style="background: #fafbfc; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+                            <div style="font-size: 0.775rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+                                <span style="width: 6px; height: 6px; border-radius: 50%; background: #0284c7; display: inline-block;"></span>
+                                3. Project Schedule & Assigned Lead Personnel
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label class="form-label" style="font-size: 0.75rem;">Start Date <span style="color: var(--primary-red);">*</span></label>
+                                    <input type="date" name="start_date" class="form-input" value="{{ date('Y-m-d') }}" required style="font-size: 0.85rem;">
+                                </div>
+
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label class="form-label" style="font-size: 0.75rem;">Target Completion Date <span style="color: var(--primary-red);">*</span></label>
+                                    <input type="date" name="end_date" class="form-input" value="{{ date('Y-m-d', strtotime('+365 days')) }}" required style="font-size: 0.85rem;">
+                                </div>
+                            </div>
+
+                            @if(isset($personnelList) && $personnelList->count() > 0)
+                            <div>
+                                <label class="form-label" style="font-size: 0.75rem; margin-bottom: 6px;">Assign Lead Engineers & Architects</label>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; max-height: 80px; overflow-y: auto; padding: 8px 10px; background: #f8fafc; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                                    @foreach($personnelList as $pers)
+                                    <label style="display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--text-primary); cursor: pointer;">
+                                        <input type="checkbox" name="personnel_ids[]" value="{{ $pers->id }}">
+                                        <span><strong>{{ $pers->name }}</strong> ({{ $pers->title }})</span>
+                                    </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                            @endif
+                        </div>
+
                     </div>
 
-                    <!-- 2. Floor Plan Model & Room Configuration -->
-                    <div style="padding: 16px; background: #f8fafc; border-radius: var(--radius-md); border: 1px solid var(--border-color); box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
-                            <div>
-                                <div style="font-weight: 700; font-size: 0.875rem; color: var(--primary-red); display: flex; align-items: center; gap: 6px;">
-                                    <span>[PLAN]</span> Floor Plan Model & Room Configuration (Dropdown Driven)
+                    <!-- RIGHT COLUMN OF STEP 1: Architectural Layout & Floor Plan Models -->
+                    <div style="display: flex; flex-direction: column; gap: 14px;">
+                        
+                        <!-- 2. Floor Plan Model & Room Configuration -->
+                        <div style="padding: 14px; background: #f8fafc; border-radius: var(--radius-md); border: 1px solid var(--border-color); box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                                <div>
+                                    <div style="font-weight: 700; font-size: 0.875rem; color: var(--primary-red); display: flex; align-items: center; gap: 6px;">
+                                        <span>[PLAN]</span> Floor Plan Model & Room Configuration (Dropdown Driven)
+                                    </div>
+                                    <span style="font-size: 0.725rem; color: var(--text-muted);">
+                                        Select a floor plan preset or customize room counts and dimensions from structured dropdowns.
+                                    </span>
                                 </div>
-                                <span style="font-size: 0.725rem; color: var(--text-muted);">
-                                    Select a floor plan preset or customize room counts and dimensions from structured dropdowns.
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label class="form-label" style="font-size: 0.75rem;">1. Suggested Floor Plan Model Preset</label>
+                                    <select id="modalFloorPlanModelSelect" class="form-select" style="font-size: 0.8rem;" onchange="applyModalFloorPlanPreset(this.value)">
+                                        <option value="custom">-- Custom Room-by-Room Build --</option>
+                                        <option value="studio">1-Room Studio / Micro-Loft (36 m²)</option>
+                                        <option value="2br_bungalow" selected>2-Bedroom Single-Storey Bungalow (65 m²)</option>
+                                        <option value="3br_standard">3-Bedroom Standard Two-Storey Residence (120 m²)</option>
+                                        <option value="4br_executive">4-Bedroom Executive Villa (220 m²)</option>
+                                        <option value="5br_luxury">5-Bedroom Luxury Estate with En-Suites (350 m²)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label class="form-label" style="font-size: 0.75rem;">2. Total Room Count</label>
+                                    <select id="modalTotalRoomCountSelect" class="form-select" style="font-size: 0.8rem;" onchange="setModalTotalRoomsCount(this.value)">
+                                        <option value="1">1 Room Total</option>
+                                        <option value="2">2 Rooms Total</option>
+                                        <option value="3">3 Rooms Total</option>
+                                        <option value="4" selected>4 Rooms Total</option>
+                                        <option value="5">5 Rooms Total</option>
+                                        <option value="6">6 Rooms Total</option>
+                                        <option value="7">7 Rooms Total</option>
+                                        <option value="8">8 Rooms Total</option>
+                                        <option value="10">10 Rooms Total</option>
+                                        <option value="12">12 Rooms Total</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Container for Individual Room Dropdown Rows -->
+                            <div style="font-size: 0.725rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px; text-transform: uppercase;">
+                                3. Room Types & Dimension Brackets:
+                            </div>
+                            <div id="modalRoomRowsContainer" style="display: flex; flex-direction: column; gap: 8px; max-height: 180px; overflow-y: auto; padding-right: 4px; margin-bottom: 12px;">
+                                <!-- Populated dynamically via JS -->
+                            </div>
+
+                            <!-- Dynamic Area Calculations Bar -->
+                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; padding: 10px 12px; background: #fafbfc; border-radius: var(--radius-sm); border: 1px solid var(--border-color); align-items: center;">
+                                <div>
+                                    <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Total Rooms:</div>
+                                    <strong id="modalDispRoomCount" style="color: var(--text-primary); font-size: 0.95rem;">4</strong>
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Calculated Floor Area:</div>
+                                    <strong id="modalDispFloorArea" style="color: var(--primary-red); font-size: 1.05rem; font-family: var(--font-mono);">65.00 m²</strong>
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Suggested Lot Footprint:</div>
+                                    <strong id="modalDispLandArea" style="color: #059669; font-size: 1.05rem; font-family: var(--font-mono);">87.75 m²</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Step 1 Bottom Action Bar (With Next Button) -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border-color); background: #fafbfc;">
+                    <button type="button" class="btn-secondary" onclick="closeModal('createProjectModal')" style="padding: 9px 20px;">Cancel</button>
+                    
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span style="font-size: 0.775rem; color: var(--text-muted); font-weight: 600;">Proceed to financial contract & sizing ➔</span>
+                        <button type="button" id="btnNextToStep2" class="btn-primary" onclick="goToCreateProjectStep(2)" style="padding: 9px 28px; font-weight: 800; font-size: 0.875rem; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 8px rgba(225, 29, 72, 0.25);">
+                            <span>Next</span>
+                            <span style="font-size: 1.1rem; line-height: 1;">&rarr;</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- =========================================================================
+                 STEP 2: Sizing Targets, Financial Feasibility, Weights & Workforce Scope
+                 ========================================================================= -->
+            <div id="createProjectStep2" style="display: none; flex-direction: column; flex: 1; overflow: hidden;">
+                <div style="display: grid; grid-template-columns: 1.05fr 1fr; gap: 20px; overflow-y: auto; padding-right: 6px; padding-bottom: 6px; flex: 1; align-items: start;">
+                    
+                    <!-- LEFT COLUMN OF STEP 2: Sizing & Live Feasibility Engine -->
+                    <div style="display: flex; flex-direction: column; gap: 14px;">
+                        
+                        <!-- 4. Sizing & Financial Specifications -->
+                        <div style="background: #fafbfc; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+                            <div style="font-size: 0.775rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+                                <span style="width: 6px; height: 6px; border-radius: 50%; background: #059669; display: inline-block;"></span>
+                                2. Sizing Targets & Financial Contract
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                                <div class="form-group" style="margin-bottom: 0; background: rgba(56, 189, 248, 0.06); padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid rgba(56, 189, 248, 0.3);">
+                                    <label class="form-label" style="color: #0284c7; font-weight: 700; font-size: 0.75rem; display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                                        <span>Client Stated Budget (₱)</span>
+                                        <span style="font-size: 0.65rem; color: #64748b; font-weight: 400;">Target Cap</span>
+                                    </label>
+                                    <input type="number" step="0.01" name="client_budget" id="modalInputClientBudget" class="form-input" placeholder="e.g. 3500000" oninput="recalculateProjectModalCosting()" style="border-color: rgba(56, 189, 248, 0.5); font-weight: 700; color: #0284c7; font-family: var(--font-mono); font-size: 0.85rem;">
+                                </div>
+
+                                <div class="form-group" style="margin-bottom: 0; background: rgba(16, 185, 129, 0.06); padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid rgba(16, 185, 129, 0.3);">
+                                    <label class="form-label" style="color: #059669; font-weight: 700; font-size: 0.75rem; display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                                        <span>Contract Budget (₱) <span style="color: var(--primary-red);">*</span></span>
+                                        <span style="font-size: 0.65rem; color: #64748b; font-weight: 400;">Monitored Cap</span>
+                                    </label>
+                                    <input type="number" step="0.01" name="contract_budget" id="modalInputContractBudget" class="form-input" placeholder="₱ 0.00" style="border-color: rgba(16, 185, 129, 0.5); font-weight: 700; color: #059669; font-family: var(--font-mono); font-size: 0.85rem;" required>
+                                </div>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label class="form-label" style="font-size: 0.75rem;">Land Area (m²) <span style="color: var(--primary-red);">*</span></label>
+                                    <input type="number" step="0.01" name="land_area_sqm" id="modalInputLandArea" class="form-input" placeholder="e.g. 150" oninput="recalculateProjectModalCosting()" required style="font-size: 0.85rem;">
+                                </div>
+
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label class="form-label" style="font-size: 0.75rem;">Constructible Floor (m²) <span style="color: var(--primary-red);">*</span></label>
+                                    <input type="number" step="0.01" name="floor_area_sqm" id="modalInputFloorArea" class="form-input" placeholder="e.g. 120" oninput="recalculateProjectModalCosting()" required style="font-size: 0.85rem;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 5. Automated Costing & Financial Feasibility Engine -->
+                        <div style="padding: 14px; background: #fafbfc; border-radius: var(--radius-md); border: 1px solid var(--border-color); box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
+                                <div>
+                                    <div style="font-size: 0.85rem; font-weight: 800; color: var(--text-primary); display: flex; align-items: center; gap: 6px;">
+                                        <span style="color: #7c3aed;">⚡</span> 3. Automated Costing & Feasibility Engine
+                                    </div>
+                                </div>
+                                <span id="modalCostingHealthBadge" class="spec-chip" style="font-size: 0.65rem; color: #059669; background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.3);">
+                                    SIZING ANALYSIS READY
                                 </span>
                             </div>
+
+                            <!-- 4 Cost Pillars Breakdown -->
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px;">
+                                <div style="background: #f8fafc; padding: 8px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                                    <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">1. Floor Area Build:</div>
+                                    <div id="costingBreakdownFloor" style="font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700; color: var(--primary-red); margin-top: 1px;">₱0.00</div>
+                                    <div id="costingSubFloorRate" style="font-size: 0.625rem; color: var(--text-secondary); margin-top: 1px;">0 m² @ ₱1,100/m²</div>
+                                </div>
+
+                                <div style="background: #f8fafc; padding: 8px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                                    <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">2. Site / Land Prep:</div>
+                                    <div id="costingBreakdownLand" style="font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700; color: #059669; margin-top: 1px;">₱0.00</div>
+                                    <div id="costingSubLandRate" style="font-size: 0.625rem; color: var(--text-secondary); margin-top: 1px;">0 m² @ ₱200/m²</div>
+                                </div>
+
+                                <div style="background: #f8fafc; padding: 8px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                                    <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">3. Spatial Fit-Out:</div>
+                                    <div id="costingBreakdownRooms" style="font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700; color: #d97706; margin-top: 1px;">₱0.00</div>
+                                    <div id="costingSubRoomsCount" style="font-size: 0.625rem; color: var(--text-secondary); margin-top: 1px;">0 Rooms (1.00x Tier)</div>
+                                </div>
+
+                                <div style="background: #f8fafc; padding: 8px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                                    <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">4. Engineering Estimate:</div>
+                                    <div id="costingTotalCalculated" style="font-family: var(--font-mono); font-size: 0.9rem; font-weight: 800; color: #7c3aed; margin-top: 1px;">₱0.00</div>
+                                    <div style="font-size: 0.625rem; color: var(--text-muted); margin-top: 1px;">Sum of 1 + 2 + 3</div>
+                                </div>
+                            </div>
+
+                            <!-- Live Client Budget vs Engineering Estimate Comparison Row -->
+                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; padding: 8px 10px; background: #f8fafc; border-radius: var(--radius-sm); border: 1px solid var(--border-color); align-items: center;">
+                                <div>
+                                    <div style="font-size: 0.65rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Client Budget:</div>
+                                    <div id="costingCompareClientBudget" style="font-family: var(--font-mono); font-weight: 700; font-size: 0.8rem; color: var(--primary-red);">₱ 0.00 (Unspecified)</div>
+                                </div>
+
+                                <div>
+                                    <div style="font-size: 0.65rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Calculated Cost:</div>
+                                    <div id="costingCompareEstCost" style="font-family: var(--font-mono); font-weight: 800; font-size: 0.85rem; color: #059669;">₱ 0.00</div>
+                                </div>
+
+                                <div>
+                                    <div style="font-size: 0.65rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Budget Variance:</div>
+                                    <div id="costingVarianceDisplay" style="font-family: var(--font-mono); font-weight: 800; font-size: 0.8rem; color: var(--text-muted);">
+                                        ₱ 0.00 (0.0%)
+                                    </div>
+                                    <div id="costingFeasibilityNote" style="display: none;"></div>
+                                </div>
+                            </div>
                         </div>
 
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
-                            <div class="form-group" style="margin-bottom: 0;">
-                                <label class="form-label" style="font-size: 0.75rem;">1. Suggested Floor Plan Model Preset</label>
-                                <select id="modalFloorPlanModelSelect" class="form-select" style="font-size: 0.8rem;" onchange="applyModalFloorPlanPreset(this.value)">
-                                    <option value="custom">-- Custom Room-by-Room Build --</option>
-                                    <option value="studio">1-Room Studio / Micro-Loft (36 m²)</option>
-                                    <option value="2br_bungalow" selected>2-Bedroom Single-Storey Bungalow (65 m²)</option>
-                                    <option value="3br_standard">3-Bedroom Standard Two-Storey Residence (120 m²)</option>
-                                    <option value="4br_executive">4-Bedroom Executive Villa (220 m²)</option>
-                                    <option value="5br_luxury">5-Bedroom Luxury Estate with En-Suites (350 m²)</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group" style="margin-bottom: 0;">
-                                <label class="form-label" style="font-size: 0.75rem;">2. Total Room Count</label>
-                                <select id="modalTotalRoomCountSelect" class="form-select" style="font-size: 0.8rem;" onchange="setModalTotalRoomsCount(this.value)">
-                                    <option value="1">1 Room Total</option>
-                                    <option value="2">2 Rooms Total</option>
-                                    <option value="3">3 Rooms Total</option>
-                                    <option value="4" selected>4 Rooms Total</option>
-                                    <option value="5">5 Rooms Total</option>
-                                    <option value="6">6 Rooms Total</option>
-                                    <option value="7">7 Rooms Total</option>
-                                    <option value="8">8 Rooms Total</option>
-                                    <option value="10">10 Rooms Total</option>
-                                    <option value="12">12 Rooms Total</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Container for Individual Room Dropdown Rows -->
-                        <div style="font-size: 0.725rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px; text-transform: uppercase;">
-                            3. Room Types & Dimension Brackets:
-                        </div>
-                        <div id="modalRoomRowsContainer" style="display: flex; flex-direction: column; gap: 8px; max-height: 200px; overflow-y: auto; padding-right: 4px; margin-bottom: 12px;">
-                            <!-- Populated dynamically via JS -->
-                        </div>
-
-                        <!-- Dynamic Area Calculations Bar -->
-                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; padding: 10px 12px; background: #fafbfc; border-radius: var(--radius-sm); border: 1px solid var(--border-color); align-items: center;">
-                            <div>
-                                <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Total Rooms:</div>
-                                <strong id="modalDispRoomCount" style="color: var(--text-primary); font-size: 0.95rem;">4</strong>
-                            </div>
-                            <div>
-                                <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Calculated Floor Area:</div>
-                                <strong id="modalDispFloorArea" style="color: var(--primary-red); font-size: 1.05rem; font-family: var(--font-mono);">65.00 m²</strong>
-                            </div>
-                            <div>
-                                <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Suggested Lot Footprint:</div>
-                                <strong id="modalDispLandArea" style="color: #059669; font-size: 1.05rem; font-family: var(--font-mono);">87.75 m²</strong>
-                            </div>
-                        </div>
                     </div>
 
-                    <!-- 3. Project Schedule & Assigned Lead Personnel -->
-                    <div style="background: #fafbfc; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
-                            <div class="form-group" style="margin-bottom: 0;">
-                                <label class="form-label" style="font-size: 0.75rem;">Start Date <span style="color: var(--primary-red);">*</span></label>
-                                <input type="date" name="start_date" class="form-input" value="{{ date('Y-m-d') }}" required style="font-size: 0.85rem;">
-                            </div>
-
-                            <div class="form-group" style="margin-bottom: 0;">
-                                <label class="form-label" style="font-size: 0.75rem;">Target Completion Date <span style="color: var(--primary-red);">*</span></label>
-                                <input type="date" name="end_date" class="form-input" value="{{ date('Y-m-d', strtotime('+365 days')) }}" required style="font-size: 0.85rem;">
+                    <!-- RIGHT COLUMN OF STEP 2: Weights, Headcount Mobilization & Scope -->
+                    <div style="display: flex; flex-direction: column; gap: 14px;">
+                        
+                        <!-- 6. Trade Weighting & Initial Progress Bases -->
+                        <div style="padding: 12px 14px; background: #f8fafc; border-radius: var(--radius-md); border: 1px solid var(--border-color); box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+                            <div style="font-weight: 700; font-size: 0.775rem; color: #d97706; margin-bottom: 6px;">Engineering Progression Formula Weights & Initial Progress</div>
+                            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label class="form-label" style="font-size: 0.7rem; color: #dc2626;">Structural %</label>
+                                    <input type="number" name="structural_weight" class="form-input" value="40" min="0" max="100" style="font-size: 0.8rem; padding: 5px 6px;">
+                                    <label class="form-label" style="font-size: 0.625rem; color: var(--text-muted); margin-top: 2px;">Initial %</label>
+                                    <input type="number" name="structural_progress" class="form-input" value="0" min="0" max="100" style="font-size: 0.8rem; padding: 5px 6px;">
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label class="form-label" style="font-size: 0.7rem; color: #d97706;">Electrical %</label>
+                                    <input type="number" name="electrical_weight" class="form-input" value="25" min="0" max="100" style="font-size: 0.8rem; padding: 5px 6px;">
+                                    <label class="form-label" style="font-size: 0.625rem; color: var(--text-muted); margin-top: 2px;">Initial %</label>
+                                    <input type="number" name="electrical_progress" class="form-input" value="0" min="0" max="100" style="font-size: 0.8rem; padding: 5px 6px;">
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label class="form-label" style="font-size: 0.7rem; color: #059669;">Piping %</label>
+                                    <input type="number" name="piping_weight" class="form-input" value="20" min="0" max="100" style="font-size: 0.8rem; padding: 5px 6px;">
+                                    <label class="form-label" style="font-size: 0.625rem; color: var(--text-muted); margin-top: 2px;">Initial %</label>
+                                    <input type="number" name="piping_progress" class="form-input" value="0" min="0" max="100" style="font-size: 0.8rem; padding: 5px 6px;">
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label class="form-label" style="font-size: 0.7rem; color: #7c3aed;">Finishing %</label>
+                                    <input type="number" name="finishing_weight" class="form-input" value="15" min="0" max="100" style="font-size: 0.8rem; padding: 5px 6px;">
+                                    <label class="form-label" style="font-size: 0.625rem; color: var(--text-muted); margin-top: 2px;">Initial %</label>
+                                    <input type="number" name="finishing_progress" class="form-input" value="0" min="0" max="100" style="font-size: 0.8rem; padding: 5px 6px;">
+                                </div>
                             </div>
                         </div>
 
-                        @if(isset($personnelList) && $personnelList->count() > 0)
-                        <div>
-                            <label class="form-label" style="font-size: 0.75rem; margin-bottom: 6px;">Assign Lead Engineers & Architects</label>
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; max-height: 100px; overflow-y: auto; padding: 10px; background: #f8fafc; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-                                @foreach($personnelList as $pers)
-                                <label style="display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--text-primary); cursor: pointer;">
-                                    <input type="checkbox" name="personnel_ids[]" value="{{ $pers->id }}">
-                                    <span><strong>{{ $pers->name }}</strong> ({{ $pers->title }})</span>
-                                </label>
-                                @endforeach
+                        <!-- 7. Workforce Headcounts & Scope -->
+                        <div style="padding: 12px 14px; background: #f8fafc; border-radius: var(--radius-md); border: 1px solid var(--border-color); box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+                            <div style="font-weight: 700; font-size: 0.775rem; color: var(--primary-red); margin-bottom: 6px;">Initial On-Site Workforce Mobilization (Headcount)</div>
+                            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 8px;">
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label class="form-label" style="font-size: 0.65rem;">General Laborers</label>
+                                    <input type="number" name="deployed_workers" class="form-input" value="20" min="0" style="font-size: 0.775rem; padding: 4px 6px;">
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label class="form-label" style="font-size: 0.65rem;">Skilled Trades</label>
+                                    <input type="number" name="deployed_skilled_workers" class="form-input" value="12" min="0" style="font-size: 0.775rem; padding: 4px 6px;">
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label class="form-label" style="font-size: 0.65rem;">Field Engineers</label>
+                                    <input type="number" name="deployed_engineers" class="form-input" value="3" min="0" style="font-size: 0.775rem; padding: 4px 6px;">
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label class="form-label" style="font-size: 0.65rem;">Architects</label>
+                                    <input type="number" name="deployed_architects" class="form-input" value="1" min="0" style="font-size: 0.775rem; padding: 4px 6px;">
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label class="form-label" style="font-size: 0.65rem;">Site Foremen</label>
+                                    <input type="number" name="deployed_foremen" class="form-input" value="2" min="0" style="font-size: 0.775rem; padding: 4px 6px;">
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label class="form-label" style="font-size: 0.65rem;">Equipment Ops</label>
+                                    <input type="number" name="deployed_operators" class="form-input" value="2" min="0" style="font-size: 0.775rem; padding: 4px 6px;">
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label class="form-label" style="font-size: 0.65rem;">Safety Officers</label>
+                                    <input type="number" name="deployed_safety_officers" class="form-input" value="1" min="0" style="font-size: 0.775rem; padding: 4px 6px;">
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label" style="font-size: 0.7rem;">Project Scope & Technical Description</label>
+                                <textarea name="description" class="form-textarea" rows="2" placeholder="Brief project scope, structural design details, deliverables..." style="font-size: 0.775rem;"></textarea>
                             </div>
                         </div>
-                        @endif
+
                     </div>
 
                 </div>
 
-                <!-- RIGHT COLUMN: Sizing, Feasibility Costing & Engineering Execution -->
-                <div style="display: flex; flex-direction: column; gap: 16px;">
-
-                    <!-- 4. Sizing & Financial Specifications -->
-                    <div style="background: #fafbfc; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
-                        <div style="font-size: 0.775rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
-                            <span style="width: 6px; height: 6px; border-radius: 50%; background: #059669; display: inline-block;"></span>
-                            2. Sizing Targets & Financial Contract
-                        </div>
-
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
-                            <div class="form-group" style="margin-bottom: 0; background: rgba(56, 189, 248, 0.06); padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid rgba(56, 189, 248, 0.3);">
-                                <label class="form-label" style="color: #0284c7; font-weight: 700; font-size: 0.75rem; display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
-                                    <span>Client Stated Budget (₱)</span>
-                                    <span style="font-size: 0.65rem; color: #64748b; font-weight: 400;">Target Cap</span>
-                                </label>
-                                <input type="number" step="0.01" name="client_budget" id="modalInputClientBudget" class="form-input" placeholder="e.g. 3500000" oninput="recalculateProjectModalCosting()" style="border-color: rgba(56, 189, 248, 0.5); font-weight: 700; color: #0284c7; font-family: var(--font-mono); font-size: 0.85rem;">
-                            </div>
-
-                            <div class="form-group" style="margin-bottom: 0; background: rgba(16, 185, 129, 0.06); padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid rgba(16, 185, 129, 0.3);">
-                                <label class="form-label" style="color: #059669; font-weight: 700; font-size: 0.75rem; display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
-                                    <span>Contract Budget (₱) <span style="color: var(--primary-red);">*</span></span>
-                                    <span style="font-size: 0.65rem; color: #64748b; font-weight: 400;">Monitored Cap</span>
-                                </label>
-                                <input type="number" step="0.01" name="contract_budget" id="modalInputContractBudget" class="form-input" placeholder="₱ 0.00" style="border-color: rgba(16, 185, 129, 0.5); font-weight: 700; color: #059669; font-family: var(--font-mono); font-size: 0.85rem;" required>
-                            </div>
-                        </div>
-
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                            <div class="form-group" style="margin-bottom: 0;">
-                                <label class="form-label" style="font-size: 0.75rem;">Land Area (m²) <span style="color: var(--primary-red);">*</span></label>
-                                <input type="number" step="0.01" name="land_area_sqm" id="modalInputLandArea" class="form-input" placeholder="e.g. 150" oninput="recalculateProjectModalCosting()" required style="font-size: 0.85rem;">
-                            </div>
-
-                            <div class="form-group" style="margin-bottom: 0;">
-                                <label class="form-label" style="font-size: 0.75rem;">Constructible Floor (m²) <span style="color: var(--primary-red);">*</span></label>
-                                <input type="number" step="0.01" name="floor_area_sqm" id="modalInputFloorArea" class="form-input" placeholder="e.g. 120" oninput="recalculateProjectModalCosting()" required style="font-size: 0.85rem;">
-                            </div>
-                        </div>
+                <!-- Step 2 Bottom Action Bar (With Back and Submit Buttons) -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border-color); background: #fafbfc;">
+                    <button type="button" class="btn-secondary" onclick="goToCreateProjectStep(1)" style="padding: 9px 20px; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+                        <span style="font-size: 1.1rem; line-height: 1;">&larr;</span>
+                        <span>Back to Step 1</span>
+                    </button>
+                    
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <button type="button" class="btn-secondary" onclick="closeModal('createProjectModal')" style="padding: 9px 20px;">Cancel</button>
+                        <button type="submit" class="btn-primary" style="padding: 9px 28px; font-weight: 800; font-size: 0.875rem; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(225, 29, 72, 0.25);">
+                            <span>+ Initialize Project</span>
+                        </button>
                     </div>
-
-                    <!-- 5. Automated Costing & Financial Feasibility Engine -->
-                    <div style="padding: 16px; background: #fafbfc; border-radius: var(--radius-md); border: 1px solid var(--border-color); box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
-                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">
-                            <div>
-                                <div style="font-size: 0.875rem; font-weight: 800; color: var(--text-primary); display: flex; align-items: center; gap: 6px;">
-                                    <span style="color: #7c3aed;">⚡</span> 3. Automated Costing & Feasibility Engine
-                                </div>
-                            </div>
-                            <span id="modalCostingHealthBadge" class="spec-chip" style="font-size: 0.65rem; color: #059669; background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.3);">
-                                SIZING ANALYSIS READY
-                            </span>
-                        </div>
-
-                        <!-- 4 Cost Pillars Breakdown -->
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
-                            <div style="background: #f8fafc; padding: 8px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-                                <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">1. Floor Area Build:</div>
-                                <div id="costingBreakdownFloor" style="font-family: var(--font-mono); font-size: 0.875rem; font-weight: 700; color: var(--primary-red); margin-top: 1px;">₱0.00</div>
-                                <div id="costingSubFloorRate" style="font-size: 0.625rem; color: var(--text-secondary); margin-top: 1px;">0 m² @ ₱1,100/m²</div>
-                            </div>
-
-                            <div style="background: #f8fafc; padding: 8px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-                                <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">2. Site / Land Prep:</div>
-                                <div id="costingBreakdownLand" style="font-family: var(--font-mono); font-size: 0.875rem; font-weight: 700; color: #059669; margin-top: 1px;">₱0.00</div>
-                                <div id="costingSubLandRate" style="font-size: 0.625rem; color: var(--text-secondary); margin-top: 1px;">0 m² @ ₱200/m²</div>
-                            </div>
-
-                            <div style="background: #f8fafc; padding: 8px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-                                <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">3. Spatial Fit-Out:</div>
-                                <div id="costingBreakdownRooms" style="font-family: var(--font-mono); font-size: 0.875rem; font-weight: 700; color: #d97706; margin-top: 1px;">₱0.00</div>
-                                <div id="costingSubRoomsCount" style="font-size: 0.625rem; color: var(--text-secondary); margin-top: 1px;">0 Rooms (1.00x Tier)</div>
-                            </div>
-
-                            <div style="background: #f8fafc; padding: 8px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-                                <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">4. Engineering Estimate:</div>
-                                <div id="costingTotalCalculated" style="font-family: var(--font-mono); font-size: 0.95rem; font-weight: 800; color: #7c3aed; margin-top: 1px;">₱0.00</div>
-                                <div style="font-size: 0.625rem; color: var(--text-muted); margin-top: 1px;">Sum of 1 + 2 + 3</div>
-                            </div>
-                        </div>
-
-                        <!-- Live Client Budget vs Engineering Estimate Comparison Row -->
-                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; padding: 10px 12px; background: #f8fafc; border-radius: var(--radius-sm); border: 1px solid var(--border-color); align-items: center;">
-                            <div>
-                                <div style="font-size: 0.65rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Client Budget:</div>
-                                <div id="costingCompareClientBudget" style="font-family: var(--font-mono); font-weight: 700; font-size: 0.825rem; color: var(--primary-red);">₱ 0.00 (Unspecified)</div>
-                            </div>
-
-                            <div>
-                                <div style="font-size: 0.65rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Calculated Cost:</div>
-                                <div id="costingCompareEstCost" style="font-family: var(--font-mono); font-weight: 800; font-size: 0.9rem; color: #059669;">₱ 0.00</div>
-                            </div>
-
-                            <div>
-                                <div style="font-size: 0.65rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Budget Variance:</div>
-                                <div id="costingVarianceDisplay" style="font-family: var(--font-mono); font-weight: 800; font-size: 0.825rem; color: var(--text-muted);">
-                                    ₱ 0.00 (0.0%)
-                                </div>
-                                <div id="costingFeasibilityNote" style="display: none;"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 6. Trade Weighting & Initial Progress Bases -->
-                    <div style="padding: 14px; background: #f8fafc; border-radius: var(--radius-md); border: 1px solid var(--border-color); box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
-                        <div style="font-weight: 700; font-size: 0.775rem; color: #d97706; margin-bottom: 8px;">Engineering Progression Formula Weights & Initial Progress</div>
-                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
-                            <div class="form-group" style="margin-bottom: 0;">
-                                <label class="form-label" style="font-size: 0.7rem; color: #dc2626;">Structural %</label>
-                                <input type="number" name="structural_weight" class="form-input" value="40" min="0" max="100" style="font-size: 0.8rem; padding: 6px 8px;">
-                                <label class="form-label" style="font-size: 0.65rem; color: var(--text-muted); margin-top: 4px;">Initial %</label>
-                                <input type="number" name="structural_progress" class="form-input" value="0" min="0" max="100" style="font-size: 0.8rem; padding: 6px 8px;">
-                            </div>
-                            <div class="form-group" style="margin-bottom: 0;">
-                                <label class="form-label" style="font-size: 0.7rem; color: #d97706;">Electrical %</label>
-                                <input type="number" name="electrical_weight" class="form-input" value="25" min="0" max="100" style="font-size: 0.8rem; padding: 6px 8px;">
-                                <label class="form-label" style="font-size: 0.65rem; color: var(--text-muted); margin-top: 4px;">Initial %</label>
-                                <input type="number" name="electrical_progress" class="form-input" value="0" min="0" max="100" style="font-size: 0.8rem; padding: 6px 8px;">
-                            </div>
-                            <div class="form-group" style="margin-bottom: 0;">
-                                <label class="form-label" style="font-size: 0.7rem; color: #059669;">Piping %</label>
-                                <input type="number" name="piping_weight" class="form-input" value="20" min="0" max="100" style="font-size: 0.8rem; padding: 6px 8px;">
-                                <label class="form-label" style="font-size: 0.65rem; color: var(--text-muted); margin-top: 4px;">Initial %</label>
-                                <input type="number" name="piping_progress" class="form-input" value="0" min="0" max="100" style="font-size: 0.8rem; padding: 6px 8px;">
-                            </div>
-                            <div class="form-group" style="margin-bottom: 0;">
-                                <label class="form-label" style="font-size: 0.7rem; color: #7c3aed;">Finishing %</label>
-                                <input type="number" name="finishing_weight" class="form-input" value="15" min="0" max="100" style="font-size: 0.8rem; padding: 6px 8px;">
-                                <label class="form-label" style="font-size: 0.65rem; color: var(--text-muted); margin-top: 4px;">Initial %</label>
-                                <input type="number" name="finishing_progress" class="form-input" value="0" min="0" max="100" style="font-size: 0.8rem; padding: 6px 8px;">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 7. Workforce Headcounts & Scope -->
-                    <div style="padding: 14px; background: #f8fafc; border-radius: var(--radius-md); border: 1px solid var(--border-color); box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
-                        <div style="font-weight: 700; font-size: 0.775rem; color: var(--primary-red); margin-bottom: 8px;">Initial On-Site Workforce Mobilization (Headcount)</div>
-                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px;">
-                            <div class="form-group" style="margin-bottom: 0;">
-                                <label class="form-label" style="font-size: 0.675rem;">General Laborers</label>
-                                <input type="number" name="deployed_workers" class="form-input" value="20" min="0" style="font-size: 0.8rem; padding: 5px 8px;">
-                            </div>
-                            <div class="form-group" style="margin-bottom: 0;">
-                                <label class="form-label" style="font-size: 0.675rem;">Skilled Trades</label>
-                                <input type="number" name="deployed_skilled_workers" class="form-input" value="12" min="0" style="font-size: 0.8rem; padding: 5px 8px;">
-                            </div>
-                            <div class="form-group" style="margin-bottom: 0;">
-                                <label class="form-label" style="font-size: 0.675rem;">Field Engineers</label>
-                                <input type="number" name="deployed_engineers" class="form-input" value="3" min="0" style="font-size: 0.8rem; padding: 5px 8px;">
-                            </div>
-                            <div class="form-group" style="margin-bottom: 0;">
-                                <label class="form-label" style="font-size: 0.675rem;">Architects</label>
-                                <input type="number" name="deployed_architects" class="form-input" value="1" min="0" style="font-size: 0.8rem; padding: 5px 8px;">
-                            </div>
-                            <div class="form-group" style="margin-bottom: 0;">
-                                <label class="form-label" style="font-size: 0.675rem;">Site Foremen</label>
-                                <input type="number" name="deployed_foremen" class="form-input" value="2" min="0" style="font-size: 0.8rem; padding: 5px 8px;">
-                            </div>
-                            <div class="form-group" style="margin-bottom: 0;">
-                                <label class="form-label" style="font-size: 0.675rem;">Equipment Ops</label>
-                                <input type="number" name="deployed_operators" class="form-input" value="2" min="0" style="font-size: 0.8rem; padding: 5px 8px;">
-                            </div>
-                            <div class="form-group" style="margin-bottom: 0;">
-                                <label class="form-label" style="font-size: 0.675rem;">Safety Officers</label>
-                                <input type="number" name="deployed_safety_officers" class="form-input" value="1" min="0" style="font-size: 0.8rem; padding: 5px 8px;">
-                            </div>
-                        </div>
-
-                        <div class="form-group" style="margin-bottom: 0;">
-                            <label class="form-label" style="font-size: 0.725rem;">Project Scope & Technical Description</label>
-                            <textarea name="description" class="form-textarea" rows="2" placeholder="Brief project scope, structural design details, deliverables..." style="font-size: 0.8rem;"></textarea>
-                        </div>
-                    </div>
-
                 </div>
-
             </div>
 
             <!-- Hidden Fields for JSON Payloads & Estimated Cost -->
@@ -513,11 +601,6 @@
             <input type="hidden" name="material_takeoffs_json" id="modalInputMaterialTakeoffsJson" value="[]">
             <input type="hidden" name="estimated_cost" id="modalInputEstimatedCost" value="0">
 
-            <!-- Footer Action Bar -->
-            <div style="display: flex; justify-content: flex-end; align-items: center; gap: 12px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border-color); background: #fafbfc;">
-                <button type="button" class="btn-secondary" onclick="closeModal('createProjectModal')" style="padding: 9px 20px;">Cancel</button>
-                <button type="submit" class="btn-primary" style="padding: 9px 24px; font-weight: 700;">+ Initialize Project</button>
-            </div>
         </form>
     </div>
 </div>
@@ -851,11 +934,114 @@
     function openModal(id) { 
         const el = document.getElementById(id);
         if (el) el.classList.add('active'); 
+        if (id === 'createProjectModal') {
+            goToCreateProjectStep(1);
+        }
     }
     
     function closeModal(id) { 
         const el = document.getElementById(id);
         if (el) el.classList.remove('active'); 
+    }
+
+    function goToCreateProjectStep(step) {
+        const step1El = document.getElementById('createProjectStep1');
+        const step2El = document.getElementById('createProjectStep2');
+        const pill1 = document.getElementById('createStepPill1');
+        const pill2 = document.getElementById('createStepPill2');
+        const badge = document.getElementById('stepCounterBadge');
+        
+        if (step === 2) {
+            // Validate Step 1 required fields
+            if (step1El) {
+                const requiredFields = step1El.querySelectorAll('input[required], select[required]');
+                for (let f of requiredFields) {
+                    if (!f.value || !f.value.trim()) {
+                        f.focus();
+                        if (f.reportValidity) f.reportValidity();
+                        return false;
+                    }
+                }
+            }
+            
+            if (step1El) step1El.style.display = 'none';
+            if (step2El) step2El.style.display = 'flex';
+            
+            if (pill1) {
+                pill1.style.background = 'rgba(16, 185, 129, 0.08)';
+                pill1.style.borderColor = '#10b981';
+                pill1.style.opacity = '1';
+                const title1 = pill1.querySelector('.step-title');
+                if (title1) title1.style.color = '#10b981';
+                const b1 = pill1.querySelector('.step-badge');
+                if (b1) {
+                    b1.style.background = '#10b981';
+                    b1.style.color = '#fff';
+                    b1.innerHTML = '&#10003;';
+                }
+            }
+            
+            if (pill2) {
+                pill2.style.background = 'rgba(225, 29, 72, 0.08)';
+                pill2.style.borderColor = 'var(--primary-red)';
+                pill2.style.opacity = '1';
+                const title2 = pill2.querySelector('.step-title');
+                if (title2) title2.style.color = 'var(--primary-red)';
+                const b2 = pill2.querySelector('.step-badge');
+                if (b2) {
+                    b2.style.background = 'var(--primary-red)';
+                    b2.style.color = '#fff';
+                    b2.innerText = '2';
+                }
+            }
+            
+            if (badge) {
+                badge.innerText = 'Step 2 of 2';
+                badge.style.background = '#fef3c7';
+                badge.style.color = '#b45309';
+                badge.style.borderColor = '#fde68a';
+            }
+            
+            recalculateProjectModalCosting();
+        } else {
+            if (step1El) step1El.style.display = 'flex';
+            if (step2El) step2El.style.display = 'none';
+            
+            if (pill1) {
+                pill1.style.background = 'rgba(225, 29, 72, 0.08)';
+                pill1.style.borderColor = 'var(--primary-red)';
+                pill1.style.opacity = '1';
+                const title1 = pill1.querySelector('.step-title');
+                if (title1) title1.style.color = 'var(--primary-red)';
+                const b1 = pill1.querySelector('.step-badge');
+                if (b1) {
+                    b1.style.background = 'var(--primary-red)';
+                    b1.style.color = '#fff';
+                    b1.innerText = '1';
+                }
+            }
+            
+            if (pill2) {
+                pill2.style.background = '#ffffff';
+                pill2.style.borderColor = 'var(--border-color)';
+                pill2.style.opacity = '0.75';
+                const title2 = pill2.querySelector('.step-title');
+                if (title2) title2.style.color = 'var(--text-secondary)';
+                const b2 = pill2.querySelector('.step-badge');
+                if (b2) {
+                    b2.style.background = '#e2e8f0';
+                    b2.style.color = '#64748b';
+                    b2.innerText = '2';
+                }
+            }
+            
+            if (badge) {
+                badge.innerText = 'Step 1 of 2';
+                badge.style.background = '#e0f2fe';
+                badge.style.color = '#0369a1';
+                badge.style.borderColor = '#bae6fd';
+            }
+        }
     }
 
     function openDeleteProjectModal(id, code, title) {
