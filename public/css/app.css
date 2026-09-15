@@ -527,6 +527,15 @@ select option {
     color: var(--text-primary);
 }
 
+.modal-box-large {
+    max-width: 960px;
+}
+
+.modal-box-landscape {
+    max-width: 1260px;
+    width: 95vw;
+}
+
 @keyframes modalFadeIn {
     from {
         opacity: 0;
