@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Executive Dashboard & Sales Command - St. Bilfrid Development Corporation')
-@section('page_title', 'Executive Dashboard & Analytics')
+@section('page_title', 'Executive Dashboard')
 
 @section('top_actions')
     <a href="/projects" class="btn-primary" style="font-size: 0.85rem;">
