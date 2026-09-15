@@ -817,7 +817,7 @@
         </div>
 
         <div style="background: var(--primary-red-light); border-left: 3px solid var(--primary-red); padding: 12px 14px; border-radius: 4px; margin-bottom: 16px;">
-            <div style="font-size: 0.8rem; color: var(--text-secondary);">Are you sure you want to permanently delete:</div>
+            <div style="font-size: 0.8rem; color: var(--text-secondary);">Are you sure you want to delete this?</div>
             <div id="deleteProjectCodeDisplay" style="font-family: var(--font-mono); font-weight: 700; color: var(--primary-red); font-size: 0.95rem; margin-top: 2px;"></div>
             <div id="deleteProjectTitleDisplay" style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem; margin-top: 2px;"></div>
         </div>
