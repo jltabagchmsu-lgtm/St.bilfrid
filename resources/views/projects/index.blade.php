@@ -141,9 +141,6 @@
                         <a href="{{ route('projects.show', $prj->id) }}" class="btn-primary" style="font-size: 0.75rem; padding: 4px 8px; text-align: center;">
                             Master View &rarr;
                         </a>
-                        <button type="button" class="btn-secondary" style="font-size: 0.75rem; padding: 4px 8px; text-align: center; color: #38bdf8;" onclick="openEditProjectModal({{ json_encode($prj) }})">
-                            Edit
-                        </button>
                         <a href="{{ route('projects.printReport', $prj->id) }}" target="_blank" class="btn-secondary" style="font-size: 0.725rem; padding: 3px 6px; text-align: center; color: #ef4444;">
                             Report
                         </a>
