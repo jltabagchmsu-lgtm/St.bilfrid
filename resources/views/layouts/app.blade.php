@@ -316,29 +316,34 @@
 
         <main class="main-body">
             @if(session('error'))
-                <div class="alert-danger" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #fca5a5; padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 20px; font-size: 0.85rem; display: flex; align-items: center; gap: 8px;">
-                    {{ session('error') }}
+                <div class="alert-danger" style="background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 14px 18px; border-radius: var(--radius-md); margin-bottom: 20px; font-size: 0.875rem; display: flex; align-items: center; gap: 10px; font-weight: 600; box-shadow: 0 1px 3px rgba(220, 38, 38, 0.08);">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                    <span>{{ session('error') }}</span>
                 </div>
             @endif
             @if(isset($errors) && $errors->any())
-                <div class="alert-danger" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #fca5a5; padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 20px; font-size: 0.85rem;">
-                    <div style="font-weight: 700; margin-bottom: 4px;">Please review the following errors:</div>
-                    <ul style="margin: 0; padding-left: 20px;">
+                <div class="alert-danger" style="background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 14px 18px; border-radius: var(--radius-md); margin-bottom: 20px; font-size: 0.875rem; box-shadow: 0 1px 3px rgba(220, 38, 38, 0.08);">
+                    <div style="font-weight: 800; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; color: #7f1d1d; font-size: 0.9rem;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                        <span>Please review the following errors:</span>
+                    </div>
+                    <ul style="margin: 0; padding-left: 28px; color: #b91c1c; font-weight: 600;">
                         @foreach($errors->all() as $err)
-                            <li>{{ $err }}</li>
+                            <li style="margin-top: 3px;">{{ $err }}</li>
                         @endforeach
                     </ul>
                 </div>
             @endif
             @if(session('warning'))
-                <div class="alert-warning" style="background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.5); color: #d97706; padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 20px; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; font-weight: 600;">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                <div class="alert-warning" style="background: #fffbeb; border: 1px solid #fde68a; color: #92400e; padding: 14px 18px; border-radius: var(--radius-md); margin-bottom: 20px; font-size: 0.875rem; display: flex; align-items: center; gap: 10px; font-weight: 600; box-shadow: 0 1px 3px rgba(245, 158, 11, 0.08);">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
                     <span>{{ session('warning') }}</span>
                 </div>
             @endif
             @if(session('success'))
-                <div class="alert-success">
-                    {{ session('success') }}
+                <div class="alert-success" style="background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; padding: 14px 18px; border-radius: var(--radius-md); margin-bottom: 20px; font-size: 0.875rem; display: flex; align-items: center; gap: 10px; font-weight: 600; box-shadow: 0 1px 3px rgba(34, 197, 94, 0.08);">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                    <span>{{ session('success') }}</span>
                 </div>
             @endif
 
