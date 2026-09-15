@@ -316,7 +316,7 @@
                 </div>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                    <button type="button" onclick="fillCredentials('admin@newconstuc.firm', 'admin123')" class="btn-secondary" style="font-size: 0.75rem; padding: 8px 10px; text-align: left; background: rgba(239, 68, 68, 0.08); border-color: rgba(239, 68, 68, 0.3); display: flex; flex-direction: column; gap: 2px;">
+                    <button type="button" onclick="fillCredentials('admin@newconstuc.firm', 'admin123')" class="btn-secondary" style="grid-column: span 2; font-size: 0.75rem; padding: 8px 12px; text-align: left; background: rgba(239, 68, 68, 0.08); border-color: rgba(239, 68, 68, 0.3); display: flex; justify-content: space-between; align-items: center;">
                         <span style="font-weight: 700; color: #fca5a5;">Master Admin</span>
                         <span style="font-size: 0.68rem; color: var(--text-muted);">Executive Control</span>
                     </button>
@@ -329,11 +329,6 @@
                     <button type="button" onclick="fillCredentials('roofing.supplier@stbilfrid.com', 'supplier123')" class="btn-secondary" style="font-size: 0.75rem; padding: 8px 10px; text-align: left; background: rgba(245, 158, 11, 0.08); border-color: rgba(245, 158, 11, 0.3); display: flex; flex-direction: column; gap: 2px;">
                         <span style="font-weight: 700; color: #fcd34d;">Colorsteel</span>
                         <span style="font-size: 0.68rem; color: var(--text-muted);">Roofing Systems</span>
-                    </button>
-
-                    <button type="button" onclick="fillCredentials('structural.supplier@stbilfrid.com', 'supplier123')" class="btn-secondary" style="font-size: 0.75rem; padding: 8px 10px; text-align: left; background: rgba(16, 185, 129, 0.08); border-color: rgba(16, 185, 129, 0.3); display: flex; flex-direction: column; gap: 2px;">
-                        <span style="font-weight: 700; color: #6ee7b7;">Titan Structural</span>
-                        <span style="font-size: 0.68rem; color: var(--text-muted);">Masonry & Steel</span>
                     </button>
                 </div>
             </div>
