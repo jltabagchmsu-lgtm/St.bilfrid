@@ -1107,14 +1107,14 @@
                         <span class="scope-chip-num">ALL</span>
                         <span class="scope-chip-name">All Scope Items</span>
                     </div>
-                    <span class="scope-chip-cost">{{ $project->scopeItems->count() }}</span>
+                    <span class="scope-chip-cost">{{ $project->scopeItems->count() }} Items</span>
                 </button>
 
                 <!-- Individual Scope Items Chips -->
                 @foreach($project->scopeItems as $item)
                     <button type="button" class="scope-chip-card" onclick="switchDupaScopeTab({{ $item->id }}, this)" id="dupaTabBtn_{{ $item->id }}" data-item-id="{{ $item->id }}">
                         <div class="scope-chip-left">
-                            <span class="scope-chip-num">ITEM {{ $item->item_number }}</span>
+                            <span class="scope-chip-num">Item {{ $item->item_number }}</span>
                             <span class="scope-chip-name" title="{{ $item->item_name }}">{{ Str::title($item->item_name) }}</span>
                         </div>
                         <span class="scope-chip-cost">₱{{ number_format($item->total_item_cost, 0) }}</span>

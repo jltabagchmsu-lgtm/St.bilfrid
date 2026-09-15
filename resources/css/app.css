@@ -1927,10 +1927,10 @@ select option {
 .scope-matrix-container {
     background: #ffffff;
     border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    padding: 16px;
-    margin-bottom: 20px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.03);
 }
 
 .scope-matrix-header {
@@ -1939,15 +1939,15 @@ select option {
     align-items: center;
     flex-wrap: wrap;
     gap: 12px;
-    margin-bottom: 12px;
-    padding-bottom: 10px;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
     border-bottom: 1px solid #f1f5f9;
 }
 
 .scope-matrix-grid, .dupa-tabs-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 10px;
     align-items: stretch;
 }
 
@@ -1956,26 +1956,28 @@ select option {
     align-items: center;
     justify-content: space-between;
     gap: 10px;
-    padding: 7px 12px;
-    min-height: 38px;
+    padding: 8px 14px;
+    min-height: 42px;
     background: #ffffff;
     border: 1px solid #e2e8f0;
-    border-radius: 6px;
+    border-radius: 10px;
     color: #334155;
     font-size: 0.8125rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.15s ease-in-out;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     white-space: nowrap;
     user-select: none;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
     flex: 0 1 auto;
 }
 
 .scope-chip-card:hover, .dupa-tab-btn:hover {
-    background: #f8fafc;
+    background: #ffffff;
     border-color: #cbd5e1;
     color: #0f172a;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px -4px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
 }
 
 .scope-chip-card.active, .dupa-tab-btn.active {
@@ -1983,7 +1985,8 @@ select option {
     border: 1.5px solid var(--primary-red) !important;
     color: #0f172a !important;
     font-weight: 700 !important;
-    box-shadow: 0 1px 4px rgba(220, 38, 38, 0.18) !important;
+    box-shadow: 0 4px 16px -2px rgba(220, 38, 38, 0.2), 0 2px 4px -1px rgba(220, 38, 38, 0.1) !important;
+    transform: translateY(-1px);
 }
 
 .scope-chip-left {
@@ -1997,40 +2000,45 @@ select option {
     font-family: var(--font-mono);
     font-size: 0.7rem;
     font-weight: 800;
-    padding: 2px 6px;
-    border-radius: 4px;
+    padding: 3px 8px;
+    border-radius: 6px;
     background: #f1f5f9;
-    color: #64748b;
+    color: #475569;
+    border: 1px solid #e2e8f0;
     flex-shrink: 0;
-    transition: all 0.15s ease;
+    letter-spacing: 0.02em;
+    transition: all 0.2s ease;
 }
 
 .scope-chip-card.active .scope-chip-num, .dupa-tab-btn.active .dupa-item-num-chip {
-    background: #fee2e2 !important;
-    color: #dc2626 !important;
+    background: var(--primary-red) !important;
+    color: #ffffff !important;
+    border-color: var(--primary-red) !important;
 }
 
 .scope-chip-name, .dupa-tab-title {
     font-size: 0.8125rem;
     font-weight: 600;
     color: #1e293b;
-    max-width: 190px;
+    max-width: 200px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    letter-spacing: -0.01em;
 }
 
 .scope-chip-cost, .dupa-tab-cost {
     font-family: var(--font-mono);
     font-size: 0.75rem;
     font-weight: 700;
-    padding: 2px 7px;
-    border-radius: 4px;
+    padding: 3px 9px;
+    border-radius: 6px;
     background: #ecfdf5;
     color: #047857;
     border: 1px solid #a7f3d0;
     flex-shrink: 0;
-    transition: all 0.15s ease;
+    box-shadow: 0 1px 2px rgba(4, 120, 87, 0.04);
+    transition: all 0.2s ease;
 }
 
 .scope-chip-card.active .scope-chip-cost, .dupa-tab-btn.active .dupa-tab-cost {
