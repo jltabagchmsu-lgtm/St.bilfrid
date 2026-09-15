@@ -2,7 +2,7 @@
      MODAL: Add Excess / Surplus Materials to Central Warehouse Inventory (INV)
      Provides Itemized Breakdown of "Which Material Is It"
      ========================================================================= -->
-<div class="modal-overlay" id="reconcileProjectExcessModal" style="display: none; z-index: 9999;">
+<div class="modal-overlay" id="reconcileProjectExcessModal" onclick="if(event.target === this) closeReconcileExcessModal();" style="z-index: 9999;">
     <div class="modal-box modal-box-large" style="max-width: 960px; max-height: 90vh; display: flex; flex-direction: column; padding: 0; overflow: hidden; background: #ffffff; border: 1px solid var(--border-color); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);">
         
         <!-- Modal Header -->
@@ -143,13 +143,14 @@
                         <label class="form-label">Select from Central Catalog <span style="font-weight: normal; color: var(--text-muted);">(Optional)</span></label>
                         <select name="material_id" id="customExcessMatSelect" class="form-select" onchange="handleCustomMaterialSelect(this)">
                             <option value="">-- Choose Existing Warehouse Catalog Item --</option>
-                            @if(isset($materialsCatalog))
-                                @foreach($materialsCatalog as $cm)
-                                    <option value="{{ $cm->id }}" data-name="{{ $cm->name }}" data-category="{{ $cm->category }}" data-unit="{{ $cm->unit }}" data-cost="{{ $cm->unit_cost }}">
-                                        {{ $cm->name }} ({{ $cm->material_code }}) - ₱{{ number_format($cm->unit_cost, 2) }}/{{ $cm->unit }}
-                                    </option>
-                                @endforeach
-                            @endif
+                            @php
+                                $catalogList = (isset($materialsCatalog) && count($materialsCatalog)) ? $materialsCatalog : \App\Models\Material::orderBy('name')->get();
+                            @endphp
+                            @foreach($catalogList as $cm)
+                                <option value="{{ $cm->id }}" data-name="{{ $cm->name }}" data-category="{{ $cm->category }}" data-unit="{{ $cm->unit }}" data-cost="{{ $cm->unit_cost }}">
+                                    {{ $cm->name }} ({{ $cm->material_code }}) - ₱{{ number_format($cm->unit_cost, 2) }}/{{ $cm->unit }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
 
@@ -217,36 +218,58 @@
     let currentExcessProjectData = null;
 
     function openReconcileExcessModalForProject(projectId, projectCode, projectTitle, projectStatus) {
+        const modal = document.getElementById('reconcileProjectExcessModal');
+        if (!modal) {
+            console.error('Modal #reconcileProjectExcessModal not found');
+            return;
+        }
+
         document.getElementById('modalProjectTitle').innerText = projectTitle || 'Project';
         document.getElementById('modalProjectCode').innerText = projectCode || 'PRJ';
         if (projectStatus) {
-            document.getElementById('modalProjectStatusBadge').innerText = projectStatus === 'completed' ? 'Project Completed' : 'Active Project';
+            document.getElementById('modalProjectStatusBadge').innerText = (projectStatus === 'completed') ? 'Project Completed' : 'Active Project';
         }
         
         document.getElementById('reconcileExcessBatchForm').action = '/projects/' + projectId + '/return-excess-materials';
         document.getElementById('reconcileExcessCustomForm').action = '/projects/' + projectId + '/add-custom-excess-material';
 
         const tbody = document.getElementById('excessMaterialsModalTbody');
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:32px; color:var(--text-muted);">Loading itemized material breakdown...</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:32px; color:var(--text-muted);"><div class="spinner-border" style="margin-bottom:8px;"></div><div>Loading itemized material breakdown...</div></td></tr>';
+
+        // Display modal immediately with active class and visible styles
+        modal.classList.add('active');
+        modal.style.display = 'flex';
+        modal.style.opacity = '1';
 
         // Fetch excess materials JSON
         fetch('/projects/' + projectId + '/excess-materials-json')
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) throw new Error('HTTP error ' + res.status);
+                return res.json();
+            })
             .then(data => {
                 currentExcessProjectData = data;
                 renderExcessMaterialsTable(data.materials || []);
             })
             .catch(err => {
                 console.error(err);
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:24px; color:#ef4444;">Failed to load project materials. Please reload and try again.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:24px; color:#ef4444;">Failed to load project materials. Please check your connection or reload.</td></tr>';
             });
-
-        document.getElementById('reconcileProjectExcessModal').style.display = 'flex';
     }
 
     function closeReconcileExcessModal() {
-        document.getElementById('reconcileProjectExcessModal').style.display = 'none';
+        const modal = document.getElementById('reconcileProjectExcessModal');
+        if (modal) {
+            modal.classList.remove('active');
+            modal.style.display = 'none';
+        }
     }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeReconcileExcessModal();
+        }
+    });
 
     function switchExcessModalTab(tab) {
         const btnAlloc = document.getElementById('tabBtnAllocatedExcess');
