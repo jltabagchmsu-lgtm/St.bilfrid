@@ -5,14 +5,14 @@
 
 @section('top_actions')
     @if($selectedProject)
-        <a href="{{ route('projects.printBom', $selectedProject->id) }}" target="_blank" class="btn-secondary" style="font-size: 0.85rem; color: #10b981; border-color: rgba(16, 185, 129, 0.3); display: inline-flex; align-items: center; gap: 6px; height: 38px;">
+        <a href="{{ route('projects.printBom', $selectedProject->id) }}" target="_blank" class="btn-secondary" style="font-size: 0.825rem; color: #059669; border-color: rgba(16, 185, 129, 0.4); white-space: nowrap; padding: 8px 14px;">
             Print 8-Page BOM
         </a>
-        <a href="{{ route('projects.show', $selectedProject->id) }}" class="btn-secondary" style="font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px; height: 38px;">
+        <a href="{{ route('projects.show', $selectedProject->id) }}" class="btn-secondary" style="font-size: 0.825rem; white-space: nowrap; padding: 8px 14px;">
             View Project Master &rarr;
         </a>
     @endif
-    <button class="btn-primary" onclick="openModal('addScopeItemModal')" style="display: inline-flex; align-items: center; gap: 6px; height: 38px;">
+    <button class="btn-primary" onclick="openModal('addScopeItemModal')" style="white-space: nowrap; padding: 8px 16px; font-size: 0.825rem;">
         <span>+</span> Add Scope Item
     </button>
 @endsection

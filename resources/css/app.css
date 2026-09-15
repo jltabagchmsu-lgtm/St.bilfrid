@@ -338,6 +338,8 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 /* Red & White Buttons */
@@ -345,15 +347,19 @@ body {
     background: var(--primary-gradient);
     color: #ffffff !important;
     border: none;
-    padding: 9px 18px;
+    padding: 8px 16px;
     border-radius: var(--radius-md);
     font-weight: 700;
     font-size: 0.875rem;
+    line-height: 1.25;
     cursor: pointer;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
+    white-space: nowrap !important;
+    flex-shrink: 0;
     transition: all 0.2s ease;
     box-shadow: 0 4px 14px rgba(220, 38, 38, 0.3);
 }
@@ -368,15 +374,19 @@ body {
     background: #fafbfc;
     color: var(--text-primary);
     border: 1px solid var(--border-color);
-    padding: 9px 18px;
+    padding: 8px 16px;
     border-radius: var(--radius-md);
     font-weight: 600;
     font-size: 0.875rem;
+    line-height: 1.25;
     cursor: pointer;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
+    white-space: nowrap !important;
+    flex-shrink: 0;
     transition: all 0.2s ease;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 }
