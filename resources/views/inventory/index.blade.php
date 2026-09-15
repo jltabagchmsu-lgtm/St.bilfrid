@@ -4,7 +4,10 @@
 @section('page_title', 'Materials Inventory (INV) - Master Warehouse Catalog')
 
 @section('top_actions')
-    <button class="btn-primary" onclick="openModal('addMaterialModal')">
+    <button class="btn-primary" style="background: #10b981; border-color: #10b981; font-weight: 700; display: flex; align-items: center; gap: 6px;" onclick="openSelectProjectForExcessModal()">
+        <span>📦</span> Reconcile Project Excess Materials
+    </button>
+    <button class="btn-secondary" onclick="openModal('addMaterialModal')">
         <span>+</span> Add New Material to Catalog
     </button>
 @endsection
@@ -24,10 +27,19 @@
 
     <div class="kpi-card" style="border-top: 3px solid #10b981;">
         <div class="kpi-header">
-            <span class="kpi-title">Purchased New Products</span>
-            <span class="spec-chip" style="font-size: 0.65rem; color: #10b981; background: rgba(16, 185, 129, 0.15);">NEW ARRIVALS</span>
+            <span class="kpi-title">Reclaimed Excess to Stock</span>
+            <span class="spec-chip" style="font-size: 0.65rem; color: #10b981; background: rgba(16, 185, 129, 0.15);">RECOVERED</span>
         </div>
-        <div class="kpi-val" style="color: #10b981; font-family: var(--font-mono);">{{ $newProductsCount }}</div>
+        <div class="kpi-val" style="color: #10b981; font-family: var(--font-mono);">+₱{{ number_format($totalReturnedValuation, 2) }}</div>
+        <div class="kpi-sub">{{ number_format($totalReturnedUnits) }} units returned from completed builds</div>
+    </div>
+
+    <div class="kpi-card" style="border-top: 3px solid #38bdf8;">
+        <div class="kpi-header">
+            <span class="kpi-title">Purchased New Products</span>
+            <span class="spec-chip" style="font-size: 0.65rem; color: #38bdf8; background: rgba(56, 189, 248, 0.15);">NEW ARRIVALS</span>
+        </div>
+        <div class="kpi-val" style="color: #38bdf8; font-family: var(--font-mono);">{{ $newProductsCount }}</div>
         <div class="kpi-sub">Procured from Trade Partners</div>
     </div>
 
@@ -323,7 +335,53 @@
             </div>
         </form>
     </div>
+<!-- Modal: Select Completed / Active Project for Excess Reconciliation -->
+<div class="modal-overlay" id="selectProjectExcessModal">
+    <div class="modal-box" style="max-width: 520px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 36px; height: 36px; border-radius: 8px; background: rgba(16, 185, 129, 0.15); display: flex; align-items: center; justify-content: center; color: #10b981;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                </div>
+                <h3 style="font-weight: 800; margin: 0; font-size: 1.15rem;">Reconcile Project Excess Materials</h3>
+            </div>
+            <button onclick="closeModal('selectProjectExcessModal')" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer;">&times;</button>
+        </div>
+        
+        <div style="margin-bottom: 16px; font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+            Select a construction project to audit, identify, and return remaining unused building materials back into Central Warehouse Inventory stock:
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" style="font-weight: 700;">Select Originating Project</label>
+            <select id="projectToReconcileSelect" class="form-select" style="font-size: 0.9rem;">
+                <optgroup label="Completed Projects">
+                    @foreach($completedProjects as $cp)
+                        <option value="{{ $cp->id }}" data-code="{{ $cp->project_code }}" data-title="{{ $cp->title }}" data-status="{{ $cp->status }}">
+                            ✓ {{ $cp->title }} ({{ $cp->project_code }}) — Completed ({{ $cp->projectMaterials->count() }} materials)
+                        </option>
+                    @endforeach
+                </optgroup>
+                <optgroup label="Other Active Projects">
+                    @foreach($allProjects->where('status', '!=', 'completed') as $ap)
+                        <option value="{{ $ap->id }}" data-code="{{ $ap->project_code }}" data-title="{{ $ap->title }}" data-status="{{ $ap->status }}">
+                            &bull; {{ $ap->title }} ({{ $ap->project_code }}) — {{ ucfirst(str_replace('_', ' ', $ap->status)) }}
+                        </option>
+                    @endforeach
+                </optgroup>
+            </select>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+            <button type="button" class="btn-secondary" onclick="closeModal('selectProjectExcessModal')">Cancel</button>
+            <button type="button" class="btn-primary" style="background: #10b981; border-color: #10b981; font-weight: 700;" onclick="proceedToProjectExcessReconcile()">
+                Open Excess Materials Reconciler &rarr;
+            </button>
+        </div>
+    </div>
 </div>
+
+@include('projects.partials.excess_materials_modal')
 
 @endsection
 
@@ -331,5 +389,18 @@
 <script>
     function openModal(id) { document.getElementById(id).classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+    function openSelectProjectForExcessModal() {
+        openModal('selectProjectExcessModal');
+    }
+
+    function proceedToProjectExcessReconcile() {
+        const select = document.getElementById('projectToReconcileSelect');
+        const opt = select.options[select.selectedIndex];
+        if (!opt || !opt.value) return;
+
+        closeModal('selectProjectExcessModal');
+        openReconcileExcessModalForProject(opt.value, opt.dataset.code, opt.dataset.title, opt.dataset.status);
+    }
 </script>
 @endsection

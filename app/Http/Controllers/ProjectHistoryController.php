@@ -4,17 +4,49 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use App\Models\Payment;
-use App\Models\ProjectCost;
+use App\Models\Material;
+use App\Models\InventoryLog;
+use App\Models\ProjectMaterial;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProjectHistoryController extends Controller
 {
     public function index()
     {
         $completedProjects = Project::where('status', 'completed')
-            ->with(['personnel', 'payments', 'tasks', 'costs'])
+            ->with([
+                'personnel',
+                'payments',
+                'tasks.taskMaterials',
+                'costs',
+                'projectMaterials.material',
+                'inventoryLogs.material'
+            ])
             ->orderBy('actual_completion_date', 'desc')
             ->get();
+
+        $materialsCatalog = Material::orderBy('category')->orderBy('name')->get();
+
+        // Excess materials reconciliation metrics across completed projects
+        $totalExcessReturnedUnits = InventoryLog::where('transaction_type', 'excess_return')
+            ->whereHas('project', function ($q) {
+                $q->where('status', 'completed');
+            })->sum('quantity');
+
+        $totalExcessReturnedValue = (float) $completedProjects->sum(function ($p) {
+            return $p->total_returned_excess_value;
+        });
+
+        $totalPendingExcessUnits = (int) $completedProjects->sum(function ($p) {
+            return $p->projectMaterials->sum('remaining_qty');
+        });
+
+        $totalPendingExcessValue = (float) $completedProjects->sum(function ($p) {
+            return $p->projectMaterials->sum(function ($pm) {
+                return $pm->remaining_qty * $pm->unit_price;
+            });
+        });
 
         $totalCompletedBudget = (float) $completedProjects->sum('contract_budget');
         $totalCompletedSpent = (float) $completedProjects->sum(function ($p) {
@@ -75,6 +107,11 @@ class ProjectHistoryController extends Controller
 
         return view('history.index', compact(
             'completedProjects',
+            'materialsCatalog',
+            'totalExcessReturnedUnits',
+            'totalExcessReturnedValue',
+            'totalPendingExcessUnits',
+            'totalPendingExcessValue',
             'totalCompletedBudget',
             'totalCompletedSpent',
             'totalRealizedMargin',

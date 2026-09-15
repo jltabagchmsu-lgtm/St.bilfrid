@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Project;
 use App\Models\Material;
 use App\Models\InventoryLog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class InventoryController extends Controller
 {
@@ -43,10 +45,22 @@ class InventoryController extends Controller
         // Inventory movements & project excess return transaction logs
         $inventoryLogs = InventoryLog::with(['material', 'project'])
             ->orderBy('created_at', 'desc')
-            ->limit(20)
+            ->limit(30)
             ->get();
 
         $totalReturnedUnits = InventoryLog::where('transaction_type', 'excess_return')->sum('quantity');
+        $totalReturnedValuation = (float) InventoryLog::where('transaction_type', 'excess_return')->sum(DB::raw('quantity * unit_cost'));
+
+        // Completed and active projects with potential excess for reconciliation
+        $completedProjects = Project::where('status', 'completed')
+            ->with(['projectMaterials.material'])
+            ->orderBy('actual_completion_date', 'desc')
+            ->get();
+
+        $allProjects = Project::with(['projectMaterials.material'])
+            ->orderBy('status', 'asc')
+            ->orderBy('title', 'asc')
+            ->get();
 
         return view('inventory.index', compact(
             'materials',
@@ -60,7 +74,10 @@ class InventoryController extends Controller
             'totalValuation',
             'lowStockCount',
             'inventoryLogs',
-            'totalReturnedUnits'
+            'totalReturnedUnits',
+            'totalReturnedValuation',
+            'completedProjects',
+            'allProjects'
         ));
     }
 

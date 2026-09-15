@@ -15,7 +15,7 @@
 @section('content')
 
 <!-- Historical KPI Summary -->
-<div class="kpi-grid">
+<div class="kpi-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
     <div class="kpi-card">
         <div class="kpi-header">
             <span class="kpi-title">Completed Projects</span>
@@ -50,6 +50,15 @@
         </div>
         <div class="kpi-val" style="font-family: var(--font-mono); color: #10b981;">₱{{ number_format($totalRealizedMargin, 2) }}</div>
         <div class="kpi-sub" style="color: #10b981; font-weight: 700;">{{ $avgRealizedMarginPercent }}% Realized Margin</div>
+    </div>
+
+    <div class="kpi-card" style="border-top: 3px solid #10b981;">
+        <div class="kpi-header">
+            <span class="kpi-title">Reclaimed Excess to INV</span>
+            <span class="spec-chip" style="font-size: 0.65rem; color: #10b981; background: rgba(16, 185, 129, 0.15);">RECOVERED</span>
+        </div>
+        <div class="kpi-val" style="font-family: var(--font-mono); color: #10b981;">+₱{{ number_format($totalExcessReturnedValue, 2) }}</div>
+        <div class="kpi-sub">{{ number_format($totalExcessReturnedUnits) }} units returned to warehouse</div>
     </div>
 </div>
 
@@ -138,6 +147,100 @@
     </div>
 </div>
 
+<!-- Completed Projects Material Recovery & Inventory Reconciliation Hub -->
+<div class="glass-panel" style="border: 1px solid rgba(16, 185, 129, 0.35); background: linear-gradient(135deg, rgba(16, 185, 129, 0.04) 0%, rgba(56, 189, 248, 0.02) 100%); margin-bottom: 28px;">
+    <div class="panel-header" style="margin-bottom: 16px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); display: grid; place-items: center; font-size: 0.8rem; font-weight: 800; color: #10b981;">
+                INV
+            </div>
+            <div>
+                <h3 class="panel-title" style="font-size: 1.15rem; color: #10b981;">Completed Projects Material Recovery & Inventory Reconciliation</h3>
+                <span style="font-size: 0.85rem; color: var(--text-muted);">
+                    Audit and return unused construction materials, surplus rebar, fixtures, and finishes back to Central Warehouse stock
+                </span>
+            </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 0.8rem; padding: 6px 12px;">
+                +₱{{ number_format($totalExcessReturnedValue, 2) }} Recovered
+            </span>
+            @if($totalPendingExcessUnits > 0)
+                <span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 0.8rem; padding: 6px 12px;">
+                    {{ number_format($totalPendingExcessUnits) }} Units Pending Reconciliation
+                </span>
+            @endif
+        </div>
+    </div>
+
+    <div style="overflow-x: auto;">
+        <table class="custom-table" style="margin-bottom: 0;">
+            <thead>
+                <tr>
+                    <th>Completed Project</th>
+                    <th>Tracked BOM Items</th>
+                    <th>Returned Excess to INV</th>
+                    <th>Pending Site Balance</th>
+                    <th>Reconciliation Status</th>
+                    <th style="text-align: right;">Inventory Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($completedProjects as $cp)
+                @php
+                    $cpRemainingUnits = $cp->projectMaterials->sum('remaining_qty');
+                    $cpRemainingValue = $cp->projectMaterials->sum(function($pm) { return $pm->remaining_qty * $pm->unit_price; });
+                    $cpReturnedUnits = $cp->total_returned_excess_units;
+                    $cpReturnedVal = $cp->total_returned_excess_value;
+                    $hasUnreconciled = $cpRemainingUnits > 0;
+                @endphp
+                <tr>
+                    <td>
+                        <strong style="color: var(--text-primary); font-size: 0.95rem;">{{ $cp->title }}</strong>
+                        <div style="font-family: var(--font-mono); font-size: 0.75rem; color: #ef4444;">{{ $cp->project_code }}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">Client: {{ $cp->client_name ?? 'N/A' }}</div>
+                    </td>
+                    <td>
+                        <strong style="font-family: var(--font-mono); color: #38bdf8;">{{ $cp->projectMaterials->count() }} Materials</strong>
+                        <div style="font-size: 0.725rem; color: var(--text-muted);">Allocated: {{ number_format($cp->projectMaterials->sum('allocated_qty')) }} units</div>
+                    </td>
+                    <td>
+                        <strong style="font-family: var(--font-mono); color: #10b981;">+{{ number_format($cpReturnedUnits) }} Units</strong>
+                        <div style="font-size: 0.725rem; color: #10b981; font-weight: 700;">+₱{{ number_format($cpReturnedVal, 2) }} recovered</div>
+                    </td>
+                    <td>
+                        <strong style="font-family: var(--font-mono); color: {{ $hasUnreconciled ? '#f59e0b' : '#94a3b8' }}; font-size: 0.95rem;">
+                            {{ number_format($cpRemainingUnits) }} Units
+                        </strong>
+                        <div style="font-size: 0.725rem; color: var(--text-muted);">Est. ₱{{ number_format($cpRemainingValue, 2) }}</div>
+                    </td>
+                    <td>
+                        @if($hasUnreconciled)
+                            <span class="badge badge-pending" style="font-size: 0.75rem;">
+                                {{ number_format($cpRemainingUnits) }} Units Available
+                            </span>
+                        @else
+                            <span class="badge badge-completed" style="font-size: 0.75rem;">
+                                100% Reconciled
+                            </span>
+                        @endif
+                    </td>
+                    <td style="text-align: right;">
+                        <button type="button" class="btn-primary" style="font-size: 0.8rem; padding: 6px 14px; background: #10b981; border-color: #10b981; font-weight: 700;" onclick="openReconcileExcessModalForProject({{ $cp->id }}, '{{ addslashes($cp->project_code) }}', '{{ addslashes($cp->title) }}', 'completed')">
+                            📦 Add Excess to INV &rarr;
+                        </button>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 24px;">No completed projects found for inventory reconciliation.</td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
+
 <!-- Historical Completed Projects Matrix Table -->
 <div class="glass-panel" style="margin-bottom: 28px;">
     <div class="panel-header">
@@ -193,6 +296,9 @@
                 </td>
                 <td>
                     <div style="display: flex; flex-direction: column; gap: 4px;">
+                        <button type="button" class="btn-primary" style="font-size: 0.75rem; padding: 4px 8px; text-align: center; background: #10b981; border-color: #10b981; font-weight: 700;" onclick="openReconcileExcessModalForProject({{ $cp->id }}, '{{ addslashes($cp->project_code) }}', '{{ addslashes($cp->title) }}', 'completed')">
+                            📦 Add Excess to INV
+                        </button>
                         <a href="{{ route('projects.show', $cp->id) }}" class="btn-primary" style="font-size: 0.775rem; padding: 4px 8px; text-align: center; white-space: nowrap;">
                             Master Summary &rarr;
                         </a>
@@ -286,5 +392,7 @@
         </tbody>
     </table>
 </div>
+
+@include('projects.partials.excess_materials_modal')
 
 @endsection

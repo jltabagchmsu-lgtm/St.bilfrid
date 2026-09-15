@@ -1422,4 +1422,274 @@ class ProjectController extends Controller
             'leadArchitect'
         ));
     }
+
+    /**
+     * Batch reconcile excess / surplus materials from a completed or active project back to Central Warehouse Inventory (INV)
+     */
+    public function returnExcessMaterialsBatch(Request $request, $id)
+    {
+        $project = Project::with(['projectMaterials.material'])->findOrFail($id);
+
+        $validated = $request->validate([
+            'return_all' => 'nullable|boolean',
+            'transfer_date' => 'nullable|date',
+            'general_notes' => 'nullable|string|max:500',
+            'materials' => 'nullable|array',
+            'materials.*.project_material_id' => 'required|exists:project_materials,id',
+            'materials.*.return_qty' => 'required|numeric|min:0',
+            'materials.*.selected' => 'nullable',
+            'materials.*.notes' => 'nullable|string|max:500',
+        ]);
+
+        $transferDate = $validated['transfer_date'] ?? now()->toDateString();
+        $generalNotes = $validated['general_notes'] ?? 'Excess materials reclaimed back into Central Warehouse Inventory upon project completion.';
+        $isReturnAll = $request->boolean('return_all', false);
+
+        $totalItemsProcessed = 0;
+        $totalUnitsReturned = 0;
+        $totalValuationReclaimed = 0;
+        $reconciledNames = [];
+
+        DB::transaction(function () use ($project, $validated, $request, $transferDate, $generalNotes, $isReturnAll, &$totalItemsProcessed, &$totalUnitsReturned, &$totalValuationReclaimed, &$reconciledNames) {
+            if ($isReturnAll) {
+                // Return all remaining quantities for all project materials
+                foreach ($project->projectMaterials as $pm) {
+                    $availQty = (float) $pm->remaining_qty;
+                    if ($availQty <= 0) continue;
+
+                    $mat = $pm->material;
+                    if (!$mat) continue;
+
+                    // Increment Central Warehouse stock
+                    $mat->increment('stock_quantity', (int) ceil($availQty));
+                    // Increment excess returned quantity on project site BOM
+                    $pm->increment('excess_returned_qty', (int) ceil($availQty));
+
+                    $refNo = 'EXCESS-PRJ-' . strtoupper(substr(preg_replace('/[^A-Za-z0-9]/', '', $project->project_code), -4)) . '-' . $mat->id . '-' . rand(100, 999);
+
+                    // Create InventoryLog
+                    InventoryLog::create([
+                        'material_id' => $mat->id,
+                        'project_id' => $project->id,
+                        'transaction_type' => 'excess_return',
+                        'quantity' => (int) ceil($availQty),
+                        'unit_cost' => $pm->unit_price,
+                        'reference_no' => $refNo,
+                        'notes' => 'Reclaimed ' . number_format($availQty) . ' ' . $mat->unit . ' of ' . $mat->name . ' to inventory after completion of ' . $project->project_code . ' (' . $project->title . '). ' . $generalNotes,
+                    ]);
+
+                    // Create Transfer voucher
+                    ProjectMaterialTransfer::create([
+                        'transfer_reference_no' => $refNo,
+                        'source_project_id' => $project->id,
+                        'destination_project_id' => null,
+                        'material_id' => $mat->id,
+                        'quantity_transferred' => $availQty,
+                        'transfer_date' => $transferDate,
+                        'transfer_type' => 'warehouse_stock',
+                        'reason' => 'Surplus reclaimed upon project turnover: ' . $generalNotes,
+                        'authorized_by' => auth()->user()->name ?? 'Project Engineer',
+                    ]);
+
+                    $totalItemsProcessed++;
+                    $totalUnitsReturned += $availQty;
+                    $totalValuationReclaimed += ($availQty * $pm->unit_price);
+                    $reconciledNames[] = $mat->name . ' (' . number_format($availQty) . ' ' . $mat->unit . ')';
+                }
+            } else {
+                $matEntries = $validated['materials'] ?? [];
+                foreach ($matEntries as $entry) {
+                    $isSelected = !empty($entry['selected']) || $request->has('select_all');
+                    $qty = (float) ($entry['return_qty'] ?? 0);
+                    if (!$isSelected || $qty <= 0) continue;
+
+                    $pm = ProjectMaterial::with('material')->find($entry['project_material_id']);
+                    if (!$pm || $pm->project_id !== $project->id) continue;
+
+                    $maxAvail = (float) $pm->remaining_qty;
+                    if ($qty > $maxAvail) {
+                        $qty = $maxAvail;
+                    }
+                    if ($qty <= 0) continue;
+
+                    $mat = $pm->material;
+                    if (!$mat) continue;
+
+                    $mat->increment('stock_quantity', (int) ceil($qty));
+                    $pm->increment('excess_returned_qty', (int) ceil($qty));
+
+                    $itemNotes = !empty($entry['notes']) ? $entry['notes'] : $generalNotes;
+                    $refNo = 'EXCESS-PRJ-' . strtoupper(substr(preg_replace('/[^A-Za-z0-9]/', '', $project->project_code), -4)) . '-' . $mat->id . '-' . rand(100, 999);
+
+                    InventoryLog::create([
+                        'material_id' => $mat->id,
+                        'project_id' => $project->id,
+                        'transaction_type' => 'excess_return',
+                        'quantity' => (int) ceil($qty),
+                        'unit_cost' => $pm->unit_price,
+                        'reference_no' => $refNo,
+                        'notes' => 'Returned ' . number_format($qty) . ' ' . $mat->unit . ' of ' . $mat->name . ' from ' . $project->project_code . ' to warehouse inventory. ' . $itemNotes,
+                    ]);
+
+                    ProjectMaterialTransfer::create([
+                        'transfer_reference_no' => $refNo,
+                        'source_project_id' => $project->id,
+                        'destination_project_id' => null,
+                        'material_id' => $mat->id,
+                        'quantity_transferred' => $qty,
+                        'transfer_date' => $transferDate,
+                        'transfer_type' => 'warehouse_stock',
+                        'reason' => $itemNotes,
+                        'authorized_by' => auth()->user()->name ?? 'Project Engineer',
+                    ]);
+
+                    $totalItemsProcessed++;
+                    $totalUnitsReturned += $qty;
+                    $totalValuationReclaimed += ($qty * $pm->unit_price);
+                    $reconciledNames[] = $mat->name . ' (' . number_format($qty) . ' ' . $mat->unit . ')';
+                }
+            }
+        });
+
+        if ($totalItemsProcessed === 0) {
+            return redirect()->back()->with('warning', 'No excess material quantities were selected or available for return.');
+        }
+
+        $summaryNames = implode(', ', array_slice($reconciledNames, 0, 3));
+        if (count($reconciledNames) > 3) {
+            $summaryNames .= ' +' . (count($reconciledNames) - 3) . ' more';
+        }
+
+        return redirect()->back()->with('success', "Successfully added {$totalItemsProcessed} excess material types (" . number_format($totalUnitsReturned) . " units, ₱" . number_format($totalValuationReclaimed, 2) . ") from {$project->project_code} ({$project->title}) back into Central Warehouse Inventory! [{$summaryNames}]");
+    }
+
+    /**
+     * Add unlisted / extra site excess material discovered after project completion directly to Inventory
+     */
+    public function addCustomExcessMaterial(Request $request, $id)
+    {
+        $project = Project::findOrFail($id);
+
+        $validated = $request->validate([
+            'material_id' => 'nullable|exists:materials,id',
+            'custom_material_name' => 'nullable|string|max:255',
+            'category' => 'nullable|string|max:100',
+            'unit' => 'nullable|string|max:50',
+            'quantity' => 'required|numeric|min:0.01',
+            'unit_cost' => 'required|numeric|min:0',
+            'transfer_date' => 'nullable|date',
+            'notes' => 'nullable|string|max:500',
+        ]);
+
+        $qty = (float) $validated['quantity'];
+        $unitCost = (float) $validated['unit_cost'];
+        $transferDate = $validated['transfer_date'] ?? now()->toDateString();
+        $notes = $validated['notes'] ?? 'Unlisted surplus site material recovered upon project completion.';
+
+        if (!empty($validated['material_id'])) {
+            $material = Material::findOrFail($validated['material_id']);
+        } else {
+            $matName = trim($validated['custom_material_name'] ?? 'Surplus Construction Material');
+            $material = Material::where('name', $matName)->first();
+            if (!$material) {
+                $code = 'MAT-' . strtoupper(substr(preg_replace('/[^A-Za-z0-9]/', '', $matName), 0, 4)) . '-' . rand(100, 999);
+                $material = Material::create([
+                    'material_code' => $code,
+                    'name' => $matName,
+                    'category' => $validated['category'] ?? 'General',
+                    'unit' => $validated['unit'] ?? 'pcs',
+                    'unit_cost' => $unitCost,
+                    'stock_quantity' => 0,
+                ]);
+            }
+        }
+
+        // Increment central inventory stock
+        $material->increment('stock_quantity', (int) ceil($qty));
+
+        // Create or update ProjectMaterial record to credit project
+        $pm = ProjectMaterial::where('project_id', $project->id)
+            ->where('material_id', $material->id)
+            ->first();
+
+        if ($pm) {
+            $pm->increment('allocated_qty', (int) ceil($qty));
+            $pm->increment('excess_returned_qty', (int) ceil($qty));
+        } else {
+            ProjectMaterial::create([
+                'project_id' => $project->id,
+                'material_id' => $material->id,
+                'allocated_qty' => (int) ceil($qty),
+                'used_qty' => 0,
+                'excess_returned_qty' => (int) ceil($qty),
+                'unit_price' => $unitCost,
+            ]);
+        }
+
+        $refNo = 'EXCESS-PRJ-' . strtoupper(substr(preg_replace('/[^A-Za-z0-9]/', '', $project->project_code), -4)) . '-' . $material->id . '-' . rand(100, 999);
+
+        // Record Inventory Log
+        InventoryLog::create([
+            'material_id' => $material->id,
+            'project_id' => $project->id,
+            'transaction_type' => 'excess_return',
+            'quantity' => (int) ceil($qty),
+            'unit_cost' => $unitCost,
+            'reference_no' => $refNo,
+            'notes' => 'Surplus material discovered & added to inventory from ' . $project->project_code . ': ' . $material->name . ' (' . number_format($qty) . ' ' . $material->unit . '). ' . $notes,
+        ]);
+
+        ProjectMaterialTransfer::create([
+            'transfer_reference_no' => $refNo,
+            'source_project_id' => $project->id,
+            'destination_project_id' => null,
+            'material_id' => $material->id,
+            'quantity_transferred' => $qty,
+            'transfer_date' => $transferDate,
+            'transfer_type' => 'warehouse_stock',
+            'reason' => 'Surplus reclaimed upon project turnover: ' . $notes,
+            'authorized_by' => auth()->user()->name ?? 'Project Engineer',
+        ]);
+
+        return redirect()->back()->with('success', 'Successfully added surplus "' . $material->name . '" (' . number_format($qty) . ' ' . $material->unit . ' @ ₱' . number_format($unitCost, 2) . ') from ' . $project->project_code . ' to Central Warehouse Inventory!');
+    }
+
+    /**
+     * Get JSON array of all materials for a project (site BOM allocations + active materials)
+     */
+    public function getExcessMaterialsJson($id)
+    {
+        $project = Project::with(['projectMaterials.material', 'tasks.taskMaterials'])->findOrFail($id);
+
+        $materials = [];
+        foreach ($project->projectMaterials as $pm) {
+            if (!$pm->material) continue;
+            $materials[] = [
+                'project_material_id' => $pm->id,
+                'material_id' => $pm->material_id,
+                'material_code' => $pm->material->material_code,
+                'name' => $pm->material->name,
+                'category' => $pm->material->category,
+                'unit' => $pm->material->unit,
+                'unit_price' => (float) $pm->unit_price,
+                'allocated_qty' => (int) $pm->allocated_qty,
+                'used_qty' => (int) $pm->used_qty,
+                'excess_returned_qty' => (int) $pm->excess_returned_qty,
+                'remaining_qty' => (int) $pm->remaining_qty,
+                'total_cost' => (float) $pm->total_cost,
+                'source' => 'Site BOM Allocation',
+            ];
+        }
+
+        return response()->json([
+            'success' => true,
+            'project_id' => $project->id,
+            'project_code' => $project->project_code,
+            'project_title' => $project->title,
+            'status' => $project->status,
+            'materials' => $materials,
+            'total_excess_units' => array_sum(array_column($materials, 'remaining_qty')),
+            'total_excess_value' => array_sum(array_map(function($m) { return $m['remaining_qty'] * $m['unit_price']; }, $materials)),
+        ]);
+    }
 }

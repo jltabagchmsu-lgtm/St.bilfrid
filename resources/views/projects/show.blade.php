@@ -53,6 +53,53 @@
 
 @section('content')
 
+@php
+    $projRemainingExcessUnits = $project->projectMaterials->sum('remaining_qty');
+    $projRemainingExcessVal = $project->projectMaterials->sum(function($pm) { return $pm->remaining_qty * $pm->unit_price; });
+    $projReturnedExcessUnits = $project->total_returned_excess_units;
+    $projReturnedExcessVal = $project->total_returned_excess_value;
+@endphp
+
+@if($project->status === 'completed' || $projRemainingExcessUnits > 0)
+<!-- Completed Project Excess Materials Reconciliation Callout Banner -->
+<div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(56, 189, 248, 0.04) 100%); border: 1px solid rgba(16, 185, 129, 0.35); border-left: 5px solid #10b981; border-radius: 12px; padding: 18px 24px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.08);">
+    <div style="display: flex; align-items: center; gap: 16px;">
+        <div style="width: 46px; height: 46px; border-radius: 12px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); display: flex; align-items: center; justify-content: center; color: #10b981; flex-shrink: 0;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+        </div>
+        <div>
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <h4 style="margin: 0; font-size: 1.05rem; font-weight: 800; color: var(--text-primary);">
+                    {{ $project->status === 'completed' ? '🎉 Project Delivered & Completed — Reconcile Excess Materials to INV' : '📦 Project Site Excess Materials Reconciliation' }}
+                </h4>
+                @if($projReturnedExcessUnits > 0)
+                    <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4); font-size: 0.725rem;">
+                        +{{ number_format($projReturnedExcessUnits) }} Units Returned (₱{{ number_format($projReturnedExcessVal, 2) }})
+                    </span>
+                @endif
+            </div>
+            <p style="margin: 4px 0 0 0; font-size: 0.85rem; color: var(--text-secondary);">
+                @if($projRemainingExcessUnits > 0)
+                    There are <strong style="color: #f59e0b; font-family: var(--font-mono);">{{ number_format($projRemainingExcessUnits) }} remaining unused units</strong> (Est. ₱{{ number_format($projRemainingExcessVal, 2) }}) available to be added back into Central Warehouse Inventory (INV).
+                @else
+                    All tracked site materials have been fully consumed or reconciled back into Central Warehouse Inventory.
+                @endif
+            </p>
+        </div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <button type="button" class="btn-primary" style="background: #10b981; border-color: #10b981; font-weight: 800; padding: 10px 20px; font-size: 0.875rem; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);" onclick="openReconcileExcessModalForProject({{ $project->id }}, '{{ addslashes($project->project_code) }}', '{{ addslashes($project->title) }}', '{{ $project->status }}')">
+            <span>📦 Add Excess Materials to INV</span>
+            <span>&rarr;</span>
+        </button>
+    </div>
+</div>
+@endif
+
 <!-- Master Project Hero Banner -->
 <div class="glass-panel" style="padding: 24px 30px; margin-bottom: 24px; background: rgba(239, 68, 68, 0.04); border: 1px solid var(--border-accent); position: relative; overflow: hidden;">
     <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 24px; position: relative; z-index: 2;">
@@ -667,9 +714,12 @@
                 </div>
             </div>
 
-            <!-- Search Filter for Active Materials -->
-            <div style="display: flex; align-items: center; gap: 8px;">
-                <input type="text" id="activeMaterialSearchInput" onkeyup="filterActiveMaterialsTable(this.value)" placeholder="Filter active materials..." class="form-input" style="padding: 6px 12px; font-size: 0.825rem; width: 220px; height: 34px;">
+            <!-- Actions & Search Filter for Active Materials -->
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <button type="button" class="btn-primary" onclick="openReconcileExcessModalForProject({{ $project->id }}, '{{ addslashes($project->project_code) }}', '{{ addslashes($project->title) }}', '{{ $project->status }}')" style="font-size: 0.8rem; padding: 6px 14px; height: 34px; background: #10b981; border-color: #10b981; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+                    <span>📦 Add Excess to INV</span>
+                </button>
+                <input type="text" id="activeMaterialSearchInput" onkeyup="filterActiveMaterialsTable(this.value)" placeholder="Filter active materials..." class="form-input" style="padding: 6px 12px; font-size: 0.825rem; width: 200px; height: 34px;">
                 <button type="button" class="btn-secondary" onclick="refreshActiveMaterialsAjax()" style="font-size: 0.775rem; padding: 6px 12px; height: 34px;" title="Refresh Active Materials">
                     Sync
                 </button>
@@ -3939,4 +3989,6 @@
         }
     }
 </script>
+
+@include('projects.partials.excess_materials_modal')
 @endsection
