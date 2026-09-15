@@ -20,27 +20,27 @@
 <!-- ====================================================
      SECTION 1: DEDICATED EXECUTIVE SALES & REVENUE COMMAND HUB
      ==================================================== -->
-<div class="glass-panel" style="border: 1px solid var(--border-color); background: #fafbfc; margin-bottom: 16px;">
-    <div class="panel-header" style="margin-bottom: 12px;">
-        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-            <div style="width: 36px; height: 36px; min-width: 36px; border-radius: var(--radius-md); background: var(--primary-red-light); border: 1px solid var(--primary-red-border); display: flex; align-items: center; justify-content: center; color: var(--primary-red); flex-shrink: 0;">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+<div class="glass-panel" style="border: 1px solid var(--border-color); background: #fafbfc; margin-bottom: 12px;">
+    <div class="panel-header" style="margin-bottom: 8px;">
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <div style="width: 32px; height: 32px; min-width: 32px; border-radius: var(--radius-md); background: var(--primary-red-light); border: 1px solid var(--primary-red-border); display: flex; align-items: center; justify-content: center; color: var(--primary-red); flex-shrink: 0;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
                     <polyline points="17 6 23 6 23 12"></polyline>
                 </svg>
             </div>
             <div>
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <h3 class="panel-title" style="font-size: 1.1rem; color: var(--text-primary);">Executive Sales & Revenue Command</h3>
-                    <span class="sales-section-badge">Dedicated Sales Hub</span>
+                    <h3 class="panel-title" style="font-size: 1rem; color: var(--text-primary);">Executive Sales & Revenue Command</h3>
+                    <span class="sales-section-badge" style="font-size: 0.6rem; padding: 1px 6px;">Dedicated Sales Hub</span>
                 </div>
-                <span style="font-size: 0.8rem; color: var(--text-muted);">
+                <span style="font-size: 0.75rem; color: var(--text-muted);">
                     Contract bookings, cleared cash revenues, sales margins, and multi-year performance (2024 &ndash; 2027)
                 </span>
             </div>
         </div>
-        <div style="display: flex; gap: 8px;">
-            <a href="/payments" class="btn-primary" style="font-size: 0.775rem; padding: 5px 12px;">
+        <div style="display: flex; gap: 6px;">
+            <a href="/payments" class="btn-primary" style="font-size: 0.725rem; padding: 4px 10px;">
                 Full Sales Ledger &rarr;
             </a>
         </div>
@@ -49,143 +49,143 @@
     <!-- 5 Executive Sales KPI Cards -->
     <div class="sales-kpi-grid">
         <div class="sales-kpi-card">
-            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.725rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">
-                <span>Total Booked Sales</span>
-                <span class="spec-chip" style="font-size: 0.6rem;">BOOKED</span>
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">
+                <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Total Booked Sales</span>
+                <span class="spec-chip" style="font-size: 0.55rem; padding: 1px 4px;">BOOKED</span>
             </div>
-            <div style="font-size: 1.35rem; font-weight: 800; font-family: var(--font-mono); color: var(--text-primary); margin: 4px 0 2px 0;">
+            <div style="font-size: 1.15rem; font-weight: 800; font-family: var(--font-mono); color: var(--text-primary); margin: 2px 0 1px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                 ₱{{ number_format($totalBookedSales, 2) }}
             </div>
-            <div style="font-size: 0.725rem; color: var(--text-secondary); display: flex; align-items: center; justify-content: space-between;">
-                <span>Across {{ $totalProjectsCount }} contracted builds</span>
-                <span class="growth-pill positive">Active Portfolio</span>
+            <div style="font-size: 0.68rem; color: var(--text-secondary); display: flex; align-items: center; justify-content: space-between;">
+                <span>{{ $totalProjectsCount }} builds</span>
+                <span class="growth-pill positive" style="font-size: 0.6rem; padding: 1px 5px;">Active</span>
             </div>
         </div>
 
         <div class="sales-kpi-card">
-            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.725rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">
-                <span>Cleared Cash Inflow</span>
-                <span class="spec-chip" style="font-size: 0.6rem; color: #059669; border-color: #a7f3d0;">SETTLED</span>
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">
+                <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Cleared Cash Inflow</span>
+                <span class="spec-chip" style="font-size: 0.55rem; padding: 1px 4px; color: #059669; border-color: #a7f3d0;">SETTLED</span>
             </div>
-            <div style="font-size: 1.35rem; font-weight: 800; font-family: var(--font-mono); color: #059669; margin: 4px 0 2px 0;">
+            <div style="font-size: 1.15rem; font-weight: 800; font-family: var(--font-mono); color: #059669; margin: 2px 0 1px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                 ₱{{ number_format($totalCollectedRevenue, 2) }}
             </div>
-            <div style="font-size: 0.725rem; color: var(--text-secondary);">
+            <div style="font-size: 0.68rem; color: var(--text-secondary);">
                 {{ $totalBookedSales > 0 ? round(($totalCollectedRevenue / $totalBookedSales) * 100, 1) : 0 }}% Collection Rate
             </div>
         </div>
 
         <div class="sales-kpi-card">
-            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.725rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">
-                <span>Pending Receivables</span>
-                <span class="spec-chip" style="font-size: 0.6rem; color: #d97706; border-color: #fde68a;">PENDING</span>
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">
+                <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Pending Receivables</span>
+                <span class="spec-chip" style="font-size: 0.55rem; padding: 1px 4px; color: #d97706; border-color: #fde68a;">PENDING</span>
             </div>
-            <div style="font-size: 1.35rem; font-weight: 800; font-family: var(--font-mono); color: #d97706; margin: 4px 0 2px 0;">
+            <div style="font-size: 1.15rem; font-weight: 800; font-family: var(--font-mono); color: #d97706; margin: 2px 0 1px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                 ₱{{ number_format($pendingReceivables, 2) }}
             </div>
-            <div style="font-size: 0.725rem; color: var(--text-secondary);">
-                Milestone Invoices In Progress
+            <div style="font-size: 0.68rem; color: var(--text-secondary);">
+                Invoices In Progress
             </div>
         </div>
 
         <div class="sales-kpi-card">
-            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.725rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">
-                <span>Realized Sales Margin</span>
-                <span class="spec-chip" style="font-size: 0.6rem; color: var(--primary-red); border-color: var(--primary-red-border);">MARGIN</span>
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">
+                <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Realized Sales Margin</span>
+                <span class="spec-chip" style="font-size: 0.55rem; padding: 1px 4px; color: var(--primary-red); border-color: var(--primary-red-border);">MARGIN</span>
             </div>
-            <div style="font-size: 1.35rem; font-weight: 800; font-family: var(--font-mono); color: var(--primary-red); margin: 4px 0 2px 0;">
+            <div style="font-size: 1.15rem; font-weight: 800; font-family: var(--font-mono); color: var(--primary-red); margin: 2px 0 1px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                 ₱{{ number_format($totalGrossMargin, 2) }}
             </div>
-            <div style="font-size: 0.725rem; color: #059669; font-weight: 700;">
-                {{ $avgGrossMarginPercent }}% Overall Profit Margin
+            <div style="font-size: 0.68rem; color: #059669; font-weight: 700;">
+                {{ $avgGrossMarginPercent }}% Profit Margin
             </div>
         </div>
 
         <div class="sales-kpi-card">
-            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.725rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">
-                <span>Avg Contract Deal Size</span>
-                <span class="spec-chip" style="font-size: 0.6rem;">AVG</span>
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">
+                <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Avg Deal Size</span>
+                <span class="spec-chip" style="font-size: 0.55rem; padding: 1px 4px;">AVG</span>
             </div>
-            <div style="font-size: 1.35rem; font-weight: 800; font-family: var(--font-mono); color: var(--text-primary); margin: 4px 0 2px 0;">
+            <div style="font-size: 1.15rem; font-weight: 800; font-family: var(--font-mono); color: var(--text-primary); margin: 2px 0 1px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                 ₱{{ number_format($avgDealSize / 1000000, 2) }}M
             </div>
-            <div style="font-size: 0.725rem; color: var(--text-secondary);">
+            <div style="font-size: 0.68rem; color: var(--text-secondary);">
                 Per Contracted Client
             </div>
         </div>
     </div>
 
     <!-- Yearly Sales Performance: Chart & Detailed Comparison Table -->
-    <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 12px; margin-top: 4px;">
+    <div class="sales-trajectory-grid">
         
         <!-- Yearly Sales Multi-Year Trend Chart (2024 - 2027) -->
-        <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 12px 14px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 10px 12px; min-width: 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                 <div>
-                    <h4 style="font-size: 0.875rem; font-weight: 700; color: var(--text-primary);">Multi-Year Sales & Revenue Trajectory</h4>
-                    <span style="font-size: 0.7rem; color: var(--text-muted);">Annual Booked Contract Sales vs Cleared Cash Inflow (2024 &ndash; 2027)</span>
+                    <h4 style="font-size: 0.825rem; font-weight: 700; color: var(--text-primary);">Multi-Year Sales & Revenue Trajectory</h4>
+                    <span style="font-size: 0.68rem; color: var(--text-muted);">Annual Booked vs Cleared Cash (2024 &ndash; 2027)</span>
                 </div>
-                <span class="badge badge-in_progress" style="font-size: 0.65rem;">₱ in Millions</span>
+                <span class="badge badge-in_progress" style="font-size: 0.6rem; padding: 2px 6px;">₱ in Millions</span>
             </div>
 
-            <div style="position: relative; height: 180px;">
+            <div style="position: relative; height: 160px; width: 100%;">
                 <canvas id="yearlySalesChart"></canvas>
             </div>
         </div>
 
         <!-- Yearly Sales Comparison Matrix -->
-        <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 12px 14px; overflow-x: auto;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 10px 12px; overflow-x: auto; min-width: 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                 <div>
-                    <h4 style="font-size: 0.875rem; font-weight: 700; color: var(--text-primary);">Yearly Sales Performance Matrix</h4>
-                    <span style="font-size: 0.7rem; color: var(--text-muted);">Annual bookings, margin % & YoY growth</span>
+                    <h4 style="font-size: 0.825rem; font-weight: 700; color: var(--text-primary);">Yearly Sales Performance Matrix</h4>
+                    <span style="font-size: 0.68rem; color: var(--text-muted);">Annual bookings, margin % & YoY growth</span>
                 </div>
             </div>
 
-            <table class="custom-table" style="font-size: 0.775rem;">
+            <table class="custom-table" style="font-size: 0.725rem; width: 100%;">
                 <thead>
                     <tr>
-                        <th style="padding: 6px 8px;">Year</th>
-                        <th style="padding: 6px 8px;">Booked Sales (₱)</th>
-                        <th style="padding: 6px 8px;">Cleared Cash</th>
-                        <th style="padding: 6px 8px;">Margin %</th>
-                        <th style="padding: 6px 8px;">YoY Growth</th>
+                        <th style="padding: 4px 6px;">Year</th>
+                        <th style="padding: 4px 6px;">Booked Sales (₱)</th>
+                        <th style="padding: 4px 6px;">Cleared Cash</th>
+                        <th style="padding: 4px 6px;">Margin %</th>
+                        <th style="padding: 4px 6px;">YoY Growth</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($yearlySalesMatrix as $yr => $data)
                     <tr>
-                        <td style="padding: 6px 8px;">
-                            <strong style="font-family: var(--font-mono); font-size: 0.85rem; color: {{ $yr == 2026 ? '#dc2626' : '#0f172a' }};">
+                        <td style="padding: 4px 6px;">
+                            <strong style="font-family: var(--font-mono); font-size: 0.8rem; color: {{ $yr == 2026 ? '#dc2626' : '#0f172a' }};">
                                 {{ $yr }}
                             </strong>
                             @if($yr == 2026)
-                                <span class="badge badge-in_progress" style="font-size: 0.55rem; padding: 1px 4px; margin-left: 2px;">Current</span>
+                                <span class="badge badge-in_progress" style="font-size: 0.5rem; padding: 1px 3px; margin-left: 2px;">Current</span>
                             @elseif($yr < 2026)
-                                <span class="badge badge-settled" style="font-size: 0.55rem; padding: 1px 4px; margin-left: 2px;">Archived</span>
+                                <span class="badge badge-settled" style="font-size: 0.5rem; padding: 1px 3px; margin-left: 2px;">Archived</span>
                             @else
-                                <span class="badge badge-warning" style="font-size: 0.55rem; padding: 1px 4px; margin-left: 2px;">Forecast</span>
+                                <span class="badge badge-warning" style="font-size: 0.5rem; padding: 1px 3px; margin-left: 2px;">Forecast</span>
                             @endif
                         </td>
-                        <td style="font-family: var(--font-mono); font-weight: 700; color: var(--text-primary); padding: 6px 8px;">
+                        <td style="font-family: var(--font-mono); font-weight: 700; color: var(--text-primary); padding: 4px 6px;">
                             ₱{{ number_format($data['booked_sales'] / 1000000, 2) }}M
-                            <div style="font-size: 0.65rem; color: var(--text-muted);">{{ $data['projects_count'] }} Contracts</div>
+                            <div style="font-size: 0.6rem; color: var(--text-muted);">{{ $data['projects_count'] }} Contracts</div>
                         </td>
-                        <td style="font-family: var(--font-mono); color: #059669; font-weight: 700; padding: 6px 8px;">
+                        <td style="font-family: var(--font-mono); color: #059669; font-weight: 700; padding: 4px 6px;">
                             ₱{{ number_format($data['cleared_revenue'] / 1000000, 2) }}M
                         </td>
-                        <td style="padding: 6px 8px;">
+                        <td style="padding: 4px 6px;">
                             <span style="color: {{ $data['margin_percent'] >= 20 ? '#059669' : '#d97706' }}; font-weight: 700; font-family: var(--font-mono);">
                                 {{ $data['margin_percent'] }}%
                             </span>
                         </td>
-                        <td style="padding: 6px 8px;">
+                        <td style="padding: 4px 6px;">
                             @if($data['growth_rate'] > 0)
-                                <span class="growth-pill positive">+{{ $data['growth_rate'] }}%</span>
+                                <span class="growth-pill positive" style="font-size: 0.6rem; padding: 1px 4px;">+{{ $data['growth_rate'] }}%</span>
                             @elseif($data['growth_rate'] < 0)
-                                <span class="growth-pill negative">{{ $data['growth_rate'] }}%</span>
+                                <span class="growth-pill negative" style="font-size: 0.6rem; padding: 1px 4px;">{{ $data['growth_rate'] }}%</span>
                             @else
-                                <span class="growth-pill neutral">--</span>
+                                <span class="growth-pill neutral" style="font-size: 0.6rem; padding: 1px 4px;">--</span>
                             @endif
                         </td>
                     </tr>
@@ -200,11 +200,11 @@
 <!-- ====================================================
      SECTION 2: COMPANY-WIDE ON-SITE WORKFORCE & DEPLOYMENT
      ==================================================== -->
-<div class="glass-panel" style="border: 1px solid rgba(56, 189, 248, 0.25); margin-bottom: 16px;">
-    <div class="panel-header" style="margin-bottom: 12px;">
-        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-            <div style="width: 36px; height: 36px; min-width: 36px; border-radius: var(--radius-md); background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); display: flex; align-items: center; justify-content: center; color: #38bdf8; flex-shrink: 0;">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<div class="glass-panel" style="border: 1px solid rgba(56, 189, 248, 0.25); margin-bottom: 12px;">
+    <div class="panel-header" style="margin-bottom: 8px;">
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <div style="width: 32px; height: 32px; min-width: 32px; border-radius: var(--radius-md); background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); display: flex; align-items: center; justify-content: center; color: #38bdf8; flex-shrink: 0;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                     <circle cx="9" cy="7" r="4"></circle>
                     <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
@@ -212,18 +212,18 @@
                 </svg>
             </div>
             <div>
-                <h3 class="panel-title" style="font-size: 1.1rem;">Company-Wide On-Site Workforce & Resource Deployment</h3>
-                <span style="font-size: 0.8rem; color: var(--text-muted);">
+                <h3 class="panel-title" style="font-size: 1rem;">Company-Wide On-Site Workforce & Resource Deployment</h3>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">
                     Real-time field personnel and trade crews currently mobilized across active construction sites
                 </span>
             </div>
         </div>
-        <div style="display: flex; align-items: center; gap: 8px;">
-            <span class="badge badge-in_progress" style="font-size: 0.775rem; padding: 4px 10px;">
-                {{ $totalActiveManpower }} Total Active Manpower
+        <div style="display: flex; align-items: center; gap: 6px;">
+            <span class="badge badge-in_progress" style="font-size: 0.725rem; padding: 3px 8px;">
+                {{ $totalActiveManpower }} Total Active
             </span>
-            <a href="/personnel" class="btn-secondary" style="font-size: 0.775rem; padding: 5px 10px;">
-                Engineers & Architects Roster &rarr;
+            <a href="/personnel" class="btn-secondary" style="font-size: 0.725rem; padding: 4px 8px;">
+                Roster &rarr;
             </a>
         </div>
     </div>

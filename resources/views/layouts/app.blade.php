@@ -299,14 +299,14 @@
             </div>
 
             <!-- Right Controls: Command Search Trigger & Top Action Slot -->
-            <div class="top-actions" style="display: flex; align-items: center; gap: 10px;">
+            <div class="top-actions" style="display: flex; align-items: center; gap: 6px;">
                 <!-- Global Command Palette Hotkey Trigger Button -->
                 <button type="button" class="btn-command-search" onclick="openCommandPalette()" title="Press Ctrl + K to search anything">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="11" cy="11" r="8"></circle>
                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                     </svg>
-                    <span class="cmd-search-text">Search projects, materials, BOM...</span>
+                    <span class="cmd-search-text">Search...</span>
                     <kbd class="cmd-shortcut-key">Ctrl K</kbd>
                 </button>
 
