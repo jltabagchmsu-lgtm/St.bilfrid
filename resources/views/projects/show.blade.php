@@ -28,18 +28,10 @@
     <button class="btn-secondary" style="font-size: 0.85rem;" onclick="openModal('addProjectPaymentModal')">
         + Payment / OR
     </button>
-    <form action="{{ route('projects.destroy', $project->id) }}" method="POST" onsubmit="
-        const text = prompt('DANGER: This will permanently erase this project and all associated records.\n\nPlease type DELETE to confirm:');
-        if (text !== 'DELETE') {
-            if (text !== null) alert('Deletion aborted: Confirmation text must exactly match DELETE.');
-            return false;
-        }
-        document.getElementById('showDeleteConfirmationInput').value = text;
-        return true;
-    " style="display:inline;">
+    <form action="{{ route('projects.destroy', $project->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this?');" style="display:inline;">
         @csrf
         @method('DELETE')
-        <input type="hidden" name="confirmation" id="showDeleteConfirmationInput" value="">
+        <input type="hidden" name="confirmation" value="DELETE">
         <button type="submit" class="btn-secondary" style="font-size: 0.85rem; color: #f87171; border-color: rgba(239,68,68,0.35);" title="Permanently Delete Project">
             Delete
         </button>

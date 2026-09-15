@@ -321,23 +321,6 @@ class ProjectController extends Controller
 
     public function destroy(Request $request, $id)
     {
-        $confirmationField = 'confirmation';
-        foreach (['confirmation', 'confirm', 'confirmation_text', 'confirm_text', 'delete_confirmation'] as $candidate) {
-            if ($request->exists($candidate)) {
-                $confirmationField = $candidate;
-                break;
-            }
-        }
-
-        $confirmationValue = $request->input($confirmationField);
-
-        if ($confirmationValue !== 'DELETE') {
-            throw ValidationException::withMessages([
-                $confirmationField => ['Project deletion aborted: Confirmation text must exactly match "DELETE".'],
-                'confirmation' => ['Project deletion aborted: Confirmation text must exactly match "DELETE".'],
-            ]);
-        }
-
         $project = Project::with(['photos', 'tasks', 'scopeItems.lines', 'projectMaterials', 'costs', 'payments'])->findOrFail($id);
         $projectCode = $project->project_code;
         $projectTitle = $project->title;

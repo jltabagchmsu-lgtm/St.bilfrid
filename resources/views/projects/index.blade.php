@@ -800,45 +800,44 @@
     </div>
 </div>
 
-<!-- Modal: Delete Project Confirmation -->
-<div class="modal-overlay" id="deleteProjectModal">
-    <div class="modal-box" style="max-width: 480px; border: 1px solid rgba(239, 68, 68, 0.4); box-shadow: var(--card-shadow);">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
-            <div style="display: flex; align-items: center; gap: 12px;">
-                <div style="width: 44px; height: 44px; border-radius: 50%; background: var(--primary-red-light); display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: bold; color: var(--primary-red); border: 1px solid var(--primary-red-border);">
-                    DEL
-                </div>
-                <div>
-                    <h3 style="font-weight: 700; color: var(--primary-red); margin: 0; font-size: 1.15rem;">Delete Project</h3>
-                    <div style="font-size: 0.775rem; color: var(--text-muted);">St. Bilfrid Development Corporation</div>
+<!-- Modal: Delete Project Confirmation Pop Up Window -->
+<div class="modal-overlay" id="deleteProjectModal" onclick="if(event.target === this) closeModal('deleteProjectModal');">
+    <div class="modal-box" style="max-width: 440px; border: 1px solid rgba(239, 68, 68, 0.4); box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.25); padding: 24px;">
+        <div style="display: flex; align-items: flex-start; gap: 14px; margin-bottom: 16px;">
+            <div style="width: 44px; height: 44px; border-radius: 50%; background: var(--primary-red-light); display: flex; align-items: center; justify-content: center; color: var(--primary-red); border: 1px solid var(--primary-red-border); flex-shrink: 0;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 6h18"></path>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                </svg>
+            </div>
+            <div style="flex: 1;">
+                <h3 style="font-weight: 800; color: var(--text-primary); margin: 0 0 4px 0; font-size: 1.15rem;">
+                    Are you sure you want to delete this?
+                </h3>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">
+                    This action is permanent and cannot be undone.
                 </div>
             </div>
-            <button onclick="closeModal('deleteProjectModal')" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer; line-height: 1;">&times;</button>
+            <button onclick="closeModal('deleteProjectModal')" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer; line-height: 1; padding: 2px;" title="Close">&times;</button>
         </div>
 
-        <div style="background: var(--primary-red-light); border-left: 3px solid var(--primary-red); padding: 12px 14px; border-radius: 4px; margin-bottom: 16px;">
-            <div style="font-size: 0.8rem; color: var(--text-secondary);">Are you sure you want to delete this?</div>
-            <div id="deleteProjectCodeDisplay" style="font-family: var(--font-mono); font-weight: 700; color: var(--primary-red); font-size: 0.95rem; margin-top: 2px;"></div>
-            <div id="deleteProjectTitleDisplay" style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem; margin-top: 2px;"></div>
-        </div>
-
-        <div style="background: #f8fafc; border-radius: var(--radius-sm); padding: 12px; margin-bottom: 20px; font-size: 0.78rem; color: var(--text-secondary); line-height: 1.5; border: 1px solid var(--border-color);">
-            <strong>Action Details:</strong> This will permanently delete this project, including its 53-item checklist, material allocations, BOM estimates, incurred expense logs, CAD blueprints/photos, and billing payment history.
+        <div style="background: var(--primary-red-light); border-left: 3px solid var(--primary-red); padding: 10px 14px; border-radius: var(--radius-sm); margin-bottom: 20px;">
+            <div id="deleteProjectCodeDisplay" style="font-family: var(--font-mono); font-weight: 700; color: var(--primary-red); font-size: 0.9rem;"></div>
+            <div id="deleteProjectTitleDisplay" style="font-weight: 600; color: var(--text-primary); font-size: 0.85rem; margin-top: 2px;"></div>
         </div>
 
         <form id="deleteProjectForm" action="" method="POST">
             @csrf
             @method('DELETE')
-            <div style="margin-bottom: 16px;">
-                <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px;">
-                    Please type <strong style="color: var(--primary-red); font-family: var(--font-mono);">DELETE</strong> to confirm permanent deletion:
-                </label>
-                <input type="text" name="confirmation" id="deleteProjectConfirmInput" class="form-input" placeholder="Type DELETE" required autocomplete="off" style="width: 100%;">
-            </div>
+            <input type="hidden" name="confirmation" value="DELETE">
             <div style="display: flex; justify-content: flex-end; gap: 10px;">
-                <button type="button" class="btn-secondary" onclick="closeModal('deleteProjectModal')">Cancel</button>
-                <button type="submit" class="btn-primary" style="background: linear-gradient(135deg, #ef4444, #dc2626); border-color: #dc2626; color: white; font-weight: 700;">
-                    Permanently Delete Project
+                <button type="button" class="btn-secondary" onclick="closeModal('deleteProjectModal')" style="padding: 8px 18px; font-weight: 600;">
+                    Cancel
+                </button>
+                <button type="submit" class="btn-primary" style="background: linear-gradient(135deg, #ef4444, #dc2626); border-color: #dc2626; color: white; font-weight: 700; padding: 8px 20px;">
+                    Yes, Delete
                 </button>
             </div>
         </form>
@@ -871,10 +870,6 @@
         const titleEl = document.getElementById('deleteProjectTitleDisplay');
         if (titleEl) {
             titleEl.innerText = title || '';
-        }
-        const inputEl = document.getElementById('deleteProjectConfirmInput');
-        if (inputEl) {
-            inputEl.value = '';
         }
         openModal('deleteProjectModal');
     }
