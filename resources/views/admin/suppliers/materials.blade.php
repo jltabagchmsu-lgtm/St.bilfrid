@@ -187,7 +187,7 @@
 </div>
 
 <!-- Pagination Links -->
-<div style="display: flex; justify-content: flex-end;">
+<div style="margin-top: 14px;">
     {{ $materials->links() }}
 </div>
 

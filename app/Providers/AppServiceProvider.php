@@ -19,6 +19,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        \Illuminate\Pagination\Paginator::defaultView('vendor.pagination.custom');
+        \Illuminate\Pagination\Paginator::defaultSimpleView('vendor.pagination.simple-custom');
+
         // Auto-migrate and seed supplier tables on remote web host if they don't exist yet
         try {
             if (!\Illuminate\Support\Facades\Schema::hasTable('suppliers')) {
