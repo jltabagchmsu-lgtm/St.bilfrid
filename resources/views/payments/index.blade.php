@@ -144,7 +144,7 @@
                         </span>
                     </td>
                     <td>
-                        <strong style="font-family: var(--font-mono); font-size: 1.05rem; color: {{ $pay->status === 'paid' ? '#10b981' : '#f59e0b' }};">
+                        <strong style="font-family: var(--font-mono); font-size: 1.15rem; font-weight: 800; color: {{ $pay->status === 'paid' ? '#059669' : '#d97706' }}; letter-spacing: -0.015em;">
                             ₱{{ number_format($pay->amount, 2) }}
                         </strong>
                     </td>

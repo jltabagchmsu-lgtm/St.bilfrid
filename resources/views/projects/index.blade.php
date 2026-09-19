@@ -111,28 +111,28 @@
                     </div>
                 <td>
                     <div style="font-size: 0.85rem;">
-                        <div style="color: var(--text-secondary);">Contract Budget:</div>
-                        <div style="font-family: var(--font-mono); font-weight: 700; color: var(--text-primary);">
+                        <div style="font-size: 0.7rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); letter-spacing: 0.04em;">Contract Budget:</div>
+                        <div style="font-family: var(--font-mono); font-weight: 800; font-size: 1.05rem; color: var(--text-primary); line-height: 1.2;">
                             ₱{{ number_format($prj->contract_budget, 2) }}
                         </div>
                     </div>
                     @if($prj->client_budget && $prj->client_budget > 0)
-                    <div style="font-size: 0.75rem; color: #38bdf8; margin-top: 2px;">
-                        Client Budget: ₱{{ number_format($prj->client_budget, 2) }}
+                    <div style="font-size: 0.775rem; color: #0284c7; margin-top: 3px; font-weight: 600;">
+                        Client: <span style="font-family: var(--font-mono); font-weight: 700;">₱{{ number_format($prj->client_budget, 2) }}</span>
                     </div>
                     @endif
                     @if($prj->estimated_cost && $prj->estimated_cost > 0)
-                    <div style="font-size: 0.725rem; color: #ec4899; margin-top: 1px;">
-                        Est. Cost: ₱{{ number_format($prj->estimated_cost, 2) }}
+                    <div style="font-size: 0.75rem; color: #db2777; margin-top: 1px;">
+                        Est: <span style="font-family: var(--font-mono); font-weight: 700;">₱{{ number_format($prj->estimated_cost, 2) }}</span>
                     </div>
                     @endif
-                    <div style="font-size: 0.8rem; margin-top: 4px;">
-                        <div style="color: var(--text-secondary);">Incurred Cost:</div>
-                        <div style="font-family: var(--font-mono); color: {{ $prj->total_incurred_cost > $prj->contract_budget ? '#ef4444' : '#38bdf8' }}; font-weight: 600;">
-                            ₱{{ number_format($prj->total_incurred_cost, 2) }} ({{ number_format($prj->budget_consumption_pct, 1) }}%)
+                    <div style="font-size: 0.825rem; margin-top: 5px; border-top: 1px dashed var(--border-color); padding-top: 4px;">
+                        <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600;">Incurred Cost:</div>
+                        <div style="font-family: var(--font-mono); color: {{ $prj->total_incurred_cost > $prj->contract_budget ? '#ef4444' : '#0284c7' }}; font-weight: 700; font-size: 0.95rem;">
+                            ₱{{ number_format($prj->total_incurred_cost, 2) }} <span style="font-size: 0.725rem; font-weight: 600;">({{ number_format($prj->budget_consumption_pct, 1) }}%)</span>
                         </div>
-                        <div style="font-size: 0.725rem; color: #10b981; margin-top: 2px;">
-                            Margin: ₱{{ number_format($prj->gross_margin, 2) }} ({{ $prj->gross_margin_percent }}%)
+                        <div style="font-size: 0.75rem; color: #059669; margin-top: 2px; font-weight: 600;">
+                            Margin: <span style="font-family: var(--font-mono); font-weight: 700;">₱{{ number_format($prj->gross_margin, 2) }}</span> ({{ $prj->gross_margin_percent }}%)
                         </div>
                     </div>
                 </td>

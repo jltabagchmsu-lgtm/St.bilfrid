@@ -4,42 +4,27 @@
 @section('page_title', $project->title)
 
 @section('top_actions')
-    <button class="btn-secondary" style="font-size: 0.85rem; color: #38bdf8; border-color: rgba(56, 189, 248, 0.4);" onclick="openModal('editProjectModal')">
+    <button class="btn-secondary" style="font-size: 0.825rem; color: #0284c7; border-color: rgba(56, 189, 248, 0.4);" onclick="openModal('editProjectModal')">
         Edit Project Specs
     </button>
-    <a href="{{ route('projects.printReport', $project->id) }}" target="_blank" class="btn-primary" style="font-size: 0.85rem; background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);">
+    <a href="{{ route('projects.printReport', $project->id) }}" target="_blank" class="btn-primary" style="font-size: 0.825rem; background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);">
         Official Accomplishment Report
     </a>
-    <a href="{{ route('projects.printBom', $project->id) }}" target="_blank" class="btn-secondary" style="font-size: 0.85rem; color: #10b981; border-color: rgba(16, 185, 129, 0.4);">
+    <a href="{{ route('projects.printBom', $project->id) }}" target="_blank" class="btn-secondary" style="font-size: 0.825rem; color: #10b981; border-color: rgba(16, 185, 129, 0.4);">
         Print 8-Page BOM (DUPA)
     </a>
-    <button class="btn-secondary" style="font-size: 0.85rem;" onclick="switchMasterProjectTab('scheduling'); openModal('updateScheduleModal');">
-        Set Schedule ({{ $remainingDays }}d left)
-    </button>
-    <button class="btn-secondary" style="font-size: 0.85rem;" onclick="switchMasterProjectTab('blueprints'); openModal('uploadPhotoModal');">
-        + Blueprint / Photo
-    </button>
-    <button class="btn-secondary" style="font-size: 0.85rem;" onclick="switchMasterProjectTab('workforce'); openModal('updateManpowerModal');">
-        Manpower ({{ $totalDeployedManpower }})
-    </button>
-    <button class="btn-secondary" style="font-size: 0.85rem;" onclick="switchMasterProjectTab('bom'); openModal('addCostItemModal');">
-        + Cost Item
-    </button>
-    <button class="btn-secondary" style="font-size: 0.85rem;" onclick="switchMasterProjectTab('financials'); openModal('addProjectPaymentModal');">
-        + Payment / OR
-    </button>
     <form action="{{ route('projects.destroy', $project->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this?');" style="display:inline;">
         @csrf
         @method('DELETE')
         <input type="hidden" name="confirmation" value="DELETE">
-        <button type="submit" class="btn-secondary" style="font-size: 0.85rem; color: #f87171; border-color: rgba(239,68,68,0.35);" title="Permanently Delete Project">
+        <button type="submit" class="btn-secondary" style="font-size: 0.825rem; color: #f87171; border-color: rgba(239,68,68,0.35);" title="Permanently Delete Project">
             Delete
         </button>
     </form>
     @if($project->status === 'completed')
-        <a href="/history" class="btn-secondary" style="font-size: 0.85rem;">&larr; History</a>
+        <a href="/history" class="btn-secondary" style="font-size: 0.825rem;">&larr; History</a>
     @else
-        <a href="/projects" class="btn-secondary" style="font-size: 0.85rem;">&larr; Tracker</a>
+        <a href="/projects" class="btn-secondary" style="font-size: 0.825rem;">&larr; Tracker</a>
     @endif
 @endsection
 
@@ -175,14 +160,17 @@
     top: 8px;
     z-index: 45;
     backdrop-filter: blur(10px);
+    width: 100%;
+    box-sizing: border-box;
 }
 .project-master-tabs-scroll {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     overflow-x: auto;
     scrollbar-width: thin;
     padding-bottom: 2px;
+    width: 100%;
 }
 .project-master-tabs-scroll::-webkit-scrollbar {
     height: 4px;
@@ -310,10 +298,6 @@
             <span class="master-tab-dot" style="background: #64748b;"></span>
             <span>Milestone Audit</span>
             <span class="master-tab-badge">{{ count($milestones) }}</span>
-        </button>
-        <button type="button" id="masterTabBtn_all" class="master-project-tab-btn" onclick="switchMasterProjectTab('all', this)" style="margin-left: auto;">
-            <span class="master-tab-dot" style="background: #0f172a;"></span>
-            <span>All Modules (Full View)</span>
         </button>
     </div>
 </div>
@@ -1663,7 +1647,7 @@
                         <td>
                             <span style="font-weight: 700; color: var(--text-primary);">{{ $payment->payment_stage }}</span>
                         </td>
-                        <td style="font-family: var(--font-mono); font-size: 0.95rem; font-weight: 800; color: {{ $payment->status === 'paid' ? '#059669' : '#d97706' }};">
+                        <td style="font-family: var(--font-mono); font-size: 1.15rem; font-weight: 800; color: {{ $payment->status === 'paid' ? '#059669' : '#d97706' }}; letter-spacing: -0.015em;">
                             ₱{{ number_format($payment->amount, 2) }}
                         </td>
                         <td>
@@ -3448,10 +3432,10 @@
             }
         }
 
-        // 3. Show target pane or all panes
+        // 3. Show target pane strictly (single-pane viewing)
         const panes = document.querySelectorAll('.project-tab-pane');
         panes.forEach(pane => {
-            if (tabName === 'all' || pane.getAttribute('data-tab-pane') === tabName) {
+            if (pane.getAttribute('data-tab-pane') === tabName) {
                 pane.style.display = 'block';
                 pane.classList.add('active-pane');
             } else {
@@ -3477,7 +3461,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         let targetTab = 'executive';
         const hash = window.location.hash ? window.location.hash.substring(1) : '';
-        const validTabs = ['executive', 'blueprints', 'scheduling', 'monitoring', 'workforce', 'bom', 'tasks', 'financials', 'audit', 'all'];
+        const validTabs = ['executive', 'blueprints', 'scheduling', 'monitoring', 'workforce', 'bom', 'tasks', 'financials', 'audit'];
 
         if (hash && validTabs.includes(hash)) {
             targetTab = hash;
