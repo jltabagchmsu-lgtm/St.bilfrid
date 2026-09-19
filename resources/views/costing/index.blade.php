@@ -97,43 +97,43 @@
     <div class="kpi-grid">
         <div class="kpi-card">
             <div class="kpi-header">
-                <span class="kpi-title">Total Contract Value (₱)</span>
-                <span class="spec-chip" style="font-size: 0.65rem; color: #38bdf8;">CONTRACT</span>
+                <span class="kpi-title">Total Contract Value (Sales)</span>
+                <span class="spec-chip" style="font-size: 0.65rem; color: #10b981; border-color: rgba(16, 185, 129, 0.4);">CONTRACT</span>
             </div>
-            <div class="kpi-val" style="font-family: var(--font-mono); color: #38bdf8;">₱{{ number_format($selectedProject->contract_budget, 2) }}</div>
+            <div class="kpi-val" style="font-family: var(--font-mono); color: #10b981; font-weight: 800; font-size: 1.6rem;">₱{{ number_format($selectedProject->contract_budget, 2) }}</div>
             <div class="kpi-sub">Target Contract Baseline</div>
         </div>
 
         <div class="kpi-card">
             <div class="kpi-header">
-                <span class="kpi-title">Total Incurred Actual Cost (₱)</span>
-                <span class="spec-chip" style="font-size: 0.65rem; color: #ef4444;">ACTUAL</span>
+                <span class="kpi-title">Total Incurred Actual Cost</span>
+                <span class="spec-chip" style="font-size: 0.65rem; color: {{ $selectedProject->total_incurred_cost > $selectedProject->contract_budget ? '#ef4444' : '#f59e0b' }}; border-color: {{ $selectedProject->total_incurred_cost > $selectedProject->contract_budget ? 'rgba(239, 68, 68, 0.4)' : 'rgba(245, 158, 11, 0.4)' }};">ACTUAL</span>
             </div>
-            <div class="kpi-val" style="font-family: var(--font-mono); color: #f8fafc;">₱{{ number_format($selectedProject->total_incurred_cost, 2) }}</div>
-            <div class="kpi-sub">
-                {{ $selectedProject->contract_budget > 0 ? round(($selectedProject->total_incurred_cost / $selectedProject->contract_budget) * 100, 1) : 0 }}% of Contract Budget Utilized
+            <div class="kpi-val" style="font-family: var(--font-mono); color: {{ $selectedProject->total_incurred_cost > $selectedProject->contract_budget ? '#dc2626' : '#d97706' }}; font-weight: 800; font-size: 1.6rem;">₱{{ number_format($selectedProject->total_incurred_cost, 2) }}</div>
+            <div class="kpi-sub" style="color: {{ $selectedProject->total_incurred_cost > $selectedProject->contract_budget ? '#dc2626' : 'var(--text-muted)' }}; font-weight: {{ $selectedProject->total_incurred_cost > $selectedProject->contract_budget ? '700' : 'normal' }};">
+                {{ $selectedProject->contract_budget > 0 ? round(($selectedProject->total_incurred_cost / $selectedProject->contract_budget) * 100, 1) : 0 }}% of Contract Budget {{ $selectedProject->total_incurred_cost > $selectedProject->contract_budget ? '(Overrun)' : 'Utilized' }}
             </div>
         </div>
 
         <div class="kpi-card">
             <div class="kpi-header">
                 <span class="kpi-title">Projected Gross Profit / Margin</span>
-                <span class="spec-chip" style="font-size: 0.65rem; color: #10b981;">MARGIN</span>
+                <span class="spec-chip" style="font-size: 0.65rem; color: {{ $selectedProject->gross_margin >= 0 ? '#10b981' : '#ef4444' }}; border-color: {{ $selectedProject->gross_margin >= 0 ? 'rgba(16, 185, 129, 0.4)' : 'rgba(239, 68, 68, 0.4)' }};">MARGIN</span>
             </div>
-            <div class="kpi-val" style="font-family: var(--font-mono); color: {{ $selectedProject->gross_margin >= 0 ? '#10b981' : '#ef4444' }};">
+            <div class="kpi-val" style="font-family: var(--font-mono); color: {{ $selectedProject->gross_margin >= 0 ? '#10b981' : '#ef4444' }}; font-weight: 800; font-size: 1.6rem;">
                 ₱{{ number_format($selectedProject->gross_margin, 2) }}
             </div>
             <div class="kpi-sub" style="color: {{ $selectedProject->gross_margin >= 0 ? '#10b981' : '#ef4444' }}; font-weight: 700;">
-                {{ $selectedProject->gross_margin_percent }}% Gross Margin
+                {{ $selectedProject->gross_margin_percent }}% {{ $selectedProject->gross_margin >= 0 ? 'Gross Profit Margin' : 'Financial Deficit' }}
             </div>
         </div>
 
         <div class="kpi-card">
             <div class="kpi-header">
                 <span class="kpi-title">Unit Cost per Floor Area</span>
-                <span class="spec-chip" style="font-size: 0.65rem; color: #f59e0b;">UNIT COST</span>
+                <span class="spec-chip" style="font-size: 0.65rem; color: #f59e0b; border-color: rgba(245, 158, 11, 0.4);">UNIT COST</span>
             </div>
-            <div class="kpi-val" style="font-family: var(--font-mono); color: #f59e0b;">
+            <div class="kpi-val" style="font-family: var(--font-mono); color: #f59e0b; font-weight: 800; font-size: 1.6rem;">
                 ₱{{ number_format($selectedProject->cost_per_floor_sqm, 2) }}<span style="font-size: 0.9rem; font-weight: 500; color: var(--text-muted);">/m²</span>
             </div>
             <div class="kpi-sub">Land Rate: ₱{{ number_format($selectedProject->cost_per_land_sqm, 2) }}/m²</div>

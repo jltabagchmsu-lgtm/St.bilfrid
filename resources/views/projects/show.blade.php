@@ -130,7 +130,7 @@
 
         <div style="text-align: right; display: flex; flex-direction: column; gap: 8px; cursor: pointer;" onclick="switchMasterProjectTab('monitoring')" title="Click to view Trade Progression Checklist">
             <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Weighted Accomplishment ↗</div>
-            <div style="font-family: var(--font-mono); font-size: 2.75rem; font-weight: 800; color: var(--primary-red); line-height: 1;" id="headerOverallProgressVal">
+            <div style="font-family: var(--font-mono); font-size: 2.75rem; font-weight: 800; color: {{ $project->overall_progress >= 100 ? '#10b981' : ($project->overall_progress > 0 ? '#d97706' : '#64748b') }}; line-height: 1;" id="headerOverallProgressVal">
                 {{ $project->overall_progress }}%
             </div>
             <div style="font-size: 0.8rem; color: var(--text-secondary);">
@@ -326,43 +326,47 @@
 
     <!-- 8 Executive Summary Blocks Grid -->
     <div class="summary-metric-blocks">
-        <div class="summary-block interactive-jump-card" style="border-left: 4px solid var(--primary-red);" onclick="switchMasterProjectTab('financials')" title="Click to open Financials & Payments Ledger">
-            <div class="summary-block-label">Total Contract Value ↗</div>
-            <div class="summary-block-val">₱{{ number_format($project->contract_budget, 2) }}</div>
+        <div class="summary-block interactive-jump-card" style="border-left: 4px solid #10b981;" onclick="switchMasterProjectTab('financials')" title="Click to open Financials & Payments Ledger">
+            <div class="summary-block-label" style="color: #059669;">Total Contract Value (Sales) ↗</div>
+            <div class="summary-block-val" style="color: #059669;">₱{{ number_format($project->contract_budget, 2) }}</div>
             <div class="summary-block-sub">
                 @if($project->client_budget && $project->client_budget > 0)
                     Client Budget: ₱{{ number_format($project->client_budget, 2) }}
                 @elseif($project->estimated_cost && $project->estimated_cost > 0)
                     Est. Cost: ₱{{ number_format($project->estimated_cost, 2) }}
                 @else
-                    Gross Booked Sales
+                    Gross Booked Sales (Revenue)
                 @endif
             </div>
         </div>
 
         <div class="summary-block interactive-jump-card" style="border-left: 4px solid #10b981;" onclick="switchMasterProjectTab('financials')" title="Click to open Financials & Payments Ledger">
-            <div class="summary-block-label">Cleared Cash Inflow ↗</div>
+            <div class="summary-block-label" style="color: #059669;">Cleared Cash Inflow ↗</div>
             <div class="summary-block-val" style="color: #059669;">₱{{ number_format($totalPaid, 2) }}</div>
             <div class="summary-block-sub" style="color: #059669; font-weight: 700;">{{ $salesCollectionRate }}% Collection Rate</div>
         </div>
 
-        <div class="summary-block interactive-jump-card" style="border-left: 4px solid #f59e0b;" onclick="switchMasterProjectTab('bom')" title="Click to open Itemized BOM & Cost Estimates">
-            <div class="summary-block-label">Actual Incurred Cost ↗</div>
-            <div class="summary-block-val" style="color: #d97706;">₱{{ number_format($totalIncurredCost, 2) }}</div>
-            <div class="summary-block-sub">Rate: ₱{{ number_format($costPerFloorSqm, 2) }}/m²</div>
+        <div class="summary-block interactive-jump-card" style="border-left: 4px solid {{ $totalIncurredCost > $project->contract_budget ? '#ef4444' : '#f59e0b' }};" onclick="switchMasterProjectTab('bom')" title="Click to open Itemized BOM & Cost Estimates">
+            <div class="summary-block-label" style="color: {{ $totalIncurredCost > $project->contract_budget ? '#dc2626' : '#d97706' }};">Actual Incurred Cost ↗</div>
+            <div class="summary-block-val" style="color: {{ $totalIncurredCost > $project->contract_budget ? '#dc2626' : '#d97706' }};">₱{{ number_format($totalIncurredCost, 2) }}</div>
+            <div class="summary-block-sub" style="color: {{ $totalIncurredCost > $project->contract_budget ? '#dc2626' : 'var(--text-muted)' }}; font-weight: {{ $totalIncurredCost > $project->contract_budget ? '700' : 'normal' }};">
+                {{ $totalIncurredCost > $project->contract_budget ? '⚠️ Budget Overrun' : 'Rate: ₱' . number_format($costPerFloorSqm, 2) . '/m²' }}
+            </div>
         </div>
 
-        <div class="summary-block interactive-jump-card" style="border-left: 4px solid #10b981;" onclick="switchMasterProjectTab('financials')" title="Click to open Financials & Payments Ledger">
-            <div class="summary-block-label">Projected Gross Margin ↗</div>
+        <div class="summary-block interactive-jump-card" style="border-left: 4px solid {{ $grossMargin >= 0 ? '#10b981' : '#ef4444' }};" onclick="switchMasterProjectTab('financials')" title="Click to open Financials & Payments Ledger">
+            <div class="summary-block-label" style="color: {{ $grossMargin >= 0 ? '#059669' : '#dc2626' }};">Projected Gross Margin ↗</div>
             <div class="summary-block-val" style="color: {{ $grossMargin >= 0 ? '#059669' : '#dc2626' }};">
                 ₱{{ number_format($grossMargin, 2) }}
             </div>
-            <div class="summary-block-sub" style="color: #059669; font-weight: 700;">{{ $grossMarginPercent }}% Profit Margin</div>
+            <div class="summary-block-sub" style="color: {{ $grossMargin >= 0 ? '#059669' : '#dc2626' }}; font-weight: 700;">
+                {{ $grossMargin >= 0 ? $grossMarginPercent . '% Profit Margin' : 'Financial Loss Deficit' }}
+            </div>
         </div>
 
-        <div class="summary-block interactive-jump-card" style="border-left: 4px solid var(--primary-red);" onclick="switchMasterProjectTab('workforce')" title="Click to open On-Site Workforce & Resource Hub">
+        <div class="summary-block interactive-jump-card" style="border-left: 4px solid #3b82f6;" onclick="switchMasterProjectTab('workforce')" title="Click to open On-Site Workforce & Resource Hub">
             <div class="summary-block-label">Workforce Deployed ↗</div>
-            <div class="summary-block-val" style="color: var(--primary-red);">{{ $totalDeployedManpower }} Headcount</div>
+            <div class="summary-block-val" style="color: #2563eb;">{{ $totalDeployedManpower }} Headcount</div>
             <div class="summary-block-sub">{{ $project->deployed_workers }} Workers, {{ $project->deployed_engineers }} Engr, {{ $project->deployed_operators }} Ops</div>
         </div>
 
@@ -372,9 +376,9 @@
             <div class="summary-block-sub">Land Area: {{ number_format($project->land_area_sqm) }} m²</div>
         </div>
 
-        <div class="summary-block interactive-jump-card" style="border-left: 4px solid var(--primary-red);" onclick="switchMasterProjectTab('monitoring')" title="Click to open Trade Progression Checklist">
+        <div class="summary-block interactive-jump-card" style="border-left: 4px solid {{ $project->overall_progress >= 100 ? '#10b981' : ($project->overall_progress > 0 ? '#f59e0b' : '#64748b') }};" onclick="switchMasterProjectTab('monitoring')" title="Click to open Trade Progression Checklist">
             <div class="summary-block-label">Trade Progression ↗</div>
-            <div class="summary-block-val" style="color: var(--primary-red);" id="sec1TradeProgVal">{{ $project->overall_progress }}%</div>
+            <div class="summary-block-val" style="color: {{ $project->overall_progress >= 100 ? '#059669' : ($project->overall_progress > 0 ? '#d97706' : '#64748b') }};" id="sec1TradeProgVal">{{ $project->overall_progress }}%</div>
             <div class="summary-block-sub" id="sec1TradeProgSub">Struct {{ $project->structural_progress }}% | Elec {{ $project->electrical_progress }}% | Pipe {{ $project->piping_progress }}%</div>
         </div>
 
@@ -1590,28 +1594,28 @@
 
     <!-- Financial Billing Summary Matrix -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 20px;">
-        <div class="summary-block" style="border-left: 4px solid var(--primary-red);">
-            <div class="summary-block-label">Total Contract Value</div>
-            <div class="summary-block-val">₱{{ number_format($project->contract_budget, 2) }}</div>
-            <div class="summary-block-sub">Gross Agreed Budget</div>
+        <div class="summary-block" style="border-left: 4px solid #10b981;">
+            <div class="summary-block-label" style="color: #059669;">Total Contract Value (Sales)</div>
+            <div class="summary-block-val" style="color: #059669;">₱{{ number_format($project->contract_budget, 2) }}</div>
+            <div class="summary-block-sub">Gross Booked Sales Budget</div>
         </div>
 
         <div class="summary-block" style="border-left: 4px solid #10b981;">
-            <div class="summary-block-label">Total Settled / Paid</div>
+            <div class="summary-block-label" style="color: #059669;">Total Settled / Paid</div>
             <div class="summary-block-val" style="color: #059669;">₱{{ number_format($totalPaid, 2) }}</div>
             <div class="summary-block-sub" style="color: #059669; font-weight: 700;">{{ $salesCollectionRate }}% Collection Rate</div>
         </div>
 
         <div class="summary-block" style="border-left: 4px solid #f59e0b;">
-            <div class="summary-block-label">Remaining Balance</div>
+            <div class="summary-block-label" style="color: #d97706;">Remaining Balance</div>
             <div class="summary-block-val" style="color: #d97706;">₱{{ number_format($uncollectedBalance, 2) }}</div>
-            <div class="summary-block-sub">Uncollected Receivable</div>
+            <div class="summary-block-sub">Uncollected / In-Progress Receivable</div>
         </div>
 
-        <div class="summary-block" style="border-left: 4px solid #ec4899;">
-            <div class="summary-block-label">Pending Invoices</div>
-            <div class="summary-block-val" style="color: #db2777;">₱{{ number_format($totalPending, 2) }}</div>
-            <div class="summary-block-sub">Awaiting Client Settlement</div>
+        <div class="summary-block" style="border-left: 4px solid {{ $totalPending > 0 ? '#f59e0b' : '#10b981' }};">
+            <div class="summary-block-label" style="color: {{ $totalPending > 0 ? '#d97706' : '#059669' }};">Pending Invoices</div>
+            <div class="summary-block-val" style="color: {{ $totalPending > 0 ? '#d97706' : '#059669' }};">₱{{ number_format($totalPending, 2) }}</div>
+            <div class="summary-block-sub">{{ $totalPending > 0 ? 'Awaiting Client Settlement' : 'All Billed Invoices Settled' }}</div>
         </div>
     </div>
 

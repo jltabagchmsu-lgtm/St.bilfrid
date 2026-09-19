@@ -51,9 +51,9 @@
         <div class="sales-kpi-card">
             <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.725rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 4px;">
                 <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Total Booked Sales</span>
-                <span class="spec-chip" style="font-size: 0.6rem; padding: 1px 6px;">BOOKED</span>
+                <span class="spec-chip" style="font-size: 0.6rem; padding: 1px 6px; color: #059669; border-color: #a7f3d0;">BOOKED</span>
             </div>
-            <div style="font-size: 1.65rem; font-weight: 800; font-family: var(--font-mono); color: var(--text-primary); line-height: 1.15; margin: 4px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: -0.02em;">
+            <div style="font-size: 1.65rem; font-weight: 800; font-family: var(--font-mono); color: #059669; line-height: 1.15; margin: 4px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: -0.02em;">
                 ₱{{ number_format($totalBookedSales, 2) }}
             </div>
             <div style="font-size: 0.725rem; color: var(--text-secondary); display: flex; align-items: center; justify-content: space-between; margin-top: 4px;">
@@ -91,12 +91,12 @@
         <div class="sales-kpi-card">
             <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.725rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 4px;">
                 <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Realized Sales Margin</span>
-                <span class="spec-chip" style="font-size: 0.6rem; padding: 1px 6px; color: var(--primary-red); border-color: var(--primary-red-border);">MARGIN</span>
+                <span class="spec-chip" style="font-size: 0.6rem; padding: 1px 6px; color: {{ $totalGrossMargin >= 0 ? '#059669' : '#dc2626' }}; border-color: {{ $totalGrossMargin >= 0 ? '#a7f3d0' : '#fecaca' }};">MARGIN</span>
             </div>
-            <div style="font-size: 1.65rem; font-weight: 800; font-family: var(--font-mono); color: var(--primary-red); line-height: 1.15; margin: 4px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: -0.02em;">
+            <div style="font-size: 1.65rem; font-weight: 800; font-family: var(--font-mono); color: {{ $totalGrossMargin >= 0 ? '#059669' : '#dc2626' }}; line-height: 1.15; margin: 4px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: -0.02em;">
                 ₱{{ number_format($totalGrossMargin, 2) }}
             </div>
-            <div style="font-size: 0.725rem; color: #059669; font-weight: 700; margin-top: 4px;">
+            <div style="font-size: 0.725rem; color: {{ $totalGrossMargin >= 0 ? '#059669' : '#dc2626' }}; font-weight: 700; margin-top: 4px;">
                 {{ $avgGrossMarginPercent }}% Profit Margin
             </div>
         </div>
@@ -104,9 +104,9 @@
         <div class="sales-kpi-card">
             <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.725rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 4px;">
                 <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Avg Deal Size</span>
-                <span class="spec-chip" style="font-size: 0.6rem; padding: 1px 6px;">AVG</span>
+                <span class="spec-chip" style="font-size: 0.6rem; padding: 1px 6px; color: #059669; border-color: #a7f3d0;">AVG</span>
             </div>
-            <div style="font-size: 1.65rem; font-weight: 800; font-family: var(--font-mono); color: var(--text-primary); line-height: 1.15; margin: 4px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: -0.02em;">
+            <div style="font-size: 1.65rem; font-weight: 800; font-family: var(--font-mono); color: #059669; line-height: 1.15; margin: 4px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: -0.02em;">
                 ₱{{ number_format($avgDealSize / 1000000, 2) }}M
             </div>
             <div style="font-size: 0.725rem; color: var(--text-secondary); margin-top: 4px;">

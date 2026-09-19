@@ -183,12 +183,12 @@
             <div class="kpi-sub">Phase Allocations Across Scope Items</div>
         </div>
 
-        <div class="kpi-card" style="border-left: 3px solid #ec4899;">
+        <div class="kpi-card" style="border-left: 3.5px solid #047857;">
             <div class="kpi-header">
-                <span class="kpi-title">Grand Total Scope Cost</span>
-                <span class="spec-chip" style="font-size: 0.65rem; color: #ec4899;">TOTAL DUPA</span>
+                <span class="kpi-title">Grand Total Scope Cost (Quotation)</span>
+                <span class="spec-chip" style="font-size: 0.65rem; color: #047857; border-color: rgba(4, 120, 87, 0.4);">TOTAL DUPA</span>
             </div>
-            <div class="kpi-val col-num" style="color: #ec4899;">₱{{ number_format($scopeGrandTotal, 2) }}</div>
+            <div class="kpi-val col-num" style="color: #047857; font-weight: 800; font-size: 1.6rem;">₱{{ number_format($scopeGrandTotal, 2) }}</div>
             <div class="kpi-sub">With Labor + Markups + Profit</div>
         </div>
     </div>

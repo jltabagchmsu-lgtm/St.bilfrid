@@ -28,10 +28,10 @@
     <div class="kpi-card">
         <div class="kpi-header">
             <span class="kpi-title">Archived Contract Sales</span>
-            <span class="spec-chip" style="font-size: 0.65rem; color: #38bdf8;">SALES</span>
+            <span class="spec-chip" style="font-size: 0.65rem; color: #10b981; border-color: rgba(16, 185, 129, 0.4);">SALES</span>
         </div>
-        <div class="kpi-val" style="font-family: var(--font-mono); color: #38bdf8;">₱{{ number_format($totalCompletedBudget, 2) }}</div>
-        <div class="kpi-sub">Total Historical Value</div>
+        <div class="kpi-val" style="font-family: var(--font-mono); color: #10b981; font-weight: 800; font-size: 1.6rem;">₱{{ number_format($totalCompletedBudget, 2) }}</div>
+        <div class="kpi-sub">Total Historical Sales Value</div>
     </div>
 
     <div class="kpi-card">
@@ -276,16 +276,16 @@
                     <div style="font-family: var(--font-mono); font-size: 0.75rem; color: #ef4444;">{{ $cp->project_code }}</div>
                     <div style="font-size: 0.75rem; color: var(--text-muted);">Client: {{ $cp->client_name ?? 'N/A' }}</div>
                 </td>
-                <td style="font-family: var(--font-mono); font-weight: 700; color: #f8fafc;">
+                <td style="font-family: var(--font-mono); font-weight: 800; font-size: 1.05rem; color: #059669;">
                     ₱{{ number_format($cp->contract_budget, 2) }}
                 </td>
-                <td style="font-family: var(--font-mono); font-weight: 700; color: #f87171;">
+                <td style="font-family: var(--font-mono); font-weight: 800; font-size: 1.05rem; color: {{ $cost > $cp->contract_budget ? '#dc2626' : '#d97706' }};">
                     ₱{{ number_format($cost, 2) }}
                 </td>
-                <td style="font-family: var(--font-mono); font-weight: 700; color: #38bdf8;">
+                <td style="font-family: var(--font-mono); font-weight: 800; font-size: 1.05rem; color: #059669;">
                     ₱{{ number_format($rev, 2) }}
                 </td>
-                <td style="font-family: var(--font-mono); font-weight: 700; color: {{ $profit >= 0 ? '#10b981' : '#ef4444' }};">
+                <td style="font-family: var(--font-mono); font-weight: 800; font-size: 1.05rem; color: {{ $profit >= 0 ? '#10b981' : '#dc2626' }};">
                     ₱{{ number_format($profit, 2) }}
                 </td>
                 <td style="font-family: var(--font-mono); font-size: 0.825rem; color: var(--text-secondary);">

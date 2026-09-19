@@ -16,45 +16,45 @@
     <div class="kpi-card">
         <div class="kpi-header">
             <span class="kpi-title">Total Settled Receipts</span>
-            <span class="spec-chip" style="font-size: 0.65rem; color: #10b981;">CLEARED</span>
+            <span class="spec-chip" style="font-size: 0.65rem; color: #10b981; border-color: rgba(16, 185, 129, 0.4);">CLEARED</span>
         </div>
-        <div class="kpi-val" style="font-family: var(--font-mono); color: #10b981;">₱{{ number_format($totalPaid, 2) }}</div>
+        <div class="kpi-val" style="font-family: var(--font-mono); color: #10b981; font-weight: 800; font-size: 1.6rem;">₱{{ number_format($totalPaid, 2) }}</div>
         <div class="kpi-sub">Total Cleared & Paid to Firm</div>
     </div>
 
     <div class="kpi-card">
         <div class="kpi-header">
             <span class="kpi-title">Total Invoiced Billing</span>
-            <span class="spec-chip" style="font-size: 0.65rem; color: #38bdf8;">GROSS BILLINGS</span>
+            <span class="spec-chip" style="font-size: 0.65rem; color: #059669; border-color: rgba(16, 185, 129, 0.4);">GROSS BILLINGS</span>
         </div>
-        <div class="kpi-val" style="font-family: var(--font-mono); color: #38bdf8;">₱{{ number_format($totalInvoiced, 2) }}</div>
+        <div class="kpi-val" style="font-family: var(--font-mono); color: #059669; font-weight: 800; font-size: 1.6rem;">₱{{ number_format($totalInvoiced, 2) }}</div>
         <div class="kpi-sub">Total Billed Invoices</div>
     </div>
 
     <div class="kpi-card">
         <div class="kpi-header">
             <span class="kpi-title">Pending Invoices</span>
-            <span class="spec-chip" style="font-size: 0.65rem; color: #f59e0b;">AWAITING CLEARANCE</span>
+            <span class="spec-chip" style="font-size: 0.65rem; color: #f59e0b; border-color: rgba(245, 158, 11, 0.4);">AWAITING CLEARANCE</span>
         </div>
-        <div class="kpi-val" style="font-family: var(--font-mono); color: #f59e0b;">₱{{ number_format($totalPending, 2) }}</div>
+        <div class="kpi-val" style="font-family: var(--font-mono); color: #f59e0b; font-weight: 800; font-size: 1.6rem;">₱{{ number_format($totalPending, 2) }}</div>
         <div class="kpi-sub">Unsettled Milestone Invoices</div>
     </div>
 
     <div class="kpi-card">
         <div class="kpi-header">
             <span class="kpi-title">Overdue Receivables</span>
-            <span class="spec-chip" style="font-size: 0.65rem; color: #ef4444;">OVERDUE</span>
+            <span class="spec-chip" style="font-size: 0.65rem; color: #ef4444; border-color: rgba(239, 68, 68, 0.4);">OVERDUE</span>
         </div>
-        <div class="kpi-val" style="font-family: var(--font-mono); color: #ef4444;">₱{{ number_format($totalOverdue, 2) }}</div>
+        <div class="kpi-val" style="font-family: var(--font-mono); color: #ef4444; font-weight: 800; font-size: 1.6rem;">₱{{ number_format($totalOverdue, 2) }}</div>
         <div class="kpi-sub">Past Due Invoices</div>
     </div>
 
     <div class="kpi-card">
         <div class="kpi-header">
             <span class="kpi-title">Collection Rate</span>
-            <span class="spec-chip" style="font-size: 0.65rem; color: #ec4899;">EFFICIENCY</span>
+            <span class="spec-chip" style="font-size: 0.65rem; color: #10b981; border-color: rgba(16, 185, 129, 0.4);">EFFICIENCY</span>
         </div>
-        <div class="kpi-val" style="font-family: var(--font-mono); color: #ec4899;">{{ $collectionRate }}%</div>
+        <div class="kpi-val" style="font-family: var(--font-mono); color: #10b981; font-weight: 800; font-size: 1.6rem;">{{ $collectionRate }}%</div>
         <div class="kpi-sub">Paid vs Gross Billed</div>
     </div>
 </div>
