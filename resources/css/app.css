@@ -1768,6 +1768,8 @@ select option {
     border: 1px solid var(--border-color) !important;
     border-radius: var(--radius-md);
     overflow: hidden;
+}
+
 /* Executive Summary Briefing Card & Metric Blocks */
 .summary-briefing-card {
     background: #fafbfc;
