@@ -288,11 +288,11 @@
                             @if(isset($personnelList) && $personnelList->count() > 0)
                             <div>
                                 <label class="form-label" style="font-size: 0.75rem; margin-bottom: 6px;">Assign Lead Engineers & Architects</label>
-                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; max-height: 80px; overflow-y: auto; padding: 8px 10px; background: #f8fafc; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px 12px; max-height: 145px; overflow-y: auto; padding: 10px 12px; background: #f8fafc; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
                                     @foreach($personnelList as $pers)
-                                    <label style="display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--text-primary); cursor: pointer;">
+                                    <label style="display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--text-primary); cursor: pointer; padding: 4px 6px; background: #ffffff; border-radius: 4px; border: 1px solid rgba(0,0,0,0.04);">
                                         <input type="checkbox" name="personnel_ids[]" value="{{ $pers->id }}">
-                                        <span><strong>{{ $pers->name }}</strong> ({{ $pers->title }})</span>
+                                        <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>{{ $pers->name }}</strong> ({{ $pers->title }})</span>
                                     </label>
                                     @endforeach
                                 </div>
@@ -754,11 +754,11 @@
                         @if(isset($personnelList) && $personnelList->count() > 0)
                         <div>
                             <label class="form-label" style="font-size: 0.75rem; margin-bottom: 6px;">Assign Lead Engineers & Architects</label>
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; max-height: 100px; overflow-y: auto; padding: 10px; background: #f8fafc; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px 12px; max-height: 145px; overflow-y: auto; padding: 10px 12px; background: #f8fafc; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
                                 @foreach($personnelList as $pers)
-                                <label style="display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--text-primary); cursor: pointer;">
+                                <label style="display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--text-primary); cursor: pointer; padding: 4px 6px; background: #ffffff; border-radius: 4px; border: 1px solid rgba(0,0,0,0.04);">
                                     <input type="checkbox" name="personnel_ids[]" class="edit-personnel-checkbox" value="{{ $pers->id }}">
-                                    <span><strong>{{ $pers->name }}</strong> ({{ $pers->title }})</span>
+                                    <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>{{ $pers->name }}</strong> ({{ $pers->title }})</span>
                                 </label>
                                 @endforeach
                             </div>

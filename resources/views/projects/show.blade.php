@@ -13,19 +13,19 @@
     <a href="{{ route('projects.printBom', $project->id) }}" target="_blank" class="btn-secondary" style="font-size: 0.85rem; color: #10b981; border-color: rgba(16, 185, 129, 0.4);">
         Print 8-Page BOM (DUPA)
     </a>
-    <button class="btn-secondary" style="font-size: 0.85rem;" onclick="openModal('updateScheduleModal')">
+    <button class="btn-secondary" style="font-size: 0.85rem;" onclick="switchMasterProjectTab('scheduling'); openModal('updateScheduleModal');">
         Set Schedule ({{ $remainingDays }}d left)
     </button>
-    <button class="btn-secondary" style="font-size: 0.85rem;" onclick="openModal('uploadPhotoModal')">
+    <button class="btn-secondary" style="font-size: 0.85rem;" onclick="switchMasterProjectTab('blueprints'); openModal('uploadPhotoModal');">
         + Blueprint / Photo
     </button>
-    <button class="btn-secondary" style="font-size: 0.85rem;" onclick="openModal('updateManpowerModal')">
+    <button class="btn-secondary" style="font-size: 0.85rem;" onclick="switchMasterProjectTab('workforce'); openModal('updateManpowerModal');">
         Manpower ({{ $totalDeployedManpower }})
     </button>
-    <button class="btn-secondary" style="font-size: 0.85rem;" onclick="openModal('addCostItemModal')">
+    <button class="btn-secondary" style="font-size: 0.85rem;" onclick="switchMasterProjectTab('bom'); openModal('addCostItemModal');">
         + Cost Item
     </button>
-    <button class="btn-secondary" style="font-size: 0.85rem;" onclick="openModal('addProjectPaymentModal')">
+    <button class="btn-secondary" style="font-size: 0.85rem;" onclick="switchMasterProjectTab('financials'); openModal('addProjectPaymentModal');">
         + Payment / OR
     </button>
     <form action="{{ route('projects.destroy', $project->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this?');" style="display:inline;">
@@ -121,10 +121,10 @@
                     <span class="badge badge-{{ $project->status }}">{{ str_replace('_', ' ', $project->status) }}</span>
                     <span style="font-family: var(--font-mono); font-size: 0.9rem; color: #ef4444; font-weight: 700;">{{ $project->project_code }}</span>
                     <span class="spec-chip" style="font-size: 0.775rem;">{{ $project->project_type }}</span>
-                    <span class="spec-chip" style="font-size: 0.775rem; background: {{ $scheduleHealth['bg'] }}; color: {{ $scheduleHealth['color'] }}; border-color: {{ $scheduleHealth['border'] }};">
+                    <span class="spec-chip" style="font-size: 0.775rem; background: {{ $scheduleHealth['bg'] }}; color: {{ $scheduleHealth['color'] }}; border-color: {{ $scheduleHealth['border'] }}; cursor: pointer;" onclick="switchMasterProjectTab('scheduling')" title="Click to view Master Schedule">
                         {{ $scheduleHealth['icon'] }} {{ $scheduleHealth['label'] }}
                     </span>
-                    <span class="spec-chip" style="font-size: 0.775rem; background: rgba(56, 189, 248, 0.15); color: #38bdf8; border-color: rgba(56, 189, 248, 0.3);">
+                    <span class="spec-chip" style="font-size: 0.775rem; background: rgba(56, 189, 248, 0.15); color: #38bdf8; border-color: rgba(56, 189, 248, 0.3); cursor: pointer;" onclick="switchMasterProjectTab('workforce')" title="Click to view Workforce & Manpower">
                         {{ $totalDeployedManpower }} Deployed
                     </span>
                 </div>
@@ -132,8 +132,8 @@
                 <div style="font-size: 0.925rem; color: var(--text-secondary); margin-top: 6px; display: flex; gap: 20px; flex-wrap: wrap;">
                     <span>Client: <strong style="color: var(--text-primary);">{{ $project->client_name }}</strong></span>
                     <span>Location: <strong style="color: var(--text-primary);">{{ $project->location ?? 'Main Construction Site' }}</strong></span>
-                    <span>Tasks: <strong style="color: #38bdf8;" id="headerTasksText">{{ $completedTasksCount }} / {{ $totalTasksCount }} Completed ({{ $project->overall_progress }}%)</strong></span>
-                    <span>Timeline: <strong style="color: var(--text-primary);">{{ $project->start_date->format('M d, Y') }} &rarr; {{ $project->end_date->format('M d, Y') }}</strong></span>
+                    <span style="cursor: pointer;" onclick="switchMasterProjectTab('monitoring')" title="Click to view Trade Progression Checklist">Tasks: <strong style="color: #38bdf8;" id="headerTasksText">{{ $completedTasksCount }} / {{ $totalTasksCount }} Completed ({{ $project->overall_progress }}%) ↗</strong></span>
+                    <span style="cursor: pointer;" onclick="switchMasterProjectTab('scheduling')" title="Click to view Master Schedule">Timeline: <strong style="color: var(--text-primary);">{{ $project->start_date->format('M d, Y') }} &rarr; {{ $project->end_date->format('M d, Y') }} ↗</strong></span>
                 </div>
                 @if($project->description)
                     <p style="font-size: 0.875rem; color: var(--text-muted); margin-top: 10px; line-height: 1.6; max-width: 850px;">
@@ -143,8 +143,8 @@
             </div>
         </div>
 
-        <div style="text-align: right; display: flex; flex-direction: column; gap: 8px;">
-            <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Weighted Accomplishment</div>
+        <div style="text-align: right; display: flex; flex-direction: column; gap: 8px; cursor: pointer;" onclick="switchMasterProjectTab('monitoring')" title="Click to view Trade Progression Checklist">
+            <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Weighted Accomplishment ↗</div>
             <div style="font-family: var(--font-mono); font-size: 2.75rem; font-weight: 800; color: var(--primary-red); line-height: 1;" id="headerOverallProgressVal">
                 {{ $project->overall_progress }}%
             </div>
@@ -162,9 +162,166 @@
     </div>
 </div>
 
+<!-- Master Navigation Tabs Bar -->
+<style>
+.project-master-tabs-container {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 6px 12px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+    position: sticky;
+    top: 8px;
+    z-index: 45;
+    backdrop-filter: blur(10px);
+}
+.project-master-tabs-scroll {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    padding-bottom: 2px;
+}
+.project-master-tabs-scroll::-webkit-scrollbar {
+    height: 4px;
+}
+.project-master-tabs-scroll::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+.master-project-tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 13px;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: #64748b;
+    font-size: 0.84rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+    white-space: nowrap;
+    border-radius: 6px 6px 0 0;
+    text-decoration: none;
+    user-select: none;
+}
+.master-project-tab-btn:hover {
+    color: #0f172a;
+    background: rgba(241, 245, 249, 0.8);
+    border-bottom-color: #cbd5e1;
+}
+.master-project-tab-btn.active {
+    color: #0f172a !important;
+    font-weight: 800 !important;
+    border-bottom: 3.5px solid var(--primary-red) !important;
+    background: rgba(239, 68, 68, 0.05) !important;
+}
+.master-project-tab-btn .master-tab-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+}
+.master-project-tab-btn .master-tab-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 7px;
+    border-radius: 9999px;
+    font-size: 0.72rem;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    background: #f1f5f9;
+    color: #64748b;
+    transition: all 0.15s ease;
+}
+.master-project-tab-btn.active .master-tab-badge {
+    background: #fee2e2 !important;
+    color: #dc2626 !important;
+}
+.project-tab-pane {
+    display: none;
+    animation: masterTabFadeIn 0.22s ease-in-out;
+}
+.project-tab-pane.active-pane {
+    display: block;
+}
+@keyframes masterTabFadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.summary-block.interactive-jump-card {
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.summary-block.interactive-jump-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+}
+</style>
+
+<div class="project-master-tabs-container">
+    <div class="project-master-tabs-scroll">
+        <button type="button" id="masterTabBtn_executive" class="master-project-tab-btn active" onclick="switchMasterProjectTab('executive', this)">
+            <span class="master-tab-dot" style="background: #ef4444;"></span>
+            <span>Executive Summary</span>
+            <span class="master-tab-badge">Briefing</span>
+        </button>
+        <button type="button" id="masterTabBtn_blueprints" class="master-project-tab-btn" onclick="switchMasterProjectTab('blueprints', this)">
+            <span class="master-tab-dot" style="background: #0ea5e9;"></span>
+            <span>Design & Blueprints</span>
+            <span class="master-tab-badge">{{ $project->photos->count() }}</span>
+        </button>
+        <button type="button" id="masterTabBtn_scheduling" class="master-project-tab-btn" onclick="switchMasterProjectTab('scheduling', this)">
+            <span class="master-tab-dot" style="background: #f59e0b;"></span>
+            <span>Master Schedule</span>
+            <span class="master-tab-badge">{{ $remainingDays }}d left</span>
+        </button>
+        <button type="button" id="masterTabBtn_monitoring" class="master-project-tab-btn" onclick="switchMasterProjectTab('monitoring', this)">
+            <span class="master-tab-dot" style="background: #10b981;"></span>
+            <span>Trade Progression</span>
+            <span class="master-tab-badge">{{ $project->overall_progress }}%</span>
+        </button>
+        <button type="button" id="masterTabBtn_workforce" class="master-project-tab-btn" onclick="switchMasterProjectTab('workforce', this)">
+            <span class="master-tab-dot" style="background: #3b82f6;"></span>
+            <span>Workforce & Manpower</span>
+            <span class="master-tab-badge">{{ $totalDeployedManpower }}</span>
+        </button>
+        <button type="button" id="masterTabBtn_bom" class="master-project-tab-btn" onclick="switchMasterProjectTab('bom', this)">
+            <span class="master-tab-dot" style="background: #8b5cf6;"></span>
+            <span>BOM & Cost Estimates</span>
+            <span class="master-tab-badge">{{ $project->scopeItems->count() }}</span>
+        </button>
+        <button type="button" id="masterTabBtn_tasks" class="master-project-tab-btn" onclick="switchMasterProjectTab('tasks', this)">
+            <span class="master-tab-dot" style="background: #6366f1;"></span>
+            <span>Scheduled Tasks</span>
+            <span class="master-tab-badge">{{ $completedTasksCount }}/{{ $totalTasksCount }}</span>
+        </button>
+        <button type="button" id="masterTabBtn_financials" class="master-project-tab-btn" onclick="switchMasterProjectTab('financials', this)">
+            <span class="master-tab-dot" style="background: #14b8a6;"></span>
+            <span>Financials & Payments</span>
+            <span class="master-tab-badge">₱{{ number_format($totalPaid, 0) }}</span>
+        </button>
+        <button type="button" id="masterTabBtn_audit" class="master-project-tab-btn" onclick="switchMasterProjectTab('audit', this)">
+            <span class="master-tab-dot" style="background: #64748b;"></span>
+            <span>Milestone Audit</span>
+            <span class="master-tab-badge">{{ count($milestones) }}</span>
+        </button>
+        <button type="button" id="masterTabBtn_all" class="master-project-tab-btn" onclick="switchMasterProjectTab('all', this)" style="margin-left: auto;">
+            <span class="master-tab-dot" style="background: #0f172a;"></span>
+            <span>All Modules (Full View)</span>
+        </button>
+    </div>
+</div>
+
 <!-- ====================================================
      SECTION 1: COMPREHENSIVE PROJECT EXECUTIVE MASTER SUMMARY
      ==================================================== -->
+<div id="projectTabPane_executive" class="project-tab-pane active-pane" data-tab-pane="executive">
 <div class="summary-briefing-card" style="margin-bottom: 28px;">
     <div class="summary-header-row">
         <div>
@@ -185,8 +342,8 @@
 
     <!-- 8 Executive Summary Blocks Grid -->
     <div class="summary-metric-blocks">
-        <div class="summary-block" style="border-left: 4px solid var(--primary-red);">
-            <div class="summary-block-label">Total Contract Value</div>
+        <div class="summary-block interactive-jump-card" style="border-left: 4px solid var(--primary-red);" onclick="switchMasterProjectTab('financials')" title="Click to open Financials & Payments Ledger">
+            <div class="summary-block-label">Total Contract Value ↗</div>
             <div class="summary-block-val">₱{{ number_format($project->contract_budget, 2) }}</div>
             <div class="summary-block-sub">
                 @if($project->client_budget && $project->client_budget > 0)
@@ -199,55 +356,57 @@
             </div>
         </div>
 
-        <div class="summary-block" style="border-left: 4px solid #10b981;">
-            <div class="summary-block-label">Cleared Cash Inflow</div>
+        <div class="summary-block interactive-jump-card" style="border-left: 4px solid #10b981;" onclick="switchMasterProjectTab('financials')" title="Click to open Financials & Payments Ledger">
+            <div class="summary-block-label">Cleared Cash Inflow ↗</div>
             <div class="summary-block-val" style="color: #059669;">₱{{ number_format($totalPaid, 2) }}</div>
             <div class="summary-block-sub" style="color: #059669; font-weight: 700;">{{ $salesCollectionRate }}% Collection Rate</div>
         </div>
 
-        <div class="summary-block" style="border-left: 4px solid #f59e0b;">
-            <div class="summary-block-label">Actual Incurred Cost</div>
+        <div class="summary-block interactive-jump-card" style="border-left: 4px solid #f59e0b;" onclick="switchMasterProjectTab('bom')" title="Click to open Itemized BOM & Cost Estimates">
+            <div class="summary-block-label">Actual Incurred Cost ↗</div>
             <div class="summary-block-val" style="color: #d97706;">₱{{ number_format($totalIncurredCost, 2) }}</div>
             <div class="summary-block-sub">Rate: ₱{{ number_format($costPerFloorSqm, 2) }}/m²</div>
         </div>
 
-        <div class="summary-block" style="border-left: 4px solid #10b981;">
-            <div class="summary-block-label">Projected Gross Margin</div>
+        <div class="summary-block interactive-jump-card" style="border-left: 4px solid #10b981;" onclick="switchMasterProjectTab('financials')" title="Click to open Financials & Payments Ledger">
+            <div class="summary-block-label">Projected Gross Margin ↗</div>
             <div class="summary-block-val" style="color: {{ $grossMargin >= 0 ? '#059669' : '#dc2626' }};">
                 ₱{{ number_format($grossMargin, 2) }}
             </div>
             <div class="summary-block-sub" style="color: #059669; font-weight: 700;">{{ $grossMarginPercent }}% Profit Margin</div>
         </div>
 
-        <div class="summary-block" style="border-left: 4px solid var(--primary-red);">
-            <div class="summary-block-label">Workforce Deployed</div>
+        <div class="summary-block interactive-jump-card" style="border-left: 4px solid var(--primary-red);" onclick="switchMasterProjectTab('workforce')" title="Click to open On-Site Workforce & Resource Hub">
+            <div class="summary-block-label">Workforce Deployed ↗</div>
             <div class="summary-block-val" style="color: var(--primary-red);">{{ $totalDeployedManpower }} Headcount</div>
             <div class="summary-block-sub">{{ $project->deployed_workers }} Workers, {{ $project->deployed_engineers }} Engr, {{ $project->deployed_operators }} Ops</div>
         </div>
 
-        <div class="summary-block" style="border-left: 4px solid #6366f1;">
-            <div class="summary-block-label">Constructible Floor Space</div>
+        <div class="summary-block interactive-jump-card" style="border-left: 4px solid #6366f1;" onclick="switchMasterProjectTab('blueprints')" title="Click to open Project Design & Blueprints">
+            <div class="summary-block-label">Constructible Floor Space ↗</div>
             <div class="summary-block-val" style="color: #4f46e5;">{{ number_format($project->floor_area_sqm) }} m²</div>
             <div class="summary-block-sub">Land Area: {{ number_format($project->land_area_sqm) }} m²</div>
         </div>
 
-        <div class="summary-block" style="border-left: 4px solid var(--primary-red);">
-            <div class="summary-block-label">Trade Progression</div>
+        <div class="summary-block interactive-jump-card" style="border-left: 4px solid var(--primary-red);" onclick="switchMasterProjectTab('monitoring')" title="Click to open Trade Progression Checklist">
+            <div class="summary-block-label">Trade Progression ↗</div>
             <div class="summary-block-val" style="color: var(--primary-red);" id="sec1TradeProgVal">{{ $project->overall_progress }}%</div>
             <div class="summary-block-sub" id="sec1TradeProgSub">Struct {{ $project->structural_progress }}% | Elec {{ $project->electrical_progress }}% | Pipe {{ $project->piping_progress }}%</div>
         </div>
 
-        <div class="summary-block" style="border-left: 4px solid #0d9488;">
-            <div class="summary-block-label">BOM Materials Allocated</div>
+        <div class="summary-block interactive-jump-card" style="border-left: 4px solid #0d9488;" onclick="switchMasterProjectTab('bom')" title="Click to open Itemized BOM & Cost Estimates">
+            <div class="summary-block-label">BOM Materials Allocated ↗</div>
             <div class="summary-block-val" style="color: #0d9488;">₱{{ number_format($bomAllocatedValue, 2) }}</div>
             <div class="summary-block-sub">Consumed: ₱{{ number_format($bomConsumedValue, 2) }} | Ret: +₱{{ number_format($bomReturnedExcessValue, 2) }}</div>
         </div>
     </div>
 </div>
+</div>
 
 <!-- ====================================================
      SECTION 2: PROJECT BLUEPRINTS, 3D ARCHITECTURAL RENDERS & SITE PHOTOS GALLERY
      ==================================================== -->
+<div id="projectTabPane_blueprints" class="project-tab-pane" data-tab-pane="blueprints">
 <div class="glass-panel" style="border: 1px solid var(--border-color); margin-bottom: 28px;">
     <div class="panel-header" style="margin-bottom: 16px;">
         <div style="display: flex; align-items: center; gap: 12px;">
@@ -363,10 +522,12 @@
         </div>
     @endif
 </div>
+</div>
 
 <!-- ====================================================
      SECTION 3: CLARIFIED PROJECT SCHEDULING & PHASE MATRIX PLANNER
      ==================================================== -->
+<div id="projectTabPane_scheduling" class="project-tab-pane" data-tab-pane="scheduling">
 <div class="glass-panel" style="border: 1px solid var(--border-color); margin-bottom: 28px;">
     <div class="panel-header" style="margin-bottom: 18px;">
         <div style="display: flex; align-items: center; gap: 12px;">
@@ -417,10 +578,12 @@
         </div>
     </div>
 </div>
+</div>
 
 <!-- ====================================================
      SECTION 4: PROJECT MONITORING & TRADE PROGRESSION (CHECKLIST METHOD)
      ==================================================== -->
+<div id="projectTabPane_monitoring" class="project-tab-pane" data-tab-pane="monitoring">
 <div class="glass-panel" style="border: 1px solid var(--border-color); margin-bottom: 28px;">
     <div class="panel-header" style="margin-bottom: 16px; flex-wrap: wrap; gap: 14px;">
         <div style="display: flex; align-items: center; gap: 12px;">
@@ -921,10 +1084,12 @@
         </div>
     </div>
 </div>
+</div>
 
 <!-- ====================================================
      SECTION 5: ON-SITE WORKFORCE & RESOURCE DEPLOYMENT HUB
      ==================================================== -->
+<div id="projectTabPane_workforce" class="project-tab-pane" data-tab-pane="workforce">
 <div class="glass-panel" style="border: 1px solid var(--border-color); margin-bottom: 28px;">
     <div class="panel-header" style="margin-bottom: 16px;">
         <div style="display: flex; align-items: center; gap: 12px;">
@@ -1009,10 +1174,12 @@
         @endif
     </div>
 </div>
+</div>
 
 <!-- ====================================================
      SECTION 6B: ITEMIZED BILL OF MATERIALS & DETAILED COST ESTIMATES (DUPA ENGINE)
      ==================================================== -->
+<div id="projectTabPane_bom" class="project-tab-pane" data-tab-pane="bom">
 <div class="glass-panel" style="border: 1px solid var(--border-color); margin-bottom: 28px;">
     <div class="panel-header" style="margin-bottom: 18px;">
         <div style="display: flex; align-items: center; gap: 12px;">
@@ -1323,10 +1490,12 @@
         </div>
     @endif
 </div>
+</div>
 
 <!-- ====================================================
      SECTION 7: SCHEDULED TASKS & MILESTONES TIMELINE
      ==================================================== -->
+<div id="projectTabPane_tasks" class="project-tab-pane" data-tab-pane="tasks">
 <div class="glass-panel" style="margin-bottom: 28px;">
     <div class="panel-header" style="margin-bottom: 16px;">
         <div style="display: flex; align-items: center; gap: 12px;">
@@ -1405,10 +1574,12 @@
         </table>
     </div>
 </div>
+</div>
 
 <!-- ====================================================
      SECTION 8: FINANCIAL PAYMENTS LEDGER & OFFICIAL RECEIPTS (OR)
      ==================================================== -->
+<div id="projectTabPane_financials" class="project-tab-pane" data-tab-pane="financials">
 <div class="glass-panel" style="margin-bottom: 28px;">
     <div class="panel-header" style="margin-bottom: 16px;">
         <div style="display: flex; align-items: center; gap: 12px;">
@@ -1541,10 +1712,12 @@
         </table>
     </div>
 </div>
+</div>
 
 <!-- ====================================================
      SECTION 9: AUDIT MILESTONE TIMELINE
      ==================================================== -->
+<div id="projectTabPane_audit" class="project-tab-pane" data-tab-pane="audit">
 <div class="glass-panel" style="margin-bottom: 28px;">
     <div class="panel-header" style="margin-bottom: 16px;">
         <div>
@@ -1566,6 +1739,7 @@
             </div>
         @endforeach
     </div>
+</div>
 </div>
 
 <!-- ====================================================
@@ -2629,11 +2803,11 @@
             @php $assignedPersonnelIds = $project->personnel->pluck('id')->toArray(); @endphp
             <div style="margin-top: 14px;">
                 <label class="form-label">Assign Lead Engineers & Architects</label>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; max-height: 120px; overflow-y: auto; padding: 10px; background: #f8fafc; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px 12px; max-height: 145px; overflow-y: auto; padding: 10px 12px; background: #f8fafc; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
                     @foreach($allPersonnel as $pers)
-                    <label style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--text-primary); cursor: pointer;">
+                    <label style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--text-primary); cursor: pointer; padding: 4px 6px; background: #ffffff; border-radius: 4px; border: 1px solid rgba(0,0,0,0.04);">
                         <input type="checkbox" name="personnel_ids[]" value="{{ $pers->id }}" {{ in_array($pers->id, $assignedPersonnelIds) ? 'checked' : '' }}>
-                        <span><strong>{{ $pers->name }}</strong> ({{ $pers->title }})</span>
+                        <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>{{ $pers->name }}</strong> ({{ $pers->title }})</span>
                     </label>
                     @endforeach
                 </div>
@@ -3249,6 +3423,77 @@
         openModal('updateTaskModal');
     }
 
+    /* ====================================================
+       MASTER PROJECT TAB SYSTEM (SINGLE-PANE VIEWING)
+       ==================================================== */
+    let currentMasterProjectTab = 'executive';
+
+    function switchMasterProjectTab(tabName, btn) {
+        currentMasterProjectTab = tabName;
+
+        // 1. Deactivate all master buttons
+        const masterBtns = document.querySelectorAll('.master-project-tab-btn');
+        masterBtns.forEach(b => {
+            b.classList.remove('active');
+        });
+
+        // 2. Activate target button
+        let activeBtn = btn;
+        if (!activeBtn) {
+            activeBtn = document.getElementById('masterTabBtn_' + tabName);
+        }
+        if (activeBtn) {
+            activeBtn.classList.add('active');
+            if (typeof activeBtn.scrollIntoView === 'function') {
+                activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+        }
+
+        // 3. Show target pane or all panes
+        const panes = document.querySelectorAll('.project-tab-pane');
+        panes.forEach(pane => {
+            if (tabName === 'all' || pane.getAttribute('data-tab-pane') === tabName) {
+                pane.style.display = 'block';
+                pane.classList.add('active-pane');
+            } else {
+                pane.style.display = 'none';
+                pane.classList.remove('active-pane');
+            }
+        });
+
+        // 4. Update URL hash without causing viewport jumping
+        if (history.replaceState) {
+            history.replaceState(null, null, '#' + tabName);
+        } else {
+            window.location.hash = tabName;
+        }
+
+        // 5. Store in sessionStorage
+        try {
+            sessionStorage.setItem('activeProjectTab_{{ $project->id }}', tabName);
+        } catch (e) {}
+    }
+
+    // Auto-restore tab on load
+    document.addEventListener('DOMContentLoaded', function() {
+        let targetTab = 'executive';
+        const hash = window.location.hash ? window.location.hash.substring(1) : '';
+        const validTabs = ['executive', 'blueprints', 'scheduling', 'monitoring', 'workforce', 'bom', 'tasks', 'financials', 'audit', 'all'];
+
+        if (hash && validTabs.includes(hash)) {
+            targetTab = hash;
+        } else {
+            try {
+                const saved = sessionStorage.getItem('activeProjectTab_{{ $project->id }}');
+                if (saved && validTabs.includes(saved)) {
+                    targetTab = saved;
+                }
+            } catch (e) {}
+        }
+
+        switchMasterProjectTab(targetTab, document.getElementById('masterTabBtn_' + targetTab));
+    });
+
     let currentDisciplineTab = 'structural';
     let currentStatusFilter = 'all';
 
@@ -3334,6 +3579,9 @@
     function jumpToTaskDirect(taskId) {
         if (!taskId) return;
         
+        // Ensure Monitoring master tab is active
+        switchMasterProjectTab('monitoring', document.getElementById('masterTabBtn_monitoring'));
+
         const row = document.getElementById('task-row-' + taskId);
         if (!row) return;
 
@@ -3358,14 +3606,16 @@
 
         applyCombinedChecklistFilter();
 
-        row.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        row.style.transition = 'all 0.4s ease';
-        row.style.backgroundColor = 'var(--primary-red-light)';
-        row.style.boxShadow = '0 0 0 2px var(--primary-red-border)';
         setTimeout(() => {
-            row.style.backgroundColor = '';
-            row.style.boxShadow = 'none';
-        }, 2500);
+            row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            row.style.transition = 'all 0.4s ease';
+            row.style.backgroundColor = 'var(--primary-red-light)';
+            row.style.boxShadow = '0 0 0 2px var(--primary-red-border)';
+            setTimeout(() => {
+                row.style.backgroundColor = '';
+                row.style.boxShadow = 'none';
+            }, 2500);
+        }, 100);
     }
 
     /* ====================================================

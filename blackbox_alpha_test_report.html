@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>St. Bilfrid Development Corp — Blackbox Alpha & Beta Test Register</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        @page {
+            size: A4 landscape;
+            margin: 8mm;
+        }
+
+        :root {
+            --primary-navy: #0f2b48;
+            --header-navy: #16385c;
+            --section-banner: #1e4a78;
+            --border-color: #cbd5e1;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --bg-light: #f8fafc;
+            --row-even: #f8fafc;
+            --row-odd: #ffffff;
+            --pass-green: #16a34a;
+            --pass-bg: #dcfce7;
+            --tc-badge-bg: #e0f2fe;
+            --tc-badge-text: #0369a1;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #f1f5f9;
+            color: var(--text-dark);
+            padding: 20px;
+            font-size: 11.5px;
+            line-height: 1.35;
+        }
+
+        .container {
+            max-width: 1750px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0f172a;
+            color: #fff;
+            padding: 12px 24px;
+        }
+
+        .action-bar h1 {
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .action-bar .badge {
+            background: #2563eb;
+            color: #fff;
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .search-input {
+            padding: 6px 12px;
+            border-radius: 4px;
+            border: 1px solid #475569;
+            background: #1e293b;
+            color: #fff;
+            font-size: 11px;
+            min-width: 260px;
+        }
+
+        .search-input::placeholder {
+            color: #94a3b8;
+        }
+
+        .btn {
+            padding: 6px 14px;
+            border-radius: 4px;
+            border: none;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-success {
+            background: #16a34a;
+            color: #fff;
+        }
+
+        .company-header {
+            background: linear-gradient(135deg, var(--primary-navy) 0%, var(--header-navy) 100%);
+            color: #ffffff;
+            padding: 20px 24px;
+            border-bottom: 3px solid #f59e0b;
+        }
+
+        .company-title {
+            font-size: 17px;
+            font-weight: 800;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .company-subtitle {
+            font-size: 12px;
+            color: #cbd5e1;
+            font-weight: 500;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 12px;
+            padding: 16px 24px;
+            background: #f8fafc;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .metric-card {
+            background: #fff;
+            padding: 10px 14px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        .metric-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .metric-value {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+
+        .metric-value.pass {
+            color: var(--pass-green);
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table.test-matrix {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        table.test-matrix thead th {
+            background: var(--header-navy);
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 10px 12px;
+            border: 1px solid #1e3a8a;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .use-case-banner {
+            background: var(--section-banner);
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 12px;
+            padding: 10px 14px;
+            letter-spacing: 0.3px;
+            border-top: 2px solid #0f172a;
+            border-bottom: 1px solid var(--section-banner);
+        }
+
+        table.test-matrix td {
+            padding: 8px 10px;
+            border: 1px solid var(--border-color);
+            vertical-align: top;
+        }
+
+        table.test-matrix tbody tr:nth-child(even) {
+            background-color: var(--row-even);
+        }
+
+        table.test-matrix tbody tr:nth-child(odd) {
+            background-color: var(--row-odd);
+        }
+
+        table.test-matrix tbody tr:hover {
+            background-color: #e2e8f0;
+        }
+
+        .tc-id {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            color: var(--tc-badge-text);
+            background: var(--tc-badge-bg);
+            padding: 4px 6px;
+            border-radius: 4px;
+            display: inline-block;
+            white-space: nowrap;
+            font-size: 10.5px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 800;
+            font-size: 10px;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        .status-pass {
+            background: var(--pass-bg);
+            color: var(--pass-green);
+            border: 1px solid #bbf7d0;
+        }
+
+        .steps-list {
+            line-height: 1.45;
+        }
+
+        .steps-list span.step-num {
+            font-weight: 700;
+            color: #0369a1;
+        }
+
+        .code-snippet {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10.5px;
+            background: #f1f5f9;
+            padding: 2px 5px;
+            border-radius: 3px;
+            color: #0f172a;
+            border: 1px solid #e2e8f0;
+            word-break: break-all;
+        }
+
+        @media print {
+            body {
+                padding: 0;
+                background: #fff;
+                font-size: 9.5px;
+            }
+
+            .action-bar, .controls {
+                display: none !important;
+            }
+
+            .container {
+                box-shadow: none;
+                border: none;
+                max-width: 100%;
+            }
+
+            table.test-matrix td, table.test-matrix th {
+                padding: 4px 6px;
+            }
+
+            .tc-id {
+                background: none;
+                padding: 0;
+                color: #000;
+            }
+
+            tr {
+                page-break-inside: avoid;
+            }
+
+            .use-case-banner {
+                page-break-after: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Action / Navigation Bar -->
+    <div class="action-bar">
+        <h1>
+            ST. BILFRID QA TEST REGISTER
+            <span class="badge">Laravel ERP Suite</span>
+        </h1>
+        <div class="controls">
+            <input type="text" id="searchInput" class="search-input" placeholder="Search Test ID, Model, Action, Outcome..." onkeyup="filterTable()">
+            <button class="btn btn-primary" onclick="window.print()">🖨 Print / Export PDF</button>
+            <button class="btn btn-success" onclick="downloadCSV()">📥 Download CSV</button>
+        </div>
+    </div>
+
+    <!-- Company Header -->
+    <div class="company-header">
+        <div class="company-title">ST. BILFRID DEVELOPMENT CORPORATION — BLACKBOX TEST CASES</div>
+        <div class="company-subtitle">Black Box Testing Suite based on System Architecture & Laravel Eloquent Models | Test Case Execution & Defect Register</div>
+    </div>
+
+    <!-- KPI Summary Metrics -->
+    <div class="metrics-grid">
+        <div class="metric-card">
+            <div class="metric-label">Total Test Cases</div>
+            <div class="metric-value">116</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-label">Alpha Test Cases</div>
+            <div class="metric-value">103 (TC-A001 – TC-A103)</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-label">Beta Field Scenarios</div>
+            <div class="metric-value">13 (TC-B001 – TC-B013)</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-label">Execution Status</div>
+            <div class="metric-value pass">100% PASS</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-label">Open Critical Defects</div>
+            <div class="metric-value" style="color: #10b981;">0 Defect</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-label">Domain Models Tested</div>
+            <div class="metric-value">24 Eloquent Models</div>
+        </div>
+    </div>
+
+    <!-- Table Test Matrix -->
+    <div class="table-responsive">
+        <table class="test-matrix" id="testTable">
+            <thead>
+                <tr>
+                    <th style="width: 7%;">TEST CASE ID</th>
+                    <th style="width: 17%;">TEST DESCRIPTION</th>
+                    <th style="width: 22%;">ACTION</th>
+                    <th style="width: 16%;">INPUT DATA</th>
+                    <th style="width: 17%;">ACTUAL OUTCOME</th>
+                    <th style="width: 15%;">EXPECTED OUTCOME</th>
+                    <th style="width: 6%;">STATUS</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Generated dynamically via client side or direct rows -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+const testData = [
+  // Use Case 1
+  { section: "Use Case 1: Authentication & Access Control (User, Supplier Models)" },
+  { id: "TC-A001", desc: "Login as Master Administrator with valid credentials", action: "Step 1: Open login page (/login)<br>Step 2: Enter Master Admin email<br>Step 3: Enter password<br>Step 4: Click 'Sign In'", input: "Email: admin@newconstuc.firm<br>Password: admin123", actual: "User authenticated successfully and redirected to Executive Dashboard (/)", expected: "The account is successfully authenticated, and the user is redirected to the Executive Dashboard.", status: "PASS" },
+  { id: "TC-A002", desc: "Login as Roofing Transfer Officer with valid credentials", action: "Step 1: Open login page (/login)<br>Step 2: Enter Roofing Officer email<br>Step 3: Enter password<br>Step 4: Click 'Sign In'", input: "Email: roofing@newconstuc.firm<br>Password: roofing123", actual: "User authenticated and redirected to Roofing Transfer Station (/roofing-transfer)", expected: "The user is authenticated and redirected directly to the Roofing Transfer Station.", status: "PASS" },
+  { id: "TC-A003", desc: "Login as Windows & Doors Officer with valid credentials", action: "Step 1: Open login page (/login)<br>Step 2: Enter W&D Officer email<br>Step 3: Enter password<br>Step 4: Click 'Sign In'", input: "Email: windows.doors@newconstuc.firm<br>Password: windows123", actual: "User authenticated and redirected to Windows & Doors Station (/windows-doors-transfer)", expected: "The user is authenticated and redirected directly to the Windows & Doors Station.", status: "PASS" },
+  { id: "TC-A004", desc: "Login as External Supplier Partner with valid credentials", action: "Step 1: Open login page (/login)<br>Step 2: Enter Supplier email<br>Step 3: Enter password<br>Step 4: Click 'Sign In'", input: "Email: supplier@titansteel.ph<br>Password: password", actual: "User authenticated and redirected to Supplier Dashboard (/supplier/dashboard)", expected: "The supplier user is authenticated and redirected to the Supplier Operations Portal.", status: "PASS" },
+  { id: "TC-A005", desc: "Authenticate using 1-Click Fill Credentials shortcut", action: "Step 1: Open login page<br>Step 2: Click '⚡ Master Administrator' quick-fill button<br>Step 3: Click 'Sign In'", input: "Pre-filled credentials via UI shortcut", actual: "Credentials auto-filled in form and login succeeds immediately", expected: "The form automatically populates corresponding email and password and logs in successfully.", status: "PASS" },
+  { id: "TC-A006", desc: "Login attempt with incorrect password", action: "Step 1: Input valid Admin email<br>Step 2: Input wrong password<br>Step 3: Click 'Sign In'", input: "Email: admin@newconstuc.firm<br>Password: wrongpassword99", actual: "Error message 'Invalid credentials' displayed; user remains on login page", expected: "The system displays an error message and prevents unauthorized login.", status: "PASS" },
+  { id: "TC-A007", desc: "Login attempt with unregistered email", action: "Step 1: Input non-existent email<br>Step 2: Input any password<br>Step 3: Click 'Sign In'", input: "Email: ghost.user@unknown.ph<br>Password: password123", actual: "Error message 'Invalid credentials' displayed; login rejected", expected: "The system displays an authentication error and rejects the login attempt.", status: "PASS" },
+  { id: "TC-A008", desc: "Submit login with email field left empty", action: "Step 1: Leave email field blank<br>Step 2: Enter valid password<br>Step 3: Click 'Sign In'", input: "Email: (blank)<br>Password: admin123", actual: "Browser and server validation blocked submission; 'The email field is required' displayed", expected: "The system prevents submission and indicates email is required.", status: "PASS" },
+  { id: "TC-A009", desc: "Submit login with password field left empty", action: "Step 1: Input valid email<br>Step 2: Leave password field blank<br>Step 3: Click 'Sign In'", input: "Email: admin@newconstuc.firm<br>Password: (blank)", actual: "Validation halts submission; 'The password field is required' prompted", expected: "The system prevents submission and prompts that password is required.", status: "PASS" },
+  { id: "TC-A010", desc: "Rate limiting on multiple consecutive failed login attempts", action: "Step 1: Enter valid email<br>Step 2: Enter wrong password 6 consecutive times<br>Step 3: Observe system throttle response", input: "Email: admin@newconstuc.firm<br>Password: badpass (x6)", actual: "System temporarily throttled login attempts and displayed a lockout countdown message", expected: "The system will temporarily throttle login attempts and display a lockout countdown message.", status: "PASS" },
+  { id: "TC-A011", desc: "User terminates session via Sign Out action", action: "Step 1: Log in to application<br>Step 2: Click 'Sign Out' in navigation sidebar", input: "None", actual: "Session invalidated, CSRF token refreshed, user redirected back to login screen", expected: "The system will terminate user session and redirect to the login screen.", status: "PASS" },
+
+  // Use Case 2
+  { section: "Use Case 2: Executive Dashboard & Multi-Year Analytics (Project, Payment, ProjectCost Models)" },
+  { id: "TC-A012", desc: "Master Admin views Executive Dashboard KPI summary", action: "Step 1: Log in as Master Admin<br>Step 2: Navigate to root URL (/)", input: "Role: admin", actual: "Dashboard displays Booked Sales, Cleared Revenue, Overall Trade Averages, and Active Projects", expected: "The system will display high-level executive statistics and active project progress averages.", status: "PASS" },
+  { id: "TC-A013", desc: "Non-admin user attempts direct URL access to Executive Dashboard", action: "Step 1: Log in as Roofing Transfer Officer<br>Step 2: Attempt to navigate to http://localhost:8000/", input: "Role: roofing_transfer", actual: "Middleware intercepts request and redirects back to /roofing-transfer with alert", expected: "The system restricts unauthorized access and redirects user to their designated hub.", status: "PASS" },
+  { id: "TC-A014", desc: "Inspect multi-year financial performance breakdown (2024–2027)", action: "Step 1: Navigate to Executive Dashboard<br>Step 2: Review multi-year revenue and margin matrix", input: "None", actual: "Matrix correctly aggregates contracted budget, collected payments, and incurred expenses per fiscal year", expected: "The system displays accurate multi-year breakdown computed from Project, Payment, and ProjectCost records.", status: "PASS" },
+
+  // Use Case 3
+  { section: "Use Case 3: Project Master Lifecycle & Tracker (Project Model)" },
+  { id: "TC-A015", desc: "Navigate to Active Project Tracker", action: "Step 1: Log in as Master Admin<br>Step 2: Click 'Active Project Tracker' in navigation", input: "URL: /projects", actual: "Project tracker page renders listing all active projects with budget, schedule health, and trade gauges", expected: "The system displays all registered projects with visual progress bars and status indicators.", status: "PASS" },
+  { id: "TC-A016", desc: "Create a new project with valid details", action: "Step 1: Click 'Add New Project'<br>Step 2: Input Title, Client, Location, Budget, Start and End Dates<br>Step 3: Click 'Create Project'", input: "Title: Horizon Heights Tower, Client: Metro Prime, Location: Cebu City, Budget: 28000000, Start: 2026-05-01, End: 2026-12-31", actual: "Project saved, project code auto-generated (PRJ-...), default checklist seeded, redirected to project control", expected: "The system will create the project, auto-assign project code, seed default checklist, and redirect to project control.", status: "PASS" },
+  { id: "TC-A017", desc: "Create project with Project Title left blank", action: "Step 1: Click 'Add New Project'<br>Step 2: Leave Title empty<br>Step 3: Fill other fields<br>Step 4: Click 'Create Project'", input: "Title: (blank), Client: Megaworld, Budget: 10000000", actual: "Form validation halted; error message 'The title field is required' displayed", expected: "The system highlights missing field and prevents project creation.", status: "PASS" },
+  { id: "TC-A018", desc: "Create project with negative budget value", action: "Step 1: Click 'Add New Project'<br>Step 2: Input negative budget<br>Step 3: Click 'Create Project'", input: "Contract Budget: -1500000", actual: "Submission rejected; validation error prompts budget must be greater than zero", expected: "The system displays a validation error requiring budget to be a positive number.", status: "PASS" },
+  { id: "TC-A019", desc: "Create project with End Date earlier than Start Date", action: "Step 1: Click 'Add New Project'<br>Step 2: Set Start Date: 2026-06-01<br>Step 3: Set End Date: 2026-02-01<br>Step 4: Click Save", input: "Start: 2026-06-01, End: 2026-02-01", actual: "Validation halted submission; 'The end date must be a date after or equal to start date' displayed", expected: "The system enforces chronological date validation and blocks inverted project schedules.", status: "PASS" },
+  { id: "TC-A020", desc: "Update project metadata and client information", action: "Step 1: Open project details modal<br>Step 2: Modify Client Name and Location<br>Step 3: Click 'Save Changes'", input: "Client: Horizon Prime Holdings, Location: Iloilo Business Park", actual: "Database record updated, success toast shown, UI refreshed with updated values", expected: "The system updates project record and displays a confirmation notification.", status: "PASS" },
+  { id: "TC-A021", desc: "Open project deletion confirmation modal and cancel", action: "Step 1: Scroll to Danger Zone<br>Step 2: Click 'Delete Project'<br>Step 3: Click 'Cancel' in modal", input: "None", actual: "Modal dismissed; project record remains untouched in database", expected: "The system dismisses the modal without modifying or deleting the project.", status: "PASS" },
+  { id: "TC-A022", desc: "Confirm project deletion with exact security string", action: "Step 1: Click 'Delete Project'<br>Step 2: Type required exact confirmation text 'DELETE'<br>Step 3: Click 'Permanently Delete'", input: "Confirmation Text: DELETE", actual: "Project and cascading child records (tasks, costs, photos) deleted; redirected to /projects", expected: "The system permanently deletes project and redirects user to active projects tracker.", status: "PASS" },
+  { id: "TC-A023", desc: "Attempt project deletion with incorrect confirmation text", action: "Step 1: Click 'Delete Project'<br>Step 2: Type 'cancel' or wrong text<br>Step 3: Attempt to click Delete", input: "Confirmation Text: remove", actual: "System rejected the deletion request because the confirmation text did not exactly match the required confirmation string.", expected: "The system should enforce server-side validation rejecting deletion unless confirmation string strictly matches.", status: "PASS" },
+
+  // Use Case 4
+  { section: "Use Case 4: Project Schedule, Gantt & Task Execution (ProjectTask, Personnel Models)" },
+  { id: "TC-A024", desc: "Add a new construction task with assigned engineer", action: "Step 1: On /projects/{id}, click 'Add Task'<br>Step 2: Input Task Name, Category, Assigned Engineer, Start/Due Date, Budget<br>Step 3: Click Save", input: "Task: Foundation Rebar Matting, Category: Structural, Engineer: Engr. Carlo Cruz, Budget: 350000, Start: 2026-05-01, Due: 2026-05-20", actual: "Task record created and appears in project schedule list and Gantt timeline", expected: "The system creates task record and reflects it in the schedule timeline.", status: "PASS" },
+  { id: "TC-A025", desc: "Submit new task with empty task name", action: "Step 1: Click 'Add Task'<br>Step 2: Leave task name blank<br>Step 3: Fill other fields<br>Step 4: Click Save", input: "Task Name: (blank), Budget: 100000", actual: "Validation halted submission; error 'The task name field is required' displayed", expected: "The system highlights task name as required and rejects submission.", status: "PASS" },
+  { id: "TC-A026", desc: "Submit new task with due date before start date", action: "Step 1: Click 'Add Task'<br>Step 2: Set Start Date: 2026-05-15, Due Date: 2026-05-10<br>Step 3: Click Save", input: "Start: 2026-05-15, Due: 2026-05-10", actual: "Validation failed; system prevented saving inverted task timeline", expected: "The system validates task dates and requires due date to be after start date.", status: "PASS" },
+  { id: "TC-A027", desc: "Update task progress percentage via slider", action: "Step 1: Locate task in schedule<br>Step 2: Drag progress slider from 0% to 75%<br>Step 3: Release slider", input: "Progress: 75%", actual: "AJAX request sent, progress saved in database, progress bar rendered at 75%", expected: "The system updates task completion percentage and reflects state visually in real time.", status: "PASS" },
+  { id: "TC-A028", desc: "Verify weighted overall project progress recalculation", action: "Step 1: Change Structural trade progress to 80%<br>Step 2: Observe overall project progress badge", input: "Structural = 80%, Electrical = 20%, Piping = 10%, Finishing = 0%", actual: "Overall progress automatically recalculated using weighted engineering formula: (80*0.40)+(20*0.25)+(10*0.20)+(0*0.15) = 39%", expected: "The system automatically recalculates overall progression based on weighted trade formula.", status: "PASS" },
+  { id: "TC-A029", desc: "Toggle task checklist item completion", action: "Step 1: Locate task in checklist view<br>Step 2: Click checkbox next to task item", input: "Task ID: 14", actual: "Checklist state toggled to checked; strikethrough styling applied and state persisted", expected: "The system toggles task checklist status and persists state across page reloads.", status: "PASS" },
+  { id: "TC-A030", desc: "Delete an existing project task", action: "Step 1: Click delete trash icon on task row<br>Step 2: Confirm deletion in prompt", input: "Task ID: 12", actual: "Task removed from database and immediately removed from schedule table", expected: "The system permanently removes task and refreshes schedule view.", status: "PASS" },
+  { id: "TC-A031", desc: "Assign personnel without active license or qualification", action: "Step 1: Open task assignment dropdown<br>Step 2: Inspect personnel list for license status", input: "Personnel without license", actual: "System flagged personnel with an expired or missing license using an advisory badge and prevented improper assignment.", expected: "The system should flag an advisory badge when assigning personnel with expired engineering licenses.", status: "PASS" },
+
+  // Use Case 5
+  { section: "Use Case 5: Blueprints, 3D Renders & Site Photo Gallery (ProjectPhoto Model)" },
+  { id: "TC-A032", desc: "Upload valid architectural blueprint image (JPG/PNG)", action: "Step 1: Navigate to Project Gallery<br>Step 2: Select Category 'Technical Blueprints & CAD'<br>Step 3: Choose valid JPG file (4MB)<br>Step 4: Click Upload", input: "Category: blueprint, File: foundation_grid_rev2.jpg (4.2MB)", actual: "File uploaded to /storage/projects/photos, thumbnail generated, added to gallery grid", expected: "The system successfully uploads the image and renders it in the designated gallery category.", status: "PASS" },
+  { id: "TC-A033", desc: "Upload 3D concept render image", action: "Step 1: Select Category '3D Concept Renders'<br>Step 2: Choose PNG file<br>Step 3: Click Upload", input: "Category: 3d_render, File: facade_daylight_view.png", actual: "Render saved and displayed under 3D Concept Renders tab", expected: "The system categorizes and stores render image properly.", status: "PASS" },
+  { id: "TC-A034", desc: "Upload photo exceeding 10MB file size limit", action: "Step 1: Select high-resolution drone photo (14.5MB)<br>Step 2: Click Upload", input: "File: site_aerial_orthomosaic.jpg (14.5MB)", actual: "Upload blocked by validation; error message 'File size cannot exceed 10MB' displayed", expected: "The system rejects oversized uploads and displays an error message.", status: "PASS" },
+  { id: "TC-A035", desc: "Upload disallowed file extension (.exe / .sh)", action: "Step 1: Attempt to upload executable file disguised as photo<br>Step 2: Click Upload", input: "File: blueprint_patch.exe", actual: "Validation halted upload; 'The photo must be an image of type: jpeg, png, webp' displayed", expected: "The system validates MIME type and blocks non-image file extensions.", status: "PASS" },
+  { id: "TC-A036", desc: "Designate uploaded photo as Primary Hero Banner", action: "Step 1: Hover over gallery photo card<br>Step 2: Click '★ Set Primary' button", input: "Photo ID: 8", actual: "is_primary flag set to true on photo record, previous primary cleared, project hero banner updated", expected: "The system sets photo as primary header image and updates project display.", status: "PASS" },
+  { id: "TC-A037", desc: "Delete gallery photo", action: "Step 1: Click delete button on photo card<br>Step 2: Confirm deletion", input: "Photo ID: 8", actual: "Database record deleted and storage file removed from disk", expected: "The system removes photo record and deletes file from server storage.", status: "PASS" },
+  { id: "TC-A038", desc: "Open photo in full-screen Lightbox modal", action: "Step 1: Click on photo thumbnail in gallery grid<br>Step 2: Verify high-res lightbox view", input: "None", actual: "Lightbox modal opens with high-resolution image, title, and upload timestamp", expected: "The system renders an interactive full-screen modal showing full image details.", status: "PASS" },
+
+  // Use Case 6
+  { section: "Use Case 6: Official Accomplishment Report & Signature Blocks (Project, ProjectTask, ProjectMaterial Models)" },
+  { id: "TC-A039", desc: "Generate Official Project Accomplishment Report", action: "Step 1: On /projects/{id}, click '🖨 Official Accomplishment Report'<br>Step 2: Verify printable document view loads", input: "URL: /projects/{id}/print-report", actual: "Print-ready report renders with company letterhead, PCAB license, project specs, and trade progress", expected: "The system generates an official printable accomplishment report with all project analytics.", status: "PASS" },
+  { id: "TC-A040", desc: "Verify four distinct formal signature blocks on report", action: "Step 1: Scroll to bottom of Accomplishment Report<br>Step 2: Inspect signature block section", input: "None", actual: "Report renders exactly four formal signature lines: Prepared By (Site Engr), Checked By (Project Mgr), Approved By (Managing Director), Conforme (Client)", expected: "The system displays all four mandatory engineering signature blocks.", status: "PASS" },
+  { id: "TC-A041", desc: "Verify report print stylesheet layout (CSS @media print)", action: "Step 1: Press Ctrl+P on report page<br>Step 2: Inspect print preview layout", input: "None", actual: "Page margins align properly, navigation bars hidden, signature blocks anchored at page footer", expected: "The print preview cleanly formats content without cutoffs or overlapping headers.", status: "PASS" },
+
+  // Use Case 7
+  { section: "Use Case 7: Project Costing Hub & Overrun Alerts (ProjectCost, Project Models)" },
+  { id: "TC-A042", desc: "Record new project expenditure under specific Cost Head", action: "Step 1: Navigate to /costing<br>Step 2: Select Project<br>Step 3: Select Cost Head 'Materials'<br>Step 4: Enter Description, Amount, Incurred Date<br>Step 5: Click Save", input: "Project: Horizon Heights, Head: Materials, Desc: Ready-mix concrete batch 4, Amount: 185000, Date: 2026-05-12", actual: "Cost entry created, Materials head subtotal increments by ₱185,000, total project cost recalculated", expected: "The system records expenditure under selected cost head and updates financial totals.", status: "PASS" },
+  { id: "TC-A043", desc: "Record expenditure with blank amount field", action: "Step 1: Click 'Add Expense'<br>Step 2: Leave Amount field empty<br>Step 3: Click Save", input: "Amount: (blank)", actual: "Submission blocked; validation message 'The amount field is required' displayed", expected: "The system prevents submission and indicates amount is required.", status: "PASS" },
+  { id: "TC-A044", desc: "Record expenditure with negative amount value", action: "Step 1: Click 'Add Expense'<br>Step 2: Enter negative amount<br>Step 3: Click Save", input: "Amount: -25000", actual: "Validation failed; 'Amount must be greater than zero' prompted", expected: "The system blocks negative cost entries.", status: "PASS" },
+  { id: "TC-A045", desc: "Update existing expenditure details and amount", action: "Step 1: Click edit icon on cost item<br>Step 2: Change amount from ₱50,000 to ₱62,000<br>Step 3: Click Update", input: "New Amount: 62000", actual: "Cost record updated; cost head total and project gross margin recalculated immediately", expected: "The system updates record and refreshes financial totals.", status: "PASS" },
+  { id: "TC-A046", desc: "Delete expenditure entry", action: "Step 1: Click delete icon on cost item<br>Step 2: Confirm deletion", input: "Cost ID: 5", actual: "Cost item deleted; parent cost head total decrements accordingly", expected: "The system deletes record and updates parent totals.", status: "PASS" },
+  { id: "TC-A047", desc: "Execute Cost Auto-Sync to synchronize project actual expenses", action: "Step 1: On Costing Hub, click '⚡ Auto-Sync'<br>Step 2: Verify calculation results", input: "None", actual: "System aggregated all BOM material usages, labor items, and logged costs into project spent_budget", expected: "The system synchronizes all internal costs and updates project financial spent figures.", status: "PASS" },
+  { id: "TC-A048", desc: "Verify >85% Budget Warning indicator trigger", action: "Step 1: Record costs bringing total spent to 88% of contract budget<br>Step 2: Click 'Auto-Sync'<br>Step 3: Observe budget health badge", input: "Budget: 10,000,000, Spent: 8,800,000 (88%)", actual: "Warning badge '⚠ Budget Alert: 88% Utilized' displayed with amber highlight", expected: "The system triggers a visual advisory when expenses cross 85% of budget ceiling.", status: "PASS" },
+  { id: "TC-A049", desc: "Verify >100% Critical Budget Overrun warning trigger", action: "Step 1: Record costs bringing total spent to 105% of contract budget<br>Step 2: Click 'Auto-Sync'<br>Step 3: Observe budget health badge", input: "Budget: 10,000,000, Spent: 10,500,000 (105%)", actual: "Critical badge '🚨 CRITICAL OVERRUN: 105%' displayed with pulsing red banner", expected: "The system displays a prominent critical alert indicating contract budget has been breached.", status: "PASS" },
+
+  // Use Case 8
+  { section: "Use Case 8: Itemized DUPA Scope of Works & Templates (ProjectScopeItem, ProjectScopeLine Models)" },
+  { id: "TC-A050", desc: "Create a new Scope Item under project", action: "Step 1: In Project Control, navigate to DUPA Scope tab<br>Step 2: Enter Scope Name 'Structural Concrete Works', Category 'Structural'<br>Step 3: Click 'Add Scope Item'", input: "Scope Name: Structural Concrete Works, Category: Structural", actual: "Scope item created and displayed in DUPA breakdown tree", expected: "The system creates parent scope item under project.", status: "PASS" },
+  { id: "TC-A051", desc: "Add itemized Scope Line (material/labor rate) to Scope Item", action: "Step 1: Under Scope Item, click 'Add Line Item'<br>Step 2: Input Description 'Class A Ready Mix Concrete 3000 PSI', Qty: 45, Unit: 'cu.m', Unit Cost: 4800<br>Step 3: Click Save", input: "Desc: Class A Concrete, Qty: 45, Unit: cu.m, Unit Cost: 4800", actual: "Line item created; subtotal calculated as ₱216,000 (45 * 4800) and added to scope total", expected: "The system computes line subtotal and updates parent scope item total.", status: "PASS" },
+  { id: "TC-A052", desc: "Load pre-configured 2BR Bungalow construction template", action: "Step 1: Click 'Load Template' dropdown<br>Step 2: Select '2-Bedroom Standard Bungalow Template'<br>Step 3: Confirm template loading", input: "Template: 2BR Bungalow", actual: "Pre-configured DUPA scope items and lines (Earthworks, Rebar, Masonry, Roofing) auto-populated into project", expected: "The system seeds complete standardized bill of quantities from template.", status: "PASS" },
+  { id: "TC-A053", desc: "Load pre-configured Duplex Housing construction template", action: "Step 1: Click 'Load Template'<br>Step 2: Select 'Duplex Housing Model Template'<br>Step 3: Confirm loading", input: "Template: Duplex Housing", actual: "Duplex standardized scope items, quantities, and line rates successfully populated", expected: "The system imports all duplex scope specifications.", status: "PASS" },
+  { id: "TC-A054", desc: "Generate printable itemized BOM sheet", action: "Step 1: Click '🖨 Print Detailed BOM'<br>Step 2: Verify print view", input: "URL: /projects/{id}/print-bom", actual: "Printable tabular format with scope items, unit costs, quantities, and grand total rendered", expected: "The system formats DUPA scope into clean printable engineering estimate.", status: "PASS" },
+
+  // Use Case 9
+  { section: "Use Case 9: Central Inventory & Material Catalog (Material, InventoryLog Models)" },
+  { id: "TC-A055", desc: "Register a new master material in central catalog", action: "Step 1: Navigate to /inventory<br>Step 2: Click 'Register New Material'<br>Step 3: Input Material Code, Name, Category, Unit, Unit Cost, Initial Stock<br>Step 4: Click Save", input: "Code: MAT-STL-016, Name: 16mm Deformed Steel Bar Grade 40, Category: Structural, Unit: pcs, Cost: 485, Stock: 500", actual: "Material saved in catalog; initial stock audit log created in inventory_logs table", expected: "The system registers material in catalog and initializes inventory log record.", status: "PASS" },
+  { id: "TC-A056", desc: "Register material with duplicate Material Code", action: "Step 1: Click 'Register New Material'<br>Step 2: Enter an existing material code<br>Step 3: Click Save", input: "Code: MAT-STL-016 (already exists)", actual: "Validation blocked creation; error 'The material code has already been taken' displayed", expected: "The system enforces uniqueness on material code.", status: "PASS" },
+  { id: "TC-A057", desc: "Update central warehouse stock via manual Restock", action: "Step 1: Locate material in inventory list<br>Step 2: Click 'Restock'<br>Step 3: Enter Restock Qty: 250, Reason: 'Bulk Supplier Delivery'<br>Step 4: Click Confirm", input: "Material: 16mm Rebar, Qty: 250, Reason: Bulk Delivery", actual: "Stock incremented from 500 to 750; inventory log recorded with type 'restock'", expected: "The system increments stock quantity and logs the restocking transaction.", status: "PASS" },
+  { id: "TC-A058", desc: "Inspect inventory transaction history log", action: "Step 1: Navigate to Inventory Audit Logs tab<br>Step 2: Filter by transaction type", input: "Type: All", actual: "Full chronological table displayed showing timestamps, material, quantity change, user, and engineering remarks", expected: "The system displays complete tamper-evident inventory audit trail.", status: "PASS" },
+
+  // Use Case 10
+  { section: "Use Case 10: Bill of Materials (BOM) & Daily Consumption (ProjectMaterial, DailyMaterialUsage Models)" },
+  { id: "TC-A059", desc: "Allocate materials from central inventory to project BOM", action: "Step 1: Navigate to /bom/project/{id}<br>Step 2: Select Material from dropdown<br>Step 3: Enter Allocated Quantity: 150<br>Step 4: Click 'Allocate Material'", input: "Material: Portland Cement Type 1, Allocated Qty: 150", actual: "Central stock deducted by 150; project BOM shows allocated_qty: 150, used_qty: 0; log recorded", expected: "The system deducts warehouse stock and credits materials to project BOM.", status: "PASS" },
+  { id: "TC-A060", desc: "Attempt allocating quantity exceeding warehouse available stock", action: "Step 1: Select material with warehouse stock of 50 units<br>Step 2: Attempt to allocate 120 units<br>Step 3: Click 'Allocate Material'", input: "Available Stock: 50, Requested Qty: 120", actual: "Transaction blocked; error 'Insufficient warehouse stock! Available: 50 units' displayed", expected: "The system blocks allocation and notifies user of insufficient stock.", status: "PASS" },
+  { id: "TC-A061", desc: "Record daily material consumption on job site", action: "Step 1: In project BOM table, locate allocated material<br>Step 2: Click 'Log Daily Usage'<br>Step 3: Enter Qty Used: 35, Date: 2026-05-14, Remarks: 'Ground floor slab casting'<br>Step 4: Click Save", input: "Qty: 35, Date: 2026-05-14, Remarks: Ground floor slab casting", actual: "DailyMaterialUsage record created; ProjectMaterial used_qty updated from 0 to 35; remaining unconsumed recalculated to 115", expected: "The system records daily usage log and increments cumulative consumed quantity.", status: "PASS" },
+  { id: "TC-A062", desc: "Record daily usage exceeding total allocated BOM quantity", action: "Step 1: Project has 20 remaining allocated units<br>Step 2: Attempt to log daily usage of 30 units<br>Step 3: Click Save", input: "Allocated Remaining: 20, Logged Usage: 30", actual: "Transaction blocked; error 'Usage cannot exceed remaining allocated quantity' displayed", expected: "The system prevents logging consumption greater than allocated balance.", status: "PASS" },
+
+  // Use Case 11
+  { section: "Use Case 11: Excess Material Return & Warehouse Reconciliation (ProjectMaterial, Material, InventoryLog Models)" },
+  { id: "TC-A063", desc: "Return unused site materials to central warehouse inventory", action: "Step 1: Locate completed project BOM item with unconsumed balance<br>Step 2: Click '↩ Return Excess to Central Inventory'<br>Step 3: Enter Return Qty: 20, Reason: 'Project completed with excess stock'", input: "Material: Portland Cement, Allocated: 100, Used: 80, Return Qty: 20", actual: "Warehouse central stock credited by +20; ProjectMaterial updated; inventory_log recorded with type 'excess_return' and reference 'RET-202605-001'", expected: "The system returns unused materials to warehouse stock and creates an excess return audit log.", status: "PASS" },
+  { id: "TC-A064", desc: "Attempt returning quantity greater than unconsumed site balance", action: "Step 1: Unconsumed site balance is 15 units<br>Step 2: Enter Return Qty: 25<br>Step 3: Click Submit", input: "Unconsumed Balance: 15, Return Qty: 25", actual: "Submission rejected; error message 'Return quantity cannot exceed remaining site balance (15)' displayed", expected: "The system validates that returned quantity does not exceed unconsumed site balance.", status: "PASS" },
+  { id: "TC-A065", desc: "Attempt returning zero or negative quantity of materials", action: "Step 1: Enter Return Qty: 0 or -5<br>Step 2: Click Submit", input: "Return Qty: 0", actual: "Validation halted submission; error requires quantity to be at least 1 unit", expected: "The system requires positive integer for return quantity.", status: "PASS" },
+
+  // Use Case 12
+  { section: "Use Case 12: Financial Billing, Proof Upload & Official Receipt Voucher (Payment, Project Models)" },
+  { id: "TC-A066", desc: "Record client milestone billing payment with proof attachment", action: "Step 1: Navigate to /payments<br>Step 2: Click 'Record Payment'<br>Step 3: Select Project, Invoice No, OR No, Payer, Amount, Stage, Date<br>Step 4: Upload bank slip JPG", input: "Invoice: INV-2026-008, OR: OR-202605-014, Payer: Vanguard Corp, Amount: 1250000, Stage: 30% Milestone, File: deposit_slip.jpg", actual: "Payment record created; slip saved to /uploads/receipts; project collected revenue updated", expected: "The system records payment transaction and stores proof-of-payment attachment.", status: "PASS" },
+  { id: "TC-A067", desc: "Record payment missing Invoice Number", action: "Step 1: Click 'Record Payment'<br>Step 2: Leave Invoice No empty<br>Step 3: Click Save", input: "Invoice No: (blank), Amount: 500000", actual: "Validation blocked submission; 'The invoice no field is required' displayed", expected: "The system requires invoice number and halts submission.", status: "PASS" },
+  { id: "TC-A068", desc: "Record payment with negative amount", action: "Step 1: Click 'Record Payment'<br>Step 2: Enter Amount: -75000<br>Step 3: Click Save", input: "Amount: -75000", actual: "Validation blocked submission; amount must be greater than zero", expected: "The system blocks negative payment amounts.", status: "PASS" },
+  { id: "TC-A069", desc: "Upload disallowed attachment file type (.bat / .exe) on payment", action: "Step 1: Click 'Record Payment'<br>Step 2: Attach executable script file as receipt<br>Step 3: Click Save", input: "File: payment_script.bat", actual: "Validation rejected upload; error indicates only PDF, JPG, PNG files allowed", expected: "The system blocks dangerous file types on payment attachments.", status: "PASS" },
+  { id: "TC-A070", desc: "Update payment status from Pending to Paid / Cleared", action: "Step 1: In payments table, locate pending payment<br>Step 2: Change status dropdown to 'paid'<br>Step 3: Confirm update", input: "Payment ID: 4, New Status: paid", actual: "Status updated; payment_first_cleared flag set to true; dashboard collected revenue increments", expected: "The system updates status and recalculates collected revenue.", status: "PASS" },
+  { id: "TC-A071", desc: "Generate printable Official Receipt (OR) Voucher", action: "Step 1: In payments table, click 'Print Receipt' on payment record<br>Step 2: Inspect generated voucher", input: "URL: /payments/{id}/receipt", actual: "Official company voucher loads displaying letterhead, BIR TIN, PCAB license, amount in figures & words, and signature lines", expected: "The system renders a legally-compliant printable official receipt voucher.", status: "PASS" },
+  { id: "TC-A072", desc: "Verify duplicate Official Receipt Number rejection", action: "Step 1: Record payment using existing OR number<br>Step 2: Click Save", input: "OR: OR-202605-014 (already registered)", actual: "System rejected the payment and displayed a warning that the Official Receipt Number already exists. The duplicate OR number was not saved.", expected: "The system should enforce unique constraint on official receipt numbers to prevent tax compliance conflicts.", status: "PASS" },
+
+  // Use Case 13
+  { section: "Use Case 13: Service Cost Estimator & 1-Click Init (ServiceRequest, Project Models)" },
+  { id: "TC-A073", desc: "Calculate construction cost estimate with valid parameters", action: "Step 1: Navigate to /estimation<br>Step 2: Enter Client Name, Land Area (300 sqm), Floor Area (220 sqm)<br>Step 3: Select Service Tier 'Residential Build'<br>Step 4: Click 'Calculate Estimate'", input: "Land: 300, Floor: 220, Tier: Residential Build, Rate: ₱25,000/sqm", actual: "Estimated total cost calculated as ₱5,500,000 (220 * 25,000) with detailed trade breakdown", expected: "The system computes estimated construction cost and displays trade breakdown.", status: "PASS" },
+  { id: "TC-A074", desc: "Calculate estimate with negative or zero area inputs", action: "Step 1: Enter Land Area: -50, Floor Area: 0<br>Step 2: Click 'Calculate Estimate'", input: "Land Area: -50, Floor Area: 0", actual: "Validation failed; error requires positive numerical area values", expected: "The system rejects negative or zero area values.", status: "PASS" },
+  { id: "TC-A075", desc: "Initialize active project from estimate via 1-Click Init", action: "Step 1: On saved service estimate, click '⚡ 1-Click Init Project'<br>Step 2: Confirm project creation in modal", input: "Estimate Code: EST-2026-003", actual: "Service request status converted to 'approved'; new Project record created with matching budget, client, and areas; redirected to project control", expected: "The system converts estimate into active project and redirects user to project control.", status: "PASS" },
+
+  // Use Case 14
+  { section: "Use Case 14: Centralized Supplier Hub & Admin Purchase Orders (Supplier, SupplierOrder Models)" },
+  { id: "TC-A076", desc: "Admin places purchase order to accredited supplier", action: "Step 1: Navigate to /suppliers/orders<br>Step 2: Click 'Create Purchase Order'<br>Step 3: Select Supplier 'Titan Steel', Project 'Horizon Heights', Delivery Date, Location<br>Step 4: Add Line Items: 200 pcs 12mm Rebar", input: "Supplier: Titan Steel, Project: Horizon Heights, Qty: 200 pcs @ ₱380, Total: ₱76,000", actual: "Purchase order created with code ORD-2026-001; status set to 'pending'; order pushed to supplier portal", expected: "The system creates purchase order, calculates totals, and routes order to supplier.", status: "PASS" },
+  { id: "TC-A077", desc: "Create purchase order without selecting a supplier", action: "Step 1: Open Create PO form<br>Step 2: Leave Supplier unselected<br>Step 3: Fill items and submit", input: "Supplier: (none)", actual: "Validation halted submission; 'The supplier id field is required' displayed", expected: "The system requires supplier selection and blocks submission.", status: "PASS" },
+  { id: "TC-A078", desc: "Admin marks delivered purchase order as 'Received' and syncs to inventory", action: "Step 1: Locate delivered supplier order<br>Step 2: Click 'Receive & Sync to Warehouse'<br>Step 3: Confirm receipt", input: "Order ID: ORD-2026-001", actual: "Order status updated to 'completed'; material stock in materials table incremented; inventory_log created", expected: "The system marks order completed and automatically credits delivered items to warehouse catalog.", status: "PASS" },
+  { id: "TC-A079", desc: "Admin toggles supplier account status (Active / Inactive)", action: "Step 1: Navigate to /suppliers<br>Step 2: Click 'Deactivate' on supplier record<br>Step 3: Observe status change", input: "Supplier ID: 3", actual: "Supplier status changed to 'inactive'; supplier cannot receive new purchase orders", expected: "The system updates supplier active status and restricts PO creation for inactive suppliers.", status: "PASS" },
+
+  // Use Case 15
+  { section: "Use Case 15: Dedicated Roofing Material Transfer Station (Material, ProjectMaterialTransfer Models)" },
+  { id: "TC-A080", desc: "Roofing Officer dispatches stock from warehouse to job site", action: "Step 1: Log in as Roofing Transfer Officer<br>Step 2: Navigate to /roofing-transfer<br>Step 3: In Dispatch from Stock form, select Material 'Rib-Type Long Span Roofing'<br>Step 4: Select Destination Project, enter Qty: 80 sheets", input: "Material: Long Span Roofing 0.5mm, Project: Horizon Heights, Qty: 80", actual: "Warehouse roofing stock deducted by 80; destination project BOM credited by +80; voucher generated; inventory log created", expected: "The system dispatches stock to project BOM and logs transfer transaction.", status: "PASS" },
+  { id: "TC-A081", desc: "Roofing Officer attempts stock dispatch exceeding warehouse availability", action: "Step 1: Warehouse stock is 40 sheets<br>Step 2: Enter Dispatch Qty: 60 sheets<br>Step 3: Click 'Dispatch to Project'", input: "Stock: 40, Dispatch Qty: 60", actual: "Dispatch rejected; error 'Insufficient warehouse stock! Current available: 40' displayed", expected: "The system blocks dispatch when quantity exceeds warehouse stock.", status: "PASS" },
+  { id: "TC-A082", desc: "Roofing Officer executes Inter-Project transfer between two active sites", action: "Step 1: In Inter-Project Transfer form, select Source Project 'Azure Villas', Destination Project 'Horizon Heights'<br>Step 2: Select Material 'C-Purlins 2x4'<br>Step 3: Enter Qty: 40 pcs", input: "Source: Azure Villas, Dest: Horizon Heights, Qty: 40", actual: "Source project BOM balance deducted by 40; destination project BOM balance credited by +40; inter-project transfer log created", expected: "The system transfers material between projects and maintains balanced project accounts.", status: "PASS" },
+  { id: "TC-A083", desc: "Attempt inter-project transfer where source and destination projects are identical", action: "Step 1: Select Source Project 'Azure Villas'<br>Step 2: Select Destination Project 'Azure Villas'<br>Step 3: Click 'Transfer Between Sites'", input: "Source: Azure Villas, Dest: Azure Villas", actual: "Submission rejected; error 'Destination project must be different from source project' displayed", expected: "The system prevents transferring material to the same project.", status: "PASS" },
+  { id: "TC-A084", desc: "Roofing Officer processes excess roofing material return to stock", action: "Step 1: Select project with unconsumed roofing materials<br>Step 2: Enter Return Qty: 15 sheets<br>Step 3: Click 'Return Excess to Stock'", input: "Project: Horizon Heights, Qty: 15 sheets", actual: "Warehouse roofing stock credited by +15; project BOM allocated reduced; transaction log recorded", expected: "The system returns excess materials to central inventory.", status: "PASS" },
+  { id: "TC-A085", desc: "Master Admin attempts to execute stock dispatch in Roofing Station", action: "Step 1: Log in as Master Admin<br>Step 2: Navigate to /roofing-transfer<br>Step 3: Attempt to submit dispatch form", input: "Role: admin", actual: "Request intercepted; error 'Admins have View-Only access in dedicated transfer stations' displayed", expected: "The system enforces role restrictions, granting Master Admin view-only access to dedicated hubs.", status: "PASS" },
+
+  // Use Case 16
+  { section: "Use Case 16: Dedicated Windows & Doors Material Transfer Station (Material, ProjectMaterialTransfer Models)" },
+  { id: "TC-A086", desc: "Windows & Doors Officer dispatches stock to project site", action: "Step 1: Log in as W&D Transfer Officer<br>Step 2: Navigate to /windows-doors-transfer<br>Step 3: Select Material 'Aluminum Sliding Window 120x120cm'<br>Step 4: Select Destination Project, enter Qty: 12 sets", input: "Material: Sliding Window 120x120cm, Project: Azure Villas, Qty: 12 sets", actual: "Warehouse stock deducted by 12; Azure Villas BOM credited by +12; voucher generated", expected: "The system dispatches windows and doors stock to target project BOM.", status: "PASS" },
+  { id: "TC-A087", desc: "Windows & Doors Officer executes inter-project transfer", action: "Step 1: Select Source Project, Destination Project, Material 'Flush Solid Door'<br>Step 2: Enter Qty: 6 units<br>Step 3: Click 'Transfer Between Sites'", input: "Source: Horizon Heights, Dest: Azure Villas, Qty: 6", actual: "Stock moved between project BOMs successfully; transfer voucher issued", expected: "The system transfers items between project sites accurately.", status: "PASS" },
+  { id: "TC-A088", desc: "Master Admin attempts mutation in Windows & Doors Station", action: "Step 1: Log in as Master Admin<br>Step 2: Attempt to submit W&D restock or dispatch form", input: "Role: admin", actual: "Mutation intercepted; role middleware prevents non-transfer officers from modifying stock", expected: "The system restricts modification privileges to authorized Windows & Doors officers.", status: "PASS" },
+
+  // Use Case 17
+  { section: "Use Case 17: Inter-Project Transfer Vouchers & Auditing (ProjectMaterialTransfer Model)" },
+  { id: "TC-A089", desc: "Roofing Officer views and prints Material Transfer Voucher", action: "Step 1: In Transfer History table, click 'View Voucher'<br>Step 2: Verify voucher view", input: "URL: /roofing-transfer/voucher/{id}", actual: "Voucher loads with official company letterhead, voucher reference ID (TRF-...), source, destination, materials, and signature lines", expected: "The system renders printable transfer voucher with complete audit information.", status: "PASS" },
+  { id: "TC-A090", desc: "Master Admin views Transfer Voucher in auditing mode", action: "Step 1: Log in as Master Admin<br>Step 2: Open voucher link /windows-doors-transfer/voucher/{id}", input: "Role: admin", actual: "Voucher renders successfully in read-only mode for administrative auditing", expected: "The system allows Master Admin to inspect transfer vouchers.", status: "PASS" },
+  { id: "TC-A091", desc: "Verify voucher timestamp and user attribution integrity", action: "Step 1: Generate voucher for recent transfer<br>Step 2: Inspect dispatched_by user name and timestamp", input: "None", actual: "Voucher accurately displays full name of officer who processed dispatch and exact server timestamp", expected: "The system accurately records and presents officer name and execution timestamp.", status: "PASS" },
+
+  // Use Case 18
+  { section: "Use Case 18: Supplier Portal: Catalog & Quick Stock Management (SupplierMaterial, Supplier Models)" },
+  { id: "TC-A092", desc: "Supplier adds new material item to their catalog", action: "Step 1: Log in as Supplier<br>Step 2: Navigate to /supplier/materials<br>Step 3: Click 'Add New Product'<br>Step 4: Enter Name, Category, Unit, Unit Price, Stock Qty, MOQ", input: "Name: Heavy Duty Accordion Security Gate, Category: Windows & Doors, Unit: sets, Price: 18500, Stock: 25, MOQ: 1", actual: "Product registered in supplier_materials table and appears on supplier catalog page", expected: "The system creates supplier material record and displays it in the vendor catalog.", status: "PASS" },
+  { id: "TC-A093", desc: "Supplier adds product with negative unit price", action: "Step 1: Click 'Add New Product'<br>Step 2: Enter Unit Price: -250<br>Step 3: Click Save", input: "Unit Price: -250", actual: "Validation blocked creation; 'Unit price must be a positive number' displayed", expected: "The system rejects negative product pricing.", status: "PASS" },
+  { id: "TC-A094", desc: "Supplier performs Quick Stock level adjustment", action: "Step 1: In catalog table, click 'Quick Stock' on product<br>Step 2: Enter new quantity: 45<br>Step 3: Click Update", input: "Product ID: 2, New Stock: 45", actual: "available_quantity field updated in database and table badge reflects 45 units available", expected: "The system updates stock quantity immediately without full page reload.", status: "PASS" },
+  { id: "TC-A095", desc: "Supplier soft deletes / removes catalog product", action: "Step 1: Click delete icon on product row<br>Step 2: Confirm deletion", input: "Product ID: 2", actual: "Product marked inactive or removed from catalog; no longer selectable in purchase orders", expected: "The system removes product from active catalog.", status: "PASS" },
+
+  // Use Case 19
+  { section: "Use Case 19: Supplier Portal: Order Fulfillment & Inquiries (SupplierOrder, SupplierOrderMessage, SupplierInquiry Models)" },
+  { id: "TC-A096", desc: "Supplier views incoming purchase orders list", action: "Step 1: Navigate to /supplier/orders<br>Step 2: Inspect orders list table", input: "Role: supplier", actual: "Orders displayed showing Order Code, Target Project, Items, Total Price, and Status badge", expected: "The system displays all purchase orders assigned to the logged-in supplier.", status: "PASS" },
+  { id: "TC-A097", desc: "Supplier updates order status from 'Pending' to 'Confirmed'", action: "Step 1: Open order details /supplier/orders/{id}<br>Step 2: Click 'Accept & Confirm Order'<br>Step 3: Confirm action", input: "Order Code: ORD-2026-001, New Status: confirmed", actual: "Order status updated to confirmed; supplier_order_logs audit record created", expected: "The system updates order status and creates a status audit log.", status: "PASS" },
+  { id: "TC-A098", desc: "Supplier advances order status to 'Ready for Delivery'", action: "Step 1: On order details, click 'Mark Ready for Delivery'<br>Step 2: Confirm update", input: "Status: ready_for_delivery", actual: "Order status changed; timestamp recorded; notification pushed to admin dashboard", expected: "The system advances order status in the fulfillment pipeline.", status: "PASS" },
+  { id: "TC-A099", desc: "Send two-way chat message on specific purchase order thread", action: "Step 1: In order conversation box, type 'Delivery truck scheduled to arrive tomorrow at 9:00 AM'<br>Step 2: Click Send", input: "Message: Delivery truck scheduled to arrive tomorrow at 9:00 AM", actual: "Message stored in supplier_order_messages and appears in conversation thread with timestamp", expected: "The system saves and displays message in order communication thread.", status: "PASS" },
+  { id: "TC-A100", desc: "Supplier responds to technical material inquiry from construction firm", action: "Step 1: Navigate to /supplier/inquiries<br>Step 2: Open pending inquiry<br>Step 3: Type response details<br>Step 4: Click 'Submit Response'", input: "Inquiry: Galvanized coating thickness specs, Response: All sheets comply with ASTM A653 G90 standard", actual: "Response saved in supplier_inquiries table; inquiry status updated to 'answered'", expected: "The system records vendor response and updates inquiry status.", status: "PASS" },
+
+  // Use Case 20
+  { section: "Use Case 20: Engineering Personnel Roster & Project Assignment (Personnel, Project Models)" },
+  { id: "TC-A101", desc: "Register a new engineer or architect in company roster", action: "Step 1: Navigate to /personnel<br>Step 2: Click 'Add Personnel'<br>Step 3: Enter Name, Professional Title, Email, Phone, License No, Specialization<br>Step 4: Click Save", input: "Name: Engr. Maria Santos, Title: Senior Structural Engineer, Email: maria.santos@firm.ph, License: PRC-0148921, Spec: High-Rise Concrete", actual: "Personnel record created and visible in engineering directory", expected: "The system registers professional in roster.", status: "PASS" },
+  { id: "TC-A102", desc: "Register personnel with duplicate email address", action: "Step 1: Click 'Add Personnel'<br>Step 2: Enter an existing personnel email<br>Step 3: Click Save", input: "Email: maria.santos@firm.ph (duplicate)", actual: "Validation blocked registration; error 'The email has already been taken' displayed", expected: "The system enforces unique email addresses across personnel.", status: "PASS" },
+  { id: "TC-A103", desc: "Assign personnel to project lead role", action: "Step 1: On /projects/{id}, click 'Assign Personnel'<br>Step 2: Select Engr. Maria Santos, Role: 'Lead Structural Engineer'<br>Step 3: Click Assign", input: "Personnel ID: 5, Role: Lead Structural Engineer", actual: "Record created in project_personnel pivot table; engineer listed in project header directory", expected: "The system associates personnel with project and updates project personnel roster.", status: "PASS" },
+
+  // Beta Cases (Use Cases 21 to 26)
+  { section: "Use Case 21: Pre-Construction Onboarding & Payment-First Gate (Client & Finance UAT)" },
+  { id: "TC-B001", desc: "End-to-End Client Intake to Project Initialization", action: "Step 1: Client submits request via portal<br>Step 2: Estimator applies Bungalow Template<br>Step 3: Click '1-Click Init Project'", input: "Client: Arch. Daniel Lim, Area: 180 sqm, Est Budget: ₱4,200,000", actual: "New Project created with seeded DUPA breakdown, initial status 'Planning', and code assigned", expected: "End-to-end conversion from inquiry to project workspace succeeds without data loss.", status: "PASS" },
+  { id: "TC-B002", desc: "Payment-First Policy Site Mobilization Block", action: "Step 1: Enable payment_first_policy<br>Step 2: Site Engineer attempts to start task without cleared payment", input: "payment_first_policy: true, status: pending", actual: "Site task execution displays 'Hold Site Works: Pending Mobilization Drawdown' banner", expected: "System strictly enforces Payment-First policy by disabling site progress logging until deposit is cleared.", status: "PASS" },
+  { id: "TC-B003", desc: "Bank Loan 1st Tranche Clearance & Site Unblock", action: "Step 1: Finance logs Bank Drawdown #1 (₱840,000)<br>Step 2: Attach bank deposit slip<br>Step 3: Set status to paid", input: "Payer: BDO Unibank, Amount: ₱840,000, Stage: Mobilization 20%", actual: "Badge transitions to 'Payment Cleared • Authorized to Construct' (Green); Site tasks unlocked", expected: "Verification of bank drawdown automatically authorizes site engineers to begin mobilization.", status: "PASS" },
+
+  { section: "Use Case 22: Multi-Trade Field Progress & Auto-Handover (Site Engineering UAT)" },
+  { id: "TC-B004", desc: "Site Engineer logs daily multi-trade progression on mobile", action: "Step 1: Access /projects/{id} on tablet<br>Step 2: Update Structural task to 100%, Electrical to 60%, Piping to 40%<br>Step 3: Upload site progress photo", input: "Structural: 100%, Electrical: 60%, Piping: 40%, Photo: slab_casting.jpg", actual: "Project overall progress dynamically updates to 63%; photo tagged under milestone gallery", expected: "Mobile field updates calculate weighted progress accurately and append photos to timeline.", status: "PASS" },
+  { id: "TC-B005", desc: "Final Finishing Trade 100% Completion & Auto-Handover", action: "Step 1: Mark all remaining Finishing tasks 100%<br>Step 2: Trigger trade recalculation", input: "All 4 trades = 100%", actual: "Overall progress hits 100%; Project status changes to 'completed' and actual_completion_date auto-fills with now()", expected: "Project automatically completes and records completion timestamp when all trades reach 100%.", status: "PASS" },
+
+  { section: "Use Case 23: Supply Chain Vendor Fulfillment & Warehouse Ingestion (Supplier & Procurement UAT)" },
+  { id: "TC-B006", desc: "End-to-End Purchase Order Procurement & In-Transit Chat", action: "Step 1: Admin sends PO for 150 pcs Purlins<br>Step 2: Supplier accepts PO on Supplier Portal<br>Step 3: Supplier posts dispatch message with truck plate", input: "PO Code: ORD-2026-045, Supplier: Titan Steel, Message: Truck NBD-4412 dispatched", actual: "Order status moves from 'Pending' to 'In Transit'; message visible in real-time order thread", expected: "Supplier and procurement communicate smoothly through dedicated PO thread.", status: "PASS" },
+  { id: "TC-B007", desc: "Warehouse Ingestion & Idempotent Stock Crediting", action: "Step 1: Warehouse Custodian clicks 'Receive & Sync to Warehouse'<br>Step 2: Confirm delivery receipt<br>Step 3: Refresh page and re-verify", input: "Order: ORD-2026-045, Delivery Date: Today", actual: "Central warehouse stock increments by 150 pcs; is_synced_to_inventory set to true; second sync attempt blocked", expected: "Warehouse inventory increments correctly and duplicate ingestion is strictly prevented.", status: "PASS" },
+
+  { section: "Use Case 24: Inter-Site Trade Logistics & Material Optimization (Transfer Officer UAT)" },
+  { id: "TC-B008", desc: "Inter-Project Roofing Reallocation between active sites", action: "Step 1: Roofing Officer logs into station<br>Step 2: Select Source Project A, Dest Project B<br>Step 3: Transfer 35 sheets Rib-Type Roofing", input: "Source: Horizon Heights, Dest: Azure Villas, Qty: 35 sheets", actual: "Project A BOM reduced by 35; Project B BOM credited by 35; Transfer voucher #TRF-ROOF-09 generated", expected: "Inter-site transfers reallocate materials without creating inventory discrepancies.", status: "PASS" },
+  { id: "TC-B009", desc: "Windows & Doors Installation & Surplus Stock Return", action: "Step 1: W&D Officer identifies 4 uninstalled sliding windows<br>Step 2: Execute 'Return Excess to Stock'", input: "Project: Azure Villas, Material: Sliding Window 120x120, Qty: 4 sets", actual: "Site allocated balance deducted by 4; Central Warehouse stock credited by +4 with audit log", expected: "Unused fixtures return to central inventory safely after site turnover.", status: "PASS" },
+
+  { section: "Use Case 25: Financial Cost Engineering, Overrun Control & Audit (Executive UAT)" },
+  { id: "TC-B010", desc: "Unplanned Site Expense & Automated Overrun Warning", action: "Step 1: Cost Engineer logs emergency equipment repair (₱145,000)<br>Step 2: Total expenses exceed 85% of budget", input: "Category: Equipment, Amount: ₱145,000, Date: 2026-05-18", actual: "Costing Hub activates amber warning badge: '⚠ Budget Alert: 89% Utilized'", expected: "System alerts management before budget is completely exhausted.", status: "PASS" },
+  { id: "TC-B011", desc: "Official Accomplishment Report Generation & Client Sign-Off", action: "Step 1: Project Manager opens Accomplishment Report<br>Step 2: Verify PCAB License, trade breakdown, and four signature lines<br>Step 3: Print / Save to PDF", input: "Project: Horizon Heights, Target: 30% Progress Billing", actual: "Print preview formats cleanly on A4; includes Site Engr, Project Mgr, Managing Director, and Client sign-offs", expected: "Printable accomplishment report serves as legally binding billing documentation for bank drawdowns.", status: "PASS" },
+
+  { section: "Use Case 26: Workforce Licensure Compliance & High Concurrency Field Load (Site Safety & Load UAT)" },
+  { id: "TC-B012", desc: "Expired PRC License Flagging during Site Assignment", action: "Step 1: Open project team roster<br>Step 2: Review personnel with expired PRC ID", input: "Personnel: Engr. Roberto Garcia (PRC Expired: 2025-11-30)", actual: "Roster highlights red badge 'EXPIRED LICENSE'; system blocks assignment as Project In-Charge", expected: "Safety compliance rule prevents deploying engineers with invalid credentials to active projects.", status: "PASS" },
+  { id: "TC-B013", desc: "Multi-User Concurrent Site Updates under 4G Field Network", action: "Step 1: 5 field users submit daily material usage and task progress simultaneously<br>Step 2: Check database integrity and response times", input: "5 concurrent requests on LTE network simulation (200ms latency)", actual: "All 5 transactions committed successfully without deadlocks or corrupted stock counters", expected: "System maintains transaction isolation and performance stability during peak site operational hours.", status: "PASS" }
+];
+
+function renderTable(items) {
+    const tbody = document.querySelector("#testTable tbody");
+    tbody.innerHTML = "";
+
+    items.forEach(item => {
+        if (item.section) {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `<td colspan="7" class="use-case-banner">${item.section}</td>`;
+            tbody.appendChild(tr);
+        } else {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td><span class="tc-id">${item.id}</span></td>
+                <td><strong>${item.desc}</strong></td>
+                <td class="steps-list">${item.action}</td>
+                <td><span class="code-snippet">${item.input}</span></td>
+                <td>${item.actual}</td>
+                <td>${item.expected}</td>
+                <td><span class="status-badge status-pass">${item.status}</span></td>
+            `;
+            tbody.appendChild(tr);
+        }
+    });
+}
+
+function filterTable() {
+    const q = document.getElementById("searchInput").value.toLowerCase();
+    if (!q) {
+        renderTable(testData);
+        return;
+    }
+    const filtered = [];
+    let currentSection = null;
+
+    testData.forEach(item => {
+        if (item.section) {
+            currentSection = item;
+        } else {
+            const text = (item.id + " " + item.desc + " " + item.action + " " + item.input + " " + item.actual + " " + item.expected).toLowerCase();
+            if (text.includes(q)) {
+                if (currentSection && !filtered.includes(currentSection)) {
+                    filtered.push(currentSection);
+                }
+                filtered.push(item);
+            }
+        }
+    });
+
+    renderTable(filtered);
+}
+
+function downloadCSV() {
+    window.location.href = "BLACKBOX_ALPHA_TEST_RESULTS.csv";
+}
+
+// Initial render
+renderTable(testData);
+</script>
+
+</body>
+</html>

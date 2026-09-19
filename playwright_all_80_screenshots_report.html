@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>St. Bilfrid — 80 Test Cases Visual Screenshot Evidence Dossier</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    @page { size: A4 landscape; margin: 8mm; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: #0f172a; color: #f8fafc; padding: 20px; font-size: 12px; }
+    .container { max-width: 1700px; margin: 0 auto; }
+    .header-bar {
+      background: #0b1120;
+      padding: 18px 24px;
+      border-radius: 10px;
+      border: 1px solid #334155;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
+    .header-bar h1 { font-size: 18px; font-weight: 800; color: #38bdf8; display: flex; align-items: center; gap: 10px; }
+    .btn { background: #2563eb; color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 11px; font-weight: 600; border: none; cursor: pointer; text-decoration: none; }
+    .search-strip { margin-bottom: 20px; }
+    .search-input { width: 100%; padding: 12px 18px; font-size: 13px; border-radius: 8px; border: 1px solid #334155; background: #1e293b; color: #fff; font-family: inherit; }
+    .search-input:focus { outline: 2px solid #38bdf8; }
+    .grid-wrap {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(800px, 1fr));
+      gap: 20px;
+    }
+    .evidence-item {
+      background: #1e293b;
+      border-radius: 8px;
+      border: 1px solid #334155;
+      padding: 16px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    .evidence-item h3 {
+      font-size: 13px;
+      color: #38bdf8;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .evidence-item img {
+      width: 100%;
+      border-radius: 6px;
+      border: 1px solid #0f172a;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+    .meta-row {
+      margin-top: 10px;
+      font-size: 11px;
+      color: #94a3b8;
+      display: flex;
+      justify-content: space-between;
+    }
+    .badge-pass { background: #064e3b; color: #34d399; font-weight: 800; padding: 2px 6px; border-radius: 4px; font-size: 10px; }
+    @media print {
+      body { background: #fff; color: #000; padding: 0; }
+      .header-bar, .search-strip { display: none; }
+      .evidence-item { page-break-inside: avoid; border: 1px solid #cbd5e1; background: #fff; margin-bottom: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header-bar">
+      <h1>📸 80 Whitebox Test Cases Visual Screenshot Evidence Dossier</h1>
+      <div>
+        <button class="btn" onclick="window.print()">Print / PDF (A4 Landscape)</button>
+        <a class="btn" href="BETA_TEST_EXECUTION_EVIDENCES.csv" download>Download CSV</a>
+      </div>
+    </div>
+
+    <div class="search-strip">
+      <input type="text" id="filterInput" class="search-input" placeholder="Search by Test ID (e.g. TC-B001, TC-B025), Model, or Keyword..." onkeyup="filterCards()">
+    </div>
+
+    <div class="grid-wrap" id="galleryGrid">
+      
+        <div class="evidence-item" data-search="TC-B001 Authentication & Security App\Models\User::isAdmin() User - isAdmin() returns true for null role (Default Admin in legacy schema)">
+          <h3>
+            <span><strong>TC-B001</strong>: User - isAdmin() returns true for null role (Default Admin in legacy schema)</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B001.png" alt="Evidence TC-B001" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\User::isAdmin()</code></span>
+            <span><strong>Duration:</strong> 12 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B002 Authentication & Security App\Models\User::isAdmin() User - isAdmin() returns true for explicit admin role">
+          <h3>
+            <span><strong>TC-B002</strong>: User - isAdmin() returns true for explicit admin role</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B002.png" alt="Evidence TC-B002" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\User::isAdmin()</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B003 Authentication & Security App\Models\User::isAdmin() User - isAdmin() returns false for specialized roofing officer role">
+          <h3>
+            <span><strong>TC-B003</strong>: User - isAdmin() returns false for specialized roofing officer role</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B003.png" alt="Evidence TC-B003" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\User::isAdmin()</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B004 Authentication & Security App\Models\User::isRoofingOfficer() User - isRoofingOfficer() returns true for roofing_transfer role">
+          <h3>
+            <span><strong>TC-B004</strong>: User - isRoofingOfficer() returns true for roofing_transfer role</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B004.png" alt="Evidence TC-B004" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\User::isRoofingOfficer()</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B005 Authentication & Security App\Models\User::isRoofingOfficer() User - isRoofingOfficer() returns false for admin role">
+          <h3>
+            <span><strong>TC-B005</strong>: User - isRoofingOfficer() returns false for admin role</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B005.png" alt="Evidence TC-B005" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\User::isRoofingOfficer()</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B006 Authentication & Security App\Models\User::isWindowsDoorsOfficer() User - isWindowsDoorsOfficer() returns true for windows_doors_transfer">
+          <h3>
+            <span><strong>TC-B006</strong>: User - isWindowsDoorsOfficer() returns true for windows_doors_transfer</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B006.png" alt="Evidence TC-B006" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\User::isWindowsDoorsOfficer()</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B007 Authentication & Security App\Models\User::isWindowsDoorsOfficer() User - isWindowsDoorsOfficer() returns false for roofing_transfer">
+          <h3>
+            <span><strong>TC-B007</strong>: User - isWindowsDoorsOfficer() returns false for roofing_transfer</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B007.png" alt="Evidence TC-B007" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\User::isWindowsDoorsOfficer()</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B008 Authentication & Security App\Models\User::isSupplier() User - isSupplier() returns true for supplier role">
+          <h3>
+            <span><strong>TC-B008</strong>: User - isSupplier() returns true for supplier role</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B008.png" alt="Evidence TC-B008" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\User::isSupplier()</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B009 Authentication & Security App\Models\User::isSupplier() User - isSupplier() returns true when supplier_id is set (FK Link)">
+          <h3>
+            <span><strong>TC-B009</strong>: User - isSupplier() returns true when supplier_id is set (FK Link)</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B009.png" alt="Evidence TC-B009" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\User::isSupplier()</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B010 Authentication & Security App\Models\User::isSupplier() User - isSupplier() returns false for regular admin">
+          <h3>
+            <span><strong>TC-B010</strong>: User - isSupplier() returns false for regular admin</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B010.png" alt="Evidence TC-B010" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\User::isSupplier()</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B011 Authentication & Security App\Models\User::getRoleTitleAttribute User - getRoleTitleAttribute with Supplier Model relation">
+          <h3>
+            <span><strong>TC-B011</strong>: User - getRoleTitleAttribute with Supplier Model relation</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B011.png" alt="Evidence TC-B011" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\User::getRoleTitleAttribute</code></span>
+            <span><strong>Duration:</strong> 2 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B012 Authentication & Security App\Models\User::getRoleTitleAttribute User - getRoleTitleAttribute with null Supplier relation fallback">
+          <h3>
+            <span><strong>TC-B012</strong>: User - getRoleTitleAttribute with null Supplier relation fallback</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B012.png" alt="Evidence TC-B012" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\User::getRoleTitleAttribute</code></span>
+            <span><strong>Duration:</strong> 7 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B013 Authentication & Security App\Models\User::getRoleTitleAttribute User - getRoleTitleAttribute for Roofing Officer">
+          <h3>
+            <span><strong>TC-B013</strong>: User - getRoleTitleAttribute for Roofing Officer</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B013.png" alt="Evidence TC-B013" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\User::getRoleTitleAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B014 Authentication & Security App\Models\User::getRoleTitleAttribute User - getRoleTitleAttribute for Windows Officer">
+          <h3>
+            <span><strong>TC-B014</strong>: User - getRoleTitleAttribute for Windows Officer</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B014.png" alt="Evidence TC-B014" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\User::getRoleTitleAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B015 Authentication & Security App\Models\User::getRoleTitleAttribute User - getRoleTitleAttribute default Master Admin">
+          <h3>
+            <span><strong>TC-B015</strong>: User - getRoleTitleAttribute default Master Admin</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B015.png" alt="Evidence TC-B015" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\User::getRoleTitleAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B016 Authentication & Security App\Models\User::getPortalRouteAttribute User - getPortalRouteAttribute for Supplier redirect">
+          <h3>
+            <span><strong>TC-B016</strong>: User - getPortalRouteAttribute for Supplier redirect</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B016.png" alt="Evidence TC-B016" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\User::getPortalRouteAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B017 Authentication & Security App\Models\User::getPortalRouteAttribute User - getPortalRouteAttribute for Roofing Officer redirect">
+          <h3>
+            <span><strong>TC-B017</strong>: User - getPortalRouteAttribute for Roofing Officer redirect</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B017.png" alt="Evidence TC-B017" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\User::getPortalRouteAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B018 Authentication & Security App\Models\User::getPortalRouteAttribute User - getPortalRouteAttribute for Windows Officer redirect">
+          <h3>
+            <span><strong>TC-B018</strong>: User - getPortalRouteAttribute for Windows Officer redirect</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B018.png" alt="Evidence TC-B018" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\User::getPortalRouteAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B019 Authentication & Security App\Models\User::getPortalRouteAttribute User - getPortalRouteAttribute for Admin root redirect">
+          <h3>
+            <span><strong>TC-B019</strong>: User - getPortalRouteAttribute for Admin root redirect</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B019.png" alt="Evidence TC-B019" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\User::getPortalRouteAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B020 Supply Chain & Supplier Operations App\Models\Supplier::isActive() Supplier - isActive() returns true for active status">
+          <h3>
+            <span><strong>TC-B020</strong>: Supplier - isActive() returns true for active status</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B020.png" alt="Evidence TC-B020" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\Supplier::isActive()</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B021 Supply Chain & Supplier Operations App\Models\Supplier::isActive() Supplier - isActive() returns false for inactive status">
+          <h3>
+            <span><strong>TC-B021</strong>: Supplier - isActive() returns false for inactive status</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B021.png" alt="Evidence TC-B021" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\Supplier::isActive()</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B022 Supply Chain & Supplier Operations App\Models\Supplier::getCategoryColorAttribute Supplier - getCategoryColorAttribute for Windows & Doors">
+          <h3>
+            <span><strong>TC-B022</strong>: Supplier - getCategoryColorAttribute for Windows &amp; Doors</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B022.png" alt="Evidence TC-B022" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\Supplier::getCategoryColorAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B023 Supply Chain & Supplier Operations App\Models\Supplier::getCategoryColorAttribute Supplier - getCategoryColorAttribute for Roofing">
+          <h3>
+            <span><strong>TC-B023</strong>: Supplier - getCategoryColorAttribute for Roofing</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B023.png" alt="Evidence TC-B023" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\Supplier::getCategoryColorAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B024 Supply Chain & Supplier Operations App\Models\Supplier::getCategoryColorAttribute Supplier - getCategoryColorAttribute for Structural">
+          <h3>
+            <span><strong>TC-B024</strong>: Supplier - getCategoryColorAttribute for Structural</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B024.png" alt="Evidence TC-B024" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\Supplier::getCategoryColorAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B025 Project Management & Progress App\Http\Requests\TaskStoreRequest [FIXED DEFECT 01] ProjectTask - Hierarchical Date Validation (Task Start Date vs Project Start Date)">
+          <h3>
+            <span><strong>TC-B025</strong>: ProjectTask - Hierarchical Date Validation (Task Start Date vs Project Start Date)</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B025.png" alt="Evidence TC-B025" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Http\Requests\TaskStoreRequest [FIXED DEFECT 01]</code></span>
+            <span><strong>Duration:</strong> 2 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B026 Supply Chain & Supplier Operations App\Models\SupplierMaterial::getStatusBadgeAttribute SupplierMaterial - getStatusBadgeAttribute for inactive item">
+          <h3>
+            <span><strong>TC-B026</strong>: SupplierMaterial - getStatusBadgeAttribute for inactive item</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B026.png" alt="Evidence TC-B026" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\SupplierMaterial::getStatusBadgeAttribute</code></span>
+            <span><strong>Duration:</strong> 2 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B027 Supply Chain & Supplier Operations App\Models\SupplierMaterial::getStatusBadgeAttribute SupplierMaterial - getStatusBadgeAttribute for out of stock">
+          <h3>
+            <span><strong>TC-B027</strong>: SupplierMaterial - getStatusBadgeAttribute for out of stock</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B027.png" alt="Evidence TC-B027" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\SupplierMaterial::getStatusBadgeAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B028 Supply Chain & Supplier Operations App\Models\SupplierMaterial::getStatusBadgeAttribute SupplierMaterial - getStatusBadgeAttribute for active available item">
+          <h3>
+            <span><strong>TC-B028</strong>: SupplierMaterial - getStatusBadgeAttribute for active available item</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B028.png" alt="Evidence TC-B028" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\SupplierMaterial::getStatusBadgeAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B029 Supply Chain & Supplier Operations App\Models\SupplierOrder::getStatusBadgeAttribute SupplierOrder - getStatusBadgeAttribute pending status">
+          <h3>
+            <span><strong>TC-B029</strong>: SupplierOrder - getStatusBadgeAttribute pending status</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B029.png" alt="Evidence TC-B029" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\SupplierOrder::getStatusBadgeAttribute</code></span>
+            <span><strong>Duration:</strong> 2 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B030 Supply Chain & Supplier Operations App\Models\SupplierOrder::getStatusBadgeAttribute SupplierOrder - getStatusBadgeAttribute confirmed status">
+          <h3>
+            <span><strong>TC-B030</strong>: SupplierOrder - getStatusBadgeAttribute confirmed status</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B030.png" alt="Evidence TC-B030" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\SupplierOrder::getStatusBadgeAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B031 Supply Chain & Supplier Operations App\Models\SupplierOrder::getStatusBadgeAttribute SupplierOrder - getStatusBadgeAttribute processing status">
+          <h3>
+            <span><strong>TC-B031</strong>: SupplierOrder - getStatusBadgeAttribute processing status</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B031.png" alt="Evidence TC-B031" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\SupplierOrder::getStatusBadgeAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B032 Supply Chain & Supplier Operations App\Models\SupplierOrder::getStatusBadgeAttribute SupplierOrder - getStatusBadgeAttribute ready_for_delivery">
+          <h3>
+            <span><strong>TC-B032</strong>: SupplierOrder - getStatusBadgeAttribute ready_for_delivery</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B032.png" alt="Evidence TC-B032" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\SupplierOrder::getStatusBadgeAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B033 Supply Chain & Supplier Operations App\Models\SupplierOrder::getStatusBadgeAttribute SupplierOrder - getStatusBadgeAttribute delivered status">
+          <h3>
+            <span><strong>TC-B033</strong>: SupplierOrder - getStatusBadgeAttribute delivered status</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B033.png" alt="Evidence TC-B033" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\SupplierOrder::getStatusBadgeAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B034 Supply Chain & Supplier Operations App\Models\SupplierOrder::getStatusBadgeAttribute SupplierOrder - getStatusBadgeAttribute completed status">
+          <h3>
+            <span><strong>TC-B034</strong>: SupplierOrder - getStatusBadgeAttribute completed status</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B034.png" alt="Evidence TC-B034" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\SupplierOrder::getStatusBadgeAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B035 Supply Chain & Supplier Operations App\Models\SupplierOrder::getStatusBadgeAttribute SupplierOrder - getStatusBadgeAttribute cancelled status">
+          <h3>
+            <span><strong>TC-B035</strong>: SupplierOrder - getStatusBadgeAttribute cancelled status</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B035.png" alt="Evidence TC-B035" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\SupplierOrder::getStatusBadgeAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B036 Supply Chain & Supplier Operations App\Models\SupplierOrder::syncToInventory() SupplierOrder - syncToInventory() idempotency guard preventing duplicate stock credit">
+          <h3>
+            <span><strong>TC-B036</strong>: SupplierOrder - syncToInventory() idempotency guard preventing duplicate stock credit</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B036.png" alt="Evidence TC-B036" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\SupplierOrder::syncToInventory()</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B037 Supply Chain & Supplier Operations App\Models\SupplierOrder::syncToInventory() SupplierOrder - syncToInventory() stock crediting & inventory transaction log creation">
+          <h3>
+            <span><strong>TC-B037</strong>: SupplierOrder - syncToInventory() stock crediting &amp; inventory transaction log creation</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B037.png" alt="Evidence TC-B037" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\SupplierOrder::syncToInventory()</code></span>
+            <span><strong>Duration:</strong> 46 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B038 Inventory & Materials Management App\Models\InventoryLog::getTransactionBadgeAttribute InventoryLog - getTransactionBadge for excess_return transaction">
+          <h3>
+            <span><strong>TC-B038</strong>: InventoryLog - getTransactionBadge for excess_return transaction</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B038.png" alt="Evidence TC-B038" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\InventoryLog::getTransactionBadgeAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B039 Inventory & Materials Management App\Models\InventoryLog::getTransactionBadgeAttribute InventoryLog - getTransactionBadge for site allocation transaction">
+          <h3>
+            <span><strong>TC-B039</strong>: InventoryLog - getTransactionBadge for site allocation transaction</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B039.png" alt="Evidence TC-B039" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\InventoryLog::getTransactionBadgeAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B040 Inventory & Materials Management App\Models\InventoryLog::getTransactionBadgeAttribute InventoryLog - getTransactionBadge for daily usage transaction">
+          <h3>
+            <span><strong>TC-B040</strong>: InventoryLog - getTransactionBadge for daily usage transaction</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B040.png" alt="Evidence TC-B040" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\InventoryLog::getTransactionBadgeAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B041 Inventory & Materials Management App\Models\InventoryLog::getTransactionBadgeAttribute InventoryLog - getTransactionBadge for restock transaction">
+          <h3>
+            <span><strong>TC-B041</strong>: InventoryLog - getTransactionBadge for restock transaction</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B041.png" alt="Evidence TC-B041" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\InventoryLog::getTransactionBadgeAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B042 Inventory & Materials Management App\Models\InventoryLog::getTransactionBadgeAttribute InventoryLog - getTransactionBadge for physical adjustment">
+          <h3>
+            <span><strong>TC-B042</strong>: InventoryLog - getTransactionBadge for physical adjustment</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B042.png" alt="Evidence TC-B042" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\InventoryLog::getTransactionBadgeAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B043 Billing & Financial Clearance App\Models\Payment::getReceiptUrlAttribute Payment - getReceiptUrlAttribute for null file record">
+          <h3>
+            <span><strong>TC-B043</strong>: Payment - getReceiptUrlAttribute for null file record</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B043.png" alt="Evidence TC-B043" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\Payment::getReceiptUrlAttribute</code></span>
+            <span><strong>Duration:</strong> 2 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B044 Billing & Financial Clearance App\Http\Requests\PaymentReceiptUploadRequest [FIXED DEFECT 02] Payment - Receipt File MIME Type Validation for Mobile Camera Uploads (JPEG JFIF)">
+          <h3>
+            <span><strong>TC-B044</strong>: Payment - Receipt File MIME Type Validation for Mobile Camera Uploads (JPEG JFIF)</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B044.png" alt="Evidence TC-B044" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Http\Requests\PaymentReceiptUploadRequest [FIXED DEFECT 02]</code></span>
+            <span><strong>Duration:</strong> 3 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B045 Billing & Financial Clearance App\Models\Payment::getReceiptUrlAttribute Payment - getReceiptUrlAttribute for absolute root slash path">
+          <h3>
+            <span><strong>TC-B045</strong>: Payment - getReceiptUrlAttribute for absolute root slash path</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B045.png" alt="Evidence TC-B045" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\Payment::getReceiptUrlAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B046 Billing & Financial Clearance App\Models\Payment::getReceiptUrlAttribute Payment - getReceiptUrlAttribute for relative filename">
+          <h3>
+            <span><strong>TC-B046</strong>: Payment - getReceiptUrlAttribute for relative filename</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B046.png" alt="Evidence TC-B046" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\Payment::getReceiptUrlAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B047 Billing & Financial Clearance App\Models\Payment::getEffectiveOrNumberAttribute Payment - getEffectiveOrNumberAttribute for explicit OR number">
+          <h3>
+            <span><strong>TC-B047</strong>: Payment - getEffectiveOrNumberAttribute for explicit OR number</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B047.png" alt="Evidence TC-B047" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\Payment::getEffectiveOrNumberAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B048 Billing & Financial Clearance App\Models\Payment::getEffectiveOrNumberAttribute Payment - getEffectiveOrNumberAttribute synthetic fallback pattern">
+          <h3>
+            <span><strong>TC-B048</strong>: Payment - getEffectiveOrNumberAttribute synthetic fallback pattern</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B048.png" alt="Evidence TC-B048" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\Payment::getEffectiveOrNumberAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B049 Billing & Financial Clearance App\Models\Payment::getFinancingTypeLabelAttribute Payment - getFinancingTypeLabel for bank_loan">
+          <h3>
+            <span><strong>TC-B049</strong>: Payment - getFinancingTypeLabel for bank_loan</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B049.png" alt="Evidence TC-B049" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\Payment::getFinancingTypeLabelAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B050 Billing & Financial Clearance App\Models\Payment::getFinancingTypeLabelAttribute Payment - getFinancingTypeLabel for pagibig_loan">
+          <h3>
+            <span><strong>TC-B050</strong>: Payment - getFinancingTypeLabel for pagibig_loan</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B050.png" alt="Evidence TC-B050" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\Payment::getFinancingTypeLabelAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B051 Billing & Financial Clearance App\Models\Payment::getFinancingTypeLabelAttribute Payment - getFinancingTypeLabel for client_equity">
+          <h3>
+            <span><strong>TC-B051</strong>: Payment - getFinancingTypeLabel for client_equity</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B051.png" alt="Evidence TC-B051" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\Payment::getFinancingTypeLabelAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B052 Billing & Financial Clearance App\Models\Payment::getFinancingTypeLabelAttribute Payment - getFinancingTypeLabel for cash_progress">
+          <h3>
+            <span><strong>TC-B052</strong>: Payment - getFinancingTypeLabel for cash_progress</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B052.png" alt="Evidence TC-B052" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\Payment::getFinancingTypeLabelAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B053 Billing & Financial Clearance App\Models\Payment::getConstructionClearanceBadgeAttribute Payment - getConstructionClearanceBadge status paid">
+          <h3>
+            <span><strong>TC-B053</strong>: Payment - getConstructionClearanceBadge status paid</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B053.png" alt="Evidence TC-B053" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\Payment::getConstructionClearanceBadgeAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B054 Billing & Financial Clearance App\Models\Payment::getConstructionClearanceBadgeAttribute Payment - getConstructionClearanceBadge inspection scheduled">
+          <h3>
+            <span><strong>TC-B054</strong>: Payment - getConstructionClearanceBadge inspection scheduled</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B054.png" alt="Evidence TC-B054" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\Payment::getConstructionClearanceBadgeAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B055 Personnel & Licensure Compliance App\Models\Personnel::isLicenseExpired() Personnel - isLicenseExpired() with explicit status expired">
+          <h3>
+            <span><strong>TC-B055</strong>: Personnel - isLicenseExpired() with explicit status expired</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B055.png" alt="Evidence TC-B055" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\Personnel::isLicenseExpired()</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B056 Personnel & Licensure Compliance App\Models\Personnel::isLicenseExpired() Personnel - isLicenseExpired() with past expiry date">
+          <h3>
+            <span><strong>TC-B056</strong>: Personnel - isLicenseExpired() with past expiry date</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B056.png" alt="Evidence TC-B056" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\Personnel::isLicenseExpired()</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B057 Personnel & Licensure Compliance App\Models\Personnel::isLicenseExpired() Personnel - isLicenseExpired() with future expiry date">
+          <h3>
+            <span><strong>TC-B057</strong>: Personnel - isLicenseExpired() with future expiry date</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B057.png" alt="Evidence TC-B057" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\Personnel::isLicenseExpired()</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B058 Personnel & Licensure Compliance App\Models\Personnel::getLicenseStatusBadgeAttribute Personnel - getLicenseStatusBadge for expired license">
+          <h3>
+            <span><strong>TC-B058</strong>: Personnel - getLicenseStatusBadge for expired license</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B058.png" alt="Evidence TC-B058" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\Personnel::getLicenseStatusBadgeAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B059 Personnel & Licensure Compliance App\Models\Personnel::getLicenseStatusBadgeAttribute Personnel - getLicenseStatusBadge for active license">
+          <h3>
+            <span><strong>TC-B059</strong>: Personnel - getLicenseStatusBadge for active license</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B059.png" alt="Evidence TC-B059" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\Personnel::getLicenseStatusBadgeAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B060 Cost Engineering & Budget Control App\Models\ProjectCost::getVarianceAttribute ProjectCost - getVarianceAttribute standard savings computation">
+          <h3>
+            <span><strong>TC-B060</strong>: ProjectCost - getVarianceAttribute standard savings computation</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B060.png" alt="Evidence TC-B060" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\ProjectCost::getVarianceAttribute</code></span>
+            <span><strong>Duration:</strong> 2 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B061 Cost Engineering & Budget Control App\Models\ProjectCost::getVariancePercentAttribute ProjectCost - getVariancePercent zero-division safety guard">
+          <h3>
+            <span><strong>TC-B061</strong>: ProjectCost - getVariancePercent zero-division safety guard</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B061.png" alt="Evidence TC-B061" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\ProjectCost::getVariancePercentAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B062 Inventory & Materials Management App\Http\Controllers\InventoryController [FIXED DEFECT 03] InventoryController - Integer Quantity Enforcement for Discrete Material Units">
+          <h3>
+            <span><strong>TC-B062</strong>: InventoryController - Integer Quantity Enforcement for Discrete Material Units</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B062.png" alt="Evidence TC-B062" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Http\Controllers\InventoryController [FIXED DEFECT 03]</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B063 Scope of Works & DUPA Estimation App\Models\ProjectMaterial::getRemainingQtyAttribute ProjectMaterial - getRemainingQtyAttribute clamp calculation">
+          <h3>
+            <span><strong>TC-B063</strong>: ProjectMaterial - getRemainingQtyAttribute clamp calculation</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B063.png" alt="Evidence TC-B063" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\ProjectMaterial::getRemainingQtyAttribute</code></span>
+            <span><strong>Duration:</strong> 2 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B064 Scope of Works & DUPA Estimation App\Models\ProjectMaterial::getNetAllocatedQtyAttribute ProjectMaterial - getNetAllocatedQtyAttribute calculation">
+          <h3>
+            <span><strong>TC-B064</strong>: ProjectMaterial - getNetAllocatedQtyAttribute calculation</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B064.png" alt="Evidence TC-B064" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\ProjectMaterial::getNetAllocatedQtyAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B065 Scope of Works & DUPA Estimation App\Models\ProjectMaterial::getReturnedExcessValueAttribute ProjectMaterial - getReturnedExcessValueAttribute financial credit">
+          <h3>
+            <span><strong>TC-B065</strong>: ProjectMaterial - getReturnedExcessValueAttribute financial credit</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B065.png" alt="Evidence TC-B065" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\ProjectMaterial::getReturnedExcessValueAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B066 Scope of Works & DUPA Estimation App\Models\ProjectScopeItem::recalculate() ProjectScopeItem - recalculate() DUPA Rollup (Direct + Markups)">
+          <h3>
+            <span><strong>TC-B066</strong>: ProjectScopeItem - recalculate() DUPA Rollup (Direct + Markups)</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B066.png" alt="Evidence TC-B066" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\ProjectScopeItem::recalculate()</code></span>
+            <span><strong>Duration:</strong> 7 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B067 Scope of Works & DUPA Estimation App\Models\ProjectScopeLine::getRemainingQuantityAttribute ProjectScopeLine - getRemainingQuantityAttribute zero-floor clamp">
+          <h3>
+            <span><strong>TC-B067</strong>: ProjectScopeLine - getRemainingQuantityAttribute zero-floor clamp</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B067.png" alt="Evidence TC-B067" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\ProjectScopeLine::getRemainingQuantityAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B068 Project Management & Progress Engine App\Models\ProjectTask::getIsCompletedAttribute ProjectTask - getIsCompletedAttribute for 100% progress">
+          <h3>
+            <span><strong>TC-B068</strong>: ProjectTask - getIsCompletedAttribute for 100% progress</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B068.png" alt="Evidence TC-B068" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\ProjectTask::getIsCompletedAttribute</code></span>
+            <span><strong>Duration:</strong> 2 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B069 Project Management & Progress Engine App\Models\ProjectTask::getStatusBadgeClassAttribute ProjectTask - getStatusBadgeClassAttribute for 30% progress">
+          <h3>
+            <span><strong>TC-B069</strong>: ProjectTask - getStatusBadgeClassAttribute for 30% progress</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B069.png" alt="Evidence TC-B069" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\ProjectTask::getStatusBadgeClassAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B070 Project Management & Progress Engine App\Models\ProjectTask::getTimelinePhaseKeyAttribute ProjectTask - getTimelinePhaseKey for Superstructure">
+          <h3>
+            <span><strong>TC-B070</strong>: ProjectTask - getTimelinePhaseKey for Superstructure</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B070.png" alt="Evidence TC-B070" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\ProjectTask::getTimelinePhaseKeyAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B071 Project Management & Progress Engine App\Models\ProjectTaskMaterial::boot() ProjectTaskMaterial - boot() saving event auto-calculates total_cost">
+          <h3>
+            <span><strong>TC-B071</strong>: ProjectTaskMaterial - boot() saving event auto-calculates total_cost</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B071.png" alt="Evidence TC-B071" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\ProjectTaskMaterial::boot()</code></span>
+            <span><strong>Duration:</strong> 4 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B072 Project Management & Progress Engine App\Models\Project::getStructuralWeightAttribute Project - getStructuralWeightAttribute fallback to default 40%">
+          <h3>
+            <span><strong>TC-B072</strong>: Project - getStructuralWeightAttribute fallback to default 40%</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B072.png" alt="Evidence TC-B072" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\Project::getStructuralWeightAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B073 Project Management & Progress Engine App\Models\Project::recalculateTradeProgressFromTasks() Project - recalculateTradeProgressFromTasks() Weighted Multi-Trade Aggregation">
+          <h3>
+            <span><strong>TC-B073</strong>: Project - recalculateTradeProgressFromTasks() Weighted Multi-Trade Aggregation</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B073.png" alt="Evidence TC-B073" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\Project::recalculateTradeProgressFromTasks()</code></span>
+            <span><strong>Duration:</strong> 5 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B074 Project Management & Progress Engine App\Models\Project::getRemainingBudgetAttribute Project - getRemainingBudgetAttribute calculation">
+          <h3>
+            <span><strong>TC-B074</strong>: Project - getRemainingBudgetAttribute calculation</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B074.png" alt="Evidence TC-B074" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\Project::getRemainingBudgetAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B075 Project Management & Progress Engine App\Models\Project::getBudgetUsagePercentAttribute Project - getBudgetUsagePercentAttribute calculation">
+          <h3>
+            <span><strong>TC-B075</strong>: Project - getBudgetUsagePercentAttribute calculation</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B075.png" alt="Evidence TC-B075" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\Project::getBudgetUsagePercentAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B076 Project Management & Progress Engine App\Models\Project::getTotalDeployedManpowerAttribute Project - getTotalDeployedManpowerAttribute summation across trades">
+          <h3>
+            <span><strong>TC-B076</strong>: Project - getTotalDeployedManpowerAttribute summation across trades</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B076.png" alt="Evidence TC-B076" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\Project::getTotalDeployedManpowerAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B077 Project Management & Progress Engine App\Models\Project::getCostHealthStatusAttribute Project - getCostHealthStatusAttribute budget overrun check">
+          <h3>
+            <span><strong>TC-B077</strong>: Project - getCostHealthStatusAttribute budget overrun check</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B077.png" alt="Evidence TC-B077" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\Project::getCostHealthStatusAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B078 Project Management & Progress Engine App\Models\Project::getScheduleHealthStatusAttribute Project - getScheduleHealthStatusAttribute completed status">
+          <h3>
+            <span><strong>TC-B078</strong>: Project - getScheduleHealthStatusAttribute completed status</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B078.png" alt="Evidence TC-B078" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\Project::getScheduleHealthStatusAttribute</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B079 Trade Transfers & Specialized Logistics App\Http\Controllers\ProjectMaterialTransferController [FIXED DEFECT 04] ProjectMaterialTransfer - Inter-Site Transfer with 0.00 Quantity Guard">
+          <h3>
+            <span><strong>TC-B079</strong>: ProjectMaterialTransfer - Inter-Site Transfer with 0.00 Quantity Guard</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B079.png" alt="Evidence TC-B079" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Http\Controllers\ProjectMaterialTransferController [FIXED DEFECT 04]</code></span>
+            <span><strong>Duration:</strong> 1 ms</span>
+          </div>
+        </div>
+      
+        <div class="evidence-item" data-search="TC-B080 Pre-Construction Estimator App\Models\ServiceRequest::class ServiceRequest - Pre-Construction Rough Estimate Calculation">
+          <h3>
+            <span><strong>TC-B080</strong>: ServiceRequest - Pre-Construction Rough Estimate Calculation</span>
+            <span class="badge-pass">PASS</span>
+          </h3>
+          <img src="evidence_screenshots/TC-B080.png" alt="Evidence TC-B080" loading="lazy">
+          <div class="meta-row">
+            <span><strong>Target:</strong> <code>App\Models\ServiceRequest::class</code></span>
+            <span><strong>Duration:</strong> 3 ms</span>
+          </div>
+        </div>
+      
+    </div>
+  </div>
+
+  <script>
+    function filterCards() {
+      const q = document.getElementById("filterInput").value.toLowerCase();
+      const items = document.querySelectorAll(".evidence-item");
+      items.forEach(el => {
+        const text = el.getAttribute("data-search").toLowerCase();
+        el.style.display = text.includes(q) ? "" : "none";
+      });
+    }
+  </script>
+</body>
+</html>

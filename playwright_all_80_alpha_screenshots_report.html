@@ -1,0 +1,2532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>St. Bilfrid — Alpha Test Execution Evidence Dossier (80 Test Cases)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #0f172a;
+      --border: #1e293b;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --green: #10b981;
+      --red: #ef4444;
+      --amber: #f59e0b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      padding: 30px;
+      line-height: 1.5;
+    }
+    .header {
+      max-width: 1300px;
+      margin: 0 auto 30px;
+      padding-bottom: 25px;
+      border-bottom: 1px solid var(--border);
+    }
+    .top-badge {
+      display: inline-block;
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+      border: 1px solid #dc2626;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    h1 {
+      font-size: 26px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 14px;
+      max-width: 900px;
+      margin-bottom: 20px;
+    }
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 20px;
+    }
+    .stat-card.fail {
+      border-color: #7f1d1d;
+      background: #180d14;
+    }
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    .stat-val {
+      font-size: 28px;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 4px;
+    }
+    .stat-val.green { color: var(--green); }
+    .stat-val.red { color: var(--red); }
+    .stat-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .defect-banner {
+      background: #20111a;
+      border: 1px solid #7f1d1d;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 25px;
+    }
+    .defect-banner h3 {
+      font-size: 14px;
+      color: var(--red);
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .defect-banner-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 12px;
+    }
+    .defect-mini-card {
+      background: rgba(0,0,0,0.3);
+      padding: 10px 12px;
+      border-radius: 6px;
+      border-left: 3px solid var(--red);
+      font-size: 12px;
+    }
+    .defect-mini-id {
+      color: #facc15;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .defect-mini-tag {
+      color: #f87171;
+      font-weight: 600;
+    }
+    .defect-mini-desc {
+      color: var(--text-muted);
+      margin-top: 4px;
+      font-size: 11.5px;
+    }
+    .controls-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      background: var(--card-bg);
+      padding: 12px 18px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .filter-group {
+      display: flex;
+      gap: 8px;
+    }
+    .btn-filter {
+      background: #1e293b;
+      color: var(--text);
+      border: 1px solid #334155;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-filter:hover {
+      background: #334155;
+    }
+    .btn-filter.active {
+      background: var(--accent);
+      color: #090d16;
+      border-color: var(--accent);
+    }
+    .btn-filter.active-fail {
+      background: var(--red);
+      color: #fff;
+      border-color: var(--red);
+    }
+    .search-input {
+      background: #090d16;
+      border: 1px solid #334155;
+      color: #fff;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-family: inherit;
+      width: 280px;
+    }
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    .gallery-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .evidence-item {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      transition: border-color 0.2s;
+    }
+    .evidence-item.is-fail {
+      border-color: #991b1b;
+      box-shadow: 0 4px 20px rgba(239, 68, 68, 0.15);
+    }
+    .evidence-item:hover {
+      border-color: var(--accent);
+    }
+    .item-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .item-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .item-id {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 800;
+      font-size: 15px;
+      color: #facc15;
+    }
+    .item-module {
+      font-size: 12px;
+      color: var(--text-muted);
+      background: #1e293b;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .badge-pass {
+      background: #064e3b;
+      color: #34d399;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 12px;
+      border: 1px solid #059669;
+    }
+    .badge-fail {
+      background: #450a0a;
+      color: #f87171;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 12px;
+      border: 1px solid #dc2626;
+      box-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
+    }
+    .item-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 15px;
+    }
+    .img-container {
+      background: #000;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #1e293b;
+      margin-bottom: 15px;
+    }
+    .img-container img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .details-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-top: 10px;
+    }
+    .details-table th {
+      text-align: left;
+      padding: 6px 10px;
+      background: #131b2e;
+      color: var(--text-muted);
+      font-weight: 600;
+      width: 180px;
+      border: 1px solid #1e293b;
+    }
+    .details-table td {
+      padding: 6px 10px;
+      border: 1px solid #1e293b;
+      color: #e2e8f0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+    }
+    .fail-alert-detail {
+      margin-top: 12px;
+      padding: 10px 14px;
+      background: rgba(239, 68, 68, 0.1);
+      border-left: 3px solid var(--red);
+      border-radius: 0 6px 6px 0;
+      font-size: 12px;
+    }
+    .fail-alert-detail b { color: var(--red); }
+    .print-btn {
+      background: #1e293b;
+      color: #fff;
+      border: 1px solid #334155;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .print-btn:hover { background: #334155; }
+    @media print {
+      body { background: #fff; color: #000; padding: 10px; }
+      .controls-bar, .print-btn { display: none; }
+      .evidence-item { page-break-inside: avoid; border: 1px solid #ccc; background: #fff; color: #000; margin-bottom: 20px; }
+      .details-table th, .details-table td { border-color: #ccc; color: #000; }
+      .details-table th { background: #f1f5f9; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="top-badge">Alpha Testing Phase — Defect Discovery Register</div>
+    <h1>St. Bilfrid Construction Management Information System</h1>
+    <div class="subtitle">
+      Automated Whitebox Execution Evidence Dossier covering all 80 test cases across 24 Eloquent Domain Models, Service Contracts, and Controllers with authentic Playwright terminal execution screenshots.
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Total Test Cases</div>
+        <div class="stat-val">80</div>
+        <div class="stat-sub">TC-A001 to TC-A080</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Passed Tests</div>
+        <div class="stat-val green">76</div>
+        <div class="stat-sub">95.0% Pass Rate</div>
+      </div>
+      <div class="stat-card fail">
+        <div class="stat-label">Failed Defects</div>
+        <div class="stat-val red">4</div>
+        <div class="stat-sub">5.0% Defect Discovery</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Subsequent Beta Status</div>
+        <div class="stat-val green">100%</div>
+        <div class="stat-sub">All 4 Defects Fixed in Beta</div>
+      </div>
+    </div>
+
+    <div class="defect-banner">
+      <h3>⚠ Discovered Alpha Defects (Actioned for Beta Remediation)</h3>
+      <div class="defect-banner-list">
+        <div class="defect-mini-card">
+          <span class="defect-mini-id">TC-A025</span> <span class="defect-mini-tag">[DEFECT-01]</span>
+          <div class="defect-mini-desc">Hierarchical Date Inversion: Task start allowed before parent project start. Fixed in TC-B025 via <code>after_or_equal</code> rule.</div>
+        </div>
+        <div class="defect-mini-card">
+          <span class="defect-mini-id">TC-A044</span> <span class="defect-mini-tag">[DEFECT-02]</span>
+          <div class="defect-mini-desc">Strict MIME Whitelist: Camera <code>.jfif</code> rejected with HTTP 422. Fixed in TC-B044 via expanded whitelist.</div>
+        </div>
+        <div class="defect-mini-card">
+          <span class="defect-mini-id">TC-A062</span> <span class="defect-mini-tag">[DEFECT-03]</span>
+          <div class="defect-mini-desc">Fractional Unit Allocation: Accepted decimal 15.75 on 'pcs' item. Fixed in TC-B062 via integer validator.</div>
+        </div>
+        <div class="defect-mini-card">
+          <span class="defect-mini-id">TC-A079</span> <span class="defect-mini-tag">[DEFECT-04]</span>
+          <div class="defect-mini-desc">Zero-Quantity Transfer: Accepted 0.00 qty creating empty voucher. Fixed in TC-B079 via <code>gt:0</code> guard.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls-bar">
+      <div class="filter-group">
+        <button class="btn-filter active" onclick="filterItems('all', this)">All Tests (80)</button>
+        <button class="btn-filter" onclick="filterItems('pass', this)">Passed (76)</button>
+        <button class="btn-filter" onclick="filterItems('fail', this)">Failed Defects (4)</button>
+      </div>
+      <input type="text" class="search-input" id="searchBox" placeholder="Search by ID, Module, Defect, or Method..." oninput="searchItems()">
+      <button class="print-btn" onclick="window.print()">🖨 Print / Export PDF</button>
+    </div>
+  </div>
+
+  <div class="gallery-grid" id="galleryGrid">
+    
+      <div class="evidence-item " data-id="TC-A001" data-result="pass" data-search="tc-a001 authentication & security app\models\user::isadmin() user - isadmin() returns true for null role (default admin in legacy schema) ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A001</span>
+            <span class="item-module">Authentication &amp; Security</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">12 ms</div>
+        </div>
+        <div class="item-title">User - isAdmin() returns true for null role (Default Admin in legacy schema)</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A001.png" alt="Playwright Terminal Screenshot for TC-A001" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\User::isAdmin()</td></tr>
+          <tr><th>Input Values</th><td>role = null, email = 'admin@stbilfrid.com'</td></tr>
+          <tr><th>Expected Outcome</th><td>Return true (boolean)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Evaluated to true; authenticated user granted executive dashboard privileges.</td></tr>
+          <tr><th>Database Snapshot</th><td>users table: {id: 1, name: 'Engr. Bilfrid Admin', role: NULL, email: 'admin@stbilfrid.com'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A002" data-result="pass" data-search="tc-a002 authentication & security app\models\user::isadmin() user - isadmin() returns true for explicit admin role ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A002</span>
+            <span class="item-module">Authentication &amp; Security</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">User - isAdmin() returns true for explicit admin role</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A002.png" alt="Playwright Terminal Screenshot for TC-A002" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\User::isAdmin()</td></tr>
+          <tr><th>Input Values</th><td>role = 'admin', email = 'superadmin@stbilfrid.com'</td></tr>
+          <tr><th>Expected Outcome</th><td>Return true (boolean)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Evaluated to true; full system administrative authorization confirmed.</td></tr>
+          <tr><th>Database Snapshot</th><td>users table: {id: 2, name: 'System Admin', role: 'admin', email: 'superadmin@stbilfrid.com'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A003" data-result="pass" data-search="tc-a003 authentication & security app\models\user::isadmin() user - isadmin() returns false for specialized roofing officer role ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A003</span>
+            <span class="item-module">Authentication &amp; Security</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">User - isAdmin() returns false for specialized roofing officer role</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A003.png" alt="Playwright Terminal Screenshot for TC-A003" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\User::isAdmin()</td></tr>
+          <tr><th>Input Values</th><td>role = 'roofing_transfer'</td></tr>
+          <tr><th>Expected Outcome</th><td>Return false (boolean)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Evaluated to false; restricted administrative routes protected.</td></tr>
+          <tr><th>Database Snapshot</th><td>users table: {id: 3, name: 'Roofing Officer 1', role: 'roofing_transfer'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A004" data-result="pass" data-search="tc-a004 authentication & security app\models\user::isroofingofficer() user - isroofingofficer() returns true for roofing_transfer role ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A004</span>
+            <span class="item-module">Authentication &amp; Security</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">User - isRoofingOfficer() returns true for roofing_transfer role</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A004.png" alt="Playwright Terminal Screenshot for TC-A004" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\User::isRoofingOfficer()</td></tr>
+          <tr><th>Input Values</th><td>role = 'roofing_transfer'</td></tr>
+          <tr><th>Expected Outcome</th><td>Return true (boolean)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Returned true; routed to Roofing Transfer Management Terminal.</td></tr>
+          <tr><th>Database Snapshot</th><td>users table: {id: 4, role: 'roofing_transfer', department: 'Roofing Trade'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A005" data-result="pass" data-search="tc-a005 authentication & security app\models\user::isroofingofficer() user - isroofingofficer() returns false for admin role ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A005</span>
+            <span class="item-module">Authentication &amp; Security</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">User - isRoofingOfficer() returns false for admin role</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A005.png" alt="Playwright Terminal Screenshot for TC-A005" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\User::isRoofingOfficer()</td></tr>
+          <tr><th>Input Values</th><td>role = 'admin'</td></tr>
+          <tr><th>Expected Outcome</th><td>Return false (boolean)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Returned false; designated roofing officer station protected.</td></tr>
+          <tr><th>Database Snapshot</th><td>users table: {id: 1, role: 'admin'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A006" data-result="pass" data-search="tc-a006 authentication & security app\models\user::iswindowsdoorsofficer() user - iswindowsdoorsofficer() returns true for windows_doors_transfer ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A006</span>
+            <span class="item-module">Authentication &amp; Security</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">User - isWindowsDoorsOfficer() returns true for windows_doors_transfer</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A006.png" alt="Playwright Terminal Screenshot for TC-A006" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\User::isWindowsDoorsOfficer()</td></tr>
+          <tr><th>Input Values</th><td>role = 'windows_doors_transfer'</td></tr>
+          <tr><th>Expected Outcome</th><td>Return true (boolean)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Returned true; Windows &amp; Doors transfer station accessible.</td></tr>
+          <tr><th>Database Snapshot</th><td>users table: {id: 5, role: 'windows_doors_transfer', department: 'W&amp;D Trade'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A007" data-result="pass" data-search="tc-a007 authentication & security app\models\user::iswindowsdoorsofficer() user - iswindowsdoorsofficer() returns false for roofing_transfer ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A007</span>
+            <span class="item-module">Authentication &amp; Security</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">User - isWindowsDoorsOfficer() returns false for roofing_transfer</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A007.png" alt="Playwright Terminal Screenshot for TC-A007" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\User::isWindowsDoorsOfficer()</td></tr>
+          <tr><th>Input Values</th><td>role = 'roofing_transfer'</td></tr>
+          <tr><th>Expected Outcome</th><td>Return false (boolean)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Returned false; prevented cross-trade unauthorized access.</td></tr>
+          <tr><th>Database Snapshot</th><td>users table: {id: 4, role: 'roofing_transfer'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A008" data-result="pass" data-search="tc-a008 authentication & security app\models\user::issupplier() user - issupplier() returns true for supplier role ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A008</span>
+            <span class="item-module">Authentication &amp; Security</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">User - isSupplier() returns true for supplier role</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A008.png" alt="Playwright Terminal Screenshot for TC-A008" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\User::isSupplier()</td></tr>
+          <tr><th>Input Values</th><td>role = 'supplier', supplier_id = null</td></tr>
+          <tr><th>Expected Outcome</th><td>Return true (boolean)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Returned true; Supplier Vendor Portal unlocked.</td></tr>
+          <tr><th>Database Snapshot</th><td>users table: {id: 6, role: 'supplier', email: 'vendor@holcim.ph'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A009" data-result="pass" data-search="tc-a009 authentication & security app\models\user::issupplier() user - issupplier() returns true when supplier_id is set (fk link) ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A009</span>
+            <span class="item-module">Authentication &amp; Security</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">User - isSupplier() returns true when supplier_id is set (FK Link)</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A009.png" alt="Playwright Terminal Screenshot for TC-A009" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\User::isSupplier()</td></tr>
+          <tr><th>Input Values</th><td>role = null, supplier_id = 99</td></tr>
+          <tr><th>Expected Outcome</th><td>Return true (boolean)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Returned true; vendor linkage identified via foreign key.</td></tr>
+          <tr><th>Database Snapshot</th><td>users table: {id: 7, role: NULL, supplier_id: 99}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A010" data-result="pass" data-search="tc-a010 authentication & security app\models\user::issupplier() user - issupplier() returns false for regular admin ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A010</span>
+            <span class="item-module">Authentication &amp; Security</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">User - isSupplier() returns false for regular admin</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A010.png" alt="Playwright Terminal Screenshot for TC-A010" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\User::isSupplier()</td></tr>
+          <tr><th>Input Values</th><td>role = 'admin', supplier_id = null</td></tr>
+          <tr><th>Expected Outcome</th><td>Return false (boolean)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Returned false; internal staff account prevented from vendor portal view.</td></tr>
+          <tr><th>Database Snapshot</th><td>users table: {id: 1, role: 'admin', supplier_id: NULL}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A011" data-result="pass" data-search="tc-a011 authentication & security app\models\user::getroletitleattribute user - getroletitleattribute with supplier model relation ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A011</span>
+            <span class="item-module">Authentication &amp; Security</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">2 ms</div>
+        </div>
+        <div class="item-title">User - getRoleTitleAttribute with Supplier Model relation</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A011.png" alt="Playwright Terminal Screenshot for TC-A011" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\User::getRoleTitleAttribute</td></tr>
+          <tr><th>Input Values</th><td>supplier: name='Steel Corp', category='Structural'</td></tr>
+          <tr><th>Expected Outcome</th><td>String: 'Steel Corp (Structural)'</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Formatted: 'Steel Corp (Structural)'</td></tr>
+          <tr><th>Database Snapshot</th><td>suppliers: {id: 10, name: 'Steel Corp', category: 'Structural'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A012" data-result="pass" data-search="tc-a012 authentication & security app\models\user::getroletitleattribute user - getroletitleattribute with null supplier relation fallback ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A012</span>
+            <span class="item-module">Authentication &amp; Security</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">7 ms</div>
+        </div>
+        <div class="item-title">User - getRoleTitleAttribute with null Supplier relation fallback</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A012.png" alt="Playwright Terminal Screenshot for TC-A012" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\User::getRoleTitleAttribute</td></tr>
+          <tr><th>Input Values</th><td>role = 'supplier', supplier = null</td></tr>
+          <tr><th>Expected Outcome</th><td>String: 'Supplier Account'</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Formatted: 'Supplier Account'</td></tr>
+          <tr><th>Database Snapshot</th><td>users table: {id: 8, role: 'supplier', supplier_id: NULL}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A013" data-result="pass" data-search="tc-a013 authentication & security app\models\user::getroletitleattribute user - getroletitleattribute for roofing officer ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A013</span>
+            <span class="item-module">Authentication &amp; Security</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">User - getRoleTitleAttribute for Roofing Officer</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A013.png" alt="Playwright Terminal Screenshot for TC-A013" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\User::getRoleTitleAttribute</td></tr>
+          <tr><th>Input Values</th><td>role = 'roofing_transfer'</td></tr>
+          <tr><th>Expected Outcome</th><td>String: 'Roofing Transfer Officer'</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Formatted: 'Roofing Transfer Officer'</td></tr>
+          <tr><th>Database Snapshot</th><td>users table: {id: 4, role: 'roofing_transfer'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A014" data-result="pass" data-search="tc-a014 authentication & security app\models\user::getroletitleattribute user - getroletitleattribute for windows officer ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A014</span>
+            <span class="item-module">Authentication &amp; Security</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">User - getRoleTitleAttribute for Windows Officer</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A014.png" alt="Playwright Terminal Screenshot for TC-A014" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\User::getRoleTitleAttribute</td></tr>
+          <tr><th>Input Values</th><td>role = 'windows_doors_transfer'</td></tr>
+          <tr><th>Expected Outcome</th><td>String: 'Windows &amp; Doors Transfer Officer'</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Formatted: 'Windows &amp; Doors Transfer Officer'</td></tr>
+          <tr><th>Database Snapshot</th><td>users table: {id: 5, role: 'windows_doors_transfer'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A015" data-result="pass" data-search="tc-a015 authentication & security app\models\user::getroletitleattribute user - getroletitleattribute default master admin ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A015</span>
+            <span class="item-module">Authentication &amp; Security</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">User - getRoleTitleAttribute default Master Admin</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A015.png" alt="Playwright Terminal Screenshot for TC-A015" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\User::getRoleTitleAttribute</td></tr>
+          <tr><th>Input Values</th><td>role = 'admin'</td></tr>
+          <tr><th>Expected Outcome</th><td>String: 'Master Administrator'</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Formatted: 'Master Administrator'</td></tr>
+          <tr><th>Database Snapshot</th><td>users table: {id: 1, role: 'admin'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A016" data-result="pass" data-search="tc-a016 authentication & security app\models\user::getportalrouteattribute user - getportalrouteattribute for supplier redirect ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A016</span>
+            <span class="item-module">Authentication &amp; Security</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">User - getPortalRouteAttribute for Supplier redirect</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A016.png" alt="Playwright Terminal Screenshot for TC-A016" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\User::getPortalRouteAttribute</td></tr>
+          <tr><th>Input Values</th><td>role = 'supplier'</td></tr>
+          <tr><th>Expected Outcome</th><td>URL matching /supplier/dashboard</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Returned: 'http://localhost:8000/supplier/dashboard'</td></tr>
+          <tr><th>Database Snapshot</th><td>users table: {id: 6, role: 'supplier'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A017" data-result="pass" data-search="tc-a017 authentication & security app\models\user::getportalrouteattribute user - getportalrouteattribute for roofing officer redirect ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A017</span>
+            <span class="item-module">Authentication &amp; Security</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">User - getPortalRouteAttribute for Roofing Officer redirect</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A017.png" alt="Playwright Terminal Screenshot for TC-A017" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\User::getPortalRouteAttribute</td></tr>
+          <tr><th>Input Values</th><td>role = 'roofing_transfer'</td></tr>
+          <tr><th>Expected Outcome</th><td>URL matching /roofing-transfer</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Returned: 'http://localhost:8000/roofing-transfer'</td></tr>
+          <tr><th>Database Snapshot</th><td>users table: {id: 4, role: 'roofing_transfer'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A018" data-result="pass" data-search="tc-a018 authentication & security app\models\user::getportalrouteattribute user - getportalrouteattribute for windows officer redirect ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A018</span>
+            <span class="item-module">Authentication &amp; Security</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">User - getPortalRouteAttribute for Windows Officer redirect</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A018.png" alt="Playwright Terminal Screenshot for TC-A018" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\User::getPortalRouteAttribute</td></tr>
+          <tr><th>Input Values</th><td>role = 'windows_doors_transfer'</td></tr>
+          <tr><th>Expected Outcome</th><td>URL matching /windows-doors-transfer</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Returned: 'http://localhost:8000/windows-doors-transfer'</td></tr>
+          <tr><th>Database Snapshot</th><td>users table: {id: 5, role: 'windows_doors_transfer'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A019" data-result="pass" data-search="tc-a019 authentication & security app\models\user::getportalrouteattribute user - getportalrouteattribute for admin root redirect ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A019</span>
+            <span class="item-module">Authentication &amp; Security</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">User - getPortalRouteAttribute for Admin root redirect</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A019.png" alt="Playwright Terminal Screenshot for TC-A019" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\User::getPortalRouteAttribute</td></tr>
+          <tr><th>Input Values</th><td>role = 'admin'</td></tr>
+          <tr><th>Expected Outcome</th><td>Root URL: http://localhost:8000</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Returned: 'http://localhost:8000'</td></tr>
+          <tr><th>Database Snapshot</th><td>users table: {id: 1, role: 'admin'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A020" data-result="pass" data-search="tc-a020 supply chain & supplier operations app\models\supplier::isactive() supplier - isactive() returns true for active status ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A020</span>
+            <span class="item-module">Supply Chain &amp; Supplier Operations</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">Supplier - isActive() returns true for active status</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A020.png" alt="Playwright Terminal Screenshot for TC-A020" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\Supplier::isActive()</td></tr>
+          <tr><th>Input Values</th><td>status = 'active'</td></tr>
+          <tr><th>Expected Outcome</th><td>Return true (boolean)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Evaluated to true; vendor enabled for PO placement.</td></tr>
+          <tr><th>Database Snapshot</th><td>suppliers: {id: 1, name: 'Holcim Philippines', status: 'active'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A021" data-result="pass" data-search="tc-a021 supply chain & supplier operations app\models\supplier::isactive() supplier - isactive() returns false for inactive status ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A021</span>
+            <span class="item-module">Supply Chain &amp; Supplier Operations</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">Supplier - isActive() returns false for inactive status</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A021.png" alt="Playwright Terminal Screenshot for TC-A021" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\Supplier::isActive()</td></tr>
+          <tr><th>Input Values</th><td>status = 'inactive'</td></tr>
+          <tr><th>Expected Outcome</th><td>Return false (boolean)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Evaluated to false; orders restricted for decommissioned vendor.</td></tr>
+          <tr><th>Database Snapshot</th><td>suppliers: {id: 2, name: 'Old Lumber Co', status: 'inactive'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A022" data-result="pass" data-search="tc-a022 supply chain & supplier operations app\models\supplier::getcategorycolorattribute supplier - getcategorycolorattribute for windows & doors ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A022</span>
+            <span class="item-module">Supply Chain &amp; Supplier Operations</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">Supplier - getCategoryColorAttribute for Windows &amp; Doors</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A022.png" alt="Playwright Terminal Screenshot for TC-A022" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\Supplier::getCategoryColorAttribute</td></tr>
+          <tr><th>Input Values</th><td>category = 'Windows &amp; Doors'</td></tr>
+          <tr><th>Expected Outcome</th><td>Hex color '#38bdf8' (Sky Blue)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Returned: '#38bdf8'</td></tr>
+          <tr><th>Database Snapshot</th><td>suppliers: {id: 3, category: 'Windows &amp; Doors'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A023" data-result="pass" data-search="tc-a023 supply chain & supplier operations app\models\supplier::getcategorycolorattribute supplier - getcategorycolorattribute for roofing ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A023</span>
+            <span class="item-module">Supply Chain &amp; Supplier Operations</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">Supplier - getCategoryColorAttribute for Roofing</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A023.png" alt="Playwright Terminal Screenshot for TC-A023" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\Supplier::getCategoryColorAttribute</td></tr>
+          <tr><th>Input Values</th><td>category = 'Roofing'</td></tr>
+          <tr><th>Expected Outcome</th><td>Hex color '#ef4444' (Red)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Returned: '#ef4444'</td></tr>
+          <tr><th>Database Snapshot</th><td>suppliers: {id: 4, category: 'Roofing'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A024" data-result="pass" data-search="tc-a024 supply chain & supplier operations app\models\supplier::getcategorycolorattribute supplier - getcategorycolorattribute for structural ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A024</span>
+            <span class="item-module">Supply Chain &amp; Supplier Operations</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">Supplier - getCategoryColorAttribute for Structural</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A024.png" alt="Playwright Terminal Screenshot for TC-A024" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\Supplier::getCategoryColorAttribute</td></tr>
+          <tr><th>Input Values</th><td>category = 'Structural &amp; Masonry'</td></tr>
+          <tr><th>Expected Outcome</th><td>Hex color '#10b981' (Green)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Returned: '#10b981'</td></tr>
+          <tr><th>Database Snapshot</th><td>suppliers: {id: 5, category: 'Structural &amp; Masonry'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item is-fail" data-id="TC-A025" data-result="fail" data-search="tc-a025 project management & progress app\http\requests\taskstorerequest [defect #01] projecttask - hierarchical date validation (task start date vs project start date) defect-01">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A025</span>
+            <span class="item-module">Project Management &amp; Progress</span>
+            <span class="badge-fail">✕ FAILED (DEFECT-01)</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">18 ms</div>
+        </div>
+        <div class="item-title">ProjectTask - Hierarchical Date Validation (Task Start Date vs Project Start Date)</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A025.png" alt="Playwright Terminal Screenshot for TC-A025" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Http\Requests\TaskStoreRequest [DEFECT #01]</td></tr>
+          <tr><th>Input Values</th><td>project_start = '2026-05-01', task_start = '2026-04-15'</td></tr>
+          <tr><th>Expected Outcome</th><td>HTTP 422 Unprocessable Entity; Validation error on task_start_date ('start_date must be after or equal to project_start_date')</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--red); font-weight: bold;">Allowed saving task with start_date '2026-04-15' earlier than parent project start_date '2026-05-01' without validation error (HTTP 200 OK)</td></tr>
+          <tr><th>Database Snapshot</th><td>projects: {id: 10, start_date: '2026-05-01'}; project_tasks: {id: 105, start_date: '2026-04-15'} [INVALID DATE INVERSION STORED IN DB]</td></tr>
+        </table>
+
+        
+        <div class="fail-alert-detail">
+          <b>DEFECT LOGGED [DEFECT-01]:</b> Hierarchical Date Inversion: ProjectTask start date precedes parent Project start date without validation error.<br>
+          <span style="color: var(--accent); margin-top: 4px; display: inline-block;"><b>Remediation in Beta (TC-B025):</b> Add 'start_date' =&gt; 'required|date|after_or_equal:project_start_date' in TaskStoreRequest.</span>
+        </div>
+      </div>
+
+      <div class="evidence-item " data-id="TC-A026" data-result="pass" data-search="tc-a026 supply chain & supplier operations app\models\suppliermaterial::getstatusbadgeattribute suppliermaterial - getstatusbadgeattribute for inactive item ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A026</span>
+            <span class="item-module">Supply Chain &amp; Supplier Operations</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">2 ms</div>
+        </div>
+        <div class="item-title">SupplierMaterial - getStatusBadgeAttribute for inactive item</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A026.png" alt="Playwright Terminal Screenshot for TC-A026" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\SupplierMaterial::getStatusBadgeAttribute</td></tr>
+          <tr><th>Input Values</th><td>is_active = false, availability = 'available'</td></tr>
+          <tr><th>Expected Outcome</th><td>Badge text 'Unavailable' / Inactive CSS</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Rendered 'Unavailable' badge with warning tag</td></tr>
+          <tr><th>Database Snapshot</th><td>supplier_materials: {id: 12, name: 'Ready-mix concrete', is_active: 0}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A027" data-result="pass" data-search="tc-a027 supply chain & supplier operations app\models\suppliermaterial::getstatusbadgeattribute suppliermaterial - getstatusbadgeattribute for out of stock ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A027</span>
+            <span class="item-module">Supply Chain &amp; Supplier Operations</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">SupplierMaterial - getStatusBadgeAttribute for out of stock</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A027.png" alt="Playwright Terminal Screenshot for TC-A027" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\SupplierMaterial::getStatusBadgeAttribute</td></tr>
+          <tr><th>Input Values</th><td>is_active = true, availability = 'unavailable'</td></tr>
+          <tr><th>Expected Outcome</th><td>Badge text 'Unavailable'</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Rendered 'Unavailable' badge</td></tr>
+          <tr><th>Database Snapshot</th><td>supplier_materials: {id: 13, availability: 'unavailable'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A028" data-result="pass" data-search="tc-a028 supply chain & supplier operations app\models\suppliermaterial::getstatusbadgeattribute suppliermaterial - getstatusbadgeattribute for active available item ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A028</span>
+            <span class="item-module">Supply Chain &amp; Supplier Operations</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">SupplierMaterial - getStatusBadgeAttribute for active available item</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A028.png" alt="Playwright Terminal Screenshot for TC-A028" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\SupplierMaterial::getStatusBadgeAttribute</td></tr>
+          <tr><th>Input Values</th><td>is_active = true, availability = 'available'</td></tr>
+          <tr><th>Expected Outcome</th><td>Badge text 'Available' (Green)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Rendered 'Available' badge with active token</td></tr>
+          <tr><th>Database Snapshot</th><td>supplier_materials: {id: 14, is_active: 1, availability: 'available'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A029" data-result="pass" data-search="tc-a029 supply chain & supplier operations app\models\supplierorder::getstatusbadgeattribute supplierorder - getstatusbadgeattribute pending status ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A029</span>
+            <span class="item-module">Supply Chain &amp; Supplier Operations</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">2 ms</div>
+        </div>
+        <div class="item-title">SupplierOrder - getStatusBadgeAttribute pending status</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A029.png" alt="Playwright Terminal Screenshot for TC-A029" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\SupplierOrder::getStatusBadgeAttribute</td></tr>
+          <tr><th>Input Values</th><td>status = 'pending'</td></tr>
+          <tr><th>Expected Outcome</th><td>Badge text 'Pending Approval' (#f59e0b)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Rendered 'Pending Approval'</td></tr>
+          <tr><th>Database Snapshot</th><td>supplier_orders: {id: 101, po_number: 'PO-202609-01', status: 'pending'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A030" data-result="pass" data-search="tc-a030 supply chain & supplier operations app\models\supplierorder::getstatusbadgeattribute supplierorder - getstatusbadgeattribute confirmed status ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A030</span>
+            <span class="item-module">Supply Chain &amp; Supplier Operations</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">SupplierOrder - getStatusBadgeAttribute confirmed status</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A030.png" alt="Playwright Terminal Screenshot for TC-A030" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\SupplierOrder::getStatusBadgeAttribute</td></tr>
+          <tr><th>Input Values</th><td>status = 'confirmed'</td></tr>
+          <tr><th>Expected Outcome</th><td>Badge text 'Confirmed'</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Rendered 'Confirmed'</td></tr>
+          <tr><th>Database Snapshot</th><td>supplier_orders: {id: 102, status: 'confirmed'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A031" data-result="pass" data-search="tc-a031 supply chain & supplier operations app\models\supplierorder::getstatusbadgeattribute supplierorder - getstatusbadgeattribute processing status ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A031</span>
+            <span class="item-module">Supply Chain &amp; Supplier Operations</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">SupplierOrder - getStatusBadgeAttribute processing status</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A031.png" alt="Playwright Terminal Screenshot for TC-A031" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\SupplierOrder::getStatusBadgeAttribute</td></tr>
+          <tr><th>Input Values</th><td>status = 'processing'</td></tr>
+          <tr><th>Expected Outcome</th><td>Badge text 'Processing'</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Rendered 'Processing'</td></tr>
+          <tr><th>Database Snapshot</th><td>supplier_orders: {id: 103, status: 'processing'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A032" data-result="pass" data-search="tc-a032 supply chain & supplier operations app\models\supplierorder::getstatusbadgeattribute supplierorder - getstatusbadgeattribute ready_for_delivery ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A032</span>
+            <span class="item-module">Supply Chain &amp; Supplier Operations</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">SupplierOrder - getStatusBadgeAttribute ready_for_delivery</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A032.png" alt="Playwright Terminal Screenshot for TC-A032" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\SupplierOrder::getStatusBadgeAttribute</td></tr>
+          <tr><th>Input Values</th><td>status = 'ready_for_delivery'</td></tr>
+          <tr><th>Expected Outcome</th><td>Badge text 'Ready for Delivery'</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Rendered 'Ready for Delivery'</td></tr>
+          <tr><th>Database Snapshot</th><td>supplier_orders: {id: 104, status: 'ready_for_delivery'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A033" data-result="pass" data-search="tc-a033 supply chain & supplier operations app\models\supplierorder::getstatusbadgeattribute supplierorder - getstatusbadgeattribute delivered status ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A033</span>
+            <span class="item-module">Supply Chain &amp; Supplier Operations</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">SupplierOrder - getStatusBadgeAttribute delivered status</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A033.png" alt="Playwright Terminal Screenshot for TC-A033" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\SupplierOrder::getStatusBadgeAttribute</td></tr>
+          <tr><th>Input Values</th><td>status = 'delivered'</td></tr>
+          <tr><th>Expected Outcome</th><td>Badge text 'Delivered'</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Rendered 'Delivered'</td></tr>
+          <tr><th>Database Snapshot</th><td>supplier_orders: {id: 105, status: 'delivered'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A034" data-result="pass" data-search="tc-a034 supply chain & supplier operations app\models\supplierorder::getstatusbadgeattribute supplierorder - getstatusbadgeattribute completed status ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A034</span>
+            <span class="item-module">Supply Chain &amp; Supplier Operations</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">SupplierOrder - getStatusBadgeAttribute completed status</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A034.png" alt="Playwright Terminal Screenshot for TC-A034" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\SupplierOrder::getStatusBadgeAttribute</td></tr>
+          <tr><th>Input Values</th><td>status = 'completed'</td></tr>
+          <tr><th>Expected Outcome</th><td>Badge text 'Completed' (#10b981)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Rendered 'Completed'</td></tr>
+          <tr><th>Database Snapshot</th><td>supplier_orders: {id: 106, status: 'completed'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A035" data-result="pass" data-search="tc-a035 supply chain & supplier operations app\models\supplierorder::getstatusbadgeattribute supplierorder - getstatusbadgeattribute cancelled status ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A035</span>
+            <span class="item-module">Supply Chain &amp; Supplier Operations</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">SupplierOrder - getStatusBadgeAttribute cancelled status</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A035.png" alt="Playwright Terminal Screenshot for TC-A035" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\SupplierOrder::getStatusBadgeAttribute</td></tr>
+          <tr><th>Input Values</th><td>status = 'cancelled'</td></tr>
+          <tr><th>Expected Outcome</th><td>Badge text 'Cancelled' (#ef4444)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Rendered 'Cancelled'</td></tr>
+          <tr><th>Database Snapshot</th><td>supplier_orders: {id: 107, status: 'cancelled'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A036" data-result="pass" data-search="tc-a036 supply chain & supplier operations app\models\supplierorder::synctoinventory() supplierorder - synctoinventory() idempotency guard preventing duplicate stock credit ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A036</span>
+            <span class="item-module">Supply Chain &amp; Supplier Operations</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">SupplierOrder - syncToInventory() idempotency guard preventing duplicate stock credit</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A036.png" alt="Playwright Terminal Screenshot for TC-A036" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\SupplierOrder::syncToInventory()</td></tr>
+          <tr><th>Input Values</th><td>is_synced_to_inventory = true</td></tr>
+          <tr><th>Expected Outcome</th><td>Return false; No inventory mutation</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Returned false; duplicate restock prevented.</td></tr>
+          <tr><th>Database Snapshot</th><td>supplier_orders: {id: 108, is_synced_to_inventory: 1}; materials.stock: UNCHANGED</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A037" data-result="pass" data-search="tc-a037 supply chain & supplier operations app\models\supplierorder::synctoinventory() supplierorder - synctoinventory() stock crediting & inventory transaction log creation ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A037</span>
+            <span class="item-module">Supply Chain &amp; Supplier Operations</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">46 ms</div>
+        </div>
+        <div class="item-title">SupplierOrder - syncToInventory() stock crediting &amp; inventory transaction log creation</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A037.png" alt="Playwright Terminal Screenshot for TC-A037" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\SupplierOrder::syncToInventory()</td></tr>
+          <tr><th>Input Values</th><td>status = 'delivered', items = [50 bags cement @ 240/bag]</td></tr>
+          <tr><th>Expected Outcome</th><td>Return true; Stock incremented by +50; inventory_logs record inserted</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Material stock credited by +50; InventoryLog audit record generated.</td></tr>
+          <tr><th>Database Snapshot</th><td>materials: {id: 1, current_stock: 150}; inventory_logs: {id: 42, type: 'restock', qty: 50}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A038" data-result="pass" data-search="tc-a038 inventory & materials management app\models\inventorylog::gettransactionbadgeattribute inventorylog - gettransactionbadge for excess_return transaction ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A038</span>
+            <span class="item-module">Inventory &amp; Materials Management</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">InventoryLog - getTransactionBadge for excess_return transaction</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A038.png" alt="Playwright Terminal Screenshot for TC-A038" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\InventoryLog::getTransactionBadgeAttribute</td></tr>
+          <tr><th>Input Values</th><td>transaction_type = 'excess_return'</td></tr>
+          <tr><th>Expected Outcome</th><td>String containing 'Excess Material Returned'</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Rendered 'Excess Material Returned'</td></tr>
+          <tr><th>Database Snapshot</th><td>inventory_logs: {id: 201, transaction_type: 'excess_return'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A039" data-result="pass" data-search="tc-a039 inventory & materials management app\models\inventorylog::gettransactionbadgeattribute inventorylog - gettransactionbadge for site allocation transaction ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A039</span>
+            <span class="item-module">Inventory &amp; Materials Management</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">InventoryLog - getTransactionBadge for site allocation transaction</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A039.png" alt="Playwright Terminal Screenshot for TC-A039" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\InventoryLog::getTransactionBadgeAttribute</td></tr>
+          <tr><th>Input Values</th><td>transaction_type = 'allocation'</td></tr>
+          <tr><th>Expected Outcome</th><td>String containing 'Site BOM Allocation'</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Rendered 'Site BOM Allocation'</td></tr>
+          <tr><th>Database Snapshot</th><td>inventory_logs: {id: 202, transaction_type: 'allocation'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A040" data-result="pass" data-search="tc-a040 inventory & materials management app\models\inventorylog::gettransactionbadgeattribute inventorylog - gettransactionbadge for daily usage transaction ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A040</span>
+            <span class="item-module">Inventory &amp; Materials Management</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">InventoryLog - getTransactionBadge for daily usage transaction</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A040.png" alt="Playwright Terminal Screenshot for TC-A040" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\InventoryLog::getTransactionBadgeAttribute</td></tr>
+          <tr><th>Input Values</th><td>transaction_type = 'usage'</td></tr>
+          <tr><th>Expected Outcome</th><td>String containing 'Site Consumption Recorded'</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Rendered 'Site Consumption Recorded'</td></tr>
+          <tr><th>Database Snapshot</th><td>inventory_logs: {id: 203, transaction_type: 'usage'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A041" data-result="pass" data-search="tc-a041 inventory & materials management app\models\inventorylog::gettransactionbadgeattribute inventorylog - gettransactionbadge for restock transaction ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A041</span>
+            <span class="item-module">Inventory &amp; Materials Management</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">InventoryLog - getTransactionBadge for restock transaction</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A041.png" alt="Playwright Terminal Screenshot for TC-A041" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\InventoryLog::getTransactionBadgeAttribute</td></tr>
+          <tr><th>Input Values</th><td>transaction_type = 'restock'</td></tr>
+          <tr><th>Expected Outcome</th><td>String containing 'Warehouse Restock / PO'</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Rendered 'Warehouse Restock / PO'</td></tr>
+          <tr><th>Database Snapshot</th><td>inventory_logs: {id: 204, transaction_type: 'restock'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A042" data-result="pass" data-search="tc-a042 inventory & materials management app\models\inventorylog::gettransactionbadgeattribute inventorylog - gettransactionbadge for physical adjustment ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A042</span>
+            <span class="item-module">Inventory &amp; Materials Management</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">InventoryLog - getTransactionBadge for physical adjustment</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A042.png" alt="Playwright Terminal Screenshot for TC-A042" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\InventoryLog::getTransactionBadgeAttribute</td></tr>
+          <tr><th>Input Values</th><td>transaction_type = 'adjustment'</td></tr>
+          <tr><th>Expected Outcome</th><td>String containing 'Inventory Adjustment'</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Rendered 'Inventory Adjustment'</td></tr>
+          <tr><th>Database Snapshot</th><td>inventory_logs: {id: 205, transaction_type: 'adjustment'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A043" data-result="pass" data-search="tc-a043 billing & financial clearance app\models\payment::getreceipturlattribute payment - getreceipturlattribute for null file record ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A043</span>
+            <span class="item-module">Billing &amp; Financial Clearance</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">2 ms</div>
+        </div>
+        <div class="item-title">Payment - getReceiptUrlAttribute for null file record</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A043.png" alt="Playwright Terminal Screenshot for TC-A043" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\Payment::getReceiptUrlAttribute</td></tr>
+          <tr><th>Input Values</th><td>receipt_file = null</td></tr>
+          <tr><th>Expected Outcome</th><td>Return null</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Returned null; view modal renders default receipt placeholder.</td></tr>
+          <tr><th>Database Snapshot</th><td>payments: {id: 50, receipt_file: NULL}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item is-fail" data-id="TC-A044" data-result="fail" data-search="tc-a044 billing & financial clearance app\http\requests\paymentreceiptuploadrequest [defect #02] payment - receipt file mime type validation for mobile camera uploads (jpeg jfif) defect-02">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A044</span>
+            <span class="item-module">Billing &amp; Financial Clearance</span>
+            <span class="badge-fail">✕ FAILED (DEFECT-02)</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">24 ms</div>
+        </div>
+        <div class="item-title">Payment - Receipt File MIME Type Validation for Mobile Camera Uploads (JPEG JFIF)</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A044.png" alt="Playwright Terminal Screenshot for TC-A044" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Http\Requests\PaymentReceiptUploadRequest [DEFECT #02]</td></tr>
+          <tr><th>Input Values</th><td>receipt_file = 'field_photo.jfif' (MIME: image/jpeg / image/jfif)</td></tr>
+          <tr><th>Expected Outcome</th><td>HTTP 200 OK; Accept valid modern mobile camera JFIF/JPEG image file and save to storage</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--red); font-weight: bold;">Server rejected '.jfif' upload with validation error: 'The receipt file must be a file of type: jpg, png, pdf.' (HTTP 422)</td></tr>
+          <tr><th>Database Snapshot</th><td>payments: {id: 51, receipt_file: NULL} [UPLOAD REJECTED BY SERVER; NO RECORD SAVED]</td></tr>
+        </table>
+
+        
+        <div class="fail-alert-detail">
+          <b>DEFECT LOGGED [DEFECT-02]:</b> Strict MIME Whitelist: Modern mobile camera photos in .jfif format are rejected during receipt upload.<br>
+          <span style="color: var(--accent); margin-top: 4px; display: inline-block;"><b>Remediation in Beta (TC-B044):</b> Expand validation rule to 'receipt_file' =&gt; 'required|file|mimes:jpeg,jpg,png,jfif,webp,pdf|max:10240'.</span>
+        </div>
+      </div>
+
+      <div class="evidence-item " data-id="TC-A045" data-result="pass" data-search="tc-a045 billing & financial clearance app\models\payment::getreceipturlattribute payment - getreceipturlattribute for absolute root slash path ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A045</span>
+            <span class="item-module">Billing &amp; Financial Clearance</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">Payment - getReceiptUrlAttribute for absolute root slash path</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A045.png" alt="Playwright Terminal Screenshot for TC-A045" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\Payment::getReceiptUrlAttribute</td></tr>
+          <tr><th>Input Values</th><td>receipt_file = '/uploads/doc.pdf'</td></tr>
+          <tr><th>Expected Outcome</th><td>Return '/uploads/doc.pdf'</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Returned '/uploads/doc.pdf'</td></tr>
+          <tr><th>Database Snapshot</th><td>payments: {id: 52, receipt_file: '/uploads/doc.pdf'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A046" data-result="pass" data-search="tc-a046 billing & financial clearance app\models\payment::getreceipturlattribute payment - getreceipturlattribute for relative filename ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A046</span>
+            <span class="item-module">Billing &amp; Financial Clearance</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">Payment - getReceiptUrlAttribute for relative filename</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A046.png" alt="Playwright Terminal Screenshot for TC-A046" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\Payment::getReceiptUrlAttribute</td></tr>
+          <tr><th>Input Values</th><td>receipt_file = 'slip.jpg'</td></tr>
+          <tr><th>Expected Outcome</th><td>Return '/uploads/receipts/slip.jpg'</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Returned '/uploads/receipts/slip.jpg'</td></tr>
+          <tr><th>Database Snapshot</th><td>payments: {id: 53, receipt_file: 'slip.jpg'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A047" data-result="pass" data-search="tc-a047 billing & financial clearance app\models\payment::geteffectiveornumberattribute payment - geteffectiveornumberattribute for explicit or number ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A047</span>
+            <span class="item-module">Billing &amp; Financial Clearance</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">Payment - getEffectiveOrNumberAttribute for explicit OR number</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A047.png" alt="Playwright Terminal Screenshot for TC-A047" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\Payment::getEffectiveOrNumberAttribute</td></tr>
+          <tr><th>Input Values</th><td>official_receipt_no = 'OR-999'</td></tr>
+          <tr><th>Expected Outcome</th><td>Return 'OR-999'</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Returned 'OR-999'</td></tr>
+          <tr><th>Database Snapshot</th><td>payments: {id: 54, official_receipt_no: 'OR-999'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A048" data-result="pass" data-search="tc-a048 billing & financial clearance app\models\payment::geteffectiveornumberattribute payment - geteffectiveornumberattribute synthetic fallback pattern ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A048</span>
+            <span class="item-module">Billing &amp; Financial Clearance</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">Payment - getEffectiveOrNumberAttribute synthetic fallback pattern</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A048.png" alt="Playwright Terminal Screenshot for TC-A048" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\Payment::getEffectiveOrNumberAttribute</td></tr>
+          <tr><th>Input Values</th><td>official_receipt_no = null, payment_date = '2026-09-01', id = 5</td></tr>
+          <tr><th>Expected Outcome</th><td>Formatted synthetic: 'OR-202609-0005'</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Formatted: 'OR-202609-0005'</td></tr>
+          <tr><th>Database Snapshot</th><td>payments: {id: 5, official_receipt_no: NULL, payment_date: '2026-09-01'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A049" data-result="pass" data-search="tc-a049 billing & financial clearance app\models\payment::getfinancingtypelabelattribute payment - getfinancingtypelabel for bank_loan ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A049</span>
+            <span class="item-module">Billing &amp; Financial Clearance</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">Payment - getFinancingTypeLabel for bank_loan</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A049.png" alt="Playwright Terminal Screenshot for TC-A049" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\Payment::getFinancingTypeLabelAttribute</td></tr>
+          <tr><th>Input Values</th><td>financing_type = 'bank_loan'</td></tr>
+          <tr><th>Expected Outcome</th><td>Return 'Bank Construction Loan'</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Returned 'Bank Construction Loan'</td></tr>
+          <tr><th>Database Snapshot</th><td>payments: {id: 55, financing_type: 'bank_loan'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A050" data-result="pass" data-search="tc-a050 billing & financial clearance app\models\payment::getfinancingtypelabelattribute payment - getfinancingtypelabel for pagibig_loan ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A050</span>
+            <span class="item-module">Billing &amp; Financial Clearance</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">Payment - getFinancingTypeLabel for pagibig_loan</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A050.png" alt="Playwright Terminal Screenshot for TC-A050" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\Payment::getFinancingTypeLabelAttribute</td></tr>
+          <tr><th>Input Values</th><td>financing_type = 'pagibig_loan'</td></tr>
+          <tr><th>Expected Outcome</th><td>Return 'Pag-IBIG (HDMF) Loan'</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Returned 'Pag-IBIG (HDMF) Loan'</td></tr>
+          <tr><th>Database Snapshot</th><td>payments: {id: 56, financing_type: 'pagibig_loan'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A051" data-result="pass" data-search="tc-a051 billing & financial clearance app\models\payment::getfinancingtypelabelattribute payment - getfinancingtypelabel for client_equity ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A051</span>
+            <span class="item-module">Billing &amp; Financial Clearance</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">Payment - getFinancingTypeLabel for client_equity</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A051.png" alt="Playwright Terminal Screenshot for TC-A051" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\Payment::getFinancingTypeLabelAttribute</td></tr>
+          <tr><th>Input Values</th><td>financing_type = 'client_equity'</td></tr>
+          <tr><th>Expected Outcome</th><td>Return 'Client Direct Equity'</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Returned 'Client Direct Equity'</td></tr>
+          <tr><th>Database Snapshot</th><td>payments: {id: 57, financing_type: 'client_equity'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A052" data-result="pass" data-search="tc-a052 billing & financial clearance app\models\payment::getfinancingtypelabelattribute payment - getfinancingtypelabel for cash_progress ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A052</span>
+            <span class="item-module">Billing &amp; Financial Clearance</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">Payment - getFinancingTypeLabel for cash_progress</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A052.png" alt="Playwright Terminal Screenshot for TC-A052" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\Payment::getFinancingTypeLabelAttribute</td></tr>
+          <tr><th>Input Values</th><td>financing_type = 'cash_progress'</td></tr>
+          <tr><th>Expected Outcome</th><td>Return 'Direct Progress Cash'</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Returned 'Direct Progress Cash'</td></tr>
+          <tr><th>Database Snapshot</th><td>payments: {id: 58, financing_type: 'cash_progress'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A053" data-result="pass" data-search="tc-a053 billing & financial clearance app\models\payment::getconstructionclearancebadgeattribute payment - getconstructionclearancebadge status paid ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A053</span>
+            <span class="item-module">Billing &amp; Financial Clearance</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">Payment - getConstructionClearanceBadge status paid</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A053.png" alt="Playwright Terminal Screenshot for TC-A053" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\Payment::getConstructionClearanceBadgeAttribute</td></tr>
+          <tr><th>Input Values</th><td>status = 'paid', payment_first_cleared = true</td></tr>
+          <tr><th>Expected Outcome</th><td>Cleared: true, text: 'Authorized to Construct' (#10b981)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Returned cleared: true, Green '#10b981'</td></tr>
+          <tr><th>Database Snapshot</th><td>payments: {id: 60, status: 'paid', amount: 350000.00}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A054" data-result="pass" data-search="tc-a054 billing & financial clearance app\models\payment::getconstructionclearancebadgeattribute payment - getconstructionclearancebadge inspection scheduled ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A054</span>
+            <span class="item-module">Billing &amp; Financial Clearance</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">Payment - getConstructionClearanceBadge inspection scheduled</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A054.png" alt="Playwright Terminal Screenshot for TC-A054" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\Payment::getConstructionClearanceBadgeAttribute</td></tr>
+          <tr><th>Input Values</th><td>status = 'pending', inspection_scheduled = true</td></tr>
+          <tr><th>Expected Outcome</th><td>Cleared: false, text: 'Inspection Scheduled' (#38bdf8)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Returned cleared: false, Blue '#38bdf8'</td></tr>
+          <tr><th>Database Snapshot</th><td>payments: {id: 61, status: 'pending', inspection_scheduled: 1}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A055" data-result="pass" data-search="tc-a055 personnel & licensure compliance app\models\personnel::islicenseexpired() personnel - islicenseexpired() with explicit status expired ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A055</span>
+            <span class="item-module">Personnel &amp; Licensure Compliance</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">Personnel - isLicenseExpired() with explicit status expired</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A055.png" alt="Playwright Terminal Screenshot for TC-A055" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\Personnel::isLicenseExpired()</td></tr>
+          <tr><th>Input Values</th><td>license_status = 'expired'</td></tr>
+          <tr><th>Expected Outcome</th><td>Return true (boolean)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Returned true; PRC license flagged as expired in personnel roster.</td></tr>
+          <tr><th>Database Snapshot</th><td>personnel: {id: 15, name: 'Engr. D. Santos', license_status: 'expired'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A056" data-result="pass" data-search="tc-a056 personnel & licensure compliance app\models\personnel::islicenseexpired() personnel - islicenseexpired() with past expiry date ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A056</span>
+            <span class="item-module">Personnel &amp; Licensure Compliance</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">Personnel - isLicenseExpired() with past expiry date</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A056.png" alt="Playwright Terminal Screenshot for TC-A056" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\Personnel::isLicenseExpired()</td></tr>
+          <tr><th>Input Values</th><td>license_expiry_date = '2024-01-01', license_status = 'active'</td></tr>
+          <tr><th>Expected Outcome</th><td>Return true (boolean)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Returned true; date comparison overrode nominal status.</td></tr>
+          <tr><th>Database Snapshot</th><td>personnel: {id: 16, license_no: 'PRC-008912', license_expiry_date: '2024-01-01'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A057" data-result="pass" data-search="tc-a057 personnel & licensure compliance app\models\personnel::islicenseexpired() personnel - islicenseexpired() with future expiry date ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A057</span>
+            <span class="item-module">Personnel &amp; Licensure Compliance</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">Personnel - isLicenseExpired() with future expiry date</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A057.png" alt="Playwright Terminal Screenshot for TC-A057" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\Personnel::isLicenseExpired()</td></tr>
+          <tr><th>Input Values</th><td>license_expiry_date = '2028-12-31', license_status = 'active'</td></tr>
+          <tr><th>Expected Outcome</th><td>Return false (boolean)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Returned false; valid active professional license.</td></tr>
+          <tr><th>Database Snapshot</th><td>personnel: {id: 17, license_no: 'PRC-011294', license_expiry_date: '2028-12-31'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A058" data-result="pass" data-search="tc-a058 personnel & licensure compliance app\models\personnel::getlicensestatusbadgeattribute personnel - getlicensestatusbadge for expired license ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A058</span>
+            <span class="item-module">Personnel &amp; Licensure Compliance</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">Personnel - getLicenseStatusBadge for expired license</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A058.png" alt="Playwright Terminal Screenshot for TC-A058" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\Personnel::getLicenseStatusBadgeAttribute</td></tr>
+          <tr><th>Input Values</th><td>license_status = 'expired'</td></tr>
+          <tr><th>Expected Outcome</th><td>HTML badge 'EXPIRED LICENSE' (#ef4444)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Rendered 'EXPIRED LICENSE' in '#ef4444'</td></tr>
+          <tr><th>Database Snapshot</th><td>personnel: {id: 18, license_status: 'expired'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A059" data-result="pass" data-search="tc-a059 personnel & licensure compliance app\models\personnel::getlicensestatusbadgeattribute personnel - getlicensestatusbadge for active license ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A059</span>
+            <span class="item-module">Personnel &amp; Licensure Compliance</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">Personnel - getLicenseStatusBadge for active license</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A059.png" alt="Playwright Terminal Screenshot for TC-A059" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\Personnel::getLicenseStatusBadgeAttribute</td></tr>
+          <tr><th>Input Values</th><td>license_status = 'active', expiry = '2029-01-01'</td></tr>
+          <tr><th>Expected Outcome</th><td>HTML badge 'ACTIVE' (#10b981)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Rendered 'ACTIVE' in '#10b981'</td></tr>
+          <tr><th>Database Snapshot</th><td>personnel: {id: 19, license_status: 'active'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A060" data-result="pass" data-search="tc-a060 cost engineering & budget control app\models\projectcost::getvarianceattribute projectcost - getvarianceattribute standard savings computation ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A060</span>
+            <span class="item-module">Cost Engineering &amp; Budget Control</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">2 ms</div>
+        </div>
+        <div class="item-title">ProjectCost - getVarianceAttribute standard savings computation</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A060.png" alt="Playwright Terminal Screenshot for TC-A060" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\ProjectCost::getVarianceAttribute</td></tr>
+          <tr><th>Input Values</th><td>estimated_cost = 100000, actual_cost = 80000</td></tr>
+          <tr><th>Expected Outcome</th><td>Numeric: +20000.00 (Savings)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Computed: 20000.00</td></tr>
+          <tr><th>Database Snapshot</th><td>project_costs: {id: 301, estimated_cost: 100000.00, actual_cost: 80000.00}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A061" data-result="pass" data-search="tc-a061 cost engineering & budget control app\models\projectcost::getvariancepercentattribute projectcost - getvariancepercent zero-division safety guard ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A061</span>
+            <span class="item-module">Cost Engineering &amp; Budget Control</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">ProjectCost - getVariancePercent zero-division safety guard</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A061.png" alt="Playwright Terminal Screenshot for TC-A061" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\ProjectCost::getVariancePercentAttribute</td></tr>
+          <tr><th>Input Values</th><td>estimated_cost = 0, actual_cost = 5000</td></tr>
+          <tr><th>Expected Outcome</th><td>String: '0.0%' (No DivisionByZeroError)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Returned: '0.0%'</td></tr>
+          <tr><th>Database Snapshot</th><td>project_costs: {id: 302, estimated_cost: 0.00, actual_cost: 5000.00}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item is-fail" data-id="TC-A062" data-result="fail" data-search="tc-a062 inventory & materials management app\http\controllers\inventorycontroller [defect #03] inventorycontroller - integer quantity enforcement for discrete material units defect-03">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A062</span>
+            <span class="item-module">Inventory &amp; Materials Management</span>
+            <span class="badge-fail">✕ FAILED (DEFECT-03)</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">14 ms</div>
+        </div>
+        <div class="item-title">InventoryController - Integer Quantity Enforcement for Discrete Material Units</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A062.png" alt="Playwright Terminal Screenshot for TC-A062" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Http\Controllers\InventoryController [DEFECT #03]</td></tr>
+          <tr><th>Input Values</th><td>material_id = 4 (Unit: 'pcs'), allocated_quantity = 15.75</td></tr>
+          <tr><th>Expected Outcome</th><td>HTTP 422 Unprocessable Entity; Reject fractional decimal allocation on discrete unit items ('pcs'/'sets')</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--red); font-weight: bold;">Allowed decimal allocation (15.75 pcs), causing database integer column truncation to 15 pcs without warning (HTTP 200 OK)</td></tr>
+          <tr><th>Database Snapshot</th><td>materials: {id: 4, unit: 'pcs'}; project_materials: {id: 404, quantity: 15} [DATA TRUNCATION DETECTED: 15.75 -&gt; 15]</td></tr>
+        </table>
+
+        
+        <div class="fail-alert-detail">
+          <b>DEFECT LOGGED [DEFECT-03]:</b> Fractional Unit Allocation: Allows decimal quantity on discrete unit items (pcs/sets), truncating integer in database.<br>
+          <span style="color: var(--accent); margin-top: 4px; display: inline-block;"><b>Remediation in Beta (TC-B062):</b> Add conditional integer rule: if in_array($unit, ['pcs', 'sets', 'units']), enforce integer.</span>
+        </div>
+      </div>
+
+      <div class="evidence-item " data-id="TC-A063" data-result="pass" data-search="tc-a063 scope of works & dupa estimation app\models\projectmaterial::getremainingqtyattribute projectmaterial - getremainingqtyattribute clamp calculation ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A063</span>
+            <span class="item-module">Scope of Works &amp; DUPA Estimation</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">2 ms</div>
+        </div>
+        <div class="item-title">ProjectMaterial - getRemainingQtyAttribute clamp calculation</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A063.png" alt="Playwright Terminal Screenshot for TC-A063" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\ProjectMaterial::getRemainingQtyAttribute</td></tr>
+          <tr><th>Input Values</th><td>allocated_qty = 100, used_qty = 60, excess_qty = 20</td></tr>
+          <tr><th>Expected Outcome</th><td>Numeric: 20 units (100 - 60 - 20)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Computed: 20 units</td></tr>
+          <tr><th>Database Snapshot</th><td>project_materials: {id: 401, allocated_quantity: 100, used_quantity: 60, excess_quantity: 20}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A064" data-result="pass" data-search="tc-a064 scope of works & dupa estimation app\models\projectmaterial::getnetallocatedqtyattribute projectmaterial - getnetallocatedqtyattribute calculation ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A064</span>
+            <span class="item-module">Scope of Works &amp; DUPA Estimation</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">ProjectMaterial - getNetAllocatedQtyAttribute calculation</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A064.png" alt="Playwright Terminal Screenshot for TC-A064" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\ProjectMaterial::getNetAllocatedQtyAttribute</td></tr>
+          <tr><th>Input Values</th><td>allocated_quantity = 100, excess_quantity = 20</td></tr>
+          <tr><th>Expected Outcome</th><td>Numeric: 80 units (100 - 20)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Computed: 80 units</td></tr>
+          <tr><th>Database Snapshot</th><td>project_materials: {id: 402, allocated_quantity: 100, excess_quantity: 20}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A065" data-result="pass" data-search="tc-a065 scope of works & dupa estimation app\models\projectmaterial::getreturnedexcessvalueattribute projectmaterial - getreturnedexcessvalueattribute financial credit ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A065</span>
+            <span class="item-module">Scope of Works &amp; DUPA Estimation</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">ProjectMaterial - getReturnedExcessValueAttribute financial credit</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A065.png" alt="Playwright Terminal Screenshot for TC-A065" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\ProjectMaterial::getReturnedExcessValueAttribute</td></tr>
+          <tr><th>Input Values</th><td>excess_quantity = 15, unit_price = 200.00</td></tr>
+          <tr><th>Expected Outcome</th><td>Numeric: ₱3,000.00 (15 * 200.00)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Computed: 3000.00</td></tr>
+          <tr><th>Database Snapshot</th><td>project_materials: {id: 403, excess_quantity: 15, unit_price: 200.00}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A066" data-result="pass" data-search="tc-a066 scope of works & dupa estimation app\models\projectscopeitem::recalculate() projectscopeitem - recalculate() dupa rollup (direct + markups) ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A066</span>
+            <span class="item-module">Scope of Works &amp; DUPA Estimation</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">7 ms</div>
+        </div>
+        <div class="item-title">ProjectScopeItem - recalculate() DUPA Rollup (Direct + Markups)</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A066.png" alt="Playwright Terminal Screenshot for TC-A066" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\ProjectScopeItem::recalculate()</td></tr>
+          <tr><th>Input Values</th><td>Direct Cost = 10000, Contingency = 5%, Tax = 12%, Profit = 10%</td></tr>
+          <tr><th>Expected Outcome</th><td>Computed Total: ₱12,700.00</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Computed total: 12700.00</td></tr>
+          <tr><th>Database Snapshot</th><td>project_scope_items: {id: 501, direct_cost: 10000.00, total_item_cost: 12700.00}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A067" data-result="pass" data-search="tc-a067 scope of works & dupa estimation app\models\projectscopeline::getremainingquantityattribute projectscopeline - getremainingquantityattribute zero-floor clamp ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A067</span>
+            <span class="item-module">Scope of Works &amp; DUPA Estimation</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">ProjectScopeLine - getRemainingQuantityAttribute zero-floor clamp</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A067.png" alt="Playwright Terminal Screenshot for TC-A067" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\ProjectScopeLine::getRemainingQuantityAttribute</td></tr>
+          <tr><th>Input Values</th><td>quantity = 50, used = 40, excess = 20 (Negative diff: -10)</td></tr>
+          <tr><th>Expected Outcome</th><td>Clamped to 0 (No negative quantities)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Clamped to 0</td></tr>
+          <tr><th>Database Snapshot</th><td>project_scope_lines: {id: 601, quantity: 50, used_quantity: 40, excess_quantity: 20}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A068" data-result="pass" data-search="tc-a068 project management & progress engine app\models\projecttask::getiscompletedattribute projecttask - getiscompletedattribute for 100% progress ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A068</span>
+            <span class="item-module">Project Management &amp; Progress Engine</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">2 ms</div>
+        </div>
+        <div class="item-title">ProjectTask - getIsCompletedAttribute for 100% progress</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A068.png" alt="Playwright Terminal Screenshot for TC-A068" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\ProjectTask::getIsCompletedAttribute</td></tr>
+          <tr><th>Input Values</th><td>progress_percentage = 100</td></tr>
+          <tr><th>Expected Outcome</th><td>Return true (boolean)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Returned true; task marked finished on Gantt chart.</td></tr>
+          <tr><th>Database Snapshot</th><td>project_tasks: {id: 701, name: 'Foundation Excavation', progress_percentage: 100}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A069" data-result="pass" data-search="tc-a069 project management & progress engine app\models\projecttask::getstatusbadgeclassattribute projecttask - getstatusbadgeclassattribute for 30% progress ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A069</span>
+            <span class="item-module">Project Management &amp; Progress Engine</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">ProjectTask - getStatusBadgeClassAttribute for 30% progress</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A069.png" alt="Playwright Terminal Screenshot for TC-A069" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\ProjectTask::getStatusBadgeClassAttribute</td></tr>
+          <tr><th>Input Values</th><td>progress_percentage = 30</td></tr>
+          <tr><th>Expected Outcome</th><td>Return 'in_progress'</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Returned 'in_progress'</td></tr>
+          <tr><th>Database Snapshot</th><td>project_tasks: {id: 702, progress_percentage: 30}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A070" data-result="pass" data-search="tc-a070 project management & progress engine app\models\projecttask::gettimelinephasekeyattribute projecttask - gettimelinephasekey for superstructure ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A070</span>
+            <span class="item-module">Project Management &amp; Progress Engine</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">ProjectTask - getTimelinePhaseKey for Superstructure</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A070.png" alt="Playwright Terminal Screenshot for TC-A070" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\ProjectTask::getTimelinePhaseKeyAttribute</td></tr>
+          <tr><th>Input Values</th><td>timeline_phase = 'Phase 2: Superstructure'</td></tr>
+          <tr><th>Expected Outcome</th><td>Return normalized key: 'phase2'</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Parsed to 'phase2'</td></tr>
+          <tr><th>Database Snapshot</th><td>project_tasks: {id: 703, timeline_phase: 'Phase 2: Superstructure'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A071" data-result="pass" data-search="tc-a071 project management & progress engine app\models\projecttaskmaterial::boot() projecttaskmaterial - boot() saving event auto-calculates total_cost ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A071</span>
+            <span class="item-module">Project Management &amp; Progress Engine</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">4 ms</div>
+        </div>
+        <div class="item-title">ProjectTaskMaterial - boot() saving event auto-calculates total_cost</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A071.png" alt="Playwright Terminal Screenshot for TC-A071" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\ProjectTaskMaterial::boot()</td></tr>
+          <tr><th>Input Values</th><td>quantity_required = 5, unit_cost = 400.00</td></tr>
+          <tr><th>Expected Outcome</th><td>total_cost auto-populated as 2000.00 on save</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Calculated total_cost = 2000.00</td></tr>
+          <tr><th>Database Snapshot</th><td>project_task_materials: {id: 801, quantity_required: 5, unit_cost: 400.00, total_cost: 2000.00}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A072" data-result="pass" data-search="tc-a072 project management & progress engine app\models\project::getstructuralweightattribute project - getstructuralweightattribute fallback to default 40% ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A072</span>
+            <span class="item-module">Project Management &amp; Progress Engine</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">Project - getStructuralWeightAttribute fallback to default 40%</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A072.png" alt="Playwright Terminal Screenshot for TC-A072" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\Project::getStructuralWeightAttribute</td></tr>
+          <tr><th>Input Values</th><td>structural_weight = 0</td></tr>
+          <tr><th>Expected Outcome</th><td>Return default 40.0 (percentage)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Fallback evaluated to 40%</td></tr>
+          <tr><th>Database Snapshot</th><td>projects: {id: 85, structural_weight: 0.00}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A073" data-result="pass" data-search="tc-a073 project management & progress engine app\models\project::recalculatetradeprogressfromtasks() project - recalculatetradeprogressfromtasks() weighted multi-trade aggregation ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A073</span>
+            <span class="item-module">Project Management &amp; Progress Engine</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">5 ms</div>
+        </div>
+        <div class="item-title">Project - recalculateTradeProgressFromTasks() Weighted Multi-Trade Aggregation</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A073.png" alt="Playwright Terminal Screenshot for TC-A073" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\Project::recalculateTradeProgressFromTasks()</td></tr>
+          <tr><th>Input Values</th><td>Structural tasks = 100% (wt 40%), Electrical = 80% (wt 25%), Piping = 50% (wt 20%), Finishing = 30% (wt 15%)</td></tr>
+          <tr><th>Expected Outcome</th><td>Calculated: (100*0.4) + (80*0.25) + (50*0.20) + (30*0.15) = 74.5%</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Computed exact progress: 74.5%</td></tr>
+          <tr><th>Database Snapshot</th><td>projects: {id: 86, overall_progress: 74.50, structural_progress: 100, electrical_progress: 80}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A074" data-result="pass" data-search="tc-a074 project management & progress engine app\models\project::getremainingbudgetattribute project - getremainingbudgetattribute calculation ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A074</span>
+            <span class="item-module">Project Management &amp; Progress Engine</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">Project - getRemainingBudgetAttribute calculation</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A074.png" alt="Playwright Terminal Screenshot for TC-A074" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\Project::getRemainingBudgetAttribute</td></tr>
+          <tr><th>Input Values</th><td>contract_amount = 500000.00, actual_spent = 200000.00</td></tr>
+          <tr><th>Expected Outcome</th><td>Numeric: ₱300,000.00 remaining</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Computed: 300000.00</td></tr>
+          <tr><th>Database Snapshot</th><td>projects: {id: 87, contract_amount: 500000.00, actual_spent: 200000.00}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A075" data-result="pass" data-search="tc-a075 project management & progress engine app\models\project::getbudgetusagepercentattribute project - getbudgetusagepercentattribute calculation ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A075</span>
+            <span class="item-module">Project Management &amp; Progress Engine</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">Project - getBudgetUsagePercentAttribute calculation</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A075.png" alt="Playwright Terminal Screenshot for TC-A075" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\Project::getBudgetUsagePercentAttribute</td></tr>
+          <tr><th>Input Values</th><td>contract_amount = 500000.00, actual_spent = 200000.00</td></tr>
+          <tr><th>Expected Outcome</th><td>Numeric: 40.0%</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Computed: 40.0%</td></tr>
+          <tr><th>Database Snapshot</th><td>projects: {id: 88, contract_amount: 500000.00, actual_spent: 200000.00}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A076" data-result="pass" data-search="tc-a076 project management & progress engine app\models\project::gettotaldeployedmanpowerattribute project - gettotaldeployedmanpowerattribute summation across trades ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A076</span>
+            <span class="item-module">Project Management &amp; Progress Engine</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">Project - getTotalDeployedManpowerAttribute summation across trades</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A076.png" alt="Playwright Terminal Screenshot for TC-A076" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\Project::getTotalDeployedManpowerAttribute</td></tr>
+          <tr><th>Input Values</th><td>general_workers = 10, skilled_workers = 5, site_engineers = 2, sub_contractors = 3</td></tr>
+          <tr><th>Expected Outcome</th><td>Sum: 20 personnel deployed</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Summed total: 20 deployed</td></tr>
+          <tr><th>Database Snapshot</th><td>projects: {id: 89, general_workers: 10, skilled_workers: 5, site_engineers: 2, sub_contractors: 3}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A077" data-result="pass" data-search="tc-a077 project management & progress engine app\models\project::getcosthealthstatusattribute project - getcosthealthstatusattribute budget overrun check ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A077</span>
+            <span class="item-module">Project Management &amp; Progress Engine</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">Project - getCostHealthStatusAttribute budget overrun check</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A077.png" alt="Playwright Terminal Screenshot for TC-A077" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\Project::getCostHealthStatusAttribute</td></tr>
+          <tr><th>Input Values</th><td>contract_amount = 100000.00, actual_spent = 120000.00 (Spent &gt; Contract)</td></tr>
+          <tr><th>Expected Outcome</th><td>Return status 'overrun' (#ef4444)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Returned 'overrun'</td></tr>
+          <tr><th>Database Snapshot</th><td>projects: {id: 90, contract_amount: 100000.00, actual_spent: 120000.00}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item " data-id="TC-A078" data-result="pass" data-search="tc-a078 project management & progress engine app\models\project::getschedulehealthstatusattribute project - getschedulehealthstatusattribute completed status ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A078</span>
+            <span class="item-module">Project Management &amp; Progress Engine</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">1 ms</div>
+        </div>
+        <div class="item-title">Project - getScheduleHealthStatusAttribute completed status</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A078.png" alt="Playwright Terminal Screenshot for TC-A078" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\Project::getScheduleHealthStatusAttribute</td></tr>
+          <tr><th>Input Values</th><td>status = 'completed'</td></tr>
+          <tr><th>Expected Outcome</th><td>Return status 'completed' (#10b981)</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Returned 'completed'</td></tr>
+          <tr><th>Database Snapshot</th><td>projects: {id: 91, status: 'completed'}</td></tr>
+        </table>
+
+        
+      </div>
+
+      <div class="evidence-item is-fail" data-id="TC-A079" data-result="fail" data-search="tc-a079 trade transfers & specialized logistics app\http\controllers\projectmaterialtransfercontroller [defect #04] projectmaterialtransfer - inter-site transfer with 0.00 quantity guard defect-04">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A079</span>
+            <span class="item-module">Trade Transfers &amp; Specialized Logistics</span>
+            <span class="badge-fail">✕ FAILED (DEFECT-04)</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">11 ms</div>
+        </div>
+        <div class="item-title">ProjectMaterialTransfer - Inter-Site Transfer with 0.00 Quantity Guard</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A079.png" alt="Playwright Terminal Screenshot for TC-A079" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Http\Controllers\ProjectMaterialTransferController [DEFECT #04]</td></tr>
+          <tr><th>Input Values</th><td>source_project_id = 1, destination_project_id = 2, quantity_transferred = 0.00</td></tr>
+          <tr><th>Expected Outcome</th><td>HTTP 422 Unprocessable Entity; Reject transfer with validation error: 'The quantity transferred must be greater than 0'</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--red); font-weight: bold;">System processed transfer record with 0.00 qty and created empty/phantom transfer voucher in warehouse audit log (HTTP 200 OK)</td></tr>
+          <tr><th>Database Snapshot</th><td>project_material_transfers: {id: 99, voucher_no: 'TRF-EMPTY-01', quantity: 0.00} [PHANTOM ZERO VOUCHER CREATED]</td></tr>
+        </table>
+
+        
+        <div class="fail-alert-detail">
+          <b>DEFECT LOGGED [DEFECT-04]:</b> Zero-Quantity Transfer: Controller processed transfer with 0.00 quantity and generated phantom transfer voucher.<br>
+          <span style="color: var(--accent); margin-top: 4px; display: inline-block;"><b>Remediation in Beta (TC-B079):</b> Update validation rule to 'quantity_transferred' =&gt; 'required|numeric|gt:0'.</span>
+        </div>
+      </div>
+
+      <div class="evidence-item " data-id="TC-A080" data-result="pass" data-search="tc-a080 pre-construction estimator app\models\servicerequest::class servicerequest - pre-construction rough estimate calculation ">
+        <div class="item-top">
+          <div class="item-meta">
+            <span class="item-id">TC-A080</span>
+            <span class="item-module">Pre-Construction Estimator</span>
+            <span class="badge-pass">✓ PASSED</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted);">3 ms</div>
+        </div>
+        <div class="item-title">ServiceRequest - Pre-Construction Rough Estimate Calculation</div>
+        
+        <div class="img-container">
+          <img src="evidence_screenshots_alpha/TC-A080.png" alt="Playwright Terminal Screenshot for TC-A080" loading="lazy">
+        </div>
+
+        <table class="details-table">
+          <tr><th>Tested Component</th><td>App\Models\ServiceRequest::class</td></tr>
+          <tr><th>Input Values</th><td>floor_area_sqm = 250, unit_rate_per_sqm = 25000.00</td></tr>
+          <tr><th>Expected Outcome</th><td>Calculated estimated_cost = ₱6,250,000.00</td></tr>
+          <tr><th>Actual Outcome</th><td style="color: var(--green);">Calculated exact PHP 6,250,000.00</td></tr>
+          <tr><th>Database Snapshot</th><td>service_requests: {id: 12, client_name: 'Dr. R. Alcantara', floor_area: 250, estimated_total: 6250000.00}</td></tr>
+        </table>
+
+        
+      </div>
+  </div>
+
+  <script>
+    let currentFilter = 'all';
+
+    function filterItems(type, btn) {
+      currentFilter = type;
+      document.querySelectorAll('.btn-filter').forEach(b => {
+        b.classList.remove('active', 'active-fail');
+      });
+      if (type === 'fail') {
+        btn.classList.add('active-fail');
+      } else {
+        btn.classList.add('active');
+      }
+      applyFilters();
+    }
+
+    function searchItems() {
+      applyFilters();
+    }
+
+    function applyFilters() {
+      const q = document.getElementById('searchBox').value.toLowerCase().trim();
+      const items = document.querySelectorAll('.evidence-item');
+
+      items.forEach(item => {
+        const itemResult = item.getAttribute('data-result');
+        const itemSearch = item.getAttribute('data-search');
+
+        let matchesFilter = (currentFilter === 'all') || (itemResult === currentFilter);
+        let matchesSearch = !q || itemSearch.includes(q);
+
+        if (matchesFilter && matchesSearch) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>

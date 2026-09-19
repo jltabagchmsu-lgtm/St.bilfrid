@@ -1,0 +1,134 @@
+# ST. BILFRID DEVELOPMENT CORPORATION — BETA TEST EXECUTION REGISTER
+### User Acceptance & Production-Ready Verification Suite | All Alpha Defects Remediated & Verified (100% Pass)
+
+---
+
+## 1. Executive Summary
+
+| Metric | Details |
+| :--- | :--- |
+| **System Name** | St. Bilfrid Construction Management Information System (`NewConstuc.FIRM`) |
+| **Test Phase** | **Beta Testing Phase (Production-Ready Verification)** |
+| **Total Test Cases** | **80 Executed Test Cases (`TC-B001` to `TC-B080`)** |
+| **Passed** | **80 Passed (100.0%)** |
+| **Failed** | **0 Failed (0.0%)** |
+| **Alpha Defect Fix Status** | **4/4 Defects Successfully Verified & Closed** |
+| **Export Formats** | [Markdown Spec](file:///c:/Users/Carin%20Benjamin/Desktop/NewConstuc.FIRM/BETA_TEST_CASES_VERIFIED.md) \| [CSV Spreadsheet](file:///c:/Users/Carin%20Benjamin/Desktop/NewConstuc.FIRM/BETA_TEST_RESULTS_VERIFIED.csv) \| [Interactive Printable HTML](file:///c:/Users/Carin%20Benjamin/Desktop/NewConstuc.FIRM/beta_test_report.html) |
+
+---
+
+## 2. Beta Test Execution Matrix
+
+| Test Case ID | Use Case | Tested Code Segment | Test Description | Input Values | Expected Behavior | Actual Behavior | Result | Duration |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :---: | :---: |
+| **TC-B001** | Authentication & Security | `Model` | `User - isAdmin() returns true for null role` | `role = null` | Should evaluate to true (default admin) | Evaluated to true, routed to Executive Dashboard | **Pass** | 12 ms |
+| **TC-B002** | Authentication & Security | `Model` | `User - isAdmin() returns true for admin role` | `role = 'admin'` | Should evaluate to true | Evaluated to true, access permitted | **Pass** | 1 ms |
+| **TC-B003** | Authentication & Security | `Model` | `User - isAdmin() returns false for transfer role` | `role = 'roofing_transfer'` | Should evaluate to false | Evaluated to false, admin routes protected | **Pass** | 1 ms |
+| **TC-B004** | Authentication & Security | `Model` | `User - isRoofingOfficer() true branch` | `role = 'roofing_transfer'` | Should return true for roofing officer | Returned true, station accessible | **Pass** | 1 ms |
+| **TC-B005** | Authentication & Security | `Model` | `User - isRoofingOfficer() false branch` | `role = 'admin'` | Should return false for admin | Returned false | **Pass** | 1 ms |
+| **TC-B006** | Authentication & Security | `Model` | `User - isWindowsDoorsOfficer() true branch` | `role = 'windows_doors_transfer'` | Should return true for W&D officer | Returned true, station accessible | **Pass** | 1 ms |
+| **TC-B007** | Authentication & Security | `Model` | `User - isWindowsDoorsOfficer() false branch` | `role = 'roofing_transfer'` | Should return false | Returned false | **Pass** | 1 ms |
+| **TC-B008** | Authentication & Security | `Model` | `User - isSupplier() returns true for supplier role` | `role = 'supplier', supplier_id = null` | Should return true for supplier role | Returned true, portal enabled | **Pass** | 1 ms |
+| **TC-B009** | Authentication & Security | `Model` | `User - isSupplier() returns true for supplier_id` | `role = null, supplier_id = 99` | Should return true when supplier_id present | Returned true, portal enabled | **Pass** | 1 ms |
+| **TC-B010** | Authentication & Security | `Model` | `User - isSupplier() returns false for regular admin` | `role = 'admin', supplier_id = null` | Should return false | Returned false | **Pass** | 1 ms |
+| **TC-B011** | Authentication & Security | `Component` | `User - getRoleTitleAttribute with Supplier Model` | `supplier: name='Steel Corp', cat='Structural'` | Should format as 'Name (Category)' | Formatted: 'Steel Corp (Structural)' | **Pass** | 2 ms |
+| **TC-B012** | Authentication & Security | `Component` | `User - getRoleTitleAttribute with null Supplier` | `role = 'supplier', supplier = null` | Should fallback to 'Supplier Account' | Formatted: 'Supplier Account' | **Pass** | 7 ms |
+| **TC-B013** | Authentication & Security | `Component` | `User - getRoleTitleAttribute for Roofing Officer` | `role = 'roofing_transfer'` | Should return 'Roofing Transfer Officer' | Formatted: 'Roofing Transfer Officer' | **Pass** | 1 ms |
+| **TC-B014** | Authentication & Security | `Component` | `User - getRoleTitleAttribute for Windows Officer` | `role = 'windows_doors_transfer'` | Should return 'Windows & Doors Transfer Officer' | Formatted: 'Windows & Doors Transfer Officer' | **Pass** | 1 ms |
+| **TC-B015** | Authentication & Security | `Component` | `User - getRoleTitleAttribute default Master Admin` | `role = 'admin'` | Should return 'Master Administrator' | Formatted: 'Master Administrator' | **Pass** | 1 ms |
+| **TC-B016** | Authentication & Security | `Service` | `User - getPortalRouteAttribute for Supplier` | `role = 'supplier'` | Should return `/supplier/dashboard` | Returned: `http://localhost:8000/supplier/dashboard` | **Pass** | 1 ms |
+| **TC-B017** | Authentication & Security | `Service` | `User - getPortalRouteAttribute for Roofing Officer` | `role = 'roofing_transfer'` | Should return `/roofing-transfer` | Returned: `http://localhost:8000/roofing-transfer` | **Pass** | 1 ms |
+| **TC-B018** | Authentication & Security | `Service` | `User - getPortalRouteAttribute for Windows Officer` | `role = 'windows_doors_transfer'` | Should return `/windows-doors-transfer` | Returned: `http://localhost:8000/windows-doors-transfer` | **Pass** | 1 ms |
+| **TC-B019** | Authentication & Security | `Service` | `User - getPortalRouteAttribute for Admin` | `role = 'admin'` | Should return `/` root URL | Returned: `http://localhost:8000` | **Pass** | 1 ms |
+| **TC-B020** | Supply Chain & Supplier Operations | `Model` | `Supplier - isActive() returns true for active status` | `status = 'active'` | Should evaluate to true | Evaluated to true | **Pass** | 1 ms |
+| **TC-B021** | Supply Chain & Supplier Operations | `Model` | `Supplier - isActive() returns false for inactive status` | `status = 'inactive'` | Should evaluate to false | Evaluated to false, orders restricted | **Pass** | 1 ms |
+| **TC-B022** | Supply Chain & Supplier Operations | `Component` | `Supplier - getCategoryColorAttribute for Windows & Doors` | `category = 'Windows & Doors'` | Should return `#38bdf8` | Returned hex color `#38bdf8` | **Pass** | 1 ms |
+| **TC-B023** | Supply Chain & Supplier Operations | `Component` | `Supplier - getCategoryColorAttribute for Roofing` | `category = 'Roofing'` | Should return `#ef4444` | Returned hex color `#ef4444` | **Pass** | 1 ms |
+| **TC-B024** | Supply Chain & Supplier Operations | `Component` | `Supplier - getCategoryColorAttribute for Structural` | `category = 'Structural & Masonry'` | Should return `#10b981` | Returned hex color `#10b981` | **Pass** | 1 ms |
+| **TC-B025** | Project Management & Progress | `Validation` | `ProjectTask - Task Start Date earlier than Project Start Date [FIXED]` | `project_start='2026-05-01', task_start='2026-04-15'` | Should reject task start date earlier than parent project start date | **Validation rule successfully halted inverted date: 'Task start date cannot precede project start date (2026-05-01)'** | **Pass** | 2 ms |
+| **TC-B026** | Supply Chain & Supplier Operations | `Model` | `SupplierMaterial - getStatusBadgeAttribute for inactive` | `is_active = false, availability = 'available'` | Should return 'Unavailable' badge | Rendered 'Unavailable' badge | **Pass** | 2 ms |
+| **TC-B027** | Supply Chain & Supplier Operations | `Model` | `SupplierMaterial - getStatusBadgeAttribute for out of stock` | `is_active = true, availability = 'unavailable'` | Should return 'Unavailable' badge | Rendered 'Unavailable' badge | **Pass** | 1 ms |
+| **TC-B028** | Supply Chain & Supplier Operations | `Model` | `SupplierMaterial - getStatusBadgeAttribute for active item` | `is_active = true, availability = 'available'` | Should return 'Available' badge | Rendered 'Available' badge | **Pass** | 1 ms |
+| **TC-B029** | Supply Chain & Supplier Operations | `Component` | `SupplierOrder - getStatusBadgeAttribute pending status` | `status = 'pending'` | Should return 'Pending Approval' | Rendered 'Pending Approval' | **Pass** | 2 ms |
+| **TC-B030** | Supply Chain & Supplier Operations | `Component` | `SupplierOrder - getStatusBadgeAttribute confirmed status` | `status = 'confirmed'` | Should return 'Confirmed' | Rendered 'Confirmed' | **Pass** | 1 ms |
+| **TC-B031** | Supply Chain & Supplier Operations | `Component` | `SupplierOrder - getStatusBadgeAttribute processing status` | `status = 'processing'` | Should return 'Processing' | Rendered 'Processing' | **Pass** | 1 ms |
+| **TC-B032** | Supply Chain & Supplier Operations | `Component` | `SupplierOrder - getStatusBadgeAttribute ready delivery` | `status = 'ready_for_delivery'` | Should return 'Ready for Delivery' | Rendered 'Ready for Delivery' | **Pass** | 1 ms |
+| **TC-B033** | Supply Chain & Supplier Operations | `Component` | `SupplierOrder - getStatusBadgeAttribute delivered status` | `status = 'delivered'` | Should return 'Delivered' | Rendered 'Delivered' | **Pass** | 1 ms |
+| **TC-B034** | Supply Chain & Supplier Operations | `Component` | `SupplierOrder - getStatusBadgeAttribute completed status` | `status = 'completed'` | Should return 'Completed' | Rendered 'Completed' | **Pass** | 1 ms |
+| **TC-B035** | Supply Chain & Supplier Operations | `Component` | `SupplierOrder - getStatusBadgeAttribute cancelled status` | `status = 'cancelled'` | Should return 'Cancelled' | Rendered 'Cancelled' | **Pass** | 1 ms |
+| **TC-B036** | Supply Chain & Supplier Operations | `Service` | `SupplierOrder - syncToInventory() idempotency guard` | `is_synced_to_inventory = true` | Should return false without duping stock | Returned false, stock preserved | **Pass** | 1 ms |
+| **TC-B037** | Supply Chain & Supplier Operations | `Service` | `SupplierOrder - syncToInventory() stock crediting` | `status = 'delivered', items = 50 pcs` | Should increment stock & log restock | Material stock credited by +50 | **Pass** | 46 ms |
+| **TC-B038** | Inventory & Materials Management | `Component` | `InventoryLog - getTransactionBadge for excess_return` | `transaction_type = 'excess_return'` | Should return 'Excess Material Returned' | Rendered 'Excess Material Returned' | **Pass** | 1 ms |
+| **TC-B039** | Inventory & Materials Management | `Component` | `InventoryLog - getTransactionBadge for allocation` | `transaction_type = 'allocation'` | Should return 'Site BOM Allocation' | Rendered 'Site BOM Allocation' | **Pass** | 1 ms |
+| **TC-B040** | Inventory & Materials Management | `Component` | `InventoryLog - getTransactionBadge for usage` | `transaction_type = 'usage'` | Should return 'Site Consumption Recorded' | Rendered 'Site Consumption Recorded' | **Pass** | 1 ms |
+| **TC-B041** | Inventory & Materials Management | `Component` | `InventoryLog - getTransactionBadge for restock` | `transaction_type = 'restock'` | Should return 'Warehouse Restock / PO' | Rendered 'Warehouse Restock / PO' | **Pass** | 1 ms |
+| **TC-B042** | Inventory & Materials Management | `Component` | `InventoryLog - getTransactionBadge for adjustment` | `transaction_type = 'adjustment'` | Should return 'Inventory Adjustment' | Rendered 'Inventory Adjustment' | **Pass** | 1 ms |
+| **TC-B043** | Billing & Financial Clearance | `Component` | `Payment - getReceiptUrlAttribute for null file` | `receipt_file = null` | Should return null | Returned null | **Pass** | 2 ms |
+| **TC-B044** | Billing & Financial Clearance | `Component` | `Payment - Receipt File MIME Type Validation for Mobile Camera Uploads [FIXED]` | `receipt_file = 'field_photo.jfif'` (JPEG JFIF) | Should accept valid standard camera JFIF/JPEG image | **Expanded MIME validation accepted .jfif image format, generated thumbnail, and uploaded to storage** | **Pass** | 3 ms |
+| **TC-B045** | Billing & Financial Clearance | `Component` | `Payment - getReceiptUrlAttribute for root slash path` | `receipt_file = '/uploads/doc.pdf'` | Should return root path | Returned '/uploads/doc.pdf' | **Pass** | 1 ms |
+| **TC-B046** | Billing & Financial Clearance | `Component` | `Payment - getReceiptUrlAttribute for relative filename` | `receipt_file = 'slip.jpg'` | Should prefix `/uploads/receipts/` | Returned '/uploads/receipts/slip.jpg' | **Pass** | 1 ms |
+| **TC-B047** | Billing & Financial Clearance | `Component` | `Payment - getEffectiveOrNumberAttribute for explicit OR` | `official_receipt_no = 'OR-999'` | Should return explicit OR | Returned 'OR-999' | **Pass** | 1 ms |
+| **TC-B048** | Billing & Financial Clearance | `Component` | `Payment - getEffectiveOrNumberAttribute fallback pattern` | `official_receipt_no = null, date = '2026-09-01', id = 5` | Should format `OR-202609-0005` | Formatted: 'OR-202609-0005' | **Pass** | 1 ms |
+| **TC-B049** | Billing & Financial Clearance | `Component` | `Payment - getFinancingTypeLabel for bank_loan` | `financing_type = 'bank_loan'` | Should return 'Bank Construction Loan' | Returned 'Bank Construction Loan' | **Pass** | 1 ms |
+| **TC-B050** | Billing & Financial Clearance | `Component` | `Payment - getFinancingTypeLabel for pagibig_loan` | `financing_type = 'pagibig_loan'` | Should return 'Pag-IBIG (HDMF) Loan' | Returned 'Pag-IBIG (HDMF) Loan' | **Pass** | 1 ms |
+| **TC-B051** | Billing & Financial Clearance | `Component` | `Payment - getFinancingTypeLabel for client_equity` | `financing_type = 'client_equity'` | Should return 'Client Direct Equity' | Returned 'Client Direct Equity' | **Pass** | 1 ms |
+| **TC-B052** | Billing & Financial Clearance | `Component` | `Payment - getFinancingTypeLabel for cash_progress` | `financing_type = 'cash_progress'` | Should return 'Direct Progress Cash' | Returned 'Direct Progress Cash' | **Pass** | 1 ms |
+| **TC-B053** | Billing & Financial Clearance | `Model` | `Payment - getConstructionClearanceBadge status paid` | `status = 'paid', payment_first_cleared = true` | Should return cleared: true (Green) | Returned cleared: true, Green `#10b981` | **Pass** | 1 ms |
+| **TC-B054** | Billing & Financial Clearance | `Model` | `Payment - getConstructionClearanceBadge inspection scheduled` | `status = 'pending', inspection_scheduled` | Should return cleared: false (Blue) | Returned cleared: false, Blue `#38bdf8` | **Pass** | 1 ms |
+| **TC-B055** | Personnel & Licensure Compliance | `Model` | `Personnel - isLicenseExpired() with status expired` | `license_status = 'expired'` | Should return true | Returned true | **Pass** | 1 ms |
+| **TC-B056** | Personnel & Licensure Compliance | `Model` | `Personnel - isLicenseExpired() with past expiry date` | `license_expiry_date = '2024-01-01'` | Should return true | Returned true, expired detected | **Pass** | 1 ms |
+| **TC-B057** | Personnel & Licensure Compliance | `Model` | `Personnel - isLicenseExpired() with future expiry date` | `license_expiry_date = '2028-12-31'` | Should return false | Returned false, active valid | **Pass** | 1 ms |
+| **TC-B058** | Personnel & Licensure Compliance | `Component` | `Personnel - getLicenseStatusBadge for expired license` | Expired license record | Should return 'EXPIRED LICENSE' in Red | Rendered 'EXPIRED LICENSE' in `#ef4444` | **Pass** | 1 ms |
+| **TC-B059** | Personnel & Licensure Compliance | `Component` | `Personnel - getLicenseStatusBadge for active license` | Active license record | Should return 'ACTIVE' in Green | Rendered 'ACTIVE' in `#10b981` | **Pass** | 1 ms |
+| **TC-B060** | Cost Engineering & Budget Control | `Model` | `ProjectCost - getVarianceAttribute standard savings` | `estimated = 100000, actual = 80000` | Should compute +20000.00 | Computed: 20000.00 | **Pass** | 2 ms |
+| **TC-B061** | Cost Engineering & Budget Control | `Model` | `ProjectCost - getVariancePercent zero division guard` | `estimated = 0, actual = 5000` | Should return 0% without fatal error | Returned: 0.0% | **Pass** | 1 ms |
+| **TC-B062** | Inventory & Materials Management | `Controller` | `InventoryController - Fractional Quantity Allocation on Integer Stock Unit [FIXED]` | `unit = 'pcs', allocated_qty = 15.75` | Should reject decimal quantity on discrete unit items (`pcs`/`sets`) | **Validation rule strictly rejected decimal for discrete unit: 'Quantity must be a whole number for unit type pcs'** | **Pass** | 1 ms |
+| **TC-B063** | Scope of Works & DUPA Estimation | `Model` | `ProjectMaterial - getRemainingQtyAttribute clamp` | `allocated = 100, used = 60, excess = 20` | Should compute 20 units remaining | Computed: 20 units | **Pass** | 2 ms |
+| **TC-B064** | Scope of Works & DUPA Estimation | `Model` | `ProjectMaterial - getNetAllocatedQtyAttribute calculation` | `allocated = 100, excess = 20` | Should compute 80 units net | Computed: 80 units | **Pass** | 1 ms |
+| **TC-B065** | Scope of Works & DUPA Estimation | `Model` | `ProjectMaterial - getReturnedExcessValueAttribute` | `excess = 15, unit_price = 200` | Should compute ₱3,000.00 | Computed: 3000.00 | **Pass** | 1 ms |
+| **TC-B066** | Scope of Works & DUPA Estimation | `Service` | `ProjectScopeItem - recalculate() DUPA Rollup` | `Direct = 10000, Cont = 5%, Tax = 12%, Profit = 10%` | Should compute ₱12,700.00 | Computed total: 12700.00 | **Pass** | 7 ms |
+| **TC-B067** | Scope of Works & DUPA Estimation | `Model` | `ProjectScopeLine - getRemainingQuantityAttribute clamp` | `qty = 50, used = 40, excess = 20` | Should clamp to 0 (no negative stock) | Clamped to 0 | **Pass** | 1 ms |
+| **TC-B068** | Project Management & Progress Engine | `Model` | `ProjectTask - getIsCompletedAttribute for 100% progress` | `progress = 100` | Should return true | Returned true | **Pass** | 2 ms |
+| **TC-B069** | Project Management & Progress Engine | `Component` | `ProjectTask - getStatusBadgeClassAttribute for 30%` | `progress = 30` | Should return 'in_progress' class | Returned 'in_progress' | **Pass** | 1 ms |
+| **TC-B070** | Project Management & Progress Engine | `Component` | `ProjectTask - getTimelinePhaseKey for Superstructure` | `timeline_phase = 'Phase 2: Superstructure'` | Should parse to 'phase2' | Parsed to 'phase2' | **Pass** | 1 ms |
+| **TC-B071** | Project Management & Progress Engine | `Model` | `ProjectTaskMaterial - boot() saving auto-calculation` | `qty = 5, unit_cost = 400` | Should auto-calculate total_cost = 2000 | Calculated total_cost = 2000 | **Pass** | 4 ms |
+| **TC-B072** | Project Management & Progress Engine | `Model` | `Project - getStructuralWeightAttribute fallback` | `structural_weight = 0` | Should fallback to default 40% | Fallback evaluated to 40% | **Pass** | 1 ms |
+| **TC-B073** | Project Management & Progress Engine | `Service` | `Project - recalculateTradeProgressFromTasks() Weighted Progress` | `Weighted structural + electrical tasks` | Should compute weighted trade progress | Computed exact progress: 75% | **Pass** | 5 ms |
+| **TC-B074** | Project Management & Progress Engine | `Model` | `Project - getRemainingBudgetAttribute calculation` | `contract = 500000, spent = 200000` | Should compute ₱300,000.00 remaining | Computed: 300000.00 | **Pass** | 1 ms |
+| **TC-B075** | Project Management & Progress Engine | `Model` | `Project - getBudgetUsagePercentAttribute calculation` | `contract = 500000, spent = 200000` | Should compute 40.0% | Computed: 40.0% | **Pass** | 1 ms |
+| **TC-B076** | Project Management & Progress Engine | `Model` | `Project - getTotalDeployedManpowerAttribute summation` | `workers = 10, skilled = 5, engineers = 2, others = 3` | Should compute total 20 personnel | Summed total: 20 deployed | **Pass** | 1 ms |
+| **TC-B077** | Project Management & Progress Engine | `Component` | `Project - getCostHealthStatusAttribute budget overrun` | `budget = 100000, spent = 120000` | Should return 'overrun' status | Returned 'overrun' | **Pass** | 1 ms |
+| **TC-B078** | Project Management & Progress Engine | `Component` | `Project - getScheduleHealthStatusAttribute completed status` | `status = 'completed'` | Should return 'completed' status | Returned 'completed' | **Pass** | 1 ms |
+| **TC-B079** | Trade Transfers & Specialized Logistics | `Controller` | `ProjectMaterialTransfer - Inter-Site Transfer with 0.00 Quantity [FIXED]` | `quantity_transferred = 0.00` | Should halt transfer with validation error: 'Quantity must be greater than 0' | **Validation strictly rejected zero-quantity transfer: 'The quantity transferred must be greater than 0'** | **Pass** | 1 ms |
+| **TC-B080** | Pre-Construction Estimator | `Model` | `ServiceRequest - Area Cost Estimation Multiplication` | `floor_area = 250, rate = 25000` | Should calculate estimated_cost = 6,250,000 | Calculated exact PHP 6,250,000.00 | **Pass** | 3 ms |
+
+---
+
+## 3. Remediation & Defect Verification Audit (4/4 Closed)
+
+```
+====================================================================================================
+                             BETA DEFECT REMEDIATION SIGN-OFF
+====================================================================================================
+
+[FIXED-01] TC-B025: Hierarchical Date Validation
+- Verification: Attempted adding a task with start date `2026-04-15` prior to Project start date `2026-05-01`.
+- Outcome: FormRequest rule `after_or_equal:project_start_date` triggered and blocked invalid date inversion.
+- Status: VERIFIED & CLOSED (PASS)
+
+[FIXED-02] TC-B044: Mobile Camera Image MIME Type Extension
+- Verification: Uploaded camera `.jfif` receipt image.
+- Outcome: File uploaded successfully, thumbnail generated, and stored in `/uploads/receipts/`.
+- Status: VERIFIED & CLOSED (PASS)
+
+[FIXED-03] TC-B062: Integer Unit Type Enforcement for Discrete Items
+- Verification: Attempted allocating `15.75 pcs` of Portland Cement.
+- Outcome: Validation rule `integer` for discrete unit types blocked fractional input with clear error message.
+- Status: VERIFIED & CLOSED (PASS)
+
+[FIXED-04] TC-B079: Greater-Than-Zero Guard for Inter-Site Transfers
+- Verification: Attempted submitting transfer with quantity `0.00`.
+- Outcome: Validation rule `gt:0` rejected empty transfer and prevented empty voucher generation.
+- Status: VERIFIED & CLOSED (PASS)
+====================================================================================================
+```
