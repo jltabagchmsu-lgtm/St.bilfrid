@@ -76,3 +76,10 @@ $RECYCLE.BIN/
 *.tmp
 *.bak
 .phpunit.result.cache
+
+# Playwright / test artifacts (generated, never commit)
+playwright-report/
+test-results/
+playwright/.auth/
+test-results*.xml
+junit*.xml
