@@ -231,16 +231,15 @@
                                 </div>
                             </div>
 
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
-                                <div class="form-group" style="margin-bottom: 0;">
-                                    <label class="form-label" style="font-size: 0.75rem;">Client / Developer Name <span style="color: var(--primary-red);">*</span></label>
-                                    <input type="text" name="client_name" class="form-input" placeholder="e.g. Apex Health Systems Inc." required style="font-size: 0.85rem;">
-                                </div>
-                                <div class="form-group" style="margin-bottom: 0;">
-                                    <label class="form-label" style="font-size: 0.75rem;">Site Location / Address</label>
-                                    <input type="text" name="location" class="form-input" placeholder="e.g. North Triangle Commercial District, QC" style="font-size: 0.85rem;">
-                                </div>
+                            <div class="form-group" style="margin-bottom: 12px;">
+                                <label class="form-label" style="font-size: 0.75rem;">Client / Developer Name <span style="color: var(--primary-red);">*</span></label>
+                                <input type="text" name="client_name" class="form-input" placeholder="e.g. Apex Health Systems Inc." required style="font-size: 0.85rem;">
                             </div>
+
+                            @include('partials.philippine_address_picker', [
+                                'prefix' => 'create',
+                                'label' => 'Site Location / Project Address'
+                            ])
 
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
                                 <div class="form-group" style="margin-bottom: 0;">
@@ -647,17 +646,15 @@
                             </div>
                         </div>
 
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
-                            <div class="form-group" style="margin-bottom: 0;">
-                                <label class="form-label" style="font-size: 0.75rem;">Client / Developer Name <span style="color: var(--primary-red);">*</span></label>
-                                <input type="text" name="client_name" id="edit_client_name" class="form-input" required style="font-size: 0.85rem;">
-                            </div>
-
-                            <div class="form-group" style="margin-bottom: 0;">
-                                <label class="form-label" style="font-size: 0.75rem;">Site Location / Address</label>
-                                <input type="text" name="location" id="edit_location" class="form-input" style="font-size: 0.85rem;">
-                            </div>
+                        <div class="form-group" style="margin-bottom: 12px;">
+                            <label class="form-label" style="font-size: 0.75rem;">Client / Developer Name <span style="color: var(--primary-red);">*</span></label>
+                            <input type="text" name="client_name" id="edit_client_name" class="form-input" required style="font-size: 0.85rem;">
                         </div>
+
+                        @include('partials.philippine_address_picker', [
+                            'prefix' => 'edit',
+                            'label' => 'Site Location / Project Address'
+                        ])
 
                         <div style="display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 12px;">
                             <div class="form-group" style="margin-bottom: 0;">
@@ -1073,7 +1070,12 @@
         document.getElementById('edit_title').value = project.title || '';
         document.getElementById('edit_project_code').value = project.project_code || '';
         document.getElementById('edit_client_name').value = project.client_name || '';
-        document.getElementById('edit_location').value = project.location || '';
+        if (typeof setPhAddress === 'function') {
+            setPhAddress('edit', project.location || '');
+        } else {
+            const locInput = document.getElementById('edit_location');
+            if (locInput) locInput.value = project.location || '';
+        }
         document.getElementById('edit_project_type').value = project.project_type || 'Commercial Construction';
         document.getElementById('edit_finish_tier').value = project.finish_tier || 'standard';
         document.getElementById('edit_status').value = project.status || 'in_progress';
@@ -1662,6 +1664,10 @@
 
     document.addEventListener('DOMContentLoaded', function() {
         initProjectModalRooms();
+        if (typeof initPhAddressPicker === 'function') {
+            initPhAddressPicker('create');
+            initPhAddressPicker('edit');
+        }
     });
 </script>
 @endsection

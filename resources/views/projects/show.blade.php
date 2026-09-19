@@ -2620,17 +2620,16 @@
                 </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-                <div class="form-group">
-                    <label class="form-label">Client / Developer Name</label>
-                    <input type="text" name="client_name" class="form-input" value="{{ $project->client_name }}" required>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Site Location / Address</label>
-                    <input type="text" name="location" class="form-input" value="{{ $project->location }}">
-                </div>
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label class="form-label">Client / Developer Name <span style="color: var(--primary-red);">*</span></label>
+                <input type="text" name="client_name" class="form-input" value="{{ $project->client_name }}" required>
             </div>
+
+            @include('partials.philippine_address_picker', [
+                'prefix' => 'show_edit',
+                'label' => 'Site Location / Project Address',
+                'currentValue' => $project->location
+            ])
 
             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
                 <div class="form-group">
@@ -4230,6 +4229,12 @@
             alertBox.style.display = 'none';
         }
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof initPhAddressPicker === 'function') {
+            initPhAddressPicker('show_edit', @json($project->location ?? ''));
+        }
+    });
 </script>
 
 @include('projects.partials.excess_materials_modal')
