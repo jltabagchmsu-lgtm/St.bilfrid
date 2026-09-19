@@ -48,12 +48,15 @@
 
                 <!-- Header Notice & Controls -->
                 <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; background: rgba(16, 185, 129, 0.06); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 8px; padding: 12px 16px;">
-                    <div style="font-size: 0.825rem; color: var(--text-secondary);">
+                    <div style="font-size: 0.825rem; color: var(--text-secondary); flex: 1; min-width: 260px;">
                         <strong style="color: #059669;">Material Inventory Reconciliation:</strong> Select which materials to return to Central Warehouse Inventory stock. Quantities are prefilled with remaining on-site units.
                     </div>
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <button type="button" class="btn-secondary" onclick="toggleSelectAllExcess(true)" style="font-size: 0.75rem; padding: 4px 10px;">Select All</button>
-                        <button type="button" class="btn-secondary" onclick="toggleSelectAllExcess(false)" style="font-size: 0.75rem; padding: 4px 10px;">Deselect All</button>
+                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                        <div style="position: relative; min-width: 200px;">
+                            <input type="text" id="excessSiteMatSearch" placeholder="🔍 Search site materials..." oninput="filterSiteExcessMaterials(this.value)" class="form-input" style="font-size: 0.775rem; padding: 6px 12px; height: 32px; background: #ffffff; border-radius: 6px;">
+                        </div>
+                        <button type="button" class="btn-secondary" onclick="toggleSelectAllExcess(true)" style="font-size: 0.75rem; padding: 6px 10px; height: 32px;">Select All</button>
+                        <button type="button" class="btn-secondary" onclick="toggleSelectAllExcess(false)" style="font-size: 0.75rem; padding: 6px 10px; height: 32px;">Deselect All</button>
                     </div>
                 </div>
 
@@ -139,22 +142,69 @@
                 </div>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
-                    <div class="form-group">
-                        <label class="form-label">Select from Central Catalog <span style="font-weight: normal; color: var(--text-muted);">(Optional)</span></label>
-                        <select name="material_id" id="customExcessMatSelect" class="form-select" onchange="handleCustomMaterialSelect(this)">
-                            <option value="">-- Choose Existing Warehouse Catalog Item --</option>
-                            @php
-                                $catalogList = (isset($materialsCatalog) && count($materialsCatalog)) ? $materialsCatalog : \App\Models\Material::orderBy('name')->get();
-                            @endphp
-                            @foreach($catalogList as $cm)
-                                <option value="{{ $cm->id }}" data-name="{{ $cm->name }}" data-category="{{ $cm->category }}" data-unit="{{ $cm->unit }}" data-cost="{{ $cm->unit_cost }}">
-                                    {{ $cm->name }} ({{ $cm->material_code }}) - ₱{{ number_format($cm->unit_cost, 2) }}/{{ $cm->unit }}
-                                </option>
-                            @endforeach
-                        </select>
+                    <!-- Central Catalog Search Bar Combobox Area -->
+                    <div class="form-group" style="position: relative; margin-bottom: 0;">
+                        <label class="form-label" style="display: flex; justify-content: space-between; align-items: center;">
+                            <span>Search Central Catalog <span style="font-weight: normal; color: var(--text-muted);">(Optional)</span></span>
+                            <span id="catalogSelectedBadge" style="display: none; font-size: 0.7rem; color: #059669; font-weight: 700; background: #ecfdf5; padding: 2px 8px; border-radius: 9999px; border: 1px solid #a7f3d0;">✓ Linked to Catalog</span>
+                        </label>
+
+                        <!-- Hidden form field for material_id -->
+                        <input type="hidden" name="material_id" id="customExcessMatId" value="">
+
+                        <!-- Search Input Field Container -->
+                        <div style="position: relative;">
+                            <div style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #64748b; pointer-events: none; display: flex; align-items: center;">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+                            </div>
+
+                            <input type="text" 
+                                   id="catalogLiveSearchInput" 
+                                   class="form-input" 
+                                   placeholder="🔍 Search material name, code (e.g. wire, pipe, rebar, purlins)..." 
+                                   autocomplete="off"
+                                   style="padding-left: 36px; padding-right: 32px; font-size: 0.85rem; font-weight: 600; background: #ffffff; border: 1.5px solid #cbd5e1; cursor: pointer;"
+                                   onclick="openCatalogDropdown()"
+                                   onfocus="openCatalogDropdown()"
+                                   oninput="filterCatalogDropdown(this.value)">
+
+                            <!-- Clear Button -->
+                            <button type="button" 
+                                    id="catalogClearBtn" 
+                                    onclick="clearCatalogSelection()" 
+                                    style="display: none; position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; padding: 2px 6px; line-height: 1;" 
+                                    title="Clear Selection">
+                                &times;
+                            </button>
+                        </div>
+
+                        <!-- Search Results Floating Menu -->
+                        <div id="catalogSearchResultsMenu" 
+                             style="display: none; position: absolute; top: calc(100% + 4px); left: 0; right: 0; max-height: 290px; overflow-y: auto; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1); z-index: 1050; padding: 4px;">
+                            
+                            <div style="padding: 6px 10px; font-size: 0.725rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border-radius: 4px 4px 0 0;">
+                                <span id="catalogResultsCount">Warehouse Catalog</span>
+                                <span style="font-size: 0.675rem; color: #64748b; font-weight: normal;">Click item to autofill</span>
+                            </div>
+
+                            <div id="catalogResultsItemsList" style="padding: 2px 0;">
+                                <!-- Dynamic item list -->
+                            </div>
+
+                            <div onclick="selectCustomUnlistedOption()" 
+                                 style="padding: 9px 12px; border-top: 1px dashed #e2e8f0; font-size: 0.8rem; color: #0284c7; cursor: pointer; display: flex; align-items: center; gap: 8px; background: #f0f9ff; border-radius: 0 0 6px 6px; margin-top: 2px; font-weight: 600;"
+                                 onmouseover="this.style.background='#e0f2fe'" 
+                                 onmouseout="this.style.background='#f0f9ff'">
+                                <span>➕</span>
+                                <span>Item not in catalog? Click here to type custom unlisted specs</span>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" style="margin-bottom: 0;">
                         <label class="form-label">Material Name / Specification</label>
                         <input type="text" name="custom_material_name" id="customExcessMatName" class="form-input" placeholder="e.g. Portland Cement Type 1 / 40kg" required>
                     </div>
@@ -412,25 +462,174 @@
         document.getElementById('summarySelectedCount').innerText = totalItems + ' Items';
         document.getElementById('summaryTotalUnits').innerText = numberFormat(totalUnits) + ' Units';
         document.getElementById('summaryTotalValuation').innerText = '₱' + numberFormat(totalValuation, 2);
+    @php
+        $catalogList = (isset($materialsCatalog) && count($materialsCatalog)) ? $materialsCatalog : \App\Models\Material::orderBy('name')->get();
+    @endphp
+
+    const CENTRAL_CATALOG_DATA = [
+        @foreach($catalogList as $cm)
+        {
+            id: {{ $cm->id }},
+            name: {!! json_encode($cm->name) !!},
+            code: {!! json_encode($cm->material_code ?? '') !!},
+            category: {!! json_encode($cm->category ?? 'General Building Materials') !!},
+            unit: {!! json_encode($cm->unit ?? 'pcs') !!},
+            cost: {{ (float)($cm->unit_cost ?? 0) }}
+        },
+        @endforeach
+    ];
+
+    function openCatalogDropdown() {
+        const menu = document.getElementById('catalogSearchResultsMenu');
+        if (menu) {
+            menu.style.display = 'block';
+            filterCatalogDropdown(document.getElementById('catalogLiveSearchInput').value || '');
+        }
     }
 
-    function handleCustomMaterialSelect(select) {
-        const opt = select.options[select.selectedIndex];
-        if (opt && opt.value) {
-            document.getElementById('customExcessMatName').value = opt.dataset.name || '';
-            document.getElementById('customExcessMatUnit').value = opt.dataset.unit || '';
-            document.getElementById('customExcessMatCost').value = opt.dataset.cost || '';
-            if (opt.dataset.category) {
-                const catSelect = document.getElementById('customExcessMatCat');
+    function closeCatalogDropdown() {
+        const menu = document.getElementById('catalogSearchResultsMenu');
+        if (menu) {
+            menu.style.display = 'none';
+        }
+    }
+
+    function filterCatalogDropdown(query) {
+        const q = (query || '').toLowerCase().trim();
+        const container = document.getElementById('catalogResultsItemsList');
+        const countLabel = document.getElementById('catalogResultsCount');
+        const clearBtn = document.getElementById('catalogClearBtn');
+
+        if (clearBtn) {
+            clearBtn.style.display = (query && query.length > 0) ? 'block' : 'none';
+        }
+
+        if (!container) return;
+
+        const filtered = (CENTRAL_CATALOG_DATA || []).filter(item => {
+            if (!q) return true;
+            return (item.name && item.name.toLowerCase().includes(q)) ||
+                   (item.code && item.code.toLowerCase().includes(q)) ||
+                   (item.category && item.category.toLowerCase().includes(q));
+        });
+
+        if (countLabel) {
+            countLabel.innerText = filtered.length + ' Materials Found';
+        }
+
+        if (filtered.length === 0) {
+            container.innerHTML = `
+                <div style="padding: 16px 12px; text-align: center; color: var(--text-muted); font-size: 0.825rem;">
+                    <div>No catalog materials matched "<strong>${escapeHtml(query)}</strong>"</div>
+                    <div style="font-size: 0.75rem; margin-top: 4px; color: #0284c7;">You can still enter it manually in the fields below!</div>
+                </div>`;
+            return;
+        }
+
+        let html = '';
+        filtered.forEach(item => {
+            const catColor = getCategoryBadgeColor(item.category);
+            html += `
+                <div class="catalog-item-row" 
+                     onclick="selectCatalogItem(${item.id})" 
+                     style="padding: 9px 12px; border-bottom: 1px solid #f1f5f9; cursor: pointer; transition: background 0.15s ease; border-radius: 4px;"
+                     onmouseover="this.style.background='#f1f5f9'"
+                     onmouseout="this.style.background='transparent'">
+                    <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px;">
+                        <strong style="color: var(--text-primary); font-size: 0.85rem;">${escapeHtml(item.name)}</strong>
+                        <span style="font-family: var(--font-mono); font-size: 0.8rem; font-weight: 800; color: #059669; white-space: nowrap;">
+                            ₱${numberFormat(item.cost, 2)} <span style="font-size: 0.7rem; font-weight: normal; color: var(--text-muted);">/ ${escapeHtml(item.unit)}</span>
+                        </span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px; margin-top: 3px; font-size: 0.725rem; color: var(--text-muted); flex-wrap: wrap;">
+                        <span style="font-family: var(--font-mono); color: #0284c7; font-weight: 700;">${escapeHtml(item.code || 'MAT-CAT')}</span>
+                        <span>&bull;</span>
+                        <span class="spec-chip" style="font-size: 0.65rem; color: ${catColor}; border-color: ${catColor}44; padding: 1px 6px;">${escapeHtml(item.category)}</span>
+                    </div>
+                </div>`;
+        });
+
+        container.innerHTML = html;
+    }
+
+    function selectCatalogItem(itemId) {
+        const item = (CENTRAL_CATALOG_DATA || []).find(x => x.id === itemId);
+        if (!item) return;
+
+        document.getElementById('customExcessMatId').value = item.id;
+        document.getElementById('catalogLiveSearchInput').value = item.name + (item.code ? ' (' + item.code + ')' : '');
+        document.getElementById('customExcessMatName').value = item.name;
+        document.getElementById('customExcessMatUnit').value = item.unit;
+        document.getElementById('customExcessMatCost').value = item.cost;
+
+        const clearBtn = document.getElementById('catalogClearBtn');
+        if (clearBtn) clearBtn.style.display = 'block';
+
+        const badge = document.getElementById('catalogSelectedBadge');
+        if (badge) badge.style.display = 'inline-block';
+
+        if (item.category) {
+            const catSelect = document.getElementById('customExcessMatCat');
+            if (catSelect) {
                 for (let i = 0; i < catSelect.options.length; i++) {
-                    if (catSelect.options[i].value === opt.dataset.category) {
+                    const optVal = catSelect.options[i].value.toLowerCase();
+                    const itmCat = item.category.toLowerCase();
+                    if (optVal === itmCat || itmCat.includes(optVal) || optVal.includes(itmCat)) {
                         catSelect.selectedIndex = i;
                         break;
                     }
                 }
             }
         }
+
+        closeCatalogDropdown();
     }
+
+    function clearCatalogSelection() {
+        document.getElementById('customExcessMatId').value = '';
+        document.getElementById('catalogLiveSearchInput').value = '';
+        document.getElementById('customExcessMatName').value = '';
+        document.getElementById('customExcessMatUnit').value = '';
+        document.getElementById('customExcessMatCost').value = '';
+
+        const clearBtn = document.getElementById('catalogClearBtn');
+        if (clearBtn) clearBtn.style.display = 'none';
+
+        const badge = document.getElementById('catalogSelectedBadge');
+        if (badge) badge.style.display = 'none';
+
+        filterCatalogDropdown('');
+    }
+
+    function selectCustomUnlistedOption() {
+        clearCatalogSelection();
+        closeCatalogDropdown();
+        const nameInput = document.getElementById('customExcessMatName');
+        if (nameInput) nameInput.focus();
+    }
+
+    function filterSiteExcessMaterials(query) {
+        const q = (query || '').toLowerCase().trim();
+        const rows = document.querySelectorAll('.excess-mat-row');
+        rows.forEach(row => {
+            const text = row.innerText.toLowerCase();
+            if (!q || text.includes(q)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+
+    // Close catalog dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+        const menu = document.getElementById('catalogSearchResultsMenu');
+        const input = document.getElementById('catalogLiveSearchInput');
+        const clearBtn = document.getElementById('catalogClearBtn');
+        if (menu && input && !menu.contains(e.target) && e.target !== input && e.target !== clearBtn) {
+            menu.style.display = 'none';
+        }
+    });
 
     function getCategoryBadgeColor(cat) {
         switch (cat) {
