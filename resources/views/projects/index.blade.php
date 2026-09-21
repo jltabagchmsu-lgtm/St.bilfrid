@@ -103,11 +103,11 @@
                     <div class="progress-track" style="height: 6px; margin-bottom: 6px;">
                         <div class="progress-bar progress-bar-structural" style="width: {{ $prj->overall_progress }}%; background: {{ $prj->overall_progress >= 100 ? '#10b981' : ($prj->overall_progress > 0 ? '#d97706' : '#64748b') }};"></div>
                     </div>
-                    <div style="font-size: 0.7rem; color: #0f172a; display: flex; justify-content: space-between;">
-                        <span style="color: #0f172a;">S: {{ $prj->structural_progress }}%</span>
-                        <span style="color: #0f172a;">E: {{ $prj->electrical_progress }}%</span>
-                        <span style="color: #0f172a;">P: {{ $prj->piping_progress }}%</span>
-                        <span style="color: #0f172a;">F: {{ $prj->finishing_progress }}%</span>
+                    <div style="font-size: 0.7rem; color: var(--text-muted); display: flex; justify-content: space-between;">
+                        <span style="color: #38bdf8; font-weight: 600;">S: {{ $prj->structural_progress }}%</span>
+                        <span style="color: #f59e0b; font-weight: 600;">E: {{ $prj->electrical_progress }}%</span>
+                        <span style="color: #10b981; font-weight: 600;">P: {{ $prj->piping_progress }}%</span>
+                        <span style="color: #ec4899; font-weight: 600;">F: {{ $prj->finishing_progress }}%</span>
                     </div>
                 </td>
                 <td>

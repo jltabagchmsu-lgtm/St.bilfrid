@@ -477,36 +477,36 @@
                 <td>
                     <strong style="color: var(--text-primary); font-size: 0.95rem;">{{ $prj->title }}</strong>
                     <div style="font-family: var(--font-mono); font-size: 0.775rem; color: var(--primary-red); font-weight: 700;">{{ $prj->project_code }}</div>
-                    <div style="font-size: 0.75rem; color: var(--text-muted);">{{ $prj->project_type }}</div>
+                    <div style="font-size: 0.75rem; color: #0f172a;">{{ $prj->project_type }}</div>
                 </td>
                 <td>
-                    <strong style="color: var(--text-secondary);">{{ $prj->client_name }}</strong>
+                    <strong style="color: #0f172a;">{{ $prj->client_name }}</strong>
                     <div style="margin-top: 4px; display: flex; flex-direction: column; gap: 2px;">
-                        <span class="spec-chip" style="font-size: 0.7rem;">{{ number_format($prj->land_area_sqm) }} m² Land</span>
-                        <span class="spec-chip" style="font-size: 0.7rem;">{{ number_format($prj->floor_area_sqm) }} m² Floor</span>
+                        <span class="spec-chip" style="font-size: 0.7rem; color: #0f172a;">{{ number_format($prj->land_area_sqm) }} m² Land</span>
+                        <span class="spec-chip" style="font-size: 0.7rem; color: #0f172a;">{{ number_format($prj->floor_area_sqm) }} m² Floor</span>
                     </div>
                 </td>
                 <td>
                     <div style="font-family: var(--font-mono);">
-                        <strong style="color: var(--text-primary);">₱{{ number_format($incurredCost, 2) }}</strong>
-                        <div style="font-size: 0.75rem; color: var(--text-muted);">of ₱{{ number_format($contractBudget, 2) }}</div>
-                        <div style="font-size: 0.75rem; color: {{ $prj->gross_margin >= 0 ? '#059669' : '#dc2626' }}; font-weight: 700;">
+                        <strong style="color: #0f172a;">₱{{ number_format($incurredCost, 2) }}</strong>
+                        <div style="font-size: 0.75rem; color: #0f172a;">of ₱{{ number_format($contractBudget, 2) }}</div>
+                        <div style="font-size: 0.75rem; color: #0f172a; font-weight: 700;">
                             Margin: ₱{{ number_format($prj->gross_margin, 2) }}
                         </div>
                     </div>
                 </td>
                 <td>
-                    <span class="health-badge health-{{ $healthStatus }}">
+                    <span class="health-badge health-{{ $healthStatus }}" style="color: #0f172a; font-weight: 700;">
                         {{ $healthLabel }}
                     </span>
-                    <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 4px;">
+                    <div style="font-size: 0.7rem; color: #0f172a; margin-top: 4px;">
                         {{ round($progRatio * 100) }}% Done vs {{ round($spentRatio * 100) }}% Spent
                     </div>
                 </td>
                 <td style="min-width: 170px;">
                     <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;">
-                        <span>Overall Execution</span>
-                        <strong style="font-family: var(--font-mono); color: var(--text-primary);">{{ $prj->overall_progress }}%</strong>
+                        <span style="color: #0f172a;">Overall Execution</span>
+                        <strong style="font-family: var(--font-mono); color: #0f172a;">{{ $prj->overall_progress }}%</strong>
                     </div>
                     <div class="progress-track" style="margin-bottom: 6px;">
                         <div class="progress-bar progress-bar-overall" style="width: {{ $prj->overall_progress }}%;"></div>
@@ -520,14 +520,14 @@
                     </div>
                 </td>
                 <td>
-                    <span class="badge badge-{{ $prj->status }}">{{ str_replace('_', ' ', $prj->status) }}</span>
+                    <span class="badge badge-{{ $prj->status }}" style="color: #0f172a; font-weight: 700;">{{ str_replace('_', ' ', $prj->status) }}</span>
                 </td>
                 <td>
                     <div style="display: flex; flex-direction: column; gap: 4px;">
                         <a href="{{ route('projects.show', $prj->id) }}" class="btn-primary" style="font-size: 0.75rem; padding: 5px 10px; text-align: center;">
                             Master Summary &rarr;
                         </a>
-                        <a href="{{ route('costing.index', ['project_id' => $prj->id]) }}" class="btn-secondary" style="font-size: 0.75rem; padding: 4px 8px; text-align: center;">
+                        <a href="{{ route('costing.index', ['project_id' => $prj->id]) }}" class="btn-secondary" style="font-size: 0.75rem; padding: 4px 8px; text-align: center; color: #0f172a;">
                             Costing
                         </a>
                     </div>
