@@ -19,21 +19,20 @@ Welcome to **St. Bilfrid Development Corporation** (Construction Project Monitor
 
 ## 🚀 2. How to Launch the System Locally
 
-### Option A: Caddy Web Server (Recommended)
-- **1-Click Launch**: Double-click [run-caddy.bat](file:///c:/Users/Carin%20Benjamin/Desktop/NewConstuc.FIRM/run-caddy.bat) or [run.bat](file:///c:/Users/Carin%20Benjamin/Desktop/NewConstuc.FIRM/run.bat)
-- **PowerShell**: `.\run-caddy.ps1`
-- **Manual**:
-  ```powershell
-  # 1. Start PHP FastCGI:
-  & 'C:\xampp\php\php-cgi.exe' -b 127.0.0.1:9000
-  # 2. Start Caddy:
-  caddy run --config Caddyfile
-  ```
-
-### Option B: Laravel Artisan Server
+### Option A: Laravel Artisan Server (Standard Development)
 ```powershell
-& 'C:\xampp\php\php.exe' artisan serve --host=127.0.0.1 --port=8000
+php artisan serve
 ```
+
+### Option B: Caddy Web Server (High Performance)
+1. Start PHP FastCGI:
+   ```powershell
+   & 'C:\xampp\php\php-cgi.exe' -b 127.0.0.1:9000
+   ```
+2. Start Caddy:
+   ```powershell
+   caddy run --config Caddyfile
+   ```
 
 Open your browser at 👉 **[http://localhost:8000](http://localhost:8000)** or **[http://127.0.0.1:8000](http://127.0.0.1:8000)**
 

@@ -4,21 +4,16 @@ A Laravel-powered Management & Monitoring System tailored for construction firms
 
 ---
 
-## 🚀 How to Run the System on Caddy Web Server
+## 🚀 How to Run the System
 
-### Option A: 1-Click Windows Launcher (Fastest)
-Double-click either:
-- **`run-caddy.bat`** (Directly launches PHP FastCGI + Caddy and opens your browser)
-- **`run.bat`** (Interactive launcher with Caddy or Artisan server choice)
-
-Or run in PowerShell:
+### Option A: Laravel Artisan Server (Standard)
 ```powershell
-.\run-caddy.ps1
+php artisan serve
 ```
 
 ---
 
-### Option B: Manual Terminal Execution
+### Option B: Caddy Web Server (High Performance)
 
 #### 1. Start PHP FastCGI Backend
 In a terminal / PowerShell window:
