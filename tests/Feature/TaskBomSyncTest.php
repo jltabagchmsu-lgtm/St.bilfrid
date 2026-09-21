@@ -158,4 +158,53 @@ class TaskBomSyncTest extends TestCase
             'allocated_qty' => 50,
         ]);
     }
+
+    /**
+     * Test Searching Purchase Orders by Supplier Name
+     */
+    public function test_search_orders_by_supplier_name()
+    {
+        $supplier = \App\Models\Supplier::create([
+            'name' => 'Colorsteel Roofing Solutions Corp.',
+            'code' => 'SUP-COLOR',
+            'category' => 'Roofing & Metal Sheets',
+            'email' => 'sales@colorsteel.test',
+            'status' => 'active',
+        ]);
+
+        $otherSupplier = \App\Models\Supplier::create([
+            'name' => 'Titan Structural Steel Corp.',
+            'code' => 'SUP-TITAN',
+            'category' => 'Structural Steel',
+            'email' => 'orders@titansteel.test',
+            'status' => 'active',
+        ]);
+
+        $order1 = \App\Models\SupplierOrder::create([
+            'order_code' => 'PO-2026-001',
+            'supplier_id' => $supplier->id,
+            'ordered_by_user_id' => $this->adminUser->id,
+            'delivery_location' => 'Main Warehouse Depot',
+            'requested_delivery_date' => now()->addDays(5),
+            'total_amount' => 85000,
+            'status' => 'confirmed',
+        ]);
+
+        $order2 = \App\Models\SupplierOrder::create([
+            'order_code' => 'PO-2026-002',
+            'supplier_id' => $otherSupplier->id,
+            'ordered_by_user_id' => $this->adminUser->id,
+            'delivery_location' => 'Site San Juan',
+            'requested_delivery_date' => now()->addDays(7),
+            'total_amount' => 150000,
+            'status' => 'confirmed',
+        ]);
+
+        // Search "Colorsteel"
+        $response = $this->actingAs($this->adminUser)->get(route('admin.suppliers.orders', ['search' => 'Colorsteel']));
+        $response->assertStatus(200);
+        $response->assertSee('PO-2026-001');
+        $response->assertSee('Colorsteel Roofing Solutions Corp.');
+        $response->assertDontSee('PO-2026-002');
+    }
 }

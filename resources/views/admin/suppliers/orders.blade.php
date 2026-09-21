@@ -12,7 +12,7 @@
         <!-- Left: Search Box -->
         <div style="display: flex; align-items: center; gap: 10px; flex: 1; min-width: 260px;">
             <div style="position: relative; width: 100%; max-width: 360px;">
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search Order ID, destination, remarks..." class="input-field search-input-with-icon" style="width: 100%; padding-left: 38px !important; font-size: 0.85rem;">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search Supplier Name, Order Code, Material, Site..." class="input-field search-input-with-icon" style="width: 100%; padding-left: 38px !important; font-size: 0.85rem;">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
             </div>
             <button type="submit" class="btn-secondary" style="padding: 8px 14px; font-size: 0.8rem;">

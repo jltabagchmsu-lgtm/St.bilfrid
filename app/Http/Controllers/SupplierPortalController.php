@@ -251,13 +251,26 @@ class SupplierPortalController extends Controller
             $query->where('status', $request->status);
         }
 
-        // Search order code
+        // Search order code, project, or materials
         if ($request->filled('search')) {
             $search = trim($request->search);
             $query->where(function ($q) use ($search) {
                 $q->where('order_code', 'like', "%{$search}%")
                   ->orWhere('delivery_location', 'like', "%{$search}%")
-                  ->orWhere('notes', 'like', "%{$search}%");
+                  ->orWhere('notes', 'like', "%{$search}%")
+                  ->orWhereHas('project', function ($pq) use ($search) {
+                      $pq->where('title', 'like', "%{$search}%")
+                         ->orWhere('project_code', 'like', "%{$search}%")
+                         ->orWhere('location', 'like', "%{$search}%");
+                  })
+                  ->orWhereHas('items', function ($iq) use ($search) {
+                      $iq->where('material_name', 'like', "%{$search}%")
+                         ->orWhereHas('material', function ($mq) use ($search) {
+                             $mq->where('material_code', 'like', "%{$search}%")
+                                ->orWhere('name', 'like', "%{$search}%")
+                                ->orWhere('specifications', 'like', "%{$search}%");
+                         });
+                  });
             });
         }
 

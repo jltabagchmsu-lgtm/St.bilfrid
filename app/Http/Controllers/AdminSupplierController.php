@@ -156,7 +156,26 @@ class AdminSupplierController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('order_code', 'like', "%{$search}%")
                   ->orWhere('delivery_location', 'like', "%{$search}%")
-                  ->orWhere('notes', 'like', "%{$search}%");
+                  ->orWhere('notes', 'like', "%{$search}%")
+                  ->orWhereHas('supplier', function ($sq) use ($search) {
+                      $sq->where('name', 'like', "%{$search}%")
+                         ->orWhere('code', 'like', "%{$search}%")
+                         ->orWhere('category', 'like', "%{$search}%")
+                         ->orWhere('contact_person', 'like', "%{$search}%");
+                  })
+                  ->orWhereHas('project', function ($pq) use ($search) {
+                      $pq->where('title', 'like', "%{$search}%")
+                         ->orWhere('project_code', 'like', "%{$search}%")
+                         ->orWhere('location', 'like', "%{$search}%");
+                  })
+                  ->orWhereHas('items', function ($iq) use ($search) {
+                      $iq->where('material_name', 'like', "%{$search}%")
+                         ->orWhereHas('material', function ($mq) use ($search) {
+                             $mq->where('material_code', 'like', "%{$search}%")
+                                ->orWhere('name', 'like', "%{$search}%")
+                                ->orWhere('specifications', 'like', "%{$search}%");
+                         });
+                  });
             });
         }
 
