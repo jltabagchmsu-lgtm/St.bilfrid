@@ -103,4 +103,67 @@ class Payment extends Model
             'cleared' => false,
         ];
     }
+
+    public function getCumulativePaidUpToThisAttribute(): float
+    {
+        if (!$this->project_id) {
+            return (float) $this->amount;
+        }
+
+        $dateStr = $this->payment_date ? $this->payment_date->format('Y-m-d') : date('Y-m-d');
+        $thisId = $this->id ?? 0;
+
+        return (float) Payment::where('project_id', $this->project_id)
+            ->where('status', 'paid')
+            ->where(function($q) use ($dateStr, $thisId) {
+                $q->whereDate('payment_date', '<', $dateStr)
+                  ->orWhere(function($sub) use ($dateStr, $thisId) {
+                      $sub->whereDate('payment_date', '=', $dateStr);
+                      if ($thisId > 0) {
+                          $sub->where('id', '<=', $thisId);
+                      }
+                  });
+            })
+            ->sum('amount');
+    }
+
+    public function getPriorPaidBeforeThisAttribute(): float
+    {
+        if (!$this->project_id) {
+            return 0;
+        }
+
+        $dateStr = $this->payment_date ? $this->payment_date->format('Y-m-d') : date('Y-m-d');
+        $thisId = $this->id ?? 0;
+
+        return (float) Payment::where('project_id', $this->project_id)
+            ->where('status', 'paid')
+            ->where(function($q) use ($dateStr, $thisId) {
+                $q->whereDate('payment_date', '<', $dateStr)
+                  ->orWhere(function($sub) use ($dateStr, $thisId) {
+                      $sub->whereDate('payment_date', '=', $dateStr);
+                      if ($thisId > 0) {
+                          $sub->where('id', '<', $thisId);
+                      } else {
+                          $sub->whereRaw('1 = 0');
+                      }
+                  });
+            })
+            ->sum('amount');
+    }
+
+    public function getRemainingBalanceAfterPaymentAttribute(): float
+    {
+        if (!$this->project || $this->project->contract_budget <= 0) {
+            return 0;
+        }
+
+        $cumulative = $this->cumulative_paid_up_to_this;
+        // If this payment is not marked 'paid' yet, calculate what the balance would be if settled
+        if ($this->status !== 'paid') {
+            $cumulative += (float) $this->amount;
+        }
+
+        return max(0, round($this->project->contract_budget - $cumulative, 2));
+    }
 }

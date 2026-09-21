@@ -1708,7 +1708,8 @@
                     <th>Official Receipt / Invoice</th>
                     <th>Client / Payer Entity</th>
                     <th>Billing Milestone / Stage</th>
-                    <th>Amount (₱)</th>
+                    <th>Amount Paid (₱)</th>
+                    <th>Remaining Balance After Payment</th>
                     <th>Payment Date & Method</th>
                     <th>Reference / Check No.</th>
                     <th>Status</th>
@@ -1717,6 +1718,9 @@
             </thead>
             <tbody>
                 @forelse($project->payments as $payment)
+                    @php
+                        $remAfter = $payment->remaining_balance_after_payment;
+                    @endphp
                     <tr>
                         <td>
                             <strong style="color: var(--primary-red); font-family: var(--font-mono);">{{ $payment->effective_or_number }}</strong>
@@ -1735,6 +1739,20 @@
                         </td>
                         <td style="font-family: var(--font-mono); font-size: 1.15rem; font-weight: 800; color: {{ $payment->status === 'paid' ? '#059669' : '#d97706' }}; letter-spacing: -0.015em;">
                             ₱{{ number_format($payment->amount, 2) }}
+                        </td>
+                        <td style="font-family: var(--font-mono);">
+                            @if($remAfter <= 0)
+                                <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.75rem; font-weight: 800; color: #047857; background: #dcfce7; padding: 3px 8px; border-radius: 4px; border: 1px solid #86efac;">
+                                    ✓ ₱0.00 Fully Settled
+                                </span>
+                            @else
+                                <div style="font-size: 0.95rem; font-weight: 800; color: #b45309;">
+                                    ₱{{ number_format($remAfter, 2) }}
+                                </div>
+                                <div style="font-size: 0.7rem; color: #64748b;">
+                                    {{ round(($payment->cumulative_paid_up_to_this / max(1, $project->contract_budget)) * 100, 1) }}% total settled
+                                </div>
+                            @endif
                         </td>
                         <td>
                             <div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-secondary);">
@@ -1773,7 +1791,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 24px;">
+                        <td colspan="9" style="text-align: center; color: var(--text-muted); padding: 24px;">
                             No client payments or billing records created yet. Click "+ Record Payment & Issue OR" to log milestone settlements.
                         </td>
                     </tr>
@@ -2112,6 +2130,41 @@
                 </div>
             </div>
 
+            <!-- Client Account & Contract Balance Summary Box -->
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 14px 16px; margin-bottom: 18px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px dashed #cbd5e1; padding-bottom: 8px;">
+                    <span style="font-size: 0.775rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.04em;">Client Account & Contract Breakdown</span>
+                    <span style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 4px; font-weight: 700;">{{ $project->client_name }}</span>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                    <div>
+                        <div style="font-size: 0.725rem; color: #64748b;">Total Contract Value:</div>
+                        <div style="font-size: 0.95rem; font-weight: 800; color: #0f172a; font-family: var(--font-mono);">₱{{ number_format($project->contract_budget, 2) }}</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.725rem; color: #64748b;">Total Already Settled:</div>
+                        <div style="font-size: 0.95rem; font-weight: 800; color: #059669; font-family: var(--font-mono);">₱{{ number_format($totalPaid, 2) }}</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.725rem; color: #64748b;">Current Unpaid Balance:</div>
+                        <div style="font-size: 0.95rem; font-weight: 800; color: #d97706; font-family: var(--font-mono);">₱{{ number_format($uncollectedBalance, 2) }}</div>
+                    </div>
+                </div>
+
+                <!-- Dynamic Live Calculation Card -->
+                <div id="projectModalLiveBalanceCard" style="background: #ffffff; border: 1.5px solid #0284c7; border-radius: 8px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                    <div>
+                        <div style="font-size: 0.75rem; font-weight: 700; color: #0284c7; text-transform: uppercase;">Remaining Balance After This Payment:</div>
+                        <div id="projectModalLiveRemainingVal" style="font-size: 1.3rem; font-weight: 900; color: #0284c7; font-family: var(--font-mono);">
+                            ₱{{ number_format($uncollectedBalance, 2) }}
+                        </div>
+                    </div>
+                    <div id="projectModalLiveStatusBadge" style="font-size: 0.775rem; font-weight: 700; color: #0369a1; background: #f0f9ff; padding: 4px 10px; border-radius: 6px; border: 1px solid #bae6fd;">
+                        Type payment amount below
+                    </div>
+                </div>
+            </div>
+
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                 <div class="form-group">
                     <label class="form-label">Client / Payer Entity Name <span style="color:#ef4444;">*</span></label>
@@ -2119,8 +2172,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Settled / Paid Amount (₱) <span style="color:#ef4444;">*</span></label>
-                    <input type="number" step="0.01" name="amount" class="form-input" placeholder="₱ 0.00" required>
+                    <label class="form-label">Payment Amount Given by Client (₱) <span style="color:#ef4444;">*</span></label>
+                    <input type="number" step="0.01" min="0" name="amount" id="projectPaymentAmountInput" class="form-input" placeholder="₱ 0.00" oninput="calcProjectPaymentRemainingBalance()" required style="font-weight: 800; font-size: 1.05rem; color: #0f172a;">
                 </div>
             </div>
 
@@ -4058,6 +4111,56 @@
             console.error('Error removing photo:', err);
             alert('Network error removing photo: ' + err.message);
         });
+    }
+
+    // Client Payment & Remaining Balance Live Calculator
+    function calcProjectPaymentRemainingBalance() {
+        const contractBudget = {{ (float) $project->contract_budget }};
+        const totalPaid = {{ (float) $totalPaid }};
+        const currentBalance = {{ (float) $uncollectedBalance }};
+        
+        const amountInput = document.getElementById('projectPaymentAmountInput');
+        if (!amountInput) return;
+        const amountVal = parseFloat(amountInput.value) || 0;
+        
+        const remainingAfter = Math.max(0, currentBalance - amountVal);
+        const liveRemainingVal = document.getElementById('projectModalLiveRemainingVal');
+        const liveCard = document.getElementById('projectModalLiveBalanceCard');
+        const liveBadge = document.getElementById('projectModalLiveStatusBadge');
+        
+        if (!liveRemainingVal) return;
+
+        liveRemainingVal.innerText = '₱' + remainingAfter.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        
+        if (amountVal <= 0) {
+            liveCard.style.borderColor = '#0284c7';
+            liveRemainingVal.style.color = '#0284c7';
+            liveBadge.innerHTML = 'Type payment amount below';
+            liveBadge.style.color = '#0369a1';
+            liveBadge.style.background = '#f0f9ff';
+            liveBadge.style.borderColor = '#bae6fd';
+        } else if (amountVal >= currentBalance && currentBalance > 0) {
+            liveCard.style.borderColor = '#059669';
+            liveRemainingVal.style.color = '#059669';
+            const overpaid = amountVal - currentBalance;
+            if (overpaid > 0) {
+                liveBadge.innerHTML = '✓ Fully Paid (Advance Credit: ₱' + overpaid.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ')';
+            } else {
+                liveBadge.innerHTML = '✓ 100% Fully Settled & Cleared';
+            }
+            liveBadge.style.color = '#047857';
+            liveBadge.style.background = '#dcfce7';
+            liveBadge.style.borderColor = '#86efac';
+        } else {
+            liveCard.style.borderColor = '#d97706';
+            liveRemainingVal.style.color = '#d97706';
+            const newTotalPaid = totalPaid + amountVal;
+            const pct = contractBudget > 0 ? Math.min(100, Math.round((newTotalPaid / contractBudget) * 100)) : 0;
+            liveBadge.innerHTML = 'Partial Payment (' + pct + '% Settled)';
+            liveBadge.style.color = '#b45309';
+            liveBadge.style.background = '#fef3c7';
+            liveBadge.style.borderColor = '#fde68a';
+        }
     }
 
     function openChecklistJsonModal() {

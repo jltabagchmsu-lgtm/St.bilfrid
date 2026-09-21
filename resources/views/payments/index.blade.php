@@ -113,7 +113,8 @@
                     <th>Project & Client</th>
                     <th>Billing Milestone / Stage</th>
                     <th>Payment Date & Method</th>
-                    <th>Amount (₱)</th>
+                    <th>Amount Paid (₱)</th>
+                    <th>Remaining Balance After Payment</th>
                     <th>Reference / Check No.</th>
                     <th>Status</th>
                     <th style="text-align: right;">Actions</th>
@@ -121,6 +122,9 @@
             </thead>
             <tbody>
                 @forelse($payments as $pay)
+                @php
+                    $remAfter = $pay->remaining_balance_after_payment;
+                @endphp
                 <tr>
                     <td>
                         <strong style="font-family: var(--font-mono); color: #ef4444; font-size: 0.95rem;">{{ $pay->effective_or_number }}</strong>
@@ -147,6 +151,20 @@
                         <strong style="font-family: var(--font-mono); font-size: 1.15rem; font-weight: 800; color: {{ $pay->status === 'paid' ? '#059669' : '#d97706' }}; letter-spacing: -0.015em;">
                             ₱{{ number_format($pay->amount, 2) }}
                         </strong>
+                    </td>
+                    <td style="font-family: var(--font-mono);">
+                        @if($remAfter <= 0)
+                            <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.75rem; font-weight: 800; color: #047857; background: #dcfce7; padding: 3px 8px; border-radius: 4px; border: 1px solid #86efac;">
+                                ✓ ₱0.00 Fully Settled
+                            </span>
+                        @else
+                            <div style="font-size: 0.95rem; font-weight: 800; color: #b45309;">
+                                ₱{{ number_format($remAfter, 2) }}
+                            </div>
+                            <div style="font-size: 0.7rem; color: #64748b;">
+                                {{ round(($pay->cumulative_paid_up_to_this / max(1, $pay->project->contract_budget)) * 100, 1) }}% total settled
+                            </div>
+                        @endif
                     </td>
                     <td>
                         @if($pay->bank_reference)
@@ -216,11 +234,49 @@
                         <option value="{{ $p->id }}" 
                                 data-client="{{ $p->client_name }}"
                                 data-phase="{{ $p->current_phase }}"
+                                data-contract="{{ (float) $p->contract_budget }}"
+                                data-paid="{{ (float) $p->total_paid_sales }}"
+                                data-balance="{{ (float) $p->uncollected_balance }}"
                                 {{ ($selectedProjectId ?? '') == $p->id ? 'selected' : '' }}>
                             {{ $p->project_code }} - {{ $p->title }} ({{ $p->client_name }})
                         </option>
                     @endforeach
                 </select>
+            </div>
+
+            <!-- Client Account & Remaining Balance Dynamic Card -->
+            <div id="genModalProjectInfoCard" style="display: none; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 14px 16px; margin-bottom: 18px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px dashed #cbd5e1; padding-bottom: 8px;">
+                    <span style="font-size: 0.775rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.04em;">Client Account & Contract Breakdown</span>
+                    <span id="genModalClientBadge" style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 4px; font-weight: 700;"></span>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                    <div>
+                        <div style="font-size: 0.725rem; color: #64748b;">Total Contract Value:</div>
+                        <div id="genModalContractVal" style="font-size: 0.95rem; font-weight: 800; color: #0f172a; font-family: var(--font-mono);">₱0.00</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.725rem; color: #64748b;">Total Already Settled:</div>
+                        <div id="genModalPaidVal" style="font-size: 0.95rem; font-weight: 800; color: #059669; font-family: var(--font-mono);">₱0.00</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.725rem; color: #64748b;">Current Unpaid Balance:</div>
+                        <div id="genModalBalanceVal" style="font-size: 0.95rem; font-weight: 800; color: #d97706; font-family: var(--font-mono);">₱0.00</div>
+                    </div>
+                </div>
+
+                <!-- Dynamic Live Calculation Card -->
+                <div id="genModalLiveBalanceCard" style="background: #ffffff; border: 1.5px solid #0284c7; border-radius: 8px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                    <div>
+                        <div style="font-size: 0.75rem; font-weight: 700; color: #0284c7; text-transform: uppercase;">Remaining Balance After This Payment:</div>
+                        <div id="genModalLiveRemainingVal" style="font-size: 1.3rem; font-weight: 900; color: #0284c7; font-family: var(--font-mono);">
+                            ₱0.00
+                        </div>
+                    </div>
+                    <div id="genModalLiveStatusBadge" style="font-size: 0.775rem; font-weight: 700; color: #0369a1; background: #f0f9ff; padding: 4px 10px; border-radius: 6px; border: 1px solid #bae6fd;">
+                        Type payment amount below
+                    </div>
+                </div>
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
@@ -242,8 +298,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Settled / Paid Amount (₱) <span style="color:#ef4444;">*</span></label>
-                    <input type="number" step="0.01" name="amount" class="form-input" placeholder="₱ 0.00" required>
+                    <label class="form-label">Payment Amount Given by Client (₱) <span style="color:#ef4444;">*</span></label>
+                    <input type="number" step="0.01" min="0" name="amount" id="inputGenPaymentAmount" class="form-input" placeholder="₱ 0.00" oninput="calcGeneralPaymentRemainingBalance()" required style="font-weight: 800; font-size: 1.05rem; color: #0f172a;">
                 </div>
             </div>
 
@@ -326,11 +382,81 @@
 
     function updateProjectClientName(select) {
         const option = select.options[select.selectedIndex];
-        if (option && option.dataset.client) {
-            document.getElementById('inputPayerName').value = option.dataset.client;
+        const card = document.getElementById('genModalProjectInfoCard');
+        if (option && option.value) {
+            document.getElementById('inputPayerName').value = option.dataset.client || '';
             if (option.dataset.phase) {
                 document.getElementById('inputPaymentStage').value = option.dataset.phase;
             }
+            if (card) {
+                card.style.display = 'block';
+                document.getElementById('genModalClientBadge').innerText = option.dataset.client || '';
+                
+                const contract = parseFloat(option.dataset.contract) || 0;
+                const paid = parseFloat(option.dataset.paid) || 0;
+                const balance = parseFloat(option.dataset.balance) || 0;
+
+                document.getElementById('genModalContractVal').innerText = '₱' + contract.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                document.getElementById('genModalPaidVal').innerText = '₱' + paid.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                document.getElementById('genModalBalanceVal').innerText = '₱' + balance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+                calcGeneralPaymentRemainingBalance();
+            }
+        } else {
+            if (card) card.style.display = 'none';
+        }
+    }
+
+    function calcGeneralPaymentRemainingBalance() {
+        const select = document.getElementById('selectPaymentProj');
+        if (!select || !select.value) return;
+        const option = select.options[select.selectedIndex];
+        if (!option) return;
+
+        const contract = parseFloat(option.dataset.contract) || 0;
+        const paid = parseFloat(option.dataset.paid) || 0;
+        const balance = parseFloat(option.dataset.balance) || 0;
+
+        const amountInput = document.getElementById('inputGenPaymentAmount');
+        const amountVal = parseFloat(amountInput ? amountInput.value : 0) || 0;
+
+        const remainingAfter = Math.max(0, balance - amountVal);
+        const liveRemainingVal = document.getElementById('genModalLiveRemainingVal');
+        const liveCard = document.getElementById('genModalLiveBalanceCard');
+        const liveBadge = document.getElementById('genModalLiveStatusBadge');
+
+        if (!liveRemainingVal) return;
+
+        liveRemainingVal.innerText = '₱' + remainingAfter.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+        if (amountVal <= 0) {
+            liveCard.style.borderColor = '#0284c7';
+            liveRemainingVal.style.color = '#0284c7';
+            liveBadge.innerHTML = 'Type payment amount below';
+            liveBadge.style.color = '#0369a1';
+            liveBadge.style.background = '#f0f9ff';
+            liveBadge.style.borderColor = '#bae6fd';
+        } else if (amountVal >= balance && balance > 0) {
+            liveCard.style.borderColor = '#059669';
+            liveRemainingVal.style.color = '#059669';
+            const overpaid = amountVal - balance;
+            if (overpaid > 0) {
+                liveBadge.innerHTML = '✓ Fully Paid (Advance Credit: ₱' + overpaid.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ')';
+            } else {
+                liveBadge.innerHTML = '✓ 100% Fully Settled & Cleared';
+            }
+            liveBadge.style.color = '#047857';
+            liveBadge.style.background = '#dcfce7';
+            liveBadge.style.borderColor = '#86efac';
+        } else {
+            liveCard.style.borderColor = '#d97706';
+            liveRemainingVal.style.color = '#d97706';
+            const newTotalPaid = paid + amountVal;
+            const pct = contract > 0 ? Math.min(100, Math.round((newTotalPaid / contract) * 100)) : 0;
+            liveBadge.innerHTML = 'Partial Payment (' + pct + '% Settled)';
+            liveBadge.style.color = '#b45309';
+            liveBadge.style.background = '#fef3c7';
+            liveBadge.style.borderColor = '#fde68a';
         }
     }
 

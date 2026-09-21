@@ -289,12 +289,50 @@
         <!-- Amount Box -->
         <div class="amount-highlight-box">
             <div>
-                <div style="font-size: 11px; font-weight: 700; color: #065f46; text-transform: uppercase;">Total Amount Paid to Firm</div>
+                <div style="font-size: 11px; font-weight: 700; color: #065f46; text-transform: uppercase;">Total Amount Paid in This Receipt</div>
                 <div class="amount-figure">₱{{ number_format($payment->amount, 2) }}</div>
             </div>
             <div class="stamp-box">
                 {{ strtoupper($payment->status) === 'PAID' ? 'OFFICIALLY CLEARED' : strtoupper($payment->status) }}
             </div>
+        </div>
+
+        <!-- Client Account & Remaining Balance Breakdown -->
+        <div style="margin-top: 14px; border: 1px solid #cbd5e1; border-radius: 6px; overflow: hidden; background: #fafbfc;">
+            <div style="background: #f1f5f9; padding: 7px 12px; font-weight: 800; font-size: 11px; color: #1e293b; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid #cbd5e1;">
+                Statement of Client Account & Remaining Balance Breakdown
+            </div>
+            <table style="width: 100%; border-collapse: collapse; font-size: 11.5px;">
+                <tbody>
+                    <tr style="border-bottom: 1px solid #f1f5f9;">
+                        <td style="padding: 5px 12px; color: #64748b;">Total Project Contract Value:</td>
+                        <td style="padding: 5px 12px; text-align: right; font-weight: 700; font-family: 'JetBrains Mono'; color: #0f172a;">₱{{ number_format($payment->project->contract_budget, 2) }}</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #f1f5f9;">
+                        <td style="padding: 5px 12px; color: #64748b;">Total Previously Settled:</td>
+                        <td style="padding: 5px 12px; text-align: right; font-weight: 700; font-family: 'JetBrains Mono'; color: #059669;">₱{{ number_format($payment->prior_paid_before_this, 2) }}</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #f1f5f9; background: #f0fdf4;">
+                        <td style="padding: 5px 12px; font-weight: 700; color: #166534;">Amount Paid in This Official Receipt:</td>
+                        <td style="padding: 5px 12px; text-align: right; font-weight: 800; font-family: 'JetBrains Mono'; color: #047857; font-size: 12.5px;">₱{{ number_format($payment->amount, 2) }}</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #f1f5f9;">
+                        <td style="padding: 5px 12px; color: #64748b;">Cumulative Cleared to Date:</td>
+                        <td style="padding: 5px 12px; text-align: right; font-weight: 700; font-family: 'JetBrains Mono'; color: #0f172a;">₱{{ number_format($payment->cumulative_paid_up_to_this, 2) }}</td>
+                    </tr>
+                    <tr style="background: {{ $payment->remaining_balance_after_payment <= 0 ? '#dcfce7' : '#fffbeb' }}; font-weight: 800;">
+                        <td style="padding: 7px 12px; color: {{ $payment->remaining_balance_after_payment <= 0 ? '#166534' : '#92400e' }}; font-size: 12px;">
+                            Remaining Client Balance After This Payment:
+                        </td>
+                        <td style="padding: 7px 12px; text-align: right; font-family: 'JetBrains Mono'; color: {{ $payment->remaining_balance_after_payment <= 0 ? '#047857' : '#b45309' }}; font-size: 13px;">
+                            ₱{{ number_format($payment->remaining_balance_after_payment, 2) }}
+                            @if($payment->remaining_balance_after_payment <= 0)
+                                <span style="font-size: 9px; background: #166534; color: #fff; padding: 1px 5px; border-radius: 3px; margin-left: 4px;">PAID IN FULL</span>
+                            @endif
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
         @if($payment->receipt_file)

@@ -296,4 +296,79 @@ class TaskBomSyncTest extends TestCase
         $this->assertNull($task->photo_path);
         $this->assertNull($task->photo_caption);
     }
+
+    /**
+     * Test client remaining balance calculation after milestone payments
+     */
+    public function test_client_remaining_balance_after_payment_calculation()
+    {
+        $project = Project::create([
+            'project_code' => 'PRJ-BAL-01',
+            'title' => 'Client Balance Test Project',
+            'client_name' => 'Dwight Schrute',
+            'status' => 'in_progress',
+            'land_area_sqm' => 500,
+            'floor_area_sqm' => 320,
+            'start_date' => now(),
+            'end_date' => now()->addMonths(6),
+            'contract_budget' => 6000000,
+        ]);
+
+        // Payment 1: ₱2,000,000 Downpayment
+        $payment1 = \App\Models\Payment::create([
+            'project_id' => $project->id,
+            'official_receipt_no' => 'OR-2026-B01',
+            'invoice_no' => 'INV-2026-B01',
+            'payer_name' => 'Dwight Schrute',
+            'amount' => 2000000,
+            'payment_date' => now()->subDays(10),
+            'payment_stage' => 'Downpayment (33.3%)',
+            'payment_method' => 'Bank Transfer',
+            'status' => 'paid',
+        ]);
+
+        $this->assertEquals(2000000, $payment1->cumulative_paid_up_to_this);
+        $this->assertEquals(0, $payment1->prior_paid_before_this);
+        $this->assertEquals(4000000, $payment1->remaining_balance_after_payment);
+
+        // Payment 2: ₱2,500,000 Structural Milestone
+        $payment2 = \App\Models\Payment::create([
+            'project_id' => $project->id,
+            'official_receipt_no' => 'OR-2026-B02',
+            'invoice_no' => 'INV-2026-B02',
+            'payer_name' => 'Dwight Schrute',
+            'amount' => 2500000,
+            'payment_date' => now()->subDays(2),
+            'payment_stage' => 'Structural Frame Completion',
+            'payment_method' => 'Bank Transfer',
+            'status' => 'paid',
+        ]);
+
+        $this->assertEquals(4500000, $payment2->cumulative_paid_up_to_this);
+        $this->assertEquals(2000000, $payment2->prior_paid_before_this);
+        $this->assertEquals(1500000, $payment2->remaining_balance_after_payment);
+
+        // Payment 3: ₱1,500,000 Final Handover Balance
+        $payment3 = \App\Models\Payment::create([
+            'project_id' => $project->id,
+            'official_receipt_no' => 'OR-2026-B03',
+            'invoice_no' => 'INV-2026-B03',
+            'payer_name' => 'Dwight Schrute',
+            'amount' => 1500000,
+            'payment_date' => now(),
+            'payment_stage' => 'Final Turnover Settlement',
+            'payment_method' => 'Cheque',
+            'status' => 'paid',
+        ]);
+
+        $this->assertEquals(6000000, $payment3->cumulative_paid_up_to_this);
+        $this->assertEquals(4500000, $payment3->prior_paid_before_this);
+        $this->assertEquals(0, $payment3->remaining_balance_after_payment);
+
+        // Verify Printable OR View renders the remaining balance
+        $orResponse = $this->actingAs($this->adminUser)->get(route('payments.printReceipt', $payment2->id));
+        $orResponse->assertStatus(200);
+        $orResponse->assertSee('Statement of Client Account & Remaining Balance Breakdown', false);
+        $orResponse->assertSee('1,500,000.00');
+    }
 }
