@@ -223,7 +223,7 @@
                 @forelse($costItems as $cost)
                 <tr>
                     <td>
-                        <strong style="color: #f8fafc; font-size: 0.925rem;">{{ $cost->item_name }}</strong>
+                        <strong style="color: var(--text-primary); font-size: 0.925rem;">{{ $cost->item_name }}</strong>
                         <div style="font-family: var(--font-mono); font-size: 0.775rem; color: #ef4444; margin-top: 2px;">
                             {{ $cost->cost_code }} &bull; {{ $cost->cost_date->format('M d, Y') }}
                         </div>
@@ -316,7 +316,7 @@
                 <span class="kpi-title">Total Incurred Execution Cost</span>
                 <span class="spec-chip" style="font-size: 0.65rem; color: #ef4444;">ACTUAL</span>
             </div>
-            <div class="kpi-val" style="font-family: var(--font-mono); color: #f8fafc;">₱{{ number_format($totalSystemActualCost, 2) }}</div>
+            <div class="kpi-val" style="font-family: var(--font-mono); color: var(--text-primary);">₱{{ number_format($totalSystemActualCost, 2) }}</div>
             <div class="kpi-sub">Actual Materials, Labor & Subcontract Spend</div>
         </div>
 
@@ -379,7 +379,7 @@
                         </div>
                     </td>
                     <td>
-                        <strong style="font-family: var(--font-mono); font-size: 1rem; color: #f8fafc;">
+                        <strong style="font-family: var(--font-mono); font-size: 1rem; color: var(--text-primary); font-weight: 700;">
                             ₱{{ number_format($prj->contract_budget, 2) }}
                         </strong>
                     </td>

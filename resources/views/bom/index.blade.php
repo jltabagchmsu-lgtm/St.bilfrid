@@ -793,7 +793,7 @@
                             </td>
                         @endif
                         <td style="text-align: left;">
-                            <strong style="color: #f8fafc; font-size: 0.95rem;">{{ $bm->material->name }}</strong>
+                            <strong style="color: var(--text-primary); font-size: 0.95rem;">{{ $bm->material->name }}</strong>
                             <div style="font-size: 0.775rem; color: var(--text-muted); margin-top: 2px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
                                 @php
                                     $isRoofingMat = str_contains(strtolower($bm->material->category ?? ''), 'roof');
@@ -1001,7 +1001,7 @@
                             </td>
                             <td style="text-align: left; font-size: 0.8rem;">{{ $log->created_at->format('M d, Y') }}</td>
                             <td style="text-align: left;">
-                                <strong style="color: #f8fafc;">{{ $log->project->project_code ?? 'N/A' }}</strong>
+                                <strong style="color: var(--text-primary);">{{ $log->project->project_code ?? 'N/A' }}</strong>
                                 <div style="font-size: 0.75rem; color: var(--text-muted);">{{ $log->project->title ?? 'Main Site' }}</div>
                             </td>
                             <td style="text-align: left;">
@@ -1011,7 +1011,7 @@
                             <td style="text-align: right; font-weight: 700; color: #10b981;" class="col-num">
                                 +{{ number_format($log->quantity) }} {{ $log->material->unit ?? 'units' }}
                             </td>
-                            <td style="text-align: right; font-weight: 700; color: #f8fafc;" class="col-num">
+                            <td style="text-align: right; font-weight: 700; color: var(--text-primary);" class="col-num">
                                 ₱{{ number_format($log->total_cost, 2) }}
                             </td>
                             <td style="text-align: left; font-size: 0.8rem; color: var(--text-muted);">{{ $log->notes }}</td>

@@ -169,7 +169,7 @@
                     </td>
                     <td style="font-weight: 600; color: var(--text-secondary);">{{ $mat->unit }}</td>
                     <td>
-                        <strong style="font-family: var(--font-mono); color: #f8fafc;">₱{{ number_format($mat->unit_cost, 2) }}</strong>
+                        <strong style="font-family: var(--font-mono); color: var(--text-primary);">₱{{ number_format($mat->unit_cost, 2) }}</strong>
                     </td>
                     <td>
                         <strong style="font-family: var(--font-mono); font-size: 1.05rem; color: {{ $mat->stock_quantity <= 500 ? '#ef4444' : '#10b981' }};">
@@ -246,7 +246,7 @@
                         </span>
                     </td>
                     <td>
-                        <strong style="color: #f8fafc;">{{ $log->material->name ?? 'Material' }}</strong>
+                        <strong style="color: var(--text-primary);">{{ $log->material->name ?? 'Material' }}</strong>
                         <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted);">{{ $log->material->material_code ?? '' }}</div>
                     </td>
                     <td>

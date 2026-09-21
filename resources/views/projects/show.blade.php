@@ -1977,7 +1977,7 @@
 
             <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 16px;">
                 <div style="font-size: 0.8rem; color: #10b981; font-weight: 700; text-transform: uppercase;">Inventory Reconciliation:</div>
-                <div style="font-weight: 700; font-size: 1rem; color: #f8fafc; margin: 4px 0;" id="retMaterialName">Material</div>
+                <div style="font-weight: 700; font-size: 1rem; color: var(--text-primary); margin: 4px 0;" id="retMaterialName">Material</div>
                 <div style="font-size: 0.8rem; color: var(--text-muted);">
                     Unused Site Stock Available for Return: <strong id="retMaxQty" style="color: #38bdf8; font-family: var(--font-mono);">0</strong>
                 </div>
@@ -2426,7 +2426,7 @@
             </div>
 
             <div style="margin-top: 6px; padding: 12px 16px; background: rgba(20, 184, 166, 0.1); border: 1px solid rgba(20, 184, 166, 0.3); border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 0.825rem; color: #f8fafc; font-weight: 600;">Total Allocation Value:</span>
+                <span style="font-size: 0.825rem; color: var(--text-primary); font-weight: 600;">Total Allocation Value:</span>
                 <strong id="projBomTotalValueDisp" style="color: #14b8a6; font-size: 1.15rem; font-family: var(--font-mono);">₱ 0.00</strong>
             </div>
 

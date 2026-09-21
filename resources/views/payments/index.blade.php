@@ -135,7 +135,7 @@
                         </a>
                     </td>
                     <td>
-                        <span style="font-weight: 700; color: #f8fafc;">{{ $pay->payment_stage }}</span>
+                        <span style="font-weight: 700; color: var(--text-primary);">{{ $pay->payment_stage }}</span>
                     </td>
                     <td>
                         <div style="font-family: var(--font-mono); font-size: 0.85rem;">{{ $pay->payment_date->format('M d, Y') }}</div>

@@ -6,7 +6,7 @@
 @section('top_actions')
 <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
     @if(Auth::user()->isAdmin())
-        <span class="badge" style="background: rgba(148, 163, 184, 0.15); color: #cbd5e1; font-size: 0.8rem; font-weight: 700; padding: 8px 14px; border: 1px solid rgba(148, 163, 184, 0.3); display: inline-flex; align-items: center; gap: 6px;">
+        <span class="badge" style="background: rgba(148, 163, 184, 0.15); color: var(--text-secondary); font-size: 0.8rem; font-weight: 700; padding: 8px 14px; border: 1px solid rgba(148, 163, 184, 0.3); display: inline-flex; align-items: center; gap: 6px;">
             <span>Administrator Audit Mode (View-Only)</span>
         </span>
     @else
