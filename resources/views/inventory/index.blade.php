@@ -18,56 +18,56 @@
 <div class="kpi-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
     <div class="kpi-card">
         <div class="kpi-header">
-            <span class="kpi-title">Warehouse Valuation</span>
-            <span class="spec-chip" style="font-size: 0.65rem; color: #10b981;">VALUATION</span>
+            <span class="kpi-title" style="color: #000000; font-weight: 700;">Warehouse Valuation</span>
+            <span class="spec-chip" style="font-size: 0.65rem; color: #000000; font-weight: 700; border-color: #cbd5e1;">VALUATION</span>
         </div>
-        <div class="kpi-val" style="font-family: var(--font-mono); color: #10b981;">₱{{ number_format($totalValuation, 2) }}</div>
-        <div class="kpi-sub">Total Capital in Stock</div>
+        <div class="kpi-val" style="font-family: var(--font-mono); color: #000000;">₱{{ number_format($totalValuation, 2) }}</div>
+        <div class="kpi-sub" style="color: #000000;">Total Capital in Stock</div>
     </div>
 
-    <div class="kpi-card" style="border-top: 3px solid #10b981;">
+    <div class="kpi-card" style="border-top: 3px solid #000000;">
         <div class="kpi-header">
-            <span class="kpi-title">Reclaimed Excess to Stock</span>
-            <span class="spec-chip" style="font-size: 0.65rem; color: #10b981; background: rgba(16, 185, 129, 0.15);">RECOVERED</span>
+            <span class="kpi-title" style="color: #000000; font-weight: 700;">Reclaimed Excess to Stock</span>
+            <span class="spec-chip" style="font-size: 0.65rem; color: #000000; background: #f1f5f9; border-color: #cbd5e1; font-weight: 700;">RECOVERED</span>
         </div>
-        <div class="kpi-val" style="color: #10b981; font-family: var(--font-mono);">+₱{{ number_format($totalReturnedValuation, 2) }}</div>
-        <div class="kpi-sub">{{ number_format($totalReturnedUnits) }} units returned from completed builds</div>
+        <div class="kpi-val" style="color: #000000; font-family: var(--font-mono);">+₱{{ number_format($totalReturnedValuation, 2) }}</div>
+        <div class="kpi-sub" style="color: #000000;">{{ number_format($totalReturnedUnits) }} units returned from completed builds</div>
     </div>
 
-    <div class="kpi-card" style="border-top: 3px solid #38bdf8;">
+    <div class="kpi-card" style="border-top: 3px solid #000000;">
         <div class="kpi-header">
-            <span class="kpi-title">Purchased New Products</span>
-            <span class="spec-chip" style="font-size: 0.65rem; color: #38bdf8; background: rgba(56, 189, 248, 0.15);">NEW ARRIVALS</span>
+            <span class="kpi-title" style="color: #000000; font-weight: 700;">Purchased New Products</span>
+            <span class="spec-chip" style="font-size: 0.65rem; color: #000000; background: #f1f5f9; border-color: #cbd5e1; font-weight: 700;">NEW ARRIVALS</span>
         </div>
-        <div class="kpi-val" style="color: #38bdf8; font-family: var(--font-mono);">{{ $newProductsCount }}</div>
-        <div class="kpi-sub">Procured from Trade Partners</div>
-    </div>
-
-    <div class="kpi-card">
-        <div class="kpi-header">
-            <span class="kpi-title">Catalog Item Types</span>
-            <span class="spec-chip" style="font-size: 0.65rem; color: #38bdf8;">TYPES</span>
-        </div>
-        <div class="kpi-val" style="color: #38bdf8;">{{ $totalItemsCount }}</div>
-        <div class="kpi-sub">Distinct Construction Materials</div>
+        <div class="kpi-val" style="color: #000000; font-family: var(--font-mono);">{{ $newProductsCount }}</div>
+        <div class="kpi-sub" style="color: #000000;">Procured from Trade Partners</div>
     </div>
 
     <div class="kpi-card">
         <div class="kpi-header">
-            <span class="kpi-title">Total Warehouse Units</span>
-            <span class="spec-chip" style="font-size: 0.65rem; color: #f59e0b;">UNITS</span>
+            <span class="kpi-title" style="color: #000000; font-weight: 700;">Catalog Item Types</span>
+            <span class="spec-chip" style="font-size: 0.65rem; color: #000000; font-weight: 700; border-color: #cbd5e1;">TYPES</span>
         </div>
-        <div class="kpi-val" style="font-family: var(--font-mono); color: #f59e0b;">{{ number_format($totalStockUnits) }}</div>
-        <div class="kpi-sub">Gross On-Hand Stock</div>
+        <div class="kpi-val" style="color: #000000;">{{ $totalItemsCount }}</div>
+        <div class="kpi-sub" style="color: #000000;">Distinct Construction Materials</div>
     </div>
 
     <div class="kpi-card">
         <div class="kpi-header">
-            <span class="kpi-title">Low Stock Warnings</span>
-            <span class="spec-chip" style="font-size: 0.65rem; color: #ef4444;">ALERT</span>
+            <span class="kpi-title" style="color: #000000; font-weight: 700;">Total Warehouse Units</span>
+            <span class="spec-chip" style="font-size: 0.65rem; color: #000000; font-weight: 700; border-color: #cbd5e1;">UNITS</span>
         </div>
-        <div class="kpi-val" style="color: #ef4444;">{{ $lowStockCount }}</div>
-        <div class="kpi-sub">Items below safety threshold</div>
+        <div class="kpi-val" style="font-family: var(--font-mono); color: #000000;">{{ number_format($totalStockUnits) }}</div>
+        <div class="kpi-sub" style="color: #000000;">Gross On-Hand Stock</div>
+    </div>
+
+    <div class="kpi-card">
+        <div class="kpi-header">
+            <span class="kpi-title" style="color: #000000; font-weight: 700;">Low Stock Warnings</span>
+            <span class="spec-chip" style="font-size: 0.65rem; color: #000000; font-weight: 700; border-color: #cbd5e1;">ALERT</span>
+        </div>
+        <div class="kpi-val" style="color: #000000;">{{ $lowStockCount }}</div>
+        <div class="kpi-sub" style="color: #000000;">Items below safety threshold</div>
     </div>
 </div>
 
@@ -78,12 +78,12 @@
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
         </div>
         <div>
-            <h4 style="font-size: 0.95rem; font-weight: 800; color: var(--text-primary); margin-bottom: 2px;">Procurement-Governed Inventory System</h4>
-            <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">Warehouse inventory is replenished exclusively through verified outside Trade Suppliers (Mils Glass, Colorsteel, Titan Structural). In-stock quantities automatically increment upon PO delivery receipts and cannot be manually overridden.</p>
+            <h4 style="font-size: 0.95rem; font-weight: 800; color: #000000; margin-bottom: 2px;">Procurement-Governed Inventory System</h4>
+            <p style="font-size: 0.8rem; color: #000000; margin: 0;">Warehouse inventory is replenished exclusively through verified outside Trade Suppliers (Mils Glass, Colorsteel, Titan Structural). In-stock quantities automatically increment upon PO delivery receipts and cannot be manually overridden.</p>
         </div>
     </div>
     <div style="display: flex; align-items: center; gap: 10px;">
-        <a href="{{ route('admin.suppliers.materials') }}" class="btn-secondary" style="font-size: 0.8rem; padding: 8px 14px; text-decoration: none;">
+        <a href="{{ route('admin.suppliers.materials') }}" class="btn-secondary" style="font-size: 0.8rem; padding: 8px 14px; text-decoration: none; color: #000000; font-weight: 600;">
             Supplier Product Matrix &rarr;
         </a>
         <a href="{{ route('admin.suppliers.index') }}" class="btn-primary" style="font-size: 0.8rem; padding: 8px 16px; text-decoration: none;">
@@ -96,23 +96,23 @@
 <div class="glass-panel" style="padding: 18px 24px; margin-bottom: 24px;">
     <form action="{{ route('inventory.index') }}" method="GET" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
         <div style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 280px;">
-            <input type="text" name="search" class="form-input" placeholder="Search by material code or name..." value="{{ $search }}" style="max-width: 380px;">
+            <input type="text" name="search" class="form-input" placeholder="Search by material code or name..." value="{{ $search }}" style="max-width: 380px; color: #000000;">
             <button type="submit" class="btn-primary" style="padding: 8px 16px;">Search</button>
             @if($search || $selectedCategory || $filter)
-                <a href="{{ route('inventory.index') }}" class="btn-secondary" style="padding: 8px 14px; font-size: 0.85rem;">Reset Filters</a>
+                <a href="{{ route('inventory.index') }}" class="btn-secondary" style="padding: 8px 14px; font-size: 0.85rem; color: #000000;">Reset Filters</a>
             @endif
         </div>
 
         <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-            <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted);">Stations & Categories:</span>
-            <a href="{{ route('inventory.index') }}" class="spec-chip {{ empty($selectedCategory) && empty($filter) ? 'spec-chip-active' : '' }}" style="text-decoration: none; cursor: pointer;">
+            <span style="font-size: 0.85rem; font-weight: 700; color: #000000;">Stations & Categories:</span>
+            <a href="{{ route('inventory.index') }}" class="spec-chip {{ empty($selectedCategory) && empty($filter) ? 'spec-chip-active' : '' }}" style="text-decoration: none; cursor: pointer; color: #000000; font-weight: 700;">
                 All ({{ $totalItemsCount }})
             </a>
-            <a href="{{ route('inventory.index', ['filter' => 'new', 'search' => $search]) }}" class="spec-chip {{ $filter === 'new' ? 'spec-chip-active' : '' }}" style="text-decoration: none; cursor: pointer; color: #10b981; border-color: rgba(16, 185, 129, 0.4); background: {{ $filter === 'new' ? 'rgba(16, 185, 129, 0.2)' : 'rgba(16, 185, 129, 0.08)' }}; font-weight: 700;">
+            <a href="{{ route('inventory.index', ['filter' => 'new', 'search' => $search]) }}" class="spec-chip {{ $filter === 'new' ? 'spec-chip-active' : '' }}" style="text-decoration: none; cursor: pointer; color: #000000; border-color: rgba(16, 185, 129, 0.4); background: {{ $filter === 'new' ? 'rgba(16, 185, 129, 0.2)' : 'rgba(16, 185, 129, 0.08)' }}; font-weight: 700;">
                 New Products ({{ $newProductsCount }})
             </a>
             @foreach($allCategories as $cat)
-                <a href="{{ route('inventory.index', ['category' => $cat, 'search' => $search]) }}" class="spec-chip {{ $selectedCategory == $cat ? 'spec-chip-active' : '' }}" style="text-decoration: none; cursor: pointer;">
+                <a href="{{ route('inventory.index', ['category' => $cat, 'search' => $search]) }}" class="spec-chip {{ $selectedCategory == $cat ? 'spec-chip-active' : '' }}" style="text-decoration: none; cursor: pointer; color: #000000; font-weight: 600;">
                     {{ $cat }}
                 </a>
             @endforeach
@@ -124,23 +124,23 @@
 <div class="glass-panel" style="margin-bottom: 28px;">
     <div class="panel-header">
         <div>
-            <h3 class="panel-title">Master Materials Inventory & Warehouse Stock</h3>
-            <span style="font-size: 0.85rem; color: var(--text-muted);">Central warehouse stock levels synchronized automatically with Trade Supplier purchase order deliveries</span>
+            <h3 class="panel-title" style="color: #000000; font-weight: 800;">Master Materials Inventory & Warehouse Stock</h3>
+            <span style="font-size: 0.85rem; color: #000000;">Central warehouse stock levels synchronized automatically with Trade Supplier purchase order deliveries</span>
         </div>
-        <button class="btn-secondary" style="font-size: 0.85rem; padding: 6px 14px;" onclick="openModal('addMaterialModal')">+ New Catalog Item</button>
+        <button class="btn-secondary" style="font-size: 0.85rem; padding: 6px 14px; color: #000000; font-weight: 600;" onclick="openModal('addMaterialModal')">+ New Catalog Item</button>
     </div>
 
     <div style="overflow-x: auto;">
         <table class="custom-table">
             <thead>
                 <tr>
-                    <th>Code & Material Name</th>
-                    <th>Trade Category</th>
-                    <th>Unit of Measure</th>
-                    <th>Contract Cost (₱)</th>
-                    <th>In-Stock Quantity</th>
-                    <th>Total Value (₱)</th>
-                    <th>Stock Health</th>
+                    <th style="color: #000000; font-weight: 700;">Code & Material Name</th>
+                    <th style="color: #000000; font-weight: 700;">Trade Category</th>
+                    <th style="color: #000000; font-weight: 700;">Unit of Measure</th>
+                    <th style="color: #000000; font-weight: 700;">Contract Cost (₱)</th>
+                    <th style="color: #000000; font-weight: 700;">In-Stock Quantity</th>
+                    <th style="color: #000000; font-weight: 700;">Total Value (₱)</th>
+                    <th style="color: #000000; font-weight: 700;">Stock Health</th>
                 </tr>
             </thead>
             <tbody>
@@ -148,56 +148,56 @@
                 <tr>
                     <td>
                         <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                            <strong style="color: var(--text-primary); font-size: 1rem;">{{ $mat->name }}</strong>
+                            <strong style="color: #000000; font-size: 1rem; font-weight: 700;">{{ $mat->name }}</strong>
                             @if($mat->is_new_product)
-                                <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.45); font-size: 0.68rem; font-weight: 800; letter-spacing: 0.04em; padding: 2px 8px; border-radius: 6px;">
+                                <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #000000; border: 1px solid rgba(16, 185, 129, 0.45); font-size: 0.68rem; font-weight: 800; letter-spacing: 0.04em; padding: 2px 8px; border-radius: 6px;">
                                     NEW PRODUCT
                                 </span>
                             @endif
                         </div>
                         <div style="display: flex; align-items: center; gap: 8px; margin-top: 3px;">
-                            <span style="font-family: var(--font-mono); font-size: 0.8rem; color: #38bdf8;">{{ $mat->material_code }}</span>
+                            <span style="font-family: var(--font-mono); font-size: 0.8rem; color: #000000; font-weight: 600;">{{ $mat->material_code }}</span>
                             @if($mat->last_purchased_at)
-                                <span style="font-size: 0.72rem; color: var(--text-muted);">&bull; Purchased {{ $mat->last_purchased_at->format('M d, Y') }}</span>
+                                <span style="font-size: 0.72rem; color: #000000;">&bull; Purchased {{ $mat->last_purchased_at->format('M d, Y') }}</span>
                             @endif
                         </div>
                     </td>
                     <td>
-                        <span class="badge" style="background: rgba(56, 189, 248, 0.1); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.25);">
+                        <span class="badge" style="background: #f1f5f9; color: #000000; border: 1px solid #cbd5e1; font-weight: 700;">
                             {{ $mat->category }}
                         </span>
                     </td>
-                    <td style="font-weight: 600; color: var(--text-secondary);">{{ $mat->unit }}</td>
+                    <td style="font-weight: 600; color: #000000;">{{ $mat->unit }}</td>
                     <td>
-                        <strong style="font-family: var(--font-mono); color: var(--text-primary);">₱{{ number_format($mat->unit_cost, 2) }}</strong>
+                        <strong style="font-family: var(--font-mono); color: #000000; font-weight: 700;">₱{{ number_format($mat->unit_cost, 2) }}</strong>
                     </td>
                     <td>
-                        <strong style="font-family: var(--font-mono); font-size: 1.05rem; color: {{ $mat->stock_quantity <= 500 ? '#ef4444' : '#10b981' }};">
+                        <strong style="font-family: var(--font-mono); font-size: 1.05rem; color: #000000; font-weight: 700;">
                             {{ number_format($mat->stock_quantity) }} {{ $mat->unit }}
                         </strong>
-                        <div style="font-size: 0.68rem; color: #38bdf8; display: flex; align-items: center; gap: 4px; margin-top: 2px;">
+                        <div style="font-size: 0.68rem; color: #000000; display: flex; align-items: center; gap: 4px; margin-top: 2px; font-weight: 600;">
                             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
                             Supplier-Synchronized
                         </div>
                     </td>
                     <td>
-                        <strong style="font-family: var(--font-mono); color: #10b981;">
+                        <strong style="font-family: var(--font-mono); color: #000000; font-weight: 700;">
                             ₱{{ number_format($mat->stock_quantity * $mat->unit_cost, 2) }}
                         </strong>
                     </td>
                     <td>
                         @if($mat->stock_quantity <= 0)
-                            <span class="badge badge-overdue">Out of Stock</span>
+                            <span class="badge badge-overdue" style="color: #000000; font-weight: 700;">Out of Stock</span>
                         @elseif($mat->stock_quantity <= 500)
-                            <span class="badge badge-pending">Low Stock</span>
+                            <span class="badge badge-pending" style="color: #000000; font-weight: 700;">Low Stock</span>
                         @else
-                            <span class="badge badge-completed">Well Stocked</span>
+                            <span class="badge badge-completed" style="color: #000000; font-weight: 700;">Well Stocked</span>
                         @endif
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="7" style="color: var(--text-muted); text-align: center; padding: 36px;">
+                    <td colspan="7" style="color: #000000; text-align: center; padding: 36px; font-weight: 600;">
                         No material catalog items found matching filters.
                     </td>
                 </tr>
@@ -211,8 +211,8 @@
 <div class="glass-panel" style="border: 1px solid rgba(16, 185, 129, 0.3);">
     <div class="panel-header" style="margin-bottom: 14px;">
         <div>
-            <h3 class="panel-title" style="font-size: 1.1rem; color: #10b981;">Central Warehouse Movement & Supplier Delivery Receipts Log</h3>
-            <span style="font-size: 0.85rem; color: var(--text-muted);">Audit log of supplier procurement deliveries, stock allocations, and site excess returns</span>
+            <h3 class="panel-title" style="font-size: 1.1rem; color: #000000; font-weight: 800;">Central Warehouse Movement & Supplier Delivery Receipts Log</h3>
+            <span style="font-size: 0.85rem; color: #000000;">Audit log of supplier procurement deliveries, stock allocations, and site excess returns</span>
         </div>
     </div>
 
@@ -220,52 +220,52 @@
         <table class="custom-table">
             <thead>
                 <tr>
-                    <th>Ref / TXN</th>
-                    <th>Date & Time</th>
-                    <th>Type</th>
-                    <th>Material Item</th>
-                    <th>Destination / Source</th>
-                    <th>Quantity Change</th>
-                    <th>Unit Cost</th>
-                    <th>Audit Verification</th>
+                    <th style="color: #000000; font-weight: 700;">Ref / TXN</th>
+                    <th style="color: #000000; font-weight: 700;">Date & Time</th>
+                    <th style="color: #000000; font-weight: 700;">Type</th>
+                    <th style="color: #000000; font-weight: 700;">Material Item</th>
+                    <th style="color: #000000; font-weight: 700;">Destination / Source</th>
+                    <th style="color: #000000; font-weight: 700;">Quantity Change</th>
+                    <th style="color: #000000; font-weight: 700;">Unit Cost</th>
+                    <th style="color: #000000; font-weight: 700;">Audit Verification</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($inventoryLogs as $log)
                 @php $tBadge = $log->transaction_badge; @endphp
                 <tr>
-                    <td style="font-family: var(--font-mono); color: #38bdf8; font-weight: 700;">
+                    <td style="font-family: var(--font-mono); color: #000000; font-weight: 700;">
                         {{ $log->reference_no ?? ('TXN-' . $log->id) }}
                     </td>
-                    <td style="font-family: var(--font-mono); font-size: 0.8rem;">
+                    <td style="font-family: var(--font-mono); font-size: 0.8rem; color: #000000;">
                         {{ $log->created_at->format('M d, Y H:i') }}
                     </td>
                     <td>
-                        <span class="badge" style="background: {{ $tBadge['bg'] }}; color: {{ $tBadge['color'] }}; border: 1px solid {{ $tBadge['border'] }}; font-size: 0.75rem;">
+                        <span class="badge" style="background: {{ $tBadge['bg'] }}; color: #000000; border: 1px solid {{ $tBadge['border'] }}; font-size: 0.75rem; font-weight: 700;">
                             {{ $tBadge['label'] }}
                         </span>
                     </td>
                     <td>
-                        <strong style="color: var(--text-primary);">{{ $log->material->name ?? 'Material' }}</strong>
-                        <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted);">{{ $log->material->material_code ?? '' }}</div>
+                        <strong style="color: #000000;">{{ $log->material->name ?? 'Material' }}</strong>
+                        <div style="font-family: var(--font-mono); font-size: 0.75rem; color: #000000;">{{ $log->material->material_code ?? '' }}</div>
                     </td>
                     <td>
                         @if($log->project)
-                            <a href="{{ route('projects.show', $log->project->id) }}" style="color: #38bdf8; font-weight: 600; text-decoration: none;">
+                            <a href="{{ route('projects.show', $log->project->id) }}" style="color: #000000; font-weight: 700; text-decoration: underline;">
                                 {{ $log->project->title }}
                             </a>
-                            <div style="font-size: 0.75rem; color: var(--text-muted);">{{ $log->project->project_code }}</div>
+                            <div style="font-size: 0.75rem; color: #000000;">{{ $log->project->project_code }}</div>
                         @else
-                            <span style="color: var(--text-muted);">Central Warehouse Stock</span>
+                            <span style="color: #000000;">Central Warehouse Stock</span>
                         @endif
                     </td>
-                    <td style="font-family: var(--font-mono); font-weight: 800; color: {{ in_array($log->transaction_type, ['excess_return', 'restock']) ? '#10b981' : '#f59e0b' }};">
+                    <td style="font-family: var(--font-mono); font-weight: 800; color: #000000;">
                         {{ in_array($log->transaction_type, ['excess_return', 'restock']) ? '+' : '-' }}{{ number_format($log->quantity) }} {{ $log->material->unit ?? 'units' }}
                     </td>
-                    <td style="font-family: var(--font-mono);">
+                    <td style="font-family: var(--font-mono); color: #000000; font-weight: 600;">
                         ₱{{ number_format($log->unit_cost, 2) }}
                     </td>
-                    <td style="font-size: 0.8rem; color: var(--text-muted);">
+                    <td style="font-size: 0.8rem; color: #000000;">
                         {{ $log->notes ?? 'Verified inventory movement' }}
                     </td>
                 </tr>
