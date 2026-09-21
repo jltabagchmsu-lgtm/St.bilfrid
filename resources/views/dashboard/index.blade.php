@@ -42,9 +42,9 @@
         <div class="sales-kpi-card">
             <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.725rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 4px;">
                 <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Total Booked Sales</span>
-                <span class="spec-chip" style="font-size: 0.6rem; padding: 1px 6px; color: #059669; border-color: #a7f3d0;">BOOKED</span>
+                <span class="spec-chip" style="font-size: 0.6rem; padding: 1px 6px; color: #0f172a; border-color: #cbd5e1;">BOOKED</span>
             </div>
-            <div style="font-size: 1.65rem; font-weight: 800; font-family: var(--font-mono); color: #059669; line-height: 1.15; margin: 4px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: -0.02em;">
+            <div style="font-size: 1.65rem; font-weight: 800; font-family: var(--font-mono); color: #0f172a; line-height: 1.15; margin: 4px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: -0.02em;">
                 ₱{{ number_format($totalBookedSales, 2) }}
             </div>
             <div style="font-size: 0.725rem; color: var(--text-secondary); display: flex; align-items: center; justify-content: space-between; margin-top: 4px;">
@@ -56,9 +56,9 @@
         <div class="sales-kpi-card">
             <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.725rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 4px;">
                 <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Cleared Cash Inflow</span>
-                <span class="spec-chip" style="font-size: 0.6rem; padding: 1px 6px; color: #059669; border-color: #a7f3d0;">SETTLED</span>
+                <span class="spec-chip" style="font-size: 0.6rem; padding: 1px 6px; color: #0f172a; border-color: #cbd5e1;">SETTLED</span>
             </div>
-            <div style="font-size: 1.65rem; font-weight: 800; font-family: var(--font-mono); color: #059669; line-height: 1.15; margin: 4px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: -0.02em;">
+            <div style="font-size: 1.65rem; font-weight: 800; font-family: var(--font-mono); color: #0f172a; line-height: 1.15; margin: 4px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: -0.02em;">
                 ₱{{ number_format($totalCollectedRevenue, 2) }}
             </div>
             <div style="font-size: 0.725rem; color: var(--text-secondary); margin-top: 4px;">
@@ -69,9 +69,9 @@
         <div class="sales-kpi-card">
             <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.725rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 4px;">
                 <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Pending Receivables</span>
-                <span class="spec-chip" style="font-size: 0.6rem; padding: 1px 6px; color: #d97706; border-color: #fde68a;">PENDING</span>
+                <span class="spec-chip" style="font-size: 0.6rem; padding: 1px 6px; color: #0f172a; border-color: #cbd5e1;">PENDING</span>
             </div>
-            <div style="font-size: 1.65rem; font-weight: 800; font-family: var(--font-mono); color: #d97706; line-height: 1.15; margin: 4px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: -0.02em;">
+            <div style="font-size: 1.65rem; font-weight: 800; font-family: var(--font-mono); color: #0f172a; line-height: 1.15; margin: 4px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: -0.02em;">
                 ₱{{ number_format($pendingReceivables, 2) }}
             </div>
             <div style="font-size: 0.725rem; color: var(--text-secondary); margin-top: 4px;">
@@ -82,12 +82,12 @@
         <div class="sales-kpi-card">
             <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.725rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 4px;">
                 <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Realized Sales Margin</span>
-                <span class="spec-chip" style="font-size: 0.6rem; padding: 1px 6px; color: {{ $totalGrossMargin >= 0 ? '#059669' : '#dc2626' }}; border-color: {{ $totalGrossMargin >= 0 ? '#a7f3d0' : '#fecaca' }};">MARGIN</span>
+                <span class="spec-chip" style="font-size: 0.6rem; padding: 1px 6px; color: #0f172a; border-color: #cbd5e1;">MARGIN</span>
             </div>
-            <div style="font-size: 1.65rem; font-weight: 800; font-family: var(--font-mono); color: {{ $totalGrossMargin >= 0 ? '#059669' : '#dc2626' }}; line-height: 1.15; margin: 4px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: -0.02em;">
+            <div style="font-size: 1.65rem; font-weight: 800; font-family: var(--font-mono); color: #0f172a; line-height: 1.15; margin: 4px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: -0.02em;">
                 ₱{{ number_format($totalGrossMargin, 2) }}
             </div>
-            <div style="font-size: 0.725rem; color: {{ $totalGrossMargin >= 0 ? '#059669' : '#dc2626' }}; font-weight: 700; margin-top: 4px;">
+            <div style="font-size: 0.725rem; color: #0f172a; font-weight: 700; margin-top: 4px;">
                 {{ $avgGrossMarginPercent }}% Profit Margin
             </div>
         </div>
@@ -95,9 +95,9 @@
         <div class="sales-kpi-card">
             <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.725rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 4px;">
                 <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Avg Deal Size</span>
-                <span class="spec-chip" style="font-size: 0.6rem; padding: 1px 6px; color: #059669; border-color: #a7f3d0;">AVG</span>
+                <span class="spec-chip" style="font-size: 0.6rem; padding: 1px 6px; color: #0f172a; border-color: #cbd5e1;">AVG</span>
             </div>
-            <div style="font-size: 1.65rem; font-weight: 800; font-family: var(--font-mono); color: #059669; line-height: 1.15; margin: 4px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: -0.02em;">
+            <div style="font-size: 1.65rem; font-weight: 800; font-family: var(--font-mono); color: #0f172a; line-height: 1.15; margin: 4px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: -0.02em;">
                 ₱{{ number_format($avgDealSize / 1000000, 2) }}M
             </div>
             <div style="font-size: 0.725rem; color: var(--text-secondary); margin-top: 4px;">
@@ -147,7 +147,7 @@
                     @foreach($yearlySalesMatrix as $yr => $data)
                     <tr>
                         <td style="padding: 4px 6px;">
-                            <strong style="font-family: var(--font-mono); font-size: 0.8rem; color: {{ $yr == 2026 ? '#dc2626' : '#0f172a' }};">
+                            <strong style="font-family: var(--font-mono); font-size: 0.8rem; color: #0f172a;">
                                 {{ $yr }}
                             </strong>
                             @if($yr == 2026)
@@ -158,15 +158,15 @@
                                 <span class="badge badge-warning" style="font-size: 0.5rem; padding: 1px 3px; margin-left: 2px;">Forecast</span>
                             @endif
                         </td>
-                        <td style="font-family: var(--font-mono); font-weight: 700; color: var(--text-primary); padding: 4px 6px;">
+                        <td style="font-family: var(--font-mono); font-weight: 700; color: #0f172a; padding: 4px 6px;">
                             ₱{{ number_format($data['booked_sales'] / 1000000, 2) }}M
                             <div style="font-size: 0.6rem; color: var(--text-muted);">{{ $data['projects_count'] }} Contracts</div>
                         </td>
-                        <td style="font-family: var(--font-mono); color: #059669; font-weight: 700; padding: 4px 6px;">
+                        <td style="font-family: var(--font-mono); color: #0f172a; font-weight: 700; padding: 4px 6px;">
                             ₱{{ number_format($data['cleared_revenue'] / 1000000, 2) }}M
                         </td>
                         <td style="padding: 4px 6px;">
-                            <span style="color: {{ $data['margin_percent'] >= 20 ? '#059669' : '#d97706' }}; font-weight: 700; font-family: var(--font-mono);">
+                            <span style="color: #0f172a; font-weight: 700; font-family: var(--font-mono);">
                                 {{ $data['margin_percent'] }}%
                             </span>
                         </td>
@@ -203,7 +203,7 @@
                 </svg>
             </div>
             <div>
-                <h3 class="panel-title" style="font-size: 1rem;">Company-Wide On-Site Workforce & Resource Deployment</h3>
+                <h3 class="panel-title" style="font-size: 1rem; color: var(--text-primary);">Company-Wide On-Site Workforce & Resource Deployment</h3>
                 <span style="font-size: 0.75rem; color: var(--text-muted);">
                     Real-time field personnel and trade crews currently mobilized across active construction sites
                 </span>
@@ -223,8 +223,8 @@
     <div class="manpower-grid">
         <div class="manpower-card" style="border-left: 3px solid #38bdf8;">
             <div class="manpower-head">
-                <span class="spec-chip" style="font-size: 0.65rem; color: #38bdf8;">WORKERS</span>
-                <span class="manpower-count" style="color: #38bdf8;">{{ $totalActiveWorkers }}</span>
+                <span class="spec-chip" style="font-size: 0.65rem; color: #0f172a; border-color: #cbd5e1;">WORKERS</span>
+                <span class="manpower-count" style="color: #0f172a;">{{ $totalActiveWorkers }}</span>
             </div>
             <div class="manpower-title">General Workers</div>
             <div class="manpower-role">Laborers & Site Helpers</div>
@@ -233,8 +233,8 @@
 
         <div class="manpower-card" style="border-left: 3px solid #818cf8;">
             <div class="manpower-head">
-                <span class="spec-chip" style="font-size: 0.65rem; color: #818cf8;">TRADES</span>
-                <span class="manpower-count" style="color: #818cf8;">{{ $totalActiveSkilled }}</span>
+                <span class="spec-chip" style="font-size: 0.65rem; color: #0f172a; border-color: #cbd5e1;">TRADES</span>
+                <span class="manpower-count" style="color: #0f172a;">{{ $totalActiveSkilled }}</span>
             </div>
             <div class="manpower-title">Skilled Tradesmen</div>
             <div class="manpower-role">Masons, Carpenters & Welders</div>
@@ -243,8 +243,8 @@
 
         <div class="manpower-card" style="border-left: 3px solid #f59e0b;">
             <div class="manpower-head">
-                <span class="spec-chip" style="font-size: 0.65rem; color: #f59e0b;">ENGR</span>
-                <span class="manpower-count" style="color: #f59e0b;">{{ $totalActiveEngineers }}</span>
+                <span class="spec-chip" style="font-size: 0.65rem; color: #0f172a; border-color: #cbd5e1;">ENGR</span>
+                <span class="manpower-count" style="color: #0f172a;">{{ $totalActiveEngineers }}</span>
             </div>
             <div class="manpower-title">Field Engineers</div>
             <div class="manpower-role">Structural, Electrical, Piping</div>
@@ -253,8 +253,8 @@
 
         <div class="manpower-card" style="border-left: 3px solid #ec4899;">
             <div class="manpower-head">
-                <span class="spec-chip" style="font-size: 0.65rem; color: #ec4899;">ARCH</span>
-                <span class="manpower-count" style="color: #ec4899;">{{ $totalActiveArchitects }}</span>
+                <span class="spec-chip" style="font-size: 0.65rem; color: #0f172a; border-color: #cbd5e1;">ARCH</span>
+                <span class="manpower-count" style="color: #0f172a;">{{ $totalActiveArchitects }}</span>
             </div>
             <div class="manpower-title">Architects</div>
             <div class="manpower-role">Principal & Design Leads</div>
@@ -263,8 +263,8 @@
 
         <div class="manpower-card" style="border-left: 3px solid #ef4444;">
             <div class="manpower-head">
-                <span class="spec-chip" style="font-size: 0.65rem; color: #ef4444;">OPERATORS</span>
-                <span class="manpower-count" style="color: #ef4444;">{{ $totalActiveOperators }}</span>
+                <span class="spec-chip" style="font-size: 0.65rem; color: #0f172a; border-color: #cbd5e1;">OPERATORS</span>
+                <span class="manpower-count" style="color: #0f172a;">{{ $totalActiveOperators }}</span>
             </div>
             <div class="manpower-title">Equipment Operators</div>
             <div class="manpower-role">Cranes, Rigs & Heavy Plant</div>
@@ -273,8 +273,8 @@
 
         <div class="manpower-card" style="border-left: 3px solid #10b981;">
             <div class="manpower-head">
-                <span class="spec-chip" style="font-size: 0.65rem; color: #10b981;">FOREMEN</span>
-                <span class="manpower-count" style="color: #10b981;">{{ $totalActiveForemen }}</span>
+                <span class="spec-chip" style="font-size: 0.65rem; color: #0f172a; border-color: #cbd5e1;">FOREMEN</span>
+                <span class="manpower-count" style="color: #0f172a;">{{ $totalActiveForemen }}</span>
             </div>
             <div class="manpower-title">Site Foremen</div>
             <div class="manpower-role">Trade Supervisors & Leads</div>
@@ -283,8 +283,8 @@
 
         <div class="manpower-card" style="border-left: 3px solid #14b8a6;">
             <div class="manpower-head">
-                <span class="spec-chip" style="font-size: 0.65rem; color: #14b8a6;">QA/QC</span>
-                <span class="manpower-count" style="color: #14b8a6;">{{ $totalActiveSafety }}</span>
+                <span class="spec-chip" style="font-size: 0.65rem; color: #0f172a; border-color: #cbd5e1;">QA/QC</span>
+                <span class="manpower-count" style="color: #0f172a;">{{ $totalActiveSafety }}</span>
             </div>
             <div class="manpower-title">Safety Officers</div>
             <div class="manpower-role">QA/QC & Site Compliance</div>
@@ -320,22 +320,22 @@
             <div class="legend-pill" title="In Progress: {{ $inProgressCount }}">
                 <span class="legend-dot" style="background: #38bdf8; color: #38bdf8;"></span>
                 <span class="legend-text">In Progress</span>
-                <strong style="margin-left: auto; font-family: var(--font-mono); color: #38bdf8;">{{ $inProgressCount }}</strong>
+                <strong style="margin-left: auto; font-family: var(--font-mono); color: #0f172a;">{{ $inProgressCount }}</strong>
             </div>
             <div class="legend-pill" title="Approved / Planned: {{ $approvedCount }}">
                 <span class="legend-dot" style="background: #f59e0b; color: #f59e0b;"></span>
                 <span class="legend-text">Approved</span>
-                <strong style="margin-left: auto; font-family: var(--font-mono); color: #f59e0b;">{{ $approvedCount }}</strong>
+                <strong style="margin-left: auto; font-family: var(--font-mono); color: #0f172a;">{{ $approvedCount }}</strong>
             </div>
             <div class="legend-pill" title="On Hold: {{ $onHoldCount }}">
                 <span class="legend-dot" style="background: #ef4444; color: #ef4444;"></span>
                 <span class="legend-text">On Hold</span>
-                <strong style="margin-left: auto; font-family: var(--font-mono); color: #ef4444;">{{ $onHoldCount }}</strong>
+                <strong style="margin-left: auto; font-family: var(--font-mono); color: #0f172a;">{{ $onHoldCount }}</strong>
             </div>
             <div class="legend-pill" title="Completed: {{ $completedCount }}">
                 <span class="legend-dot" style="background: #10b981; color: #10b981;"></span>
                 <span class="legend-text">Completed</span>
-                <strong style="margin-left: auto; font-family: var(--font-mono); color: #10b981;">{{ $completedCount }}</strong>
+                <strong style="margin-left: auto; font-family: var(--font-mono); color: #0f172a;">{{ $completedCount }}</strong>
             </div>
         </div>
     </div>
@@ -353,7 +353,7 @@
         <div class="chart-container-wrapper">
             <canvas id="costCategoryChart"></canvas>
             <div class="chart-center-metric">
-                <span class="metric-number" style="font-size: 1.15rem; color: #38bdf8;">₱{{ number_format($totalActualCost / 1000000, 1) }}M</span>
+                <span class="metric-number" style="font-size: 1.15rem; color: #0f172a;">₱{{ number_format($totalActualCost / 1000000, 1) }}M</span>
                 <span class="metric-label">Incurred</span>
             </div>
         </div>
@@ -366,7 +366,7 @@
                 <div class="legend-pill" title="{{ $catName }}: ₱{{ number_format($costCategoryTotals[$idx] ?? 0, 2) }}">
                     <span class="legend-dot" style="background: {{ $catColors[$idx % count($catColors)] }}; color: {{ $catColors[$idx % count($catColors)] }};"></span>
                     <span class="legend-text">{{ Str::limit($catName, 13) }}</span>
-                    <strong style="margin-left: auto; font-family: var(--font-mono); font-size: 0.725rem;">
+                    <strong style="margin-left: auto; font-family: var(--font-mono); font-size: 0.725rem; color: #0f172a;">
                         ₱{{ number_format(($costCategoryTotals[$idx] ?? 0) / 1000, 0) }}k
                     </strong>
                 </div>
@@ -387,7 +387,7 @@
         <div class="chart-container-wrapper">
             <canvas id="financialMarginChart"></canvas>
             <div class="chart-center-metric">
-                <span class="metric-number" style="font-size: 1.25rem; color: #10b981;">{{ $avgGrossMarginPercent }}%</span>
+                <span class="metric-number" style="font-size: 1.25rem; color: #0f172a;">{{ $avgGrossMarginPercent }}%</span>
                 <span class="metric-label">Margin Rate</span>
             </div>
         </div>
@@ -397,18 +397,18 @@
                 <div class="legend-pill" style="flex: 1;" title="Actual Incurred: ₱{{ number_format($totalActualCost, 2) }}">
                     <span class="legend-dot" style="background: #ef4444; color: #ef4444;"></span>
                     <span class="legend-text">Incurred</span>
-                    <strong style="margin-left: auto; font-family: var(--font-mono); color: #f87171;">₱{{ number_format($totalActualCost / 1000, 0) }}k</strong>
+                    <strong style="margin-left: auto; font-family: var(--font-mono); color: #0f172a;">₱{{ number_format($totalActualCost / 1000, 0) }}k</strong>
                 </div>
                 <div class="legend-pill" style="flex: 1;" title="Gross Profit Margin: ₱{{ number_format($totalGrossMargin, 2) }}">
                     <span class="legend-dot" style="background: #10b981; color: #10b981;"></span>
                     <span class="legend-text">Margin</span>
-                    <strong style="margin-left: auto; font-family: var(--font-mono); color: #34d399;">₱{{ number_format($totalGrossMargin / 1000, 0) }}k</strong>
+                    <strong style="margin-left: auto; font-family: var(--font-mono); color: #0f172a;">₱{{ number_format($totalGrossMargin / 1000, 0) }}k</strong>
                 </div>
             </div>
             <div class="legend-pill" title="Total Contract Value: ₱{{ number_format($totalContractBudget, 2) }}">
                 <span class="legend-dot" style="background: #38bdf8; color: #38bdf8;"></span>
                 <span class="legend-text">Total Contract Portfolio Budget</span>
-                <strong style="margin-left: auto; font-family: var(--font-mono); color: #38bdf8;">₱{{ number_format($totalContractBudget / 1000, 0) }}k</strong>
+                <strong style="margin-left: auto; font-family: var(--font-mono); color: #0f172a;">₱{{ number_format($totalContractBudget / 1000, 0) }}k</strong>
             </div>
         </div>
     </div>

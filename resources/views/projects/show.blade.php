@@ -1174,8 +1174,8 @@
         @foreach($manpowerBreakdown as $key => $item)
             <div class="manpower-card" style="border-left: 4px solid {{ $item['color'] }};">
                 <div class="manpower-head">
-                    <span class="spec-chip" style="font-size: 0.65rem; color: {{ $item['color'] }};">{{ strtoupper($key) }}</span>
-                    <span class="manpower-count" style="color: {{ $item['color'] }};">{{ $item['count'] }}</span>
+                    <span class="spec-chip" style="font-size: 0.65rem; color: #0f172a; border-color: #cbd5e1;">{{ strtoupper($key) }}</span>
+                    <span class="manpower-count" style="color: #0f172a;">{{ $item['count'] }}</span>
                 </div>
                 <div class="manpower-title">{{ $item['title'] }}</div>
                 <div class="manpower-role">{{ $item['role'] }}</div>
@@ -1184,7 +1184,7 @@
                 </div>
                 <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 6px; display: flex; justify-content: space-between;">
                     <span>Share of Site:</span>
-                    <strong style="color: {{ $item['color'] }}; font-family: var(--font-mono);">{{ $item['percent'] }}%</strong>
+                    <strong style="color: #0f172a; font-family: var(--font-mono);">{{ $item['percent'] }}%</strong>
                 </div>
             </div>
         @endforeach

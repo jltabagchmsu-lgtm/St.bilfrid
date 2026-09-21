@@ -84,8 +84,8 @@
     <div class="manpower-grid">
         <div class="manpower-card" style="border-left: 3px solid #38bdf8;">
             <div class="manpower-head">
-                <span class="spec-chip" style="font-size: 0.65rem; color: #38bdf8;">WORKERS</span>
-                <span class="manpower-count" style="color: #38bdf8;">{{ $historicalWorkers }}</span>
+                <span class="spec-chip" style="font-size: 0.65rem; color: #0f172a; border-color: #cbd5e1;">WORKERS</span>
+                <span class="manpower-count" style="color: #0f172a;">{{ $historicalWorkers }}</span>
             </div>
             <div class="manpower-title">General Laborers</div>
             <div class="manpower-role">Construction Crew</div>
@@ -93,8 +93,8 @@
 
         <div class="manpower-card" style="border-left: 3px solid #818cf8;">
             <div class="manpower-head">
-                <span class="spec-chip" style="font-size: 0.65rem; color: #818cf8;">TRADES</span>
-                <span class="manpower-count" style="color: #818cf8;">{{ $historicalSkilled }}</span>
+                <span class="spec-chip" style="font-size: 0.65rem; color: #0f172a; border-color: #cbd5e1;">TRADES</span>
+                <span class="manpower-count" style="color: #0f172a;">{{ $historicalSkilled }}</span>
             </div>
             <div class="manpower-title">Skilled Tradesmen</div>
             <div class="manpower-role">Masons, Carpenters, Welders</div>
@@ -102,8 +102,8 @@
 
         <div class="manpower-card" style="border-left: 3px solid #f59e0b;">
             <div class="manpower-head">
-                <span class="spec-chip" style="font-size: 0.65rem; color: #f59e0b;">ENGR</span>
-                <span class="manpower-count" style="color: #f59e0b;">{{ $historicalEngineers }}</span>
+                <span class="spec-chip" style="font-size: 0.65rem; color: #0f172a; border-color: #cbd5e1;">ENGR</span>
+                <span class="manpower-count" style="color: #0f172a;">{{ $historicalEngineers }}</span>
             </div>
             <div class="manpower-title">Licensed Engineers</div>
             <div class="manpower-role">Structural, Electrical, Piping</div>
@@ -111,8 +111,8 @@
 
         <div class="manpower-card" style="border-left: 3px solid #ec4899;">
             <div class="manpower-head">
-                <span class="spec-chip" style="font-size: 0.65rem; color: #ec4899;">ARCH</span>
-                <span class="manpower-count" style="color: #ec4899;">{{ $historicalArchitects }}</span>
+                <span class="spec-chip" style="font-size: 0.65rem; color: #0f172a; border-color: #cbd5e1;">ARCH</span>
+                <span class="manpower-count" style="color: #0f172a;">{{ $historicalArchitects }}</span>
             </div>
             <div class="manpower-title">Architects</div>
             <div class="manpower-role">Design & Spatial Planners</div>
@@ -120,8 +120,8 @@
 
         <div class="manpower-card" style="border-left: 3px solid #ef4444;">
             <div class="manpower-head">
-                <span class="spec-chip" style="font-size: 0.65rem; color: #ef4444;">OPERATORS</span>
-                <span class="manpower-count" style="color: #ef4444;">{{ $historicalOperators }}</span>
+                <span class="spec-chip" style="font-size: 0.65rem; color: #0f172a; border-color: #cbd5e1;">OPERATORS</span>
+                <span class="manpower-count" style="color: #0f172a;">{{ $historicalOperators }}</span>
             </div>
             <div class="manpower-title">Equipment Operators</div>
             <div class="manpower-role">Heavy Crane & Plant</div>
@@ -129,8 +129,8 @@
 
         <div class="manpower-card" style="border-left: 3px solid #10b981;">
             <div class="manpower-head">
-                <span class="spec-chip" style="font-size: 0.65rem; color: #10b981;">FOREMEN</span>
-                <span class="manpower-count" style="color: #10b981;">{{ $historicalForemen }}</span>
+                <span class="spec-chip" style="font-size: 0.65rem; color: #0f172a; border-color: #cbd5e1;">FOREMEN</span>
+                <span class="manpower-count" style="color: #0f172a;">{{ $historicalForemen }}</span>
             </div>
             <div class="manpower-title">Site Foremen</div>
             <div class="manpower-role">Trade Supervisors</div>
@@ -138,8 +138,8 @@
 
         <div class="manpower-card" style="border-left: 3px solid #14b8a6;">
             <div class="manpower-head">
-                <span class="spec-chip" style="font-size: 0.65rem; color: #14b8a6;">QA/QC</span>
-                <span class="manpower-count" style="color: #14b8a6;">{{ $historicalSafety }}</span>
+                <span class="spec-chip" style="font-size: 0.65rem; color: #0f172a; border-color: #cbd5e1;">QA/QC</span>
+                <span class="manpower-count" style="color: #0f172a;">{{ $historicalSafety }}</span>
             </div>
             <div class="manpower-title">Safety Officers</div>
             <div class="manpower-role">QA/QC Compliance</div>
