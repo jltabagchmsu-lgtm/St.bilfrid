@@ -6,88 +6,317 @@
 
 @section('content')
 
+<style>
+    /* Category Filter Tabs */
+    .mat-cat-tabs {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        background: #f8fafc;
+        padding: 8px 12px;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+    }
+    .mat-cat-tab {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 9px 18px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #0f172a !important;
+        text-decoration: none !important;
+        border-radius: 9px;
+        border: 1.5px solid transparent;
+        transition: all 0.2s ease;
+        background: transparent;
+    }
+    .mat-cat-tab:hover {
+        background: #ffffff;
+        color: #000000 !important;
+        border-color: #cbd5e1;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+    .mat-cat-tab.active {
+        background: #ffffff;
+        color: #0f172a !important;
+        font-weight: 800;
+        border-color: #0f172a;
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
+    .mat-cat-count {
+        background: #e2e8f0;
+        color: #0f172a;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 800;
+    }
+    .mat-cat-tab.active .mat-cat-count {
+        background: #0f172a;
+        color: #ffffff;
+    }
+
+    /* Search & Filter Card */
+    .mat-filter-card {
+        background: #ffffff;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 20px;
+        margin-bottom: 24px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    }
+    .mat-filter-grid {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 14px;
+    }
+    .mat-search-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex: 1;
+        min-width: 300px;
+    }
+    .mat-search-wrapper {
+        position: relative;
+        flex: 1;
+        max-width: 420px;
+    }
+    .mat-search-input {
+        width: 100%;
+        height: 44px;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 10px;
+        padding: 0 14px 0 42px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #0f172a !important;
+        background: #f8fafc;
+        outline: none;
+        transition: all 0.2s ease;
+    }
+    .mat-search-input:focus {
+        border-color: #0f172a;
+        background: #ffffff;
+        box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
+    }
+    .mat-search-input::placeholder {
+        color: #64748b;
+        font-weight: 500;
+    }
+    .mat-select-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    .mat-select-box {
+        height: 44px;
+        min-width: 175px;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 10px;
+        padding: 0 14px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #0f172a !important;
+        background: #f8fafc;
+        outline: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .mat-select-box:focus {
+        border-color: #0f172a;
+        background: #ffffff;
+        box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
+    }
+    .mat-select-box option {
+        color: #0f172a;
+        font-weight: 600;
+        background: #ffffff;
+    }
+    .mat-btn-search {
+        height: 44px;
+        padding: 0 22px;
+        font-size: 0.875rem;
+        font-weight: 700;
+        color: #ffffff !important;
+        background: #0f172a;
+        border: 1.5px solid #0f172a;
+        border-radius: 10px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+        box-shadow: 0 2px 6px rgba(15, 23, 42, 0.15);
+    }
+    .mat-btn-search:hover {
+        background: #1e293b;
+        border-color: #1e293b;
+        transform: translateY(-1px);
+    }
+    .mat-btn-reset {
+        height: 44px;
+        padding: 0 16px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #dc2626 !important;
+        background: #fef2f2;
+        border: 1.5px solid #fca5a5;
+        border-radius: 10px;
+        text-decoration: none !important;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        white-space: nowrap;
+        transition: all 0.2s ease;
+    }
+    .mat-btn-reset:hover {
+        background: #fee2e2;
+        border-color: #f87171;
+    }
+
+    /* Subcategory Chips */
+    .mat-subcat-bar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 18px;
+        padding-top: 16px;
+        border-top: 1px solid #f1f5f9;
+    }
+    .mat-subcat-label {
+        font-size: 0.75rem;
+        font-weight: 800;
+        color: #0f172a !important;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-right: 6px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+    .mat-subcat-chip {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 14px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: #0f172a !important;
+        text-decoration: none !important;
+        background: #f8fafc;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 8px;
+        transition: all 0.15s ease;
+        line-height: 1.3;
+    }
+    .mat-subcat-chip:hover {
+        background: #ffffff;
+        border-color: #0f172a;
+        color: #000000 !important;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    .mat-subcat-chip.active {
+        background: #0f172a !important;
+        color: #ffffff !important;
+        border-color: #0f172a !important;
+        box-shadow: 0 2px 8px rgba(15,23,42,0.2);
+    }
+</style>
+
 <!-- Category Filter Tabs -->
-<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 14px; flex-wrap: wrap;">
-    <a href="{{ route('admin.suppliers.materials', request()->except(['category', 'subcategory', 'page'])) }}" class="filter-pill {{ !request('category') || request('category') === 'all' ? 'active' : '' }}">
-        All Trade Categories ({{ \App\Models\SupplierMaterial::where('is_active', true)->count() }})
+<div class="mat-cat-tabs">
+    <a href="{{ route('admin.suppliers.materials', request()->except(['category', 'subcategory', 'page'])) }}" class="mat-cat-tab {{ !request('category') || request('category') === 'all' ? 'active' : '' }}">
+        All Trade Categories <span class="mat-cat-count">{{ \App\Models\SupplierMaterial::where('is_active', true)->count() }}</span>
     </a>
-    <a href="{{ route('admin.suppliers.materials', array_merge(request()->except(['subcategory', 'page']), ['category' => 'Windows & Doors'])) }}" class="filter-pill {{ request('category') === 'Windows & Doors' ? 'active' : '' }}" style="{{ request('category') === 'Windows & Doors' ? 'background: var(--primary-red-light); color: var(--primary-red); border-color: rgba(220, 38, 38, 0.4);' : '' }}">
-        Windows & Doors ({{ \App\Models\SupplierMaterial::where('category', 'Windows & Doors')->where('is_active', true)->count() }})
+    <a href="{{ route('admin.suppliers.materials', array_merge(request()->except(['subcategory', 'page']), ['category' => 'Windows & Doors'])) }}" class="mat-cat-tab {{ request('category') === 'Windows & Doors' ? 'active' : '' }}">
+        Windows & Doors <span class="mat-cat-count">{{ \App\Models\SupplierMaterial::where('category', 'Windows & Doors')->where('is_active', true)->count() }}</span>
     </a>
-    <a href="{{ route('admin.suppliers.materials', array_merge(request()->except(['subcategory', 'page']), ['category' => 'Roofing'])) }}" class="filter-pill {{ request('category') === 'Roofing' ? 'active' : '' }}" style="{{ request('category') === 'Roofing' ? 'background: var(--primary-red-light); color: var(--primary-red); border-color: rgba(220, 38, 38, 0.4);' : '' }}">
-        Roofing Materials ({{ \App\Models\SupplierMaterial::where('category', 'Roofing')->where('is_active', true)->count() }})
+    <a href="{{ route('admin.suppliers.materials', array_merge(request()->except(['subcategory', 'page']), ['category' => 'Roofing'])) }}" class="mat-cat-tab {{ request('category') === 'Roofing' ? 'active' : '' }}">
+        Roofing Materials <span class="mat-cat-count">{{ \App\Models\SupplierMaterial::where('category', 'Roofing')->where('is_active', true)->count() }}</span>
     </a>
-    <a href="{{ route('admin.suppliers.materials', array_merge(request()->except(['subcategory', 'page']), ['category' => 'Structural & Masonry'])) }}" class="filter-pill {{ request('category') === 'Structural & Masonry' ? 'active' : '' }}" style="{{ request('category') === 'Structural & Masonry' ? 'background: rgba(16, 185, 129, 0.15); color: #059669; border-color: rgba(16, 185, 129, 0.4);' : '' }}">
-        Structural & Masonry ({{ \App\Models\SupplierMaterial::where('category', 'Structural & Masonry')->where('is_active', true)->count() }})
+    <a href="{{ route('admin.suppliers.materials', array_merge(request()->except(['subcategory', 'page']), ['category' => 'Structural & Masonry'])) }}" class="mat-cat-tab {{ request('category') === 'Structural & Masonry' ? 'active' : '' }}">
+        Structural & Masonry <span class="mat-cat-count">{{ \App\Models\SupplierMaterial::where('category', 'Structural & Masonry')->where('is_active', true)->count() }}</span>
     </a>
 </div>
 
 <!-- Search, Filter & Sorting Bar -->
-<div style="background: #fafbfc; border: 1px solid var(--border-color); border-radius: 12px; padding: 18px 20px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-    <form method="GET" action="{{ route('admin.suppliers.materials') }}" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
+<div class="mat-filter-card">
+    <form method="GET" action="{{ route('admin.suppliers.materials') }}">
         @if(request('category'))
             <input type="hidden" name="category" value="{{ request('category') }}">
         @endif
 
-        <!-- Left: Search Box -->
-        <div style="display: flex; align-items: center; gap: 10px; flex: 1; min-width: 260px;">
-            <div style="position: relative; width: 100%; max-width: 360px;">
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search product name, specs, or code..." class="input-field search-input-with-icon" style="width: 100%; padding-left: 38px !important; font-size: 0.85rem;">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <div class="mat-filter-grid">
+            <!-- Left: Search Box & Reset -->
+            <div class="mat-search-group">
+                <div class="mat-search-wrapper">
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Search product name, specs, or code..." class="mat-search-input">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); pointer-events: none;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                </div>
+                <button type="submit" class="mat-btn-search">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    Search
+                </button>
+                @if(request()->hasAny(['search', 'supplier_id', 'status', 'sort', 'subcategory']))
+                    <a href="{{ route('admin.suppliers.materials', request('category') ? ['category' => request('category')] : []) }}" class="mat-btn-reset" title="Clear all filters">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        Reset
+                    </a>
+                @endif
             </div>
-            <button type="submit" class="btn-secondary" style="padding: 8px 14px; font-size: 0.8rem;">
-                Search
-            </button>
-            @if(request()->hasAny(['search', 'supplier_id', 'status', 'sort', 'subcategory']))
-                <a href="{{ route('admin.suppliers.materials', request('category') ? ['category' => request('category')] : []) }}" class="btn-secondary" style="padding: 8px 12px; font-size: 0.8rem; color: var(--text-muted);">
-                    Reset Filters
-                </a>
-            @endif
+
+            <!-- Right: Supplier & Sorting Selectors -->
+            <div class="mat-select-group">
+                <!-- Supplier Filter -->
+                <select name="supplier_id" onchange="this.form.submit()" class="mat-select-box" title="Filter by Supplier">
+                    <option value="all">All Suppliers</option>
+                    @foreach($suppliers as $sup)
+                        <option value="{{ $sup->id }}" {{ request('supplier_id') == $sup->id ? 'selected' : '' }}>
+                            {{ $sup->name }}
+                        </option>
+                    @endforeach
+                </select>
+
+                <!-- Availability Status -->
+                <select name="status" onchange="this.form.submit()" class="mat-select-box" title="Filter by Status">
+                    <option value="all" {{ !request('status') || request('status') === 'all' ? 'selected' : '' }}>All Statuses</option>
+                    <option value="available" {{ request('status') === 'available' ? 'selected' : '' }}>Available for Order</option>
+                    <option value="unavailable" {{ request('status') === 'unavailable' ? 'selected' : '' }}>Unavailable</option>
+                </select>
+
+                <!-- Sorting -->
+                <select name="sort" onchange="this.form.submit()" class="mat-select-box" title="Sort Order">
+                    <option value="name_asc" {{ request('sort') === 'name_asc' ? 'selected' : '' }}>Sort: Name (A-Z)</option>
+                    <option value="price_low" {{ request('sort') === 'price_low' ? 'selected' : '' }}>Price: Low to High</option>
+                    <option value="price_high" {{ request('sort') === 'price_high' ? 'selected' : '' }}>Price: High to Low</option>
+                    <option value="newest" {{ request('sort') === 'newest' ? 'selected' : '' }}>Newest Cataloged</option>
+                </select>
+            </div>
         </div>
 
-        <!-- Right: Supplier & Sorting Selectors -->
-        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-            <!-- Supplier Filter -->
-            <select name="supplier_id" onchange="this.form.submit()" class="input-field" style="font-size: 0.8rem; padding: 8px 12px;">
-                <option value="all">All Suppliers</option>
-                @foreach($suppliers as $sup)
-                    <option value="{{ $sup->id }}" {{ request('supplier_id') == $sup->id ? 'selected' : '' }}>
-                        {{ $sup->name }}
-                    </option>
+        <!-- Subcategory Chips -->
+        @if(isset($subcategories) && $subcategories->count() > 0)
+            <div class="mat-subcat-bar">
+                <span class="mat-subcat-label">Subcategory:</span>
+                <a href="{{ route('admin.suppliers.materials', array_merge(request()->except('subcategory'), ['subcategory' => 'all'])) }}" class="mat-subcat-chip {{ !request('subcategory') || request('subcategory') === 'all' ? 'active' : '' }}">
+                    All
+                </a>
+                @foreach($subcategories as $subcat)
+                    <a href="{{ route('admin.suppliers.materials', array_merge(request()->except('subcategory'), ['subcategory' => $subcat])) }}" class="mat-subcat-chip {{ request('subcategory') === $subcat ? 'active' : '' }}">
+                        {{ $subcat }}
+                    </a>
                 @endforeach
-            </select>
-
-            <!-- Availability Status -->
-            <select name="status" onchange="this.form.submit()" class="input-field" style="font-size: 0.8rem; padding: 8px 12px;">
-                <option value="all" {{ !request('status') || request('status') === 'all' ? 'selected' : '' }}>All Statuses</option>
-                <option value="available" {{ request('status') === 'available' ? 'selected' : '' }}>Available for Order</option>
-                <option value="unavailable" {{ request('status') === 'unavailable' ? 'selected' : '' }}>Unavailable</option>
-            </select>
-
-            <!-- Sorting -->
-            <select name="sort" onchange="this.form.submit()" class="input-field" style="font-size: 0.8rem; padding: 8px 12px;">
-                <option value="name_asc" {{ request('sort') === 'name_asc' ? 'selected' : '' }}>Sort: Name (A-Z)</option>
-                <option value="price_low" {{ request('sort') === 'price_low' ? 'selected' : '' }}>Price: Low to High</option>
-                <option value="price_high" {{ request('sort') === 'price_high' ? 'selected' : '' }}>Price: High to Low</option>
-                <option value="newest" {{ request('sort') === 'newest' ? 'selected' : '' }}>Newest Cataloged</option>
-            </select>
-        </div>
+            </div>
+        @endif
     </form>
-
-    <!-- Subcategory Pills -->
-    @if(isset($subcategories) && $subcategories->count() > 0)
-        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border-color);">
-            <span style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Subcategory:</span>
-            <a href="{{ route('admin.suppliers.materials', array_merge(request()->except('subcategory'), ['subcategory' => 'all'])) }}" class="filter-pill {{ !request('subcategory') || request('subcategory') === 'all' ? 'active' : '' }}" style="font-size: 0.75rem; padding: 4px 10px;">
-                All
-            </a>
-            @foreach($subcategories as $subcat)
-                <a href="{{ route('admin.suppliers.materials', array_merge(request()->except('subcategory'), ['subcategory' => $subcat])) }}" class="filter-pill {{ request('subcategory') === $subcat ? 'active' : '' }}" style="font-size: 0.75rem; padding: 4px 10px;">
-                    {{ $subcat }}
-                </a>
-            @endforeach
-        </div>
-    @endif
 </div>
 
 <!-- Product Matrix Table -->

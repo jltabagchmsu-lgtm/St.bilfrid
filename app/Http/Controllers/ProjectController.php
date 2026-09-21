@@ -323,6 +323,11 @@ class ProjectController extends Controller
     public function destroy(Request $request, $id)
     {
         $project = Project::with(['photos', 'tasks', 'scopeItems.lines', 'projectMaterials', 'costs', 'payments'])->findOrFail($id);
+
+        if ($request->input('confirmation') !== 'DELETE') {
+            return redirect()->back()->withErrors(['confirmation' => 'You must type "DELETE" exactly to confirm project deletion.']);
+        }
+
         $projectCode = $project->project_code;
         $projectTitle = $project->title;
         $status = $project->status;
