@@ -101,7 +101,7 @@
                 <span class="badge badge-{{ $selectedProject->status }}" style="text-transform: capitalize;">{{ str_replace('_', ' ', $selectedProject->status) }}</span>
                 <span style="font-family: var(--font-mono); font-size: 0.9rem; color: #0369a1; font-weight: 800;">{{ $selectedProject->project_code }}</span>
                 <span class="spec-chip" style="font-size: 0.75rem; color: #047857; font-weight: 600;">
-                    {{ $selectedProject->scopeItems->count() }} Scope Items &bull; {{ $masterMaterialsDistinctCount }} Materials Required
+                    {{ $selectedProject->tasks->count() }} Tasks &bull; {{ $selectedProject->scopeItems->count() }} Scope Items &bull; {{ $masterMaterialsDistinctCount }} Materials Synchronized
                 </span>
             </div>
             <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--text-primary); margin: 2px 0 0 0;">{{ $selectedProject->title }}</h2>
@@ -111,11 +111,16 @@
         </div>
 
         <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-            <!-- Auto-Allocate Scope to Site Tracker -->
-            <form action="{{ route('bom.autoAllocateScope', $selectedProject->id) }}" method="POST" onsubmit="return confirm('Synchronize and auto-allocate all materials from the Scope BOM into the Site Tracker warehouse allocation?');">
+            <!-- Link to Active Project Tracking -->
+            <a href="{{ route('projects.show', $selectedProject->id) }}" class="btn-secondary" style="font-size: 0.8rem; height: 36px; display: inline-flex; align-items: center; gap: 6px; text-decoration: none;">
+                &larr; Active Project Tracking
+            </a>
+
+            <!-- Auto-Allocate Scope & Tasks to Site Tracker -->
+            <form action="{{ route('bom.autoAllocateScope', $selectedProject->id) }}" method="POST" onsubmit="return confirm('Synchronize and auto-allocate all materials from Active Tasks & Scope BOM into the Site Tracker warehouse allocation?');">
                 @csrf
-                <button type="submit" class="btn-primary" style="font-size: 0.8rem; height: 36px; background: #047857; border-color: #047857; display: inline-flex; align-items: center; gap: 6px;" title="Sync all Scope BOM materials to Site Tracker">
-                    Sync Scope to Site Tracker
+                <button type="submit" class="btn-primary" style="font-size: 0.8rem; height: 36px; background: #047857; border-color: #047857; display: inline-flex; align-items: center; gap: 6px;" title="Sync all Task & Scope BOM materials to Site Tracker">
+                    Sync Tasks & Scope to Site
                 </button>
             </form>
 
@@ -260,7 +265,7 @@
                         <th style="width: 80px; text-align: left;">Unit</th>
                         <th style="width: 120px; text-align: right;">Contract Price</th>
                         <th style="width: 150px; text-align: right;">Total Amount</th>
-                        <th style="min-width: 200px; text-align: left;">Associated Scope Items</th>
+                        <th style="min-width: 220px; text-align: left;">Associated Tasks & Scope Items</th>
                         <th style="width: 130px; text-align: right;">Warehouse Stock</th>
                         <th style="width: 120px; text-align: center;">Site Status</th>
                     </tr>
@@ -294,8 +299,12 @@
                             <td style="text-align: left;">
                                 <div style="display: flex; flex-wrap: wrap; gap: 4px;">
                                     @foreach($item->scope_items as $sc)
-                                        <span class="spec-chip" style="font-size: 0.675rem; background: #f8fafc; border-color: var(--border-color); color: var(--text-secondary);" title="{{ $sc['item_name'] }}: {{ $sc['line_qty'] }} {{ $item->unit }}">
-                                            Item {{ $sc['item_number'] }} ({{ number_format($sc['line_qty']) }} {{ $item->unit }})
+                                        <span class="spec-chip" style="font-size: 0.675rem; background: #f8fafc; border-color: var(--border-color); color: var(--text-secondary);" title="{{ $sc['item_name'] }}: {{ number_format($sc['line_qty']) }} {{ $item->unit }}">
+                                            @if(str_starts_with($sc['item_number'], 'Item '))
+                                                {{ $sc['item_number'] }} ({{ number_format($sc['line_qty']) }} {{ $item->unit }})
+                                            @else
+                                                {{ $sc['item_number'] }}: {{ \Illuminate\Support\Str::limit($sc['item_name'], 24) }} ({{ number_format($sc['line_qty']) }} {{ $item->unit }})
+                                            @endif
                                         </span>
                                     @endforeach
                                 </div>
@@ -325,9 +334,14 @@
                         <tr>
                             <td colspan="10" style="text-align: center; padding: 48px 20px; color: var(--text-muted);">
                                 <div style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary);">No Material Requirements in BOM Yet</div>
-                                <div style="font-size: 0.85rem; margin-top: 4px;">Add Scope Items and itemized materials to generate this Bill of Materials.</div>
-                                <div style="margin-top: 16px;">
-                                    <button class="btn-primary" onclick="openModal('addScopeItemModal')">
+                                <div style="font-size: 0.85rem; margin-top: 4px;">Tasks in Active Project Tracking or itemized Scope Items will automatically populate this Bill of Materials.</div>
+                                <div style="margin-top: 16px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                                    @if($selectedProject)
+                                        <a href="{{ route('projects.show', $selectedProject->id) }}" class="btn-primary" style="text-decoration: none; font-size: 0.825rem; display: inline-flex; align-items: center; gap: 6px;">
+                                            Go to Active Project Tracking &rarr;
+                                        </a>
+                                    @endif
+                                    <button class="btn-secondary" onclick="openModal('addScopeItemModal')" style="font-size: 0.825rem;">
                                         + Add Scope Item
                                     </button>
                                 </div>

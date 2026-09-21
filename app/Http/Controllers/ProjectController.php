@@ -7,6 +7,7 @@ use App\Models\Personnel;
 use App\Models\Material;
 use App\Models\ProjectMaterial;
 use App\Models\ProjectTask;
+use App\Models\ProjectTaskMaterial;
 use App\Models\Payment;
 use App\Models\ProjectPhoto;
 use App\Models\ProjectCost;
@@ -747,12 +748,18 @@ class ProjectController extends Controller
             'status' => 'nullable|string',
             'timeline_phase' => 'nullable|string',
             'timeline_month' => 'nullable|string',
+            'materials' => 'nullable|array',
+            'materials.*.name' => 'nullable|string|max:255',
+            'materials.*.quantity' => 'nullable|numeric|min:0',
+            'materials.*.unit' => 'nullable|string|max:50',
+            'materials.*.unit_cost' => 'nullable|numeric|min:0',
+            'materials.*.category' => 'nullable|string|max:100',
         ]);
 
         $progress = (int) ($validated['progress'] ?? 0);
         $status = $validated['status'] ?? ($progress >= 100 ? 'completed' : ($progress > 15 ? 'in_progress' : ($progress > 0 ? 'started' : 'not_started')));
 
-        ProjectTask::create([
+        $task = ProjectTask::create([
             'project_id' => $projectId,
             'task_name' => $validated['task_name'],
             'category' => $validated['category'],
@@ -768,9 +775,43 @@ class ProjectController extends Controller
             'sort_order' => $project->tasks()->count() + 1,
         ]);
 
+        // Synchronize Task Materials to Task & BOM Master Table
+        $materialsTotal = 0;
+        if (!empty($validated['materials']) && is_array($validated['materials'])) {
+            foreach ($validated['materials'] as $mat) {
+                $matName = trim($mat['name'] ?? '');
+                $qty = (float) ($mat['quantity'] ?? 0);
+                $unit = trim($mat['unit'] ?? 'pcs');
+                $unitCost = (float) ($mat['unit_cost'] ?? 0);
+
+                if (!empty($matName) && $qty > 0) {
+                    $total = round($qty * $unitCost, 2);
+                    $materialsTotal += $total;
+
+                    $catalogMat = Material::where('name', $matName)->first();
+
+                    ProjectTaskMaterial::create([
+                        'project_task_id' => $task->id,
+                        'material_id' => $catalogMat ? $catalogMat->id : null,
+                        'material_name' => $matName,
+                        'category' => $mat['category'] ?? $validated['category'],
+                        'unit' => $unit,
+                        'unit_cost' => $unitCost,
+                        'quantity' => $qty,
+                        'total_cost' => $total,
+                        'status' => 'allocated',
+                    ]);
+                }
+            }
+        }
+
+        if ($materialsTotal > 0 && empty($validated['allocated_budget'])) {
+            $task->update(['allocated_budget' => $materialsTotal]);
+        }
+
         $project->recalculateTradeProgressFromTasks();
 
-        return redirect()->back()->with('success', 'Task "' . $validated['task_name'] . '" added to ' . $validated['category'] . ' checklist! Overall progress recalculated.');
+        return redirect()->back()->with('success', 'Task "' . $validated['task_name'] . '" added to ' . $validated['category'] . ' checklist! Materials synchronized directly into BOM Master Table.');
     }
 
     public function updateTask(Request $request, $taskId)

@@ -17,17 +17,21 @@ class BomController extends Controller
     public function index(Request $request)
     {
         $selectedProjectId = $request->query('project_id');
-        $projects = Project::withCount('scopeItems')->orderBy('status', 'asc')->orderBy('title', 'asc')->get();
+        $projects = Project::withCount(['scopeItems', 'tasks'])->orderBy('status', 'asc')->orderBy('title', 'asc')->get();
         
-        // If no project selected, default to the first project with scope items, or the first project
+        // If no project selected, default to the first project with tasks or scope items, or the first project
         if (!$selectedProjectId && $projects->count() > 0) {
-            $firstWithScope = $projects->firstWhere('scope_items_count', '>', 0);
-            $selectedProjectId = $firstWithScope ? $firstWithScope->id : $projects->first()->id;
+            $firstWithTasksOrScope = $projects->first(function ($p) {
+                return $p->tasks_count > 0 || $p->scope_items_count > 0;
+            });
+            $selectedProjectId = $firstWithTasksOrScope ? $firstWithTasksOrScope->id : $projects->first()->id;
         }
 
         $selectedProject = null;
         if ($selectedProjectId) {
             $selectedProject = Project::with([
+                'tasks.taskMaterials',
+                'tasks.assignedPersonnel',
                 'scopeItems' => function ($q) {
                     $q->orderBy('item_number', 'asc');
                 },
@@ -44,22 +48,96 @@ class BomController extends Controller
                 'materialTransfersIn.material',
                 'materialTransfersIn.sourceProject',
             ])->find($selectedProjectId);
+
+            if ($selectedProject && $selectedProject->tasks->count() === 0) {
+                $selectedProject->seedDefaultChecklist();
+                $selectedProject->load('tasks.taskMaterials');
+            }
         }
 
         $materialsCatalog = Material::orderBy('category')->orderBy('name')->get();
 
         // Build Consolidated Master "All Materials" Table for Selected Project
+        // Aggregates both Active Project Checklist Task Materials AND Scope DUPA Items
         $masterMaterialsList = collect();
-        if ($selectedProject && $selectedProject->scopeItems) {
-            $allScopeMaterials = $selectedProject->scopeItems->flatMap(function ($item) {
-                return $item->materials->map(function ($line) use ($item) {
-                    $line->scope_item_number = $item->item_number;
-                    $line->scope_item_name = $item->item_name;
-                    return $line;
-                });
-            });
+        $allCombinedMaterials = collect();
 
-            $grouped = $allScopeMaterials->groupBy(function ($line) {
+        if ($selectedProject) {
+            // 1. Collect Materials from Active Project Checklist Tasks (ProjectTaskMaterial)
+            if ($selectedProject->tasks) {
+                foreach ($selectedProject->tasks as $task) {
+                    foreach ($task->taskMaterials as $tm) {
+                        $qty = (float) $tm->quantity;
+                        $cost = (float) $tm->unit_cost;
+                        $total = (float) ($tm->total_cost ?: ($qty * $cost));
+
+                        $allCombinedMaterials->push((object)[
+                            'description' => trim($tm->material_name),
+                            'unit' => $tm->unit ?: 'pcs',
+                            'quantity' => $qty,
+                            'unit_price' => $cost,
+                            'total_cost' => $total,
+                            'scope_item_number' => $task->category,
+                            'scope_item_name' => $task->task_name,
+                            'category' => $this->determineMaterialCategory($tm->material_name),
+                            'source' => 'Task: ' . $task->task_name,
+                        ]);
+                    }
+                }
+            }
+
+            // 2. Collect Materials from Itemized Scope DUPA Items (ProjectScopeLine)
+            if ($selectedProject->scopeItems) {
+                foreach ($selectedProject->scopeItems as $item) {
+                    foreach ($item->materials as $line) {
+                        $qty = (float) $line->quantity;
+                        $cost = (float) $line->unit_price;
+                        $total = (float) ($line->total_cost ?: ($qty * $cost));
+
+                        $allCombinedMaterials->push((object)[
+                            'description' => trim($line->description),
+                            'unit' => $line->unit ?: 'pcs',
+                            'quantity' => $qty,
+                            'unit_price' => $cost,
+                            'total_cost' => $total,
+                            'scope_item_number' => 'Item ' . $item->item_number,
+                            'scope_item_name' => $item->item_name,
+                            'category' => $this->determineMaterialCategory($line->description),
+                            'source' => 'Scope: ' . $item->item_name,
+                        ]);
+                    }
+                }
+            }
+
+            // 3. Collect Direct Site Allocations (ProjectMaterial) if not already included
+            if ($selectedProject->projectMaterials) {
+                foreach ($selectedProject->projectMaterials as $pm) {
+                    if ($pm->material && $pm->allocated_qty > 0) {
+                        $matName = trim($pm->material->name);
+                        $matUnit = $pm->material->unit ?: 'pcs';
+                        $exists = $allCombinedMaterials->contains(function ($m) use ($matName) {
+                            return strtolower(trim($m->description)) === strtolower(trim($matName));
+                        });
+
+                        if (!$exists) {
+                            $allCombinedMaterials->push((object)[
+                                'description' => $matName,
+                                'unit' => $matUnit,
+                                'quantity' => (float) $pm->allocated_qty,
+                                'unit_price' => (float) $pm->unit_price,
+                                'total_cost' => (float) ($pm->allocated_qty * $pm->unit_price),
+                                'scope_item_number' => 'Site Allocation',
+                                'scope_item_name' => 'Central Warehouse Dispatch',
+                                'category' => $this->determineMaterialCategory($matName),
+                                'source' => 'Site Allocation',
+                            ]);
+                        }
+                    }
+                }
+            }
+
+            // Group and consolidate identical material specifications
+            $grouped = $allCombinedMaterials->groupBy(function ($line) {
                 return strtolower(trim($line->description)) . '|' . strtolower(trim($line->unit));
             });
 
@@ -69,17 +147,17 @@ class BomController extends Controller
                 $totalQty = (float) $groupLines->sum('quantity');
                 $totalCost = (float) $groupLines->sum('total_cost');
                 $unitPrice = $totalQty > 0 ? ($totalCost / $totalQty) : (float) $first->unit_price;
-                
+
                 $scopeItemsUsed = $groupLines->map(function ($l) {
                     return [
                         'item_number' => $l->scope_item_number,
                         'item_name' => $l->scope_item_name,
                         'line_qty' => $l->quantity,
-                        'line_id' => $l->id,
                     ];
+                })->unique(function ($item) {
+                    return $item['item_number'] . '|' . $item['item_name'];
                 })->values()->all();
 
-                // Determine Material Category
                 $category = $this->determineMaterialCategory($first->description);
 
                 // Match with Central Warehouse Stock
@@ -108,23 +186,30 @@ class BomController extends Controller
                     'site_allocated_qty' => $siteAllocation ? $siteAllocation->allocated_qty : 0,
                     'site_used_qty' => $siteAllocation ? $siteAllocation->used_qty : 0,
                     'site_remaining_qty' => $siteAllocation ? $siteAllocation->remaining_qty : 0,
-                    'sample_line_id' => $first->id,
                 ]);
             }
         }
 
-        // Scope DUPA Financial Totals
-        $scopeMaterialsSubtotal = $selectedProject ? $selectedProject->total_scope_materials_cost : 0;
+        // Scope DUPA & Task Financial Totals
+        $scopeMaterialsSubtotal = $selectedProject ? ($selectedProject->total_scope_materials_cost ?: $masterMaterialsList->sum('total_cost')) : 0;
         $scopeLaborSubtotal = $selectedProject ? $selectedProject->total_scope_labor_cost : 0;
         $scopeEquipmentSubtotal = $selectedProject ? $selectedProject->total_scope_equipment_cost : 0;
-        $scopeDirectCost = $selectedProject ? $selectedProject->total_scope_direct_cost : 0;
+        $scopeDirectCost = $selectedProject ? ($selectedProject->total_scope_direct_cost ?: $scopeMaterialsSubtotal) : 0;
         $scopeGrandTotal = $selectedProject ? ($selectedProject->grand_scope_cost ?: $selectedProject->contract_budget) : 0;
 
         $masterMaterialsTotalCost = $masterMaterialsList->sum('total_cost');
         $masterMaterialsDistinctCount = $masterMaterialsList->count();
-        $masterMaterialsTotalLineCount = $selectedProject && $selectedProject->scopeItems ? $selectedProject->scopeItems->sum(function ($item) {
-            return $item->materials->count();
-        }) : 0;
+        $masterMaterialsTotalLineCount = 0;
+        if ($selectedProject) {
+            $masterMaterialsTotalLineCount += $selectedProject->tasks->sum(function ($task) {
+                return $task->taskMaterials->count();
+            });
+            if ($selectedProject->scopeItems) {
+                $masterMaterialsTotalLineCount += $selectedProject->scopeItems->sum(function ($item) {
+                    return $item->materials->count();
+                });
+            }
+        }
 
         // Warehouse site allocation queries
         $query = ProjectMaterial::with(['project', 'material', 'dailyUsages']);
@@ -222,17 +307,46 @@ class BomController extends Controller
     }
 
     /**
-     * 1-Click Auto-Allocate Scope BOM Materials directly into Site Material Allocations Tracker
+     * 1-Click Auto-Allocate Task Checklist & Scope BOM Materials directly into Site Material Allocations Tracker
      */
     public function autoAllocateFromScope($id)
     {
-        $project = Project::with(['scopeItems.materials'])->findOrFail($id);
+        $project = Project::with(['scopeItems.materials', 'tasks.taskMaterials'])->findOrFail($id);
 
-        if ($project->scopeItems->count() === 0) {
-            return redirect()->back()->with('error', 'This project does not have any Scope BOM items yet. Please load a template or add items first.');
+        $allMaterials = collect();
+
+        // 1. Task checklist materials
+        if ($project->tasks) {
+            foreach ($project->tasks as $task) {
+                foreach ($task->taskMaterials as $tm) {
+                    $allMaterials->push((object)[
+                        'description' => trim($tm->material_name),
+                        'unit' => $tm->unit ?: 'pcs',
+                        'quantity' => (float) $tm->quantity,
+                        'unit_price' => (float) $tm->unit_cost,
+                    ]);
+                }
+            }
         }
 
-        $allMaterials = $project->scopeItems->flatMap->materials;
+        // 2. Scope item materials
+        if ($project->scopeItems) {
+            foreach ($project->scopeItems as $item) {
+                foreach ($item->materials as $line) {
+                    $allMaterials->push((object)[
+                        'description' => trim($line->description),
+                        'unit' => $line->unit ?: 'pcs',
+                        'quantity' => (float) $line->quantity,
+                        'unit_price' => (float) $line->unit_price,
+                    ]);
+                }
+            }
+        }
+
+        if ($allMaterials->isEmpty()) {
+            return redirect()->back()->with('error', 'This project does not have any materials in Tasks or Scope BOM yet. Add tasks or scope items first.');
+        }
+
         $grouped = $allMaterials->groupBy(function ($line) {
             return strtolower(trim($line->description)) . '|' . strtolower(trim($line->unit));
         });
@@ -285,7 +399,7 @@ class BomController extends Controller
                     'quantity' => (int) ceil($totalQty),
                     'unit_cost' => $unitPrice,
                     'reference_no' => 'BOM-SYNC-' . $pm->id,
-                    'notes' => 'Auto-allocated from Scope BOM specification (' . number_format($totalQty) . ' ' . $first->unit . ').',
+                    'notes' => 'Auto-allocated from Task/Scope BOM specification (' . number_format($totalQty) . ' ' . $first->unit . ').',
                 ]);
             }
 
@@ -293,7 +407,7 @@ class BomController extends Controller
         }
 
         return redirect()->route('bom.index', ['project_id' => $project->id])
-            ->with('success', 'Successfully synchronized and allocated ' . $allocatedCount . ' materials from Scope BOM directly into Site Tracking!');
+            ->with('success', 'Successfully synchronized and allocated ' . $allocatedCount . ' materials from Project Tasks & Scope directly into Site Tracking!');
     }
 
     public function store(Request $request)

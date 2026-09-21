@@ -2303,6 +2303,29 @@
                 </div>
             </div>
 
+            <!-- Dynamic Synchronized Task Materials -->
+            <div style="margin-top: 16px; padding: 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 8px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <div>
+                        <span style="font-size: 0.85rem; font-weight: 700; color: #38bdf8;">📦 Task Materials (Auto-Syncs to BOM Master Table)</span>
+                        <div style="font-size: 0.75rem; color: #94a3b8;">Materials entered here automatically reflect in Bill of Materials without manual re-entry.</div>
+                    </div>
+                    <button type="button" class="btn-secondary" onclick="addTaskMaterialRow()" style="padding: 4px 10px; font-size: 0.75rem; border-color: #38bdf8; color: #38bdf8;">
+                        + Add Material Line
+                    </button>
+                </div>
+
+                <div id="addTaskMaterialsContainer">
+                    <div class="task-material-row" style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 32px; gap: 8px; margin-bottom: 8px; align-items: center;">
+                        <input type="text" name="materials[0][name]" class="form-input" placeholder="Material Name (e.g. 10mm Rebar)" style="font-size: 0.8rem; padding: 6px 10px;">
+                        <input type="number" step="0.01" min="0" name="materials[0][quantity]" class="form-input" placeholder="Qty" style="font-size: 0.8rem; padding: 6px 10px;">
+                        <input type="text" name="materials[0][unit]" class="form-input" placeholder="Unit" value="pcs" style="font-size: 0.8rem; padding: 6px 10px;">
+                        <input type="number" step="0.01" min="0" name="materials[0][unit_cost]" class="form-input" placeholder="Unit ₱" style="font-size: 0.8rem; padding: 6px 10px;">
+                        <button type="button" onclick="removeTaskMaterialRow(this)" style="background: rgba(239,68,68,0.2); border: 1px solid rgba(239,68,68,0.4); color: #f87171; border-radius: 6px; height: 32px; cursor: pointer;">&times;</button>
+                    </div>
+                </div>
+            </div>
+
             <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
                 <button type="button" class="btn-secondary" onclick="closeModal('addTaskModal')">Cancel</button>
                 <button type="submit" class="btn-primary" style="background: #38bdf8; border-color: #38bdf8;">Add Task to Checklist</button>
@@ -3732,6 +3755,39 @@
             nameInput.value = '';
         }
         openModal('addTaskModal');
+    }
+
+    let taskMaterialIndex = 1;
+    function addTaskMaterialRow() {
+        const container = document.getElementById('addTaskMaterialsContainer');
+        if (!container) return;
+        const row = document.createElement('div');
+        row.className = 'task-material-row';
+        row.style.cssText = 'display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 32px; gap: 8px; margin-bottom: 8px; align-items: center;';
+        row.innerHTML = `
+            <input type="text" name="materials[${taskMaterialIndex}][name]" class="form-input" placeholder="Material Name" style="font-size: 0.8rem; padding: 6px 10px;">
+            <input type="number" step="0.01" min="0" name="materials[${taskMaterialIndex}][quantity]" class="form-input" placeholder="Qty" style="font-size: 0.8rem; padding: 6px 10px;">
+            <input type="text" name="materials[${taskMaterialIndex}][unit]" class="form-input" placeholder="Unit" value="pcs" style="font-size: 0.8rem; padding: 6px 10px;">
+            <input type="number" step="0.01" min="0" name="materials[${taskMaterialIndex}][unit_cost]" class="form-input" placeholder="Unit ₱" style="font-size: 0.8rem; padding: 6px 10px;">
+            <button type="button" onclick="removeTaskMaterialRow(this)" style="background: rgba(239,68,68,0.2); border: 1px solid rgba(239,68,68,0.4); color: #f87171; border-radius: 6px; height: 32px; cursor: pointer;">&times;</button>
+        `;
+        container.appendChild(row);
+        taskMaterialIndex++;
+    }
+
+    function removeTaskMaterialRow(btn) {
+        const container = document.getElementById('addTaskMaterialsContainer');
+        const rows = container.querySelectorAll('.task-material-row');
+        if (rows.length > 1) {
+            btn.closest('.task-material-row').remove();
+        } else {
+            // Just clear inputs
+            const row = btn.closest('.task-material-row');
+            row.querySelectorAll('input').forEach(i => {
+                if (i.name.includes('[unit]')) i.value = 'pcs';
+                else i.value = '';
+            });
+        }
     }
 
     function openEditTaskModal(taskId, name, category, progress, status, personnelId, startDate, dueDate, budget) {
