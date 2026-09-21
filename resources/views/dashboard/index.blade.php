@@ -7,9 +7,6 @@
     <a href="/projects" class="btn-primary" style="font-size: 0.85rem;">
         <span>+</span> Add / Manage Projects
     </a>
-    <a href="/payments" class="btn-secondary" style="font-size: 0.85rem;">
-        Sales Ledger
-    </a>
     <a href="/estimation" class="btn-secondary" style="font-size: 0.85rem;">
         + New Service Estimate
     </a>
@@ -29,11 +26,6 @@
                     Contract bookings, cleared cash revenues, sales margins, and multi-year performance (2024 &ndash; 2027)
                 </span>
             </div>
-        </div>
-        <div style="display: flex; gap: 6px;">
-            <a href="/payments" class="btn-primary" style="font-size: 0.725rem; padding: 4px 10px;">
-                Full Sales Ledger &rarr;
-            </a>
         </div>
     </div>
 
