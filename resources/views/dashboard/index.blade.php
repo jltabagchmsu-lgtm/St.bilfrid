@@ -23,17 +23,8 @@
 <div class="glass-panel" style="border: 1px solid var(--border-color); background: #fafbfc; margin-bottom: 12px;">
     <div class="panel-header" style="margin-bottom: 8px;">
         <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-            <div style="width: 32px; height: 32px; min-width: 32px; border-radius: var(--radius-md); background: var(--primary-red-light); border: 1px solid var(--primary-red-border); display: flex; align-items: center; justify-content: center; color: var(--primary-red); flex-shrink: 0;">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-                    <polyline points="17 6 23 6 23 12"></polyline>
-                </svg>
-            </div>
             <div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <h3 class="panel-title" style="font-size: 1rem; color: var(--text-primary);">Executive Sales & Revenue Command</h3>
-                    <span class="sales-section-badge" style="font-size: 0.6rem; padding: 1px 6px;">Dedicated Sales Hub</span>
-                </div>
+                <h3 class="panel-title" style="font-size: 1rem; color: var(--text-primary);">Executive Sales & Revenue Command</h3>
                 <span style="font-size: 0.75rem; color: var(--text-muted);">
                     Contract bookings, cleared cash revenues, sales margins, and multi-year performance (2024 &ndash; 2027)
                 </span>
@@ -449,21 +440,6 @@
         </button>
         <button type="button" class="filter-pill-btn" onclick="filterProjectsByStatus('in_progress', this)">
             In Progress <span class="filter-pill-count">{{ $ongoingProjects->where('status', 'in_progress')->count() }}</span>
-        </button>
-        <button type="button" class="filter-pill-btn" onclick="filterProjectsByStatus('risk', this)">
-            Budget Watch / Caution <span class="filter-pill-count" style="background: rgba(220, 38, 38, 0.15); color: var(--primary-red);">
-                @php
-                    $riskCount = $ongoingProjects->filter(function($p) {
-                        $spentRatio = $p->contract_budget > 0 ? ($p->total_incurred_cost / $p->contract_budget) : 0;
-                        $progRatio = ($p->overall_progress ?? 0) / 100;
-                        return $spentRatio > ($progRatio + 0.05);
-                    })->count();
-                @endphp
-                {{ $riskCount }}
-            </span>
-        </button>
-        <button type="button" class="filter-pill-btn" onclick="filterProjectsByStatus('approved', this)">
-            Approved / Mobilizing <span class="filter-pill-count">{{ $ongoingProjects->where('status', 'approved')->count() }}</span>
         </button>
     </div>
 
