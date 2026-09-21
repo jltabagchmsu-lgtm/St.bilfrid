@@ -4,9 +4,6 @@
 @section('page_title', $project->title)
 
 @section('top_actions')
-    <button class="btn-secondary" style="font-size: 0.825rem; color: #0284c7; border-color: rgba(56, 189, 248, 0.4);" onclick="openModal('editProjectModal')">
-        Edit Project Specs
-    </button>
     <a href="{{ route('projects.printReport', $project->id) }}" target="_blank" class="btn-primary" style="font-size: 0.825rem; background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);">
         Official Accomplishment Report
     </a>
@@ -21,11 +18,6 @@
             Delete
         </button>
     </form>
-    @if($project->status === 'completed')
-        <a href="/history" class="btn-secondary" style="font-size: 0.825rem;">&larr; History</a>
-    @else
-        <a href="/projects" class="btn-secondary" style="font-size: 0.825rem;">&larr; Tracker</a>
-    @endif
 @endsection
 
 @section('content')
