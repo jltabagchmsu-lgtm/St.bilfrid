@@ -479,4 +479,35 @@ class ProjectModelTest extends TestCase
         $this->assertEquals(15000.00, $project->total_scope_equipment_cost);
         $this->assertEquals(130000.00, $project->total_scope_direct_cost);
     }
+
+    /**
+     * White-Box Test: Auto-seed checklist when project has zero tasks
+     */
+    public function test_auto_seeds_checklist_when_empty()
+    {
+        $project = Project::create([
+            'project_code' => 'PRJ-EMPTY-TEST',
+            'title' => 'Empty Project Test',
+            'client_name' => 'Test Client',
+            'location' => 'QC',
+            'land_area_sqm' => 100.0,
+            'floor_area_sqm' => 150.0,
+            'start_date' => '2026-01-01',
+            'end_date' => '2026-12-31',
+            'status' => 'in_progress',
+        ]);
+
+        $this->assertEquals(0, $project->tasks()->count());
+
+        // Simulate show controller logic
+        if ($project->tasks()->count() === 0) {
+            $project->seedDefaultChecklist();
+        }
+
+        $this->assertGreaterThan(50, $project->tasks()->count());
+        $this->assertGreaterThan(0, $project->structuralTasks()->count());
+        $this->assertGreaterThan(0, $project->electricalTasks()->count());
+        $this->assertGreaterThan(0, $project->pipingTasks()->count());
+        $this->assertGreaterThan(0, $project->finishingTasks()->count());
+    }
 }

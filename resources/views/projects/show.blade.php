@@ -3,6 +3,84 @@
 @section('title', $project->title . ' - Project Master Monitor & Control Hub')
 @section('page_title', $project->title)
 
+@push('styles')
+<style>
+.section-filter-toolbar {
+    background: #ffffff;
+    border-bottom: 2px solid #e2e8f0;
+    margin-bottom: 22px;
+    padding: 0 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+.discipline-tabs-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: -2px;
+}
+.discipline-tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px 12px 16px;
+    background: transparent;
+    border: none;
+    border-bottom: 3.5px solid transparent;
+    color: #64748b;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    white-space: nowrap;
+    user-select: none;
+    border-radius: 6px 6px 0 0;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+}
+.discipline-tab-btn:hover {
+    color: #0f172a;
+    background: #f8fafc;
+    border-bottom-color: #cbd5e1;
+}
+.discipline-tab-btn.active {
+    background: transparent !important;
+    color: #0f172a !important;
+    font-weight: 800 !important;
+    border-bottom: 3.5px solid var(--primary-red) !important;
+}
+.discipline-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+}
+.discipline-count-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 7px;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    background: #f1f5f9;
+    color: #64748b;
+    margin-left: 2px;
+}
+.discipline-tab-btn.active .discipline-count-badge {
+    background: #fee2e2 !important;
+    color: #dc2626 !important;
+}
+</style>
+@endpush
+
 @section('top_actions')
     <a href="{{ route('projects.printReport', $project->id) }}" target="_blank" class="btn-primary" style="font-size: 0.825rem; background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);">
         Official Accomplishment Report
@@ -3478,12 +3556,9 @@
 
     function switchChecklistTab(tab, btn) {
         currentDisciplineTab = tab;
-        const tabs = document.querySelectorAll('.checklist-discipline-tabs .btn-tab, #chkDisciplineTabsBar .btn-tab, [id^="tabBtn"]');
+        const tabs = document.querySelectorAll('.discipline-tabs-bar .discipline-tab-btn, .discipline-tab-btn');
         tabs.forEach(t => {
             t.classList.remove('active');
-            t.style.background = '';
-            t.style.borderColor = '';
-            t.style.color = '';
         });
 
         if (btn) {

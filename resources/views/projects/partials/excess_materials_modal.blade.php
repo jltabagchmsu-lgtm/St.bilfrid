@@ -462,6 +462,7 @@
         document.getElementById('summarySelectedCount').innerText = totalItems + ' Items';
         document.getElementById('summaryTotalUnits').innerText = numberFormat(totalUnits) + ' Units';
         document.getElementById('summaryTotalValuation').innerText = '₱' + numberFormat(totalValuation, 2);
+    }
     @php
         $catalogList = (isset($materialsCatalog) && count($materialsCatalog)) ? $materialsCatalog : \App\Models\Material::orderBy('name')->get();
     @endphp

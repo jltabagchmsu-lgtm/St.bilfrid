@@ -399,6 +399,12 @@ class ProjectController extends Controller
             'scopeItems.lines',
         ])->findOrFail($id);
 
+        // Auto-seed default engineering checklist if project has no tasks
+        if ($project->tasks->isEmpty()) {
+            $project->seedDefaultChecklist();
+            $project->load(['tasks.assignedPersonnel', 'tasks.taskMaterials']);
+        }
+
         $allPersonnel = Personnel::orderBy('name')->get();
         $allMaterials = Material::orderBy('name')->get();
         $otherProjects = Project::where('id', '!=', $project->id)->orderBy('title')->get();

@@ -98,6 +98,8 @@ class EstimationController extends Controller
             'description' => 'Project created from estimate ' . $serviceReq->request_code . '. ' . $serviceReq->notes,
         ]);
 
+        $project->seedDefaultChecklist();
+
         return redirect()->route('projects.show', $project->id)->with('success', 'Estimate initialized into Active Project Tracker as ' . $project->project_code . '!');
     }
 
