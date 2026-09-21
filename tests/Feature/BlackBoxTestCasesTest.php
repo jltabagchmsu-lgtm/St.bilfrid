@@ -30,10 +30,12 @@ class BlackBoxTestCasesTest extends TestCase
 
         // Ensure user exists
         if (!User::where('email', $email)->exists()) {
-            User::factory()->create([
+            User::create([
+                'name' => 'Admin User',
                 'email' => $email,
                 'password' => bcrypt('AdminMaster2026!'),
                 'role' => 'admin',
+                'status' => 'active',
             ]);
         }
 

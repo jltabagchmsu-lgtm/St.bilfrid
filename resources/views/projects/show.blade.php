@@ -1583,6 +1583,7 @@
                     <th>Task Budget</th>
                     <th>Actual Incurred</th>
                     <th>Completion %</th>
+                    <th style="text-align: center; width: 110px;">Proof Photo</th>
                     <th>Status</th>
                     <th style="text-align: right;">Action</th>
                 </tr>
@@ -1612,6 +1613,17 @@
                                 <span style="font-family: var(--font-mono); font-size: 0.8rem; font-weight: 700; color: var(--text-primary);">{{ $task->progress }}%</span>
                             </div>
                         </td>
+                        <td style="text-align: center; vertical-align: middle;">
+                            @if($task->photo_path)
+                                <div style="position: relative; width: 36px; height: 36px; border-radius: 6px; overflow: hidden; border: 1.5px solid #059669; display: inline-block; cursor: pointer; background: #0f172a;" title="Click to view full-size proof photo" onclick="openTaskPhotoPreviewModal('{{ asset($task->photo_path) }}', '{{ addslashes($task->task_name) }}', '{{ addslashes($task->category) }}', '{{ addslashes($task->photo_caption ?? '') }}', '{{ $task->updated_at ? $task->updated_at->format('M d, Y') : '' }}')">
+                                    <img src="{{ asset($task->photo_path) }}" alt="Proof" style="width: 100%; height: 100%; object-fit: cover;">
+                                </div>
+                            @else
+                                <button type="button" class="btn-secondary" style="font-size: 0.7rem; padding: 3px 6px; border: 1px dashed #0284c7; color: #0284c7; background: #f0f9ff;" onclick="openAttachTaskPhotoModal({{ $task->id }}, '{{ addslashes($task->task_name) }}', '{{ addslashes($task->category) }}', '', '', {{ $task->progress >= 100 ? 1 : 0 }})">
+                                    + Photo
+                                </button>
+                            @endif
+                        </td>
                         <td>
                             <span class="badge badge-{{ $task->status }}">{{ str_replace('_', ' ', $task->status) }}</span>
                         </td>
@@ -1623,7 +1635,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 24px;">
+                        <td colspan="9" style="text-align: center; color: var(--text-muted); padding: 24px;">
                             No tasks scheduled yet. Click "+ Schedule New Task" to build the project execution plan.
                         </td>
                     </tr>
@@ -2452,6 +2464,118 @@
                 <button type="submit" class="btn-primary">Assign Professional</button>
             </div>
         </form>
+    </div>
+</div>
+
+<!-- Modal: Attach Task Completion Photo Proof -->
+<div class="modal-overlay" id="attachTaskPhotoModal">
+    <div class="modal-box modal-box-large" style="max-width: 580px; background: #ffffff; border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.25);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 36px; height: 36px; border-radius: 8px; background: #f0f9ff; border: 1px solid #bae6fd; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #0284c7;">
+                    📷
+                </div>
+                <div>
+                    <h3 style="font-weight: 800; color: #0f172a; margin: 0; font-size: 1.15rem;">Attach Task Proof Photo</h3>
+                    <span id="attachTaskCategoryBadge" style="font-size: 0.75rem; color: #0284c7; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Structural</span>
+                </div>
+            </div>
+            <button onclick="closeModal('attachTaskPhotoModal')" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer; line-height: 1;">&times;</button>
+        </div>
+
+        <form id="attachTaskPhotoForm" action="" method="POST" enctype="multipart/form-data">
+            @csrf
+            
+            <!-- Task Info Card -->
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 14px; margin-bottom: 16px;">
+                <div style="font-size: 0.75rem; color: #64748b; text-transform: uppercase; font-weight: 700; letter-spacing: 0.04em;">Target Task / Milestone</div>
+                <div id="attachTaskNameDisplay" style="font-size: 0.95rem; font-weight: 800; color: #0f172a; margin-top: 2px;">Footing & Foundation Concrete Pouring</div>
+            </div>
+
+            <!-- Current Photo Preview (if already exists) -->
+            <div id="attachTaskExistingPhotoBox" style="display: none; margin-bottom: 16px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 12px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                    <span style="font-size: 0.775rem; font-weight: 700; color: #166534;">✓ Current Attached Proof</span>
+                    <button type="button" id="btnRemoveExistingTaskPhoto" style="font-size: 0.725rem; color: #dc2626; background: none; border: none; cursor: pointer; text-decoration: underline; font-weight: 700;">
+                        Delete This Photo
+                    </button>
+                </div>
+                <div style="width: 100%; height: 160px; border-radius: 6px; overflow: hidden; background: #0f172a; display: flex; align-items: center; justify-content: center;">
+                    <img id="attachTaskExistingImg" src="" alt="Proof Preview" style="width: 100%; height: 100%; object-fit: contain;">
+                </div>
+            </div>
+
+            <!-- File Upload & Live Preview Area -->
+            <div class="form-group" style="margin-bottom: 14px;">
+                <label class="form-label" style="font-weight: 700; color: #0f172a;">Upload Proof Photo File</label>
+                <input type="file" name="photo_file" id="attachTaskFileInput" class="form-input" accept="image/*" capture="environment" onchange="previewAttachTaskPhotoFile(event)" style="padding: 8px;">
+                <span style="font-size: 0.725rem; color: #64748b;">Supported: JPG, PNG, WEBP up to 10MB. Automatically opens camera on supported mobile/tablets.</span>
+            </div>
+
+            <!-- New Image Live Preview -->
+            <div id="attachTaskNewPhotoPreviewBox" style="display: none; margin-bottom: 14px; text-align: center;">
+                <div style="font-size: 0.75rem; color: #0284c7; font-weight: 700; margin-bottom: 4px;">Selected New Image Preview:</div>
+                <img id="attachTaskNewPhotoImg" src="" style="max-height: 180px; max-width: 100%; border-radius: 6px; border: 1.5px solid #0284c7; box-shadow: 0 4px 12px rgba(0,0,0,0.1); object-fit: contain;">
+            </div>
+
+            <!-- Optional Image URL -->
+            <div class="form-group" style="margin-bottom: 14px;">
+                <label class="form-label" style="font-weight: 700; color: #0f172a;">Or Image URL / Cloud Link (Optional)</label>
+                <input type="url" name="photo_url" id="attachTaskUrlInput" class="form-input" placeholder="https://example.com/site-photo.jpg">
+            </div>
+
+            <!-- Proof Notes / Caption -->
+            <div class="form-group" style="margin-bottom: 16px;">
+                <label class="form-label" style="font-weight: 700; color: #0f172a;">Proof Verification Notes / Caption</label>
+                <textarea name="caption" id="attachTaskCaptionInput" class="form-input" rows="2" placeholder="e.g. Inspected on-site by lead engineer, rebar spacing compliant with structural plan." style="resize: vertical; font-size: 0.85rem;"></textarea>
+            </div>
+
+            <!-- Mark Completed Checkbox -->
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px 12px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                <input type="checkbox" name="mark_completed" id="attachTaskMarkCompleted" value="1" checked style="width: 18px; height: 18px; cursor: pointer; accent-color: #059669;">
+                <label for="attachTaskMarkCompleted" style="font-size: 0.825rem; font-weight: 700; color: #0f172a; margin: 0; cursor: pointer;">
+                    Mark this task as 100% Completed & Mobilize Materials
+                </label>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                <button type="button" class="btn-secondary" onclick="closeModal('attachTaskPhotoModal')">Cancel</button>
+                <button type="submit" class="btn-primary" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); border-color: #0284c7; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
+                    <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    Save & Attach Proof Photo
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal: Fullscreen Task Proof Lightbox Preview -->
+<div class="modal-overlay" id="previewTaskPhotoModal" onclick="closeModal('previewTaskPhotoModal')">
+    <div style="max-width: 90vw; max-height: 92vh; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;" onclick="event.stopPropagation();">
+        <button onclick="closeModal('previewTaskPhotoModal')" style="position: absolute; top: -40px; right: 0; background: none; border: none; color: #fff; font-size: 2rem; cursor: pointer;">&times;</button>
+        <div style="position: relative; max-width: 100%; text-align: center;">
+            <img id="taskLightboxImg" src="" style="max-width: 100%; max-height: 72vh; border-radius: 8px; border: 2px solid rgba(255,255,255,0.2); box-shadow: 0 15px 50px rgba(0,0,0,0.85); object-fit: contain; background: #000;">
+            <div style="position: absolute; top: 12px; left: 12px; background: rgba(5, 150, 105, 0.9); color: #fff; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.05em; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 2px 8px rgba(0,0,0,0.4);">
+                <span>✓</span> VERIFIED PROOF OF COMPLETION
+            </div>
+        </div>
+        <div style="margin-top: 14px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6px; width: 100%; max-width: 650px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span id="taskLightboxCategory" style="display: inline-block; font-size: 0.75rem; font-weight: 800; color: #38bdf8; background: rgba(56,189,248,0.15); padding: 3px 8px; border-radius: 4px; text-transform: uppercase;"></span>
+                <span id="taskLightboxDate" style="font-size: 0.75rem; color: #94a3b8; font-family: var(--font-mono);"></span>
+            </div>
+            <div id="taskLightboxTitle" style="font-size: 1.15rem; font-weight: 800; color: #ffffff;"></div>
+            <div id="taskLightboxCaption" style="font-size: 0.85rem; color: #cbd5e1; background: rgba(15, 23, 42, 0.6); padding: 8px 14px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); width: 100%;"></div>
+            <div style="display: flex; gap: 10px; margin-top: 8px;">
+                <a id="taskLightboxDownloadLink" href="#" target="_blank" download class="btn-primary" style="font-size: 0.8rem; padding: 6px 14px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                    <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    Open Full Resolution Photo
+                </a>
+                <button type="button" class="btn-secondary" onclick="closeModal('previewTaskPhotoModal')" style="font-size: 0.8rem; padding: 6px 14px;">
+                    Close
+                </button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -3825,6 +3949,115 @@
             persSelect.value = personnelId || '';
         }
         openModal('editTaskModal');
+    }
+
+    // Task Proof Photo Modal Handlers
+    function openAttachTaskPhotoModal(taskId, taskName, category, existingPhotoUrl, caption, isCompleted) {
+        const form = document.getElementById('attachTaskPhotoForm');
+        form.action = '/projects/tasks/' + taskId + '/attach-photo';
+        form.reset();
+
+        document.getElementById('attachTaskNameDisplay').innerText = taskName;
+        document.getElementById('attachTaskCategoryBadge').innerText = category || 'Trade Task';
+        document.getElementById('attachTaskCaptionInput').value = caption || '';
+        
+        // Hide new preview
+        document.getElementById('attachTaskNewPhotoPreviewBox').style.display = 'none';
+        document.getElementById('attachTaskNewPhotoImg').src = '';
+
+        // Handle existing photo
+        const existingBox = document.getElementById('attachTaskExistingPhotoBox');
+        const existingImg = document.getElementById('attachTaskExistingImg');
+        const removeBtn = document.getElementById('btnRemoveExistingTaskPhoto');
+
+        if (existingPhotoUrl && existingPhotoUrl.trim() !== '') {
+            existingBox.style.display = 'block';
+            existingImg.src = existingPhotoUrl;
+            removeBtn.onclick = function() {
+                removeTaskPhotoAjax(taskId, taskName);
+                closeModal('attachTaskPhotoModal');
+            };
+        } else {
+            existingBox.style.display = 'none';
+            existingImg.src = '';
+        }
+
+        // Checkbox for mark completed
+        const markCompletedChk = document.getElementById('attachTaskMarkCompleted');
+        if (isCompleted) {
+            markCompletedChk.checked = true;
+            markCompletedChk.disabled = true;
+        } else {
+            markCompletedChk.checked = true;
+            markCompletedChk.disabled = false;
+        }
+
+        openModal('attachTaskPhotoModal');
+    }
+
+    function previewAttachTaskPhotoFile(event) {
+        const file = event.target.files[0];
+        const previewBox = document.getElementById('attachTaskNewPhotoPreviewBox');
+        const previewImg = document.getElementById('attachTaskNewPhotoImg');
+        
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImg.src = e.target.result;
+                previewBox.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            previewBox.style.display = 'none';
+            previewImg.src = '';
+        }
+    }
+
+    function openTaskPhotoPreviewModal(photoUrl, taskName, category, caption, date) {
+        document.getElementById('taskLightboxImg').src = photoUrl;
+        document.getElementById('taskLightboxTitle').innerText = taskName;
+        document.getElementById('taskLightboxCategory').innerText = category || 'Trade Task';
+        document.getElementById('taskLightboxDate').innerText = date ? 'Recorded: ' + date : '';
+        
+        const captionEl = document.getElementById('taskLightboxCaption');
+        if (caption && caption.trim() !== '') {
+            captionEl.innerText = caption;
+            captionEl.style.display = 'block';
+        } else {
+            captionEl.innerText = 'Proof of completion photo verified on site.';
+            captionEl.style.display = 'block';
+        }
+
+        document.getElementById('taskLightboxDownloadLink').href = photoUrl;
+        openModal('previewTaskPhotoModal');
+    }
+
+    function removeTaskPhotoAjax(taskId, taskName) {
+        if (!confirm('Remove the attached proof photo from "' + taskName + '"?')) return;
+
+        fetch('/projects/tasks/' + taskId + '/remove-photo', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                showChecklistToast('Proof photo removed from task "' + taskName + '"', false);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 500);
+            } else {
+                alert(data.error || 'Failed to remove photo.');
+            }
+        })
+        .catch(err => {
+            console.error('Error removing photo:', err);
+            alert('Network error removing photo: ' + err.message);
+        });
     }
 
     function openChecklistJsonModal() {

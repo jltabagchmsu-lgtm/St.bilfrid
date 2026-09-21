@@ -23,6 +23,8 @@ class ProjectTask extends Model
         'status',
         'timeline_phase',
         'timeline_month',
+        'photo_path',
+        'photo_caption',
     ];
 
     protected $casts = [

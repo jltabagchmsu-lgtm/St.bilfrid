@@ -207,4 +207,93 @@ class TaskBomSyncTest extends TestCase
         $response->assertSee('Colorsteel Roofing Solutions Corp.');
         $response->assertDontSee('PO-2026-002');
     }
+
+    /**
+     * Test attaching a photo proof to a task marks it completed, updates photo path, and registers to project gallery
+     */
+    public function test_attach_photo_proof_to_task_updates_task_and_creates_project_photo()
+    {
+        $project = Project::create([
+            'project_code' => 'PRJ-PROOF-01',
+            'title' => 'Proof Photo Test Project',
+            'client_name' => 'Michael Scott',
+            'status' => 'in_progress',
+            'land_area_sqm' => 400,
+            'floor_area_sqm' => 280,
+            'start_date' => now(),
+            'end_date' => now()->addMonths(4),
+            'contract_budget' => 4500000,
+        ]);
+
+        $task = ProjectTask::create([
+            'project_id' => $project->id,
+            'task_name' => 'Foundation Rebar & Formworks Inspection',
+            'category' => 'Structural',
+            'progress' => 50,
+            'status' => 'in_progress',
+            'start_date' => now(),
+            'due_date' => now()->addDays(10),
+        ]);
+
+        $fakePhoto = \Illuminate\Http\UploadedFile::fake()->create('rebar_proof.jpg', 500, 'image/jpeg');
+
+        $response = $this->actingAs($this->adminUser)->post(route('projects.tasks.attachPhoto', $task->id), [
+            'photo_file' => $fakePhoto,
+            'caption' => 'Rebar spacing inspected on site and verified by project lead.',
+            'mark_completed' => 1,
+        ]);
+
+        $response->assertRedirect();
+        $response->assertSessionHas('success');
+
+        $task->refresh();
+        $this->assertNotNull($task->photo_path);
+        $this->assertEquals('Rebar spacing inspected on site and verified by project lead.', $task->photo_caption);
+        $this->assertEquals(100, $task->progress);
+        $this->assertEquals('completed', $task->status);
+
+        // Check project photo was added to gallery
+        $this->assertDatabaseHas('project_photos', [
+            'project_id' => $project->id,
+            'file_path' => $task->photo_path,
+        ]);
+    }
+
+    /**
+     * Test removing an attached photo proof from a task
+     */
+    public function test_remove_photo_proof_from_task()
+    {
+        $project = Project::create([
+            'project_code' => 'PRJ-PROOF-02',
+            'title' => 'Remove Proof Test Project',
+            'client_name' => 'Jim Halpert',
+            'status' => 'in_progress',
+            'land_area_sqm' => 350,
+            'floor_area_sqm' => 200,
+            'start_date' => now(),
+            'end_date' => now()->addMonths(3),
+            'contract_budget' => 3500000,
+        ]);
+
+        $task = ProjectTask::create([
+            'project_id' => $project->id,
+            'task_name' => 'Main Distribution Panel Installation',
+            'category' => 'Electrical',
+            'start_date' => now(),
+            'due_date' => now()->addMonths(1),
+            'progress' => 100,
+            'status' => 'completed',
+            'photo_path' => '/uploads/tasks/proof_test_123.jpg',
+            'photo_caption' => 'Panel energized and tested.',
+        ]);
+
+        $response = $this->actingAs($this->adminUser)->post(route('projects.tasks.removePhoto', $task->id));
+        $response->assertRedirect();
+        $response->assertSessionHas('success');
+
+        $task->refresh();
+        $this->assertNull($task->photo_path);
+        $this->assertNull($task->photo_caption);
+    }
 }

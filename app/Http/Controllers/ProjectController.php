@@ -1224,6 +1224,104 @@ class ProjectController extends Controller
         return redirect()->back()->with('success', 'Task "' . $taskName . '" removed from checklist. Progress recalculated.');
     }
 
+    public function attachTaskPhoto(Request $request, $taskId)
+    {
+        $task = ProjectTask::with('project')->findOrFail($taskId);
+        $project = $task->project;
+
+        $validated = $request->validate([
+            'photo_file' => 'nullable|image|max:10240', // 10MB
+            'photo_url' => 'nullable|string|max:1000',
+            'caption' => 'nullable|string|max:500',
+            'mark_completed' => 'nullable|boolean',
+        ]);
+
+        $filePath = null;
+
+        if ($request->hasFile('photo_file')) {
+            $file = $request->file('photo_file');
+            $filename = 'proof_' . $task->id . '_' . time() . '.' . $file->getClientOriginalExtension();
+            $destinationPath = public_path('uploads/tasks');
+            if (!File::isDirectory($destinationPath)) {
+                File::makeDirectory($destinationPath, 0755, true, true);
+            }
+            $file->move($destinationPath, $filename);
+            $filePath = '/uploads/tasks/' . $filename;
+        } elseif ($request->filled('photo_url')) {
+            $filePath = $request->input('photo_url');
+        } else {
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json(['success' => false, 'error' => 'Please select a photo file or provide a valid photo URL.'], 422);
+            }
+            return redirect()->back()->with('error', 'Please select an image file to attach as proof.');
+        }
+
+        $caption = $validated['caption'] ?? ('Proof of completion for ' . $task->task_name);
+
+        $task->photo_path = $filePath;
+        $task->photo_caption = $caption;
+
+        if ($request->boolean('mark_completed') || $task->progress < 100) {
+            $task->progress = 100;
+            $task->status = 'completed';
+            $task->taskMaterials()->update(['status' => 'consumed']);
+        }
+        $task->save();
+
+        // Also add to Project Gallery as a Progress Proof photo
+        $photoType = match(strtolower($task->category)) {
+            'electrical' => 'electrical',
+            'piping & plumbing', 'piping', 'plumbing' => 'piping',
+            'design-build / turnkey finishing', 'finishing' => 'finishing',
+            default => 'structural'
+        };
+
+        ProjectPhoto::create([
+            'project_id' => $project->id,
+            'photo_type' => $photoType,
+            'title' => 'Task Proof: ' . $task->task_name,
+            'description' => $caption,
+            'file_path' => $filePath,
+            'is_primary' => false,
+            'taken_at' => now()->toDateString(),
+        ]);
+
+        $project->recalculateTradeProgressFromTasks();
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Proof photo attached successfully to "' . $task->task_name . '"!',
+                'task_id' => $task->id,
+                'photo_path' => $task->photo_path,
+                'photo_caption' => $task->photo_caption,
+                'progress' => $task->progress,
+                'status' => $task->status,
+                'is_completed' => $task->is_completed,
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Proof of completion photo successfully attached to "' . $task->task_name . '"!');
+    }
+
+    public function removeTaskPhoto(Request $request, $taskId)
+    {
+        $task = ProjectTask::findOrFail($taskId);
+        $task->photo_path = null;
+        $task->photo_caption = null;
+        $task->save();
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Proof photo removed.',
+                'task_id' => $task->id,
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Proof photo removed from task "' . $task->task_name . '".');
+    }
+
     public function resetChecklist(Request $request, $id)
     {
         $project = Project::findOrFail($id);

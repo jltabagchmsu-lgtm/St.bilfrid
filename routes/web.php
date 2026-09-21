@@ -157,6 +157,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/projects/{id}/active-materials', [ProjectController::class, 'getActiveMaterialsJson'])->name('projects.activeMaterials');
         Route::get('/projects/{id}/checklist-state', [ProjectController::class, 'getChecklistStateJson'])->name('projects.checklistState');
         Route::delete('/projects/tasks/{taskId}', [ProjectController::class, 'destroyTask'])->name('projects.tasks.destroy');
+        Route::post('/projects/tasks/{taskId}/attach-photo', [ProjectController::class, 'attachTaskPhoto'])->name('projects.tasks.attachPhoto');
+        Route::post('/projects/tasks/{taskId}/remove-photo', [ProjectController::class, 'removeTaskPhoto'])->name('projects.tasks.removePhoto');
         Route::post('/projects/{id}/reset-checklist', [ProjectController::class, 'resetChecklist'])->name('projects.resetChecklist');
         Route::post('/projects/{id}/assign-personnel', [ProjectController::class, 'assignPersonnel'])->name('projects.assignPersonnel');
         Route::post('/projects/{id}/return-excess-materials', [ProjectController::class, 'returnExcessMaterialsBatch'])->name('projects.returnExcessBatch');
