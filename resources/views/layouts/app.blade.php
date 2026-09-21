@@ -260,56 +260,10 @@
                     </button>
                 @endif
                 <h2 class="page-title">@yield('page_title', 'Dashboard')</h2>
-                @if(Auth::check() && Auth::user()->isRoofingOfficer())
-                    <span class="admin-badge-top" style="background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.4); color: #fca5a5;">Roofing Specialist</span>
-                @elseif(Auth::check() && Auth::user()->isWindowsDoorsOfficer())
-                    <span class="admin-badge-top" style="background: rgba(56, 189, 248, 0.2); border-color: rgba(56, 189, 248, 0.4); color: #38bdf8;">Doors & Windows Specialist</span>
-                @else
-                    <span class="admin-badge-top">Master Admin</span>
-                @endif
-
-                <!-- Fast Project Quick Switcher -->
-                @if(isset($navProjects) && $navProjects->count() > 0)
-                    <div class="nav-project-quick-select-wrapper" style="position: relative;">
-                        <button type="button" class="btn-project-switcher" onclick="toggleProjectSwitcherMenu(event)">
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M2 20h20"></path><path d="M5 20V8.5L12 3l7 5.5V20"></path><path d="M9 20v-6h6v6"></path>
-                            </svg>
-                            <span class="switcher-label">Switch Project</span>
-                            <span style="font-size: 0.65rem; opacity: 0.7;">▼</span>
-                        </button>
-                        <div class="project-switcher-dropdown" id="projectSwitcherDropdown">
-                            <div class="switcher-header">Active Build Sites ({{ $navProjects->count() }})</div>
-                            <div class="switcher-list">
-                                @foreach($navProjects as $np)
-                                    <a href="/projects/{{ $np->id }}" class="switcher-item">
-                                        <div class="switcher-item-main">
-                                            <span class="switcher-dot {{ $np->status === 'completed' ? 'dot-completed' : 'dot-active' }}"></span>
-                                            <div style="flex: 1; min-width: 0;">
-                                                <div class="switcher-title">{{ $np->title }}</div>
-                                                <div class="switcher-meta">{{ $np->project_code ?? 'PROJ' }} &bull; {{ $np->overall_progress ?? 0 }}% Progress</div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
-                @endif
             </div>
 
-            <!-- Right Controls: Command Search Trigger & Top Action Slot -->
+            <!-- Right Controls: Top Action Slot -->
             <div class="top-actions" style="display: flex; align-items: center; gap: 6px;">
-                <!-- Global Command Palette Hotkey Trigger Button -->
-                <button type="button" class="btn-command-search" onclick="openCommandPalette()" title="Press Ctrl + K to search anything">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-                    <span class="cmd-search-text">Search...</span>
-                    <kbd class="cmd-shortcut-key">Ctrl K</kbd>
-                </button>
-
                 @yield('top_actions')
             </div>
         </header>

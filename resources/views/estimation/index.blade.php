@@ -9,35 +9,6 @@
 
 @section('content')
 
-<!-- Estimator Formula Information Card -->
-<div class="glass-panel" style="padding: 24px 28px; margin-bottom: 28px; background: #fafbfc; border: 1px solid var(--border-color); border-left: 4px solid var(--primary-red); box-shadow: var(--card-shadow);">
-    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px;">
-        <div style="flex: 1; min-width: 320px;">
-            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-                <span class="spec-chip" style="color: var(--primary-red); background: var(--primary-red-light); border-color: rgba(220, 38, 38, 0.3);">
-                    UNIT COST ESTIMATION
-                </span>
-                <span class="spec-chip" style="color: #059669; background: #ecfdf5; border-color: rgba(16, 185, 129, 0.3);">
-                    ACCURATE CONTRACT BUDGETS
-                </span>
-            </div>
-            <h4 style="font-size: 1.15rem; font-weight: 800; color: var(--text-primary); margin-bottom: 6px;">
-                Automated Land & Floor Area Cost Estimation Engine (₱)
-            </h4>
-            <p style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.5;">
-                Cost estimations are calculated based on contract service categories, constructible <strong>Floor Area (m²)</strong>, and site <strong>Land Area (m²)</strong> preparation in Philippine Pesos (₱). Generated estimates can be directly converted into tracked construction projects.
-            </p>
-        </div>
-
-        <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 12px 16px; font-size: 0.8rem; color: var(--text-secondary); max-width: 360px;">
-            <strong style="color: var(--primary-red);">Standard Rates Benchmark:</strong>
-            <p style="margin-top: 4px; font-size: 0.775rem;">
-                Residential: ₱1,100/m² &bull; Commercial: ₱1,400/m² &bull; Industrial: ₱1,600/m² &bull; Renovation: ₱800/m² + Land Prep: ₱200/m².
-            </p>
-        </div>
-    </div>
-</div>
-
 <!-- Requests Table -->
 <div class="glass-panel">
     <div class="panel-header">
