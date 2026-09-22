@@ -4,10 +4,33 @@
 @section('page_title', 'Service Cost Estimator & Project Quotation Engine')
 
 @section('top_actions')
-    <button class="btn-primary" onclick="openModal('estimateModal')">+ Perform New Cost Estimation</button>
+    <a href="/projects#createProjectModal" class="btn-primary" style="font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px;">
+        <span>⚡</span> Launch Unified Floorplan & Costing Builder
+    </a>
+    <button class="btn-secondary" onclick="openModal('estimateModal')">+ Quick Estimate Only</button>
 @endsection
 
 @section('content')
+
+<!-- Unified Builder Notice Banner -->
+<div class="glass-panel" style="background: linear-gradient(135deg, rgba(124, 58, 237, 0.08) 0%, rgba(56, 189, 248, 0.08) 100%); border: 1.5px solid rgba(124, 58, 237, 0.25); margin-bottom: 16px; padding: 14px 18px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="width: 36px; height: 36px; border-radius: 50%; background: #7c3aed; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 800;">
+                ⚡
+            </div>
+            <div>
+                <strong style="color: var(--text-primary); font-size: 0.95rem;">Costing & Floor Plan Models Are Now Merged!</strong>
+                <p style="font-size: 0.8rem; color: var(--text-secondary); margin: 2px 0 0 0;">
+                    You can configure room-by-room architectural layouts, preset floor plans, and view real-time 4-pillar cost breakdowns directly on the Add Project page.
+                </p>
+            </div>
+        </div>
+        <a href="/projects#createProjectModal" class="btn-primary" style="font-size: 0.825rem; padding: 8px 16px; white-space: nowrap; background: #7c3aed; border-color: #7c3aed;">
+            Open Unified Add Project & Costing &rarr;
+        </a>
+    </div>
+</div>
 
 <!-- Requests Table -->
 <div class="glass-panel">
@@ -16,8 +39,8 @@
             <h3 class="panel-title">Service Requests & Project Quotations</h3>
             <span style="font-size: 0.85rem; color: var(--text-muted);">Calculated project estimates, client specifications, and one-click project initialization</span>
         </div>
-        <button class="btn-primary" style="font-size: 0.825rem; padding: 6px 14px;" onclick="openModal('estimateModal')">
-            + New Estimate
+        <button class="btn-secondary" style="font-size: 0.825rem; padding: 6px 14px;" onclick="openModal('estimateModal')">
+            + Quick Estimate
         </button>
     </div>
 
