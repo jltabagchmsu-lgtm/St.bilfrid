@@ -411,12 +411,12 @@
 
 
 <!-- ====================================================
-     SECTION 5: ACTIVE ONGOING PROJECTS WITH INTERACTIVE FILTERS & S-CURVE HEALTH
+     SECTION 5: ACTIVE ONGOING PROJECTS WITH INTERACTIVE FILTERS & S-CURVE STATUS
      ==================================================== -->
 <div class="glass-panel">
     <div class="panel-header" style="margin-bottom: 16px;">
         <div>
-            <h3 class="panel-title">Active Projects & S-Curve Budget Health</h3>
+            <h3 class="panel-title">Active Projects & S-Curve Financial Status</h3>
             <span style="font-size: 0.85rem; color: var(--text-muted);">Real-time execution, manpower allocations, costing, and trade tracking</span>
         </div>
         <div style="display: flex; gap: 8px;">
@@ -441,7 +441,7 @@
                 <th>Code & Project Title</th>
                 <th>Client & Area</th>
                 <th>Budget vs Spend</th>
-                <th>S-Curve Health</th>
+                <th>S-Curve Status</th>
                 <th>Trade Progress Breakdown</th>
                 <th>Status</th>
                 <th>Action</th>

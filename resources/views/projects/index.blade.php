@@ -27,7 +27,7 @@
                 <th>Client & Tasks</th>
                 <th>Land & Floor Area</th>
                 <th>Workforce Deployed</th>
-                <th>Schedule Health</th>
+                <th>Schedule Status</th>
                 <th>Weighted Progression</th>
                 <th>Financials & Margins</th>
                 <th>Actions</th>

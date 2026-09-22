@@ -384,7 +384,7 @@
                 <span class="badge badge-in_progress" style="font-size: 0.75rem;">Consolidated Snapshot</span>
             </div>
             <span style="font-size: 0.85rem; color: var(--text-muted);">
-                Unified high-level executive report covering project scope, financial health, trade progress, materials, and manpower
+                Unified high-level executive report covering project scope, financial status, trade progress, materials, and manpower
             </span>
         </div>
         <div style="display: flex; gap: 10px;">

@@ -498,7 +498,7 @@
 
         <!-- Section 4: Schedule, Materials & Excess Reconciliation -->
         <div class="section-heading">
-            <span>4. Schedule Health & Materials Inventory Reconciliation</span>
+            <span>4. Schedule Status & Materials Inventory Reconciliation</span>
             <span class="badge">{{ $totalDeployedManpower }} Active Workforce</span>
         </div>
         <div class="info-grid">

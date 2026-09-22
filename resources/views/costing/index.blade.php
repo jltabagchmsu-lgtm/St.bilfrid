@@ -78,7 +78,7 @@
                     <div style="font-size: 1.2rem; font-weight: 800; color: #10b981;">{{ number_format($selectedProject->land_area_sqm) }} m²</div>
                 </div>
                 <div>
-                    <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Budget Health</div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Budget Status</div>
                     <div>
                         @if($selectedProject->cost_health_status === 'healthy')
                             <span class="badge badge-healthy">Under Budget</span>
@@ -357,7 +357,7 @@
                     <th>Total Actual Cost (₱)</th>
                     <th>Cost / m² Floor</th>
                     <th>Projected Margin</th>
-                    <th>Budget Health</th>
+                    <th>Budget Status</th>
                     <th>Action</th>
                 </tr>
             </thead>

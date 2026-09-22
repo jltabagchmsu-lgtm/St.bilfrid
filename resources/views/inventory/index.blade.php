@@ -140,7 +140,7 @@
                     <th style="color: #000000; font-weight: 700;">Contract Cost (₱)</th>
                     <th style="color: #000000; font-weight: 700;">In-Stock Quantity</th>
                     <th style="color: #000000; font-weight: 700;">Total Value (₱)</th>
-                    <th style="color: #000000; font-weight: 700;">Stock Health</th>
+                    <th style="color: #000000; font-weight: 700;">Stock Status</th>
                 </tr>
             </thead>
             <tbody>
