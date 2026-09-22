@@ -335,6 +335,8 @@
             </div>
         </form>
     </div>
+</div>
+
 <!-- Modal: Select Completed / Active Project for Excess Reconciliation -->
 <div class="modal-overlay" id="selectProjectExcessModal">
     <div class="modal-box" style="max-width: 520px;">
@@ -355,6 +357,7 @@
         <div class="form-group">
             <label class="form-label" style="font-weight: 700;">Select Originating Project</label>
             <select id="projectToReconcileSelect" class="form-select" style="font-size: 0.9rem;">
+                @if($completedProjects->count() > 0)
                 <optgroup label="Completed Projects">
                     @foreach($completedProjects as $cp)
                         <option value="{{ $cp->id }}" data-code="{{ $cp->project_code }}" data-title="{{ $cp->title }}" data-status="{{ $cp->status }}">
@@ -362,13 +365,19 @@
                         </option>
                     @endforeach
                 </optgroup>
-                <optgroup label="Other Active Projects">
+                @endif
+                @if($allProjects->where('status', '!=', 'completed')->count() > 0)
+                <optgroup label="Active Projects">
                     @foreach($allProjects->where('status', '!=', 'completed') as $ap)
                         <option value="{{ $ap->id }}" data-code="{{ $ap->project_code }}" data-title="{{ $ap->title }}" data-status="{{ $ap->status }}">
                             &bull; {{ $ap->title }} ({{ $ap->project_code }}) — {{ ucfirst(str_replace('_', ' ', $ap->status)) }}
                         </option>
                     @endforeach
                 </optgroup>
+                @endif
+                @if($allProjects->count() === 0)
+                    <option value="">-- No projects registered in system --</option>
+                @endif
             </select>
         </div>
 
@@ -387,8 +396,14 @@
 
 @section('scripts')
 <script>
-    function openModal(id) { document.getElementById(id).classList.add('active'); }
-    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+    function openModal(id) { 
+        const el = document.getElementById(id);
+        if (el) el.classList.add('active'); 
+    }
+    function closeModal(id) { 
+        const el = document.getElementById(id);
+        if (el) el.classList.remove('active'); 
+    }
 
     function openSelectProjectForExcessModal() {
         openModal('selectProjectExcessModal');
@@ -396,11 +411,20 @@
 
     function proceedToProjectExcessReconcile() {
         const select = document.getElementById('projectToReconcileSelect');
+        if (!select || select.selectedIndex < 0) {
+            alert('Please select a project first.');
+            return;
+        }
         const opt = select.options[select.selectedIndex];
-        if (!opt || !opt.value) return;
+        if (!opt || !opt.value) {
+            alert('Please select a valid project first.');
+            return;
+        }
 
         closeModal('selectProjectExcessModal');
-        openReconcileExcessModalForProject(opt.value, opt.dataset.code, opt.dataset.title, opt.dataset.status);
+        if (typeof openReconcileExcessModalForProject === 'function') {
+            openReconcileExcessModalForProject(opt.value, opt.dataset.code, opt.dataset.title, opt.dataset.status);
+        }
     }
 </script>
 @endsection
