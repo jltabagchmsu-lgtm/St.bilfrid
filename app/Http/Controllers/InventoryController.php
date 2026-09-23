@@ -45,7 +45,6 @@ class InventoryController extends Controller
         // Inventory movements & project excess return transaction logs
         $inventoryLogs = InventoryLog::with(['material', 'project'])
             ->orderBy('created_at', 'desc')
-            ->limit(30)
             ->get();
 
         $totalReturnedUnits = InventoryLog::where('transaction_type', 'excess_return')->sum('quantity');

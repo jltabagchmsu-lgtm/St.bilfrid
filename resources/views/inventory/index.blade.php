@@ -208,11 +208,22 @@
 </div>
 
 <!-- Inventory Movement & Project Excess Returns Log -->
-<div class="glass-panel" style="border: 1px solid rgba(16, 185, 129, 0.3);">
-    <div class="panel-header" style="margin-bottom: 14px;">
+<div class="glass-panel" id="inventoryLogsPanel" style="border: 1px solid rgba(16, 185, 129, 0.3);">
+    <div class="panel-header" style="margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
         <div>
             <h3 class="panel-title" style="font-size: 1.1rem; color: #000000; font-weight: 800;">Central Warehouse Movement & Supplier Delivery Receipts Log</h3>
             <span style="font-size: 0.85rem; color: #000000;">Audit log of supplier procurement deliveries, stock allocations, and site excess returns</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <button type="button" class="btn-secondary" id="invLogTopPrevBtn" onclick="changeLogPage(-1)" style="padding: 6px 14px; font-size: 0.8rem; font-weight: 700; color: #000000; border-color: #cbd5e1; display: inline-flex; align-items: center; gap: 4px;">
+                &larr; Prev
+            </button>
+            <span id="invLogTopPageIndicator" style="font-size: 0.8rem; font-weight: 700; color: #000000; font-family: var(--font-mono); padding: 4px 10px; background: #f1f5f9; border-radius: 6px; border: 1px solid #cbd5e1;">
+                Page 1 of 1
+            </span>
+            <button type="button" class="btn-primary" id="invLogTopNextBtn" onclick="changeLogPage(1)" style="padding: 6px 16px; font-size: 0.8rem; font-weight: 700; background: #10b981; border-color: #10b981; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 6px rgba(16, 185, 129, 0.25);">
+                Next &rarr;
+            </button>
         </div>
     </div>
 
@@ -230,10 +241,10 @@
                     <th style="color: #000000; font-weight: 700;">Audit Verification</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="inventoryLogsTableBody">
                 @forelse($inventoryLogs as $log)
                 @php $tBadge = $log->transaction_badge; @endphp
-                <tr>
+                <tr class="inv-log-row">
                     <td style="font-family: var(--font-mono); color: #000000; font-weight: 700;">
                         {{ $log->reference_no ?? ('TXN-' . $log->id) }}
                     </td>
@@ -270,7 +281,7 @@
                     </td>
                 </tr>
                 @empty
-                <tr>
+                <tr id="invLogEmptyRow">
                     <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 24px;">
                         No recent inventory movements recorded.
                     </td>
@@ -279,6 +290,29 @@
             </tbody>
         </table>
     </div>
+
+    <!-- Bottom Pagination Controls -->
+    @if(count($inventoryLogs) > 0)
+    <div class="custom-pagination-container" id="invLogPaginationContainer" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-top: 16px; padding: 12px 18px; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px;">
+        <div class="pagination-info" style="font-size: 0.85rem; color: #334155; font-weight: 600;">
+            Showing <span class="pagination-highlight" id="invLogRangeStart" style="color: #0f172a; font-weight: 700; font-family: var(--font-mono);">1</span> to <span class="pagination-highlight" id="invLogRangeEnd" style="color: #0f172a; font-weight: 700; font-family: var(--font-mono);">{{ min(7, count($inventoryLogs)) }}</span> of <span class="pagination-highlight" id="invLogTotalItems" style="color: #0f172a; font-weight: 700; font-family: var(--font-mono);">{{ count($inventoryLogs) }}</span> movement records
+        </div>
+        
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <button type="button" class="btn-secondary" id="invLogPrevBtn" onclick="changeLogPage(-1)" style="padding: 7px 16px; font-size: 0.85rem; font-weight: 700; color: #334155; border: 1px solid #cbd5e1; border-radius: 6px; background: #ffffff; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s ease;">
+                &larr; Previous
+            </button>
+            
+            <div id="invLogPageNumbers" style="display: flex; align-items: center; gap: 5px;">
+                <!-- Dynamically generated page pills -->
+            </div>
+
+            <button type="button" class="btn-primary" id="invLogNextBtn" onclick="changeLogPage(1)" style="padding: 7px 20px; font-size: 0.85rem; font-weight: 700; background: #10b981; border: 1px solid #10b981; color: #ffffff; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(16, 185, 129, 0.25); transition: all 0.2s ease;">
+                Next &rarr;
+            </button>
+        </div>
+    </div>
+    @endif
 </div>
 
 <!-- Modal 1: Add New Master Material to Catalog -->
@@ -426,5 +460,144 @@
             openReconcileExcessModalForProject(opt.value, opt.dataset.code, opt.dataset.title, opt.dataset.status);
         }
     }
+
+    // Client-side pagination for Central Warehouse Movement & Delivery Receipts Log
+    let currentLogPage = 1;
+    const logsPerPage = 7;
+
+    function renderLogPagination() {
+        const rows = Array.from(document.querySelectorAll('.inv-log-row'));
+        const total = rows.length;
+        if (total === 0) return;
+        
+        const totalPages = Math.ceil(total / logsPerPage) || 1;
+        if (currentLogPage > totalPages) currentLogPage = totalPages;
+        if (currentLogPage < 1) currentLogPage = 1;
+        
+        const startIndex = (currentLogPage - 1) * logsPerPage;
+        const endIndex = Math.min(startIndex + logsPerPage, total);
+        
+        rows.forEach((row, idx) => {
+            row.style.display = (idx >= startIndex && idx < endIndex) ? '' : 'none';
+        });
+        
+        // Update range labels
+        const rangeStart = document.getElementById('invLogRangeStart');
+        const rangeEnd = document.getElementById('invLogRangeEnd');
+        const totalItems = document.getElementById('invLogTotalItems');
+        if (rangeStart) rangeStart.textContent = total === 0 ? 0 : (startIndex + 1);
+        if (rangeEnd) rangeEnd.textContent = endIndex;
+        if (totalItems) totalItems.textContent = total;
+        
+        // Top page indicator
+        const topIndicator = document.getElementById('invLogTopPageIndicator');
+        if (topIndicator) topIndicator.textContent = `Page ${currentLogPage} of ${totalPages}`;
+        
+        // Top buttons state
+        const topPrev = document.getElementById('invLogTopPrevBtn');
+        const topNext = document.getElementById('invLogTopNextBtn');
+        if (topPrev) {
+            topPrev.disabled = (currentLogPage <= 1);
+            topPrev.style.opacity = (currentLogPage <= 1) ? '0.45' : '1';
+            topPrev.style.cursor = (currentLogPage <= 1) ? 'not-allowed' : 'pointer';
+        }
+        if (topNext) {
+            topNext.disabled = (currentLogPage >= totalPages);
+            topNext.style.opacity = (currentLogPage >= totalPages) ? '0.45' : '1';
+            topNext.style.cursor = (currentLogPage >= totalPages) ? 'not-allowed' : 'pointer';
+        }
+        
+        // Bottom buttons state
+        const prevBtn = document.getElementById('invLogPrevBtn');
+        const nextBtn = document.getElementById('invLogNextBtn');
+        if (prevBtn) {
+            prevBtn.disabled = (currentLogPage <= 1);
+            prevBtn.style.opacity = (currentLogPage <= 1) ? '0.45' : '1';
+            prevBtn.style.cursor = (currentLogPage <= 1) ? 'not-allowed' : 'pointer';
+        }
+        if (nextBtn) {
+            nextBtn.disabled = (currentLogPage >= totalPages);
+            nextBtn.style.opacity = (currentLogPage >= totalPages) ? '0.45' : '1';
+            nextBtn.style.cursor = (currentLogPage >= totalPages) ? 'not-allowed' : 'pointer';
+        }
+        
+        // Bottom page number pills
+        const pageNumbersContainer = document.getElementById('invLogPageNumbers');
+        if (pageNumbersContainer) {
+            pageNumbersContainer.innerHTML = '';
+            
+            let startPage = Math.max(1, currentLogPage - 2);
+            let endPage = Math.min(totalPages, startPage + 4);
+            if (endPage - startPage < 4) {
+                startPage = Math.max(1, endPage - 4);
+            }
+            
+            if (startPage > 1) {
+                pageNumbersContainer.appendChild(createPageBtn(1));
+                if (startPage > 2) {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.style.padding = '0 4px';
+                    ellipsis.style.color = '#94a3b8';
+                    ellipsis.textContent = '…';
+                    pageNumbersContainer.appendChild(ellipsis);
+                }
+            }
+            
+            for (let p = startPage; p <= endPage; p++) {
+                pageNumbersContainer.appendChild(createPageBtn(p));
+            }
+            
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.style.padding = '0 4px';
+                    ellipsis.style.color = '#94a3b8';
+                    ellipsis.textContent = '…';
+                    pageNumbersContainer.appendChild(ellipsis);
+                }
+                pageNumbersContainer.appendChild(createPageBtn(totalPages));
+            }
+        }
+    }
+
+    function createPageBtn(page) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = page;
+        btn.style.minWidth = '34px';
+        btn.style.height = '34px';
+        btn.style.padding = '0 8px';
+        btn.style.fontSize = '0.85rem';
+        btn.style.fontWeight = (page === currentLogPage) ? '800' : '600';
+        btn.style.borderRadius = '6px';
+        btn.style.cursor = 'pointer';
+        btn.style.transition = 'all 0.15s ease';
+        
+        if (page === currentLogPage) {
+            btn.style.background = '#10b981';
+            btn.style.color = '#ffffff';
+            btn.style.border = '1px solid #10b981';
+            btn.style.boxShadow = '0 2px 5px rgba(16, 185, 129, 0.3)';
+        } else {
+            btn.style.background = '#ffffff';
+            btn.style.color = '#334155';
+            btn.style.border = '1px solid #cbd5e1';
+        }
+        
+        btn.onclick = () => {
+            currentLogPage = page;
+            renderLogPagination();
+        };
+        return btn;
+    }
+
+    function changeLogPage(delta) {
+        currentLogPage += delta;
+        renderLogPagination();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        renderLogPagination();
+    });
 </script>
 @endsection
