@@ -209,21 +209,10 @@
 
 <!-- Inventory Movement & Project Excess Returns Log -->
 <div class="glass-panel" id="inventoryLogsPanel" style="border: 1px solid rgba(16, 185, 129, 0.3);">
-    <div class="panel-header" style="margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+    <div class="panel-header" style="margin-bottom: 14px;">
         <div>
             <h3 class="panel-title" style="font-size: 1.1rem; color: #000000; font-weight: 800;">Central Warehouse Movement & Supplier Delivery Receipts Log</h3>
             <span style="font-size: 0.85rem; color: #000000;">Audit log of supplier procurement deliveries, stock allocations, and site excess returns</span>
-        </div>
-        <div style="display: flex; align-items: center; gap: 8px;">
-            <button type="button" class="btn-secondary" id="invLogTopPrevBtn" onclick="changeLogPage(-1)" style="padding: 6px 14px; font-size: 0.8rem; font-weight: 700; color: #000000; border-color: #cbd5e1; display: inline-flex; align-items: center; gap: 4px;">
-                &larr; Prev
-            </button>
-            <span id="invLogTopPageIndicator" style="font-size: 0.8rem; font-weight: 700; color: #000000; font-family: var(--font-mono); padding: 4px 10px; background: #f1f5f9; border-radius: 6px; border: 1px solid #cbd5e1;">
-                Page 1 of 1
-            </span>
-            <button type="button" class="btn-primary" id="invLogTopNextBtn" onclick="changeLogPage(1)" style="padding: 6px 16px; font-size: 0.8rem; font-weight: 700; background: #10b981; border-color: #10b981; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 6px rgba(16, 185, 129, 0.25);">
-                Next &rarr;
-            </button>
         </div>
     </div>
 
@@ -489,23 +478,7 @@
         if (rangeEnd) rangeEnd.textContent = endIndex;
         if (totalItems) totalItems.textContent = total;
         
-        // Top page indicator
-        const topIndicator = document.getElementById('invLogTopPageIndicator');
-        if (topIndicator) topIndicator.textContent = `Page ${currentLogPage} of ${totalPages}`;
-        
-        // Top buttons state
-        const topPrev = document.getElementById('invLogTopPrevBtn');
-        const topNext = document.getElementById('invLogTopNextBtn');
-        if (topPrev) {
-            topPrev.disabled = (currentLogPage <= 1);
-            topPrev.style.opacity = (currentLogPage <= 1) ? '0.45' : '1';
-            topPrev.style.cursor = (currentLogPage <= 1) ? 'not-allowed' : 'pointer';
-        }
-        if (topNext) {
-            topNext.disabled = (currentLogPage >= totalPages);
-            topNext.style.opacity = (currentLogPage >= totalPages) ? '0.45' : '1';
-            topNext.style.cursor = (currentLogPage >= totalPages) ? 'not-allowed' : 'pointer';
-        }
+
         
         // Bottom buttons state
         const prevBtn = document.getElementById('invLogPrevBtn');
