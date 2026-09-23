@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', ($selectedProject ? $selectedProject->title . ' - Project Costing' : 'All Projects Costing Matrix') . ' - St. Bilfrid Development Corporation')
-@section('page_title', $selectedProject ? 'Project Costing: ' . $selectedProject->title : 'Project Costing & Expenditure Analysis')
+@section('page_title', $selectedProject ? 'Project Costing: ' . $selectedProject->title : 'Project Costing')
 
 @section('top_actions')
     @if($selectedProject)
