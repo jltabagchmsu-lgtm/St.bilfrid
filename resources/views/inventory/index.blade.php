@@ -143,9 +143,9 @@
                     <th style="color: #000000; font-weight: 700;">Stock Status</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="materialsTableBody">
                 @forelse($materials as $mat)
-                <tr>
+                <tr class="mat-row">
                     <td>
                         <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                             <strong style="color: #000000; font-size: 1rem; font-weight: 700;">{{ $mat->name }}</strong>
@@ -205,6 +205,29 @@
             </tbody>
         </table>
     </div>
+
+    <!-- Master Materials Bottom Pagination Controls -->
+    @if(count($materials) > 0)
+    <div class="custom-pagination-container" id="matPaginationContainer" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-top: 16px; padding: 12px 18px; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px;">
+        <div class="pagination-info" style="font-size: 0.85rem; color: #334155; font-weight: 600;">
+            Showing <span class="pagination-highlight" id="matRangeStart" style="color: #0f172a; font-weight: 700; font-family: var(--font-mono);">1</span> to <span class="pagination-highlight" id="matRangeEnd" style="color: #0f172a; font-weight: 700; font-family: var(--font-mono);">{{ min(10, count($materials)) }}</span> of <span class="pagination-highlight" id="matTotalItems" style="color: #0f172a; font-weight: 700; font-family: var(--font-mono);">{{ count($materials) }}</span> catalog items
+        </div>
+        
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <button type="button" class="btn-secondary" id="matPrevBtn" onclick="changeMatPage(-1)" style="padding: 7px 16px; font-size: 0.85rem; font-weight: 700; color: #334155; border: 1px solid #cbd5e1; border-radius: 6px; background: #ffffff; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s ease;">
+                &larr; Previous
+            </button>
+            
+            <div id="matPageNumbers" style="display: flex; align-items: center; gap: 5px;">
+                <!-- Dynamically generated page pills -->
+            </div>
+
+            <button type="button" class="btn-primary" id="matNextBtn" onclick="changeMatPage(1)" style="padding: 7px 20px; font-size: 0.85rem; font-weight: 700; background: #10b981; border: 1px solid #10b981; color: #ffffff; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(16, 185, 129, 0.25); transition: all 0.2s ease;">
+                Next &rarr;
+            </button>
+        </div>
+    </div>
+    @endif
 </div>
 
 <!-- Inventory Movement & Project Excess Returns Log -->
@@ -564,12 +587,130 @@
         return btn;
     }
 
+    // Client-side pagination for Master Materials Inventory & Warehouse Stock
+    let currentMatPage = 1;
+    const matsPerPage = 10;
+
+    function renderMatPagination() {
+        const rows = Array.from(document.querySelectorAll('.mat-row'));
+        const total = rows.length;
+        if (total === 0) return;
+        
+        const totalPages = Math.ceil(total / matsPerPage) || 1;
+        if (currentMatPage > totalPages) currentMatPage = totalPages;
+        if (currentMatPage < 1) currentMatPage = 1;
+        
+        const startIndex = (currentMatPage - 1) * matsPerPage;
+        const endIndex = Math.min(startIndex + matsPerPage, total);
+        
+        rows.forEach((row, idx) => {
+            row.style.display = (idx >= startIndex && idx < endIndex) ? '' : 'none';
+        });
+        
+        // Update range labels
+        const rangeStart = document.getElementById('matRangeStart');
+        const rangeEnd = document.getElementById('matRangeEnd');
+        const totalItems = document.getElementById('matTotalItems');
+        if (rangeStart) rangeStart.textContent = total === 0 ? 0 : (startIndex + 1);
+        if (rangeEnd) rangeEnd.textContent = endIndex;
+        if (totalItems) totalItems.textContent = total;
+        
+        // Bottom buttons state
+        const prevBtn = document.getElementById('matPrevBtn');
+        const nextBtn = document.getElementById('matNextBtn');
+        if (prevBtn) {
+            prevBtn.disabled = (currentMatPage <= 1);
+            prevBtn.style.opacity = (currentMatPage <= 1) ? '0.45' : '1';
+            prevBtn.style.cursor = (currentMatPage <= 1) ? 'not-allowed' : 'pointer';
+        }
+        if (nextBtn) {
+            nextBtn.disabled = (currentMatPage >= totalPages);
+            nextBtn.style.opacity = (currentMatPage >= totalPages) ? '0.45' : '1';
+            nextBtn.style.cursor = (currentMatPage >= totalPages) ? 'not-allowed' : 'pointer';
+        }
+        
+        // Bottom page number pills
+        const pageNumbersContainer = document.getElementById('matPageNumbers');
+        if (pageNumbersContainer) {
+            pageNumbersContainer.innerHTML = '';
+            
+            let startPage = Math.max(1, currentMatPage - 2);
+            let endPage = Math.min(totalPages, startPage + 4);
+            if (endPage - startPage < 4) {
+                startPage = Math.max(1, endPage - 4);
+            }
+            
+            if (startPage > 1) {
+                pageNumbersContainer.appendChild(createMatPageBtn(1));
+                if (startPage > 2) {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.style.padding = '0 4px';
+                    ellipsis.style.color = '#94a3b8';
+                    ellipsis.textContent = '…';
+                    pageNumbersContainer.appendChild(ellipsis);
+                }
+            }
+            
+            for (let p = startPage; p <= endPage; p++) {
+                pageNumbersContainer.appendChild(createMatPageBtn(p));
+            }
+            
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.style.padding = '0 4px';
+                    ellipsis.style.color = '#94a3b8';
+                    ellipsis.textContent = '…';
+                    pageNumbersContainer.appendChild(ellipsis);
+                }
+                pageNumbersContainer.appendChild(createMatPageBtn(totalPages));
+            }
+        }
+    }
+
+    function createMatPageBtn(page) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = page;
+        btn.style.minWidth = '34px';
+        btn.style.height = '34px';
+        btn.style.padding = '0 8px';
+        btn.style.fontSize = '0.85rem';
+        btn.style.fontWeight = (page === currentMatPage) ? '800' : '600';
+        btn.style.borderRadius = '6px';
+        btn.style.cursor = 'pointer';
+        btn.style.transition = 'all 0.15s ease';
+        
+        if (page === currentMatPage) {
+            btn.style.background = '#10b981';
+            btn.style.color = '#ffffff';
+            btn.style.border = '1px solid #10b981';
+            btn.style.boxShadow = '0 2px 5px rgba(16, 185, 129, 0.3)';
+        } else {
+            btn.style.background = '#ffffff';
+            btn.style.color = '#334155';
+            btn.style.border = '1px solid #cbd5e1';
+        }
+        
+        btn.onclick = () => {
+            currentMatPage = page;
+            renderMatPagination();
+        };
+        return btn;
+    }
+
+    function changeMatPage(delta) {
+        currentMatPage += delta;
+        renderMatPagination();
+    }
+
     function changeLogPage(delta) {
         currentLogPage += delta;
         renderLogPagination();
     }
 
     document.addEventListener('DOMContentLoaded', function() {
+        renderMatPagination();
         renderLogPagination();
     });
 </script>
