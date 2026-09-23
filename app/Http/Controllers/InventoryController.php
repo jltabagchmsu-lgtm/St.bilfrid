@@ -16,12 +16,30 @@ class InventoryController extends Controller
         $search = $request->query('search');
         $filter = $request->query('filter');
 
+        $categoryMapping = [
+            'Roofing' => 'Roofing & Metal Sheets',
+            'Electrical' => 'Electrical Works',
+            'Piping/Plumbing' => 'Plumbing & Sanitary',
+            'Structural' => 'Structural & Masonry',
+            'Finishing' => 'Architectural & Finishes',
+            'General' => 'General Building Materials',
+        ];
+
         $query = Material::query();
 
         if ($filter === 'new' || $selectedCategory === 'new_products') {
             $query->where('is_new_product', true);
         } elseif ($selectedCategory) {
-            $query->where('category', $selectedCategory);
+            $matchingCategories = [$selectedCategory];
+            foreach ($categoryMapping as $alias => $canonical) {
+                if ($canonical === $selectedCategory) {
+                    $matchingCategories[] = $alias;
+                }
+                if ($alias === $selectedCategory) {
+                    $matchingCategories[] = $canonical;
+                }
+            }
+            $query->whereIn('category', array_unique($matchingCategories));
         }
 
         if ($search) {
@@ -32,7 +50,10 @@ class InventoryController extends Controller
         }
 
         $materials = $query->orderBy('is_new_product', 'desc')->orderBy('category')->orderBy('name')->get();
-        $allCategories = Material::select('category')->distinct()->pluck('category');
+        $rawCategories = Material::select('category')->distinct()->pluck('category');
+        $allCategories = $rawCategories->map(function ($cat) use ($categoryMapping) {
+            return $categoryMapping[$cat] ?? $cat;
+        })->unique()->filter()->values();
 
         $totalItemsCount = Material::count();
         $newProductsCount = Material::where('is_new_product', true)->count();

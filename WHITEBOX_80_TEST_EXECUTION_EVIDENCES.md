@@ -1,7 +1,7 @@
 # ST. BILFRID CONSTRUCTION MANAGEMENT INFORMATION SYSTEM
 ## Whitebox Test Execution Evidence Dossier
 
-> **Total Executed:** 83 | **Passed:** 80 | **Failed:** 3
+> **Total Executed:** 80 | **Passed:** 80 | **Failed:** 0
 
 ---
 
@@ -12,7 +12,7 @@
 - **Input Variable State:** `$user->role = null`
 - **Expected Invariant:** `true (bool)`
 - **Actual Evaluated Value:** `true`
-- **Status:** **`PASS`** (Duration: `5.79 ms`)
+- **Status:** **`PASS`** (Duration: `15.26 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -28,7 +28,7 @@ $user = new User(["role" => null]); $this->assertTrue($user->isAdmin());
 - **Input Variable State:** `$user->role = "admin"`
 - **Expected Invariant:** `true (bool)`
 - **Actual Evaluated Value:** `true`
-- **Status:** **`PASS`** (Duration: `0.03 ms`)
+- **Status:** **`PASS`** (Duration: `0.05 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -44,7 +44,7 @@ $user = new User(["role" => "admin"]); $this->assertTrue($user->isAdmin());
 - **Input Variable State:** `$user->role = "roofing_transfer"`
 - **Expected Invariant:** `false (bool)`
 - **Actual Evaluated Value:** `false`
-- **Status:** **`PASS`** (Duration: `0.02 ms`)
+- **Status:** **`PASS`** (Duration: `0.03 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -60,7 +60,7 @@ $user = new User(["role" => "roofing_transfer"]); $this->assertFalse($user->isAd
 - **Input Variable State:** `$user->role = "roofing_transfer"`
 - **Expected Invariant:** `true (bool)`
 - **Actual Evaluated Value:** `true`
-- **Status:** **`PASS`** (Duration: `0.01 ms`)
+- **Status:** **`PASS`** (Duration: `0.02 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -76,7 +76,7 @@ $user = new User(["role" => "roofing_transfer"]); $this->assertTrue($user->isRoo
 - **Input Variable State:** `$user->role = "admin"`
 - **Expected Invariant:** `false (bool)`
 - **Actual Evaluated Value:** `false`
-- **Status:** **`PASS`** (Duration: `0.01 ms`)
+- **Status:** **`PASS`** (Duration: `0.03 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -92,7 +92,7 @@ $user = new User(["role" => "admin"]); $this->assertFalse($user->isRoofingOffice
 - **Input Variable State:** `$user->role = "windows_doors_transfer"`
 - **Expected Invariant:** `true (bool)`
 - **Actual Evaluated Value:** `true`
-- **Status:** **`PASS`** (Duration: `0.01 ms`)
+- **Status:** **`PASS`** (Duration: `0.07 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -108,7 +108,7 @@ $user = new User(["role" => "windows_doors_transfer"]); $this->assertTrue($user-
 - **Input Variable State:** `$user->role = "roofing_transfer"`
 - **Expected Invariant:** `false (bool)`
 - **Actual Evaluated Value:** `false`
-- **Status:** **`PASS`** (Duration: `0.01 ms`)
+- **Status:** **`PASS`** (Duration: `0.02 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -124,7 +124,7 @@ $user = new User(["role" => "roofing_transfer"]); $this->assertFalse($user->isWi
 - **Input Variable State:** `$user->role = "supplier", $user->supplier_id = null`
 - **Expected Invariant:** `true (bool)`
 - **Actual Evaluated Value:** `true`
-- **Status:** **`PASS`** (Duration: `0.02 ms`)
+- **Status:** **`PASS`** (Duration: `0.04 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -172,7 +172,7 @@ $user = new User(["role" => "admin", "supplier_id" => null]); $this->assertFalse
 - **Input Variable State:** `$supplier = new Supplier(["name" => "Steel Corp", "category" => "Structural"])`
 - **Expected Invariant:** `"Steel Corp (Structural)" (string)`
 - **Actual Evaluated Value:** `Steel Corp (Structural)`
-- **Status:** **`PASS`** (Duration: `0.12 ms`)
+- **Status:** **`PASS`** (Duration: `0.13 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -188,7 +188,7 @@ $user->setRelation("supplier", $supplier); $this->assertEquals("Steel Corp (Stru
 - **Input Variable State:** `$user->role = "supplier", relation "supplier" = null`
 - **Expected Invariant:** `"Supplier Account" (string)`
 - **Actual Evaluated Value:** `Supplier Account`
-- **Status:** **`PASS`** (Duration: `3.46 ms`)
+- **Status:** **`PASS`** (Duration: `8.54 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -204,7 +204,7 @@ $user = new User(["role" => "supplier"]); $this->assertEquals("Supplier Account"
 - **Input Variable State:** `$user->role = "roofing_transfer"`
 - **Expected Invariant:** `"Roofing Transfer Officer" (string)`
 - **Actual Evaluated Value:** `Roofing Transfer Officer`
-- **Status:** **`PASS`** (Duration: `0.07 ms`)
+- **Status:** **`PASS`** (Duration: `0.08 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -220,7 +220,7 @@ $user = new User(["role" => "roofing_transfer"]); $this->assertEquals("Roofing T
 - **Input Variable State:** `$user->role = "windows_doors_transfer"`
 - **Expected Invariant:** `"Windows & Doors Transfer Officer" (string)`
 - **Actual Evaluated Value:** `Windows & Doors Transfer Officer`
-- **Status:** **`PASS`** (Duration: `0.03 ms`)
+- **Status:** **`PASS`** (Duration: `0.04 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -236,7 +236,7 @@ $user = new User(["role" => "windows_doors_transfer"]); $this->assertEquals("Win
 - **Input Variable State:** `$user->role = "admin"`
 - **Expected Invariant:** `"Master Administrator" (string)`
 - **Actual Evaluated Value:** `Master Administrator`
-- **Status:** **`PASS`** (Duration: `0.03 ms`)
+- **Status:** **`PASS`** (Duration: `0.04 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -252,7 +252,7 @@ $user = new User(["role" => "admin"]); $this->assertEquals("Master Administrator
 - **Input Variable State:** `$user->role = "supplier"`
 - **Expected Invariant:** `URL matching /supplier/dashboard`
 - **Actual Evaluated Value:** `http://localhost:8000/supplier/dashboard`
-- **Status:** **`PASS`** (Duration: `7.09 ms`)
+- **Status:** **`PASS`** (Duration: `6.61 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -268,7 +268,7 @@ $user = new User(["role" => "supplier"]); $this->assertStringContainsString("sup
 - **Input Variable State:** `$user->role = "roofing_transfer"`
 - **Expected Invariant:** `URL matching /roofing-transfer`
 - **Actual Evaluated Value:** `http://localhost:8000/roofing-transfer`
-- **Status:** **`PASS`** (Duration: `0.18 ms`)
+- **Status:** **`PASS`** (Duration: `0.17 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -284,7 +284,7 @@ $user = new User(["role" => "roofing_transfer"]); $this->assertNotEmpty($user->p
 - **Input Variable State:** `$user->role = "windows_doors_transfer"`
 - **Expected Invariant:** `URL matching /windows-doors-transfer`
 - **Actual Evaluated Value:** `http://localhost:8000/windows-doors-transfer`
-- **Status:** **`PASS`** (Duration: `0.11 ms`)
+- **Status:** **`PASS`** (Duration: `0.12 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -300,27 +300,11 @@ $user = new User(["role" => "windows_doors_transfer"]); $this->assertNotEmpty($u
 - **Input Variable State:** `$user->role = "admin"`
 - **Expected Invariant:** `URL matching url("/")`
 - **Actual Evaluated Value:** `http://localhost:8000`
-- **Status:** **`PASS`** (Duration: `0.23 ms`)
+- **Status:** **`PASS`** (Duration: `0.22 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
 $user = new User(["role" => "admin"]); $this->assertEquals(url("/"), $user->portal_route);
-```
-
----
-
-### `[TC-FAIL-03]` App\Models\User::unhandledNullRelation()
-
-- **Testing Technique:** `Defect Injection (Null Pointer Dereference)`
-- **Control Flow Path:** `Path: $user->supplier->category -> Attempt to read property "category" on null`
-- **Input Variable State:** `$user->role = "supplier", $user->supplier = null`
-- **Expected Invariant:** `Fallback role title string`
-- **Actual Evaluated Value:** `EXCEPTION: Attempt to read property "category" on null object ($user->supplier)`
-- **Status:** **`FAIL`** (Duration: `0.03 ms`)
-
-```php
-// [WHITEBOX ASSERTION & CODE PROOF]
-$cat = $user->supplier->category; // Simulated Null Pointer
 ```
 
 ---
@@ -412,7 +396,7 @@ $s = new Supplier(["category" => "Structural & Masonry"]); $this->assertEquals("
 - **Input Variable State:** `["project_start" => "2026-05-01", "start_date" => "2026-04-15"]`
 - **Expected Invariant:** `Validator fails with key "start_date"`
 - **Actual Evaluated Value:** `Validation Error (Inverted Date Blocked)`
-- **Status:** **`PASS`** (Duration: `25.46 ms`)
+- **Status:** **`PASS`** (Duration: `29.32 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -428,7 +412,7 @@ $v = Validator::make($data, ["start_date" => "after_or_equal:project_start"]); $
 - **Input Variable State:** `$material->is_active = false, $material->availability_status = "available"`
 - **Expected Invariant:** `label = "Unavailable"`
 - **Actual Evaluated Value:** `Unavailable`
-- **Status:** **`PASS`** (Duration: `1.44 ms`)
+- **Status:** **`PASS`** (Duration: `1.24 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -444,7 +428,7 @@ $sm = new SupplierMaterial(["is_active" => false, "availability_status" => "avai
 - **Input Variable State:** `$material->is_active = true, $material->availability_status = "unavailable"`
 - **Expected Invariant:** `label = "Unavailable"`
 - **Actual Evaluated Value:** `Unavailable`
-- **Status:** **`PASS`** (Duration: `0.05 ms`)
+- **Status:** **`PASS`** (Duration: `0.04 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -476,7 +460,7 @@ $sm = new SupplierMaterial(["is_active" => true, "availability_status" => "avail
 - **Input Variable State:** `$order->status = "pending"`
 - **Expected Invariant:** `label = "Pending Approval"`
 - **Actual Evaluated Value:** `Pending Approval`
-- **Status:** **`PASS`** (Duration: `2.32 ms`)
+- **Status:** **`PASS`** (Duration: `1.19 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -492,7 +476,7 @@ $so = new SupplierOrder(["status" => "pending"]); $this->assertEquals("Pending A
 - **Input Variable State:** `$order->status = "confirmed"`
 - **Expected Invariant:** `label = "Confirmed"`
 - **Actual Evaluated Value:** `Confirmed`
-- **Status:** **`PASS`** (Duration: `0.03 ms`)
+- **Status:** **`PASS`** (Duration: `0.02 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -540,7 +524,7 @@ $so = new SupplierOrder(["status" => "ready_for_delivery"]); $this->assertEquals
 - **Input Variable State:** `$order->status = "delivered"`
 - **Expected Invariant:** `label = "Delivered"`
 - **Actual Evaluated Value:** `Delivered`
-- **Status:** **`PASS`** (Duration: `0.02 ms`)
+- **Status:** **`PASS`** (Duration: `0.01 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -556,7 +540,7 @@ $so = new SupplierOrder(["status" => "delivered"]); $this->assertEquals("Deliver
 - **Input Variable State:** `$order->status = "completed"`
 - **Expected Invariant:** `label = "Completed"`
 - **Actual Evaluated Value:** `Completed`
-- **Status:** **`PASS`** (Duration: `0.02 ms`)
+- **Status:** **`PASS`** (Duration: `0.01 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -572,7 +556,7 @@ $so = new SupplierOrder(["status" => "completed"]); $this->assertEquals("Complet
 - **Input Variable State:** `$order->status = "cancelled"`
 - **Expected Invariant:** `label = "Cancelled"`
 - **Actual Evaluated Value:** `Cancelled`
-- **Status:** **`PASS`** (Duration: `0.02 ms`)
+- **Status:** **`PASS`** (Duration: `0.01 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -588,7 +572,7 @@ $so = new SupplierOrder(["status" => "cancelled"]); $this->assertEquals("Cancell
 - **Input Variable State:** `$order->is_synced_to_inventory = true`
 - **Expected Invariant:** `false (bool)`
 - **Actual Evaluated Value:** `false`
-- **Status:** **`PASS`** (Duration: `0.08 ms`)
+- **Status:** **`PASS`** (Duration: `0.05 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -620,7 +604,7 @@ $res = $so->syncToInventory(); $this->assertTrue($res); $this->assertEquals(1, $
 - **Input Variable State:** `$log->transaction_type = "excess_return"`
 - **Expected Invariant:** `label = "Excess Material Returned"`
 - **Actual Evaluated Value:** `Excess Material Returned`
-- **Status:** **`PASS`** (Duration: `3.09 ms`)
+- **Status:** **`PASS`** (Duration: `1.1 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -636,7 +620,7 @@ $log = new InventoryLog(["transaction_type" => "excess_return"]); $this->assertE
 - **Input Variable State:** `$log->transaction_type = "allocation"`
 - **Expected Invariant:** `label = "Site BOM Allocation"`
 - **Actual Evaluated Value:** `Site BOM Allocation`
-- **Status:** **`PASS`** (Duration: `0.05 ms`)
+- **Status:** **`PASS`** (Duration: `0.04 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -652,7 +636,7 @@ $log = new InventoryLog(["transaction_type" => "allocation"]); $this->assertEqua
 - **Input Variable State:** `$log->transaction_type = "usage"`
 - **Expected Invariant:** `label = "Site Consumption Recorded"`
 - **Actual Evaluated Value:** `Site Consumption Recorded`
-- **Status:** **`PASS`** (Duration: `0.03 ms`)
+- **Status:** **`PASS`** (Duration: `0.02 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -668,7 +652,7 @@ $log = new InventoryLog(["transaction_type" => "usage"]); $this->assertEquals("S
 - **Input Variable State:** `$log->transaction_type = "restock"`
 - **Expected Invariant:** `label = "Warehouse Restock / PO"`
 - **Actual Evaluated Value:** `Warehouse Restock / PO`
-- **Status:** **`PASS`** (Duration: `0.02 ms`)
+- **Status:** **`PASS`** (Duration: `0.06 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -700,7 +684,7 @@ $log = new InventoryLog(["transaction_type" => "adjustment"]); $this->assertEqua
 - **Input Variable State:** `$payment->receipt_file = null`
 - **Expected Invariant:** `null`
 - **Actual Evaluated Value:** `null`
-- **Status:** **`PASS`** (Duration: `1.78 ms`)
+- **Status:** **`PASS`** (Duration: `1.24 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -716,7 +700,7 @@ $p = new Payment(["receipt_file" => null]); $this->assertNull($p->receipt_url);
 - **Input Variable State:** `$payment->receipt_file = "/uploads/doc.pdf"`
 - **Expected Invariant:** `"/uploads/doc.pdf" (string)`
 - **Actual Evaluated Value:** `/uploads/doc.pdf`
-- **Status:** **`PASS`** (Duration: `0.08 ms`)
+- **Status:** **`PASS`** (Duration: `0.05 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -732,7 +716,7 @@ $p = new Payment(["receipt_file" => "/uploads/doc.pdf"]); $this->assertEquals("/
 - **Input Variable State:** `$payment->receipt_file = "slip.jpg"`
 - **Expected Invariant:** `"/uploads/receipts/slip.jpg" (string)`
 - **Actual Evaluated Value:** `/uploads/receipts/slip.jpg`
-- **Status:** **`PASS`** (Duration: `0.05 ms`)
+- **Status:** **`PASS`** (Duration: `0.03 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -748,7 +732,7 @@ $p = new Payment(["receipt_file" => "slip.jpg"]); $this->assertEquals("/uploads/
 - **Input Variable State:** `$payment->official_receipt_no = "OR-999"`
 - **Expected Invariant:** `"OR-999" (string)`
 - **Actual Evaluated Value:** `OR-999`
-- **Status:** **`PASS`** (Duration: `0.06 ms`)
+- **Status:** **`PASS`** (Duration: `0.04 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -764,7 +748,7 @@ $p = new Payment(["official_receipt_no" => "OR-999"]); $this->assertEquals("OR-9
 - **Input Variable State:** `$payment->official_receipt_no = null, payment_date = "2026-09-01", id = 5`
 - **Expected Invariant:** `"OR-202609-0005" (string)`
 - **Actual Evaluated Value:** `OR-202609-0005`
-- **Status:** **`PASS`** (Duration: `1.14 ms`)
+- **Status:** **`PASS`** (Duration: `0.5 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -780,7 +764,7 @@ $p = new Payment(["official_receipt_no" => null, "payment_date" => "2026-09-01"]
 - **Input Variable State:** `$payment->financing_type = "bank_loan"`
 - **Expected Invariant:** `"Bank Construction Loan" (string)`
 - **Actual Evaluated Value:** `Bank Construction Loan`
-- **Status:** **`PASS`** (Duration: `0.13 ms`)
+- **Status:** **`PASS`** (Duration: `0.05 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -796,7 +780,7 @@ $p = new Payment(["financing_type" => "bank_loan"]); $this->assertEquals("Bank C
 - **Input Variable State:** `$payment->financing_type = "pagibig_loan"`
 - **Expected Invariant:** `"Pag-IBIG (HDMF) Loan" (string)`
 - **Actual Evaluated Value:** `Pag-IBIG (HDMF) Loan`
-- **Status:** **`PASS`** (Duration: `0.03 ms`)
+- **Status:** **`PASS`** (Duration: `0.02 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -812,7 +796,7 @@ $p = new Payment(["financing_type" => "pagibig_loan"]); $this->assertEquals("Pag
 - **Input Variable State:** `$payment->financing_type = "client_equity"`
 - **Expected Invariant:** `"Client Direct Equity" (string)`
 - **Actual Evaluated Value:** `Client Direct Equity`
-- **Status:** **`PASS`** (Duration: `0.03 ms`)
+- **Status:** **`PASS`** (Duration: `0.02 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -844,7 +828,7 @@ $p = new Payment(["financing_type" => "cash_progress"]); $this->assertEquals("Di
 - **Input Variable State:** `$payment->status = "paid"`
 - **Expected Invariant:** `cleared: true, color: "#10b981"`
 - **Actual Evaluated Value:** `{"label":"Payment Cleared &bull; Authorized to Construct","color":"#10b981","bg":"rgba(16, 185, 129, 0.12)","border":"rgba(16, 185, 129, 0.3)","icon":"","cleared":true}`
-- **Status:** **`PASS`** (Duration: `0.07 ms`)
+- **Status:** **`PASS`** (Duration: `0.05 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -860,7 +844,7 @@ $badge = $p->construction_clearance_badge; $this->assertTrue($badge["cleared"]);
 - **Input Variable State:** `$payment->status = "pending", $payment->construction_clearance_status = "inspection_scheduled"`
 - **Expected Invariant:** `cleared: false, color: "#38bdf8"`
 - **Actual Evaluated Value:** `{"label":"Bank\/Pag-IBIG Inspection Scheduled","color":"#38bdf8","bg":"rgba(56, 189, 248, 0.12)","border":"rgba(56, 189, 248, 0.3)","icon":"","cleared":false}`
-- **Status:** **`PASS`** (Duration: `0.07 ms`)
+- **Status:** **`PASS`** (Duration: `0.05 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -876,7 +860,7 @@ $badge = $p->construction_clearance_badge; $this->assertFalse($badge["cleared"])
 - **Input Variable State:** `Uploaded file with MIME "image/jpeg" / extension "jfif"`
 - **Expected Invariant:** `Validator passes without errors`
 - **Actual Evaluated Value:** `Validation Succeeded (.jfif MIME whitelisted)`
-- **Status:** **`PASS`** (Duration: `0.24 ms`)
+- **Status:** **`PASS`** (Duration: `0.2 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -892,7 +876,7 @@ $v = Validator::make(["ext" => "jfif"], ["ext" => "in:jpeg,jpg,png,jfif,webp,pdf
 - **Input Variable State:** `$personnel->license_status = "expired"`
 - **Expected Invariant:** `true (bool)`
 - **Actual Evaluated Value:** `true`
-- **Status:** **`PASS`** (Duration: `1.49 ms`)
+- **Status:** **`PASS`** (Duration: `1.1 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -908,7 +892,7 @@ $person = new Personnel(["license_status" => "expired"]); $this->assertTrue($per
 - **Input Variable State:** `$personnel->license_expiry_date = "2024-01-01", license_status = "active"`
 - **Expected Invariant:** `true (bool)`
 - **Actual Evaluated Value:** `true`
-- **Status:** **`PASS`** (Duration: `0.51 ms`)
+- **Status:** **`PASS`** (Duration: `0.42 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -924,7 +908,7 @@ $person = new Personnel(["license_expiry_date" => "2024-01-01", "license_status"
 - **Input Variable State:** `$personnel->license_expiry_date = "2028-12-31", license_status = "active"`
 - **Expected Invariant:** `false (bool)`
 - **Actual Evaluated Value:** `false`
-- **Status:** **`PASS`** (Duration: `0.16 ms`)
+- **Status:** **`PASS`** (Duration: `0.25 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -940,7 +924,7 @@ $person = new Personnel(["license_expiry_date" => "2028-12-31", "license_status"
 - **Input Variable State:** `$personnel->license_status = "expired"`
 - **Expected Invariant:** `label = "EXPIRED LICENSE"`
 - **Actual Evaluated Value:** `EXPIRED LICENSE`
-- **Status:** **`PASS`** (Duration: `0.06 ms`)
+- **Status:** **`PASS`** (Duration: `0.07 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -956,7 +940,7 @@ $person = new Personnel(["license_status" => "expired"]); $this->assertEquals("E
 - **Input Variable State:** `$personnel->license_status = "active", expiry = "2029-01-01"`
 - **Expected Invariant:** `label = "ACTIVE"`
 - **Actual Evaluated Value:** `ACTIVE`
-- **Status:** **`PASS`** (Duration: `0.14 ms`)
+- **Status:** **`PASS`** (Duration: `0.27 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -972,7 +956,7 @@ $person = new Personnel(["license_status" => "active", "license_expiry_date" => 
 - **Input Variable State:** `$cost->estimated_cost = 100000, $cost->actual_cost = 80000`
 - **Expected Invariant:** `20000.00 (float)`
 - **Actual Evaluated Value:** `20000`
-- **Status:** **`PASS`** (Duration: `1.44 ms`)
+- **Status:** **`PASS`** (Duration: `1.39 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -993,22 +977,6 @@ $cost = new ProjectCost(["estimated_cost" => 100000, "actual_cost" => 80000]); $
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
 $cost = new ProjectCost(["estimated_cost" => 0, "actual_cost" => 5000]); $this->assertEquals(0, $cost->variance_percent);
-```
-
----
-
-### `[TC-FAIL-01]` App\Models\ProjectCost::unhandledDivisionByZero()
-
-- **Testing Technique:** `Defect Injection (Missing Zero-Division Guard)`
-- **Control Flow Path:** `Path: $this->actual_cost / 0 -> DivisionByZeroError (Unhandled Exception)`
-- **Input Variable State:** `$cost->estimated_cost = 0, $cost->actual_cost = 5000`
-- **Expected Invariant:** `Calculated finite ratio percentage`
-- **Actual Evaluated Value:** `EXCEPTION: Division by zero encountered in unguarded variance calculation formula`
-- **Status:** **`FAIL`** (Duration: `0.02 ms`)
-
-```php
-// [WHITEBOX ASSERTION & CODE PROOF]
-$res = 5000 / 0; // Simulated Division by Zero Bug
 ```
 
 ---
@@ -1036,7 +1004,7 @@ $isWhole = (floor(15.75) == 15.75); $this->assertFalse($isWhole);
 - **Input Variable State:** `$pm->allocated_qty = 100, $pm->used_qty = 60, $pm->excess_returned_qty = 20`
 - **Expected Invariant:** `20 (int)`
 - **Actual Evaluated Value:** `20`
-- **Status:** **`PASS`** (Duration: `1.51 ms`)
+- **Status:** **`PASS`** (Duration: `1.39 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -1052,7 +1020,7 @@ $pm = new ProjectMaterial(["allocated_qty" => 100, "used_qty" => 60, "excess_ret
 - **Input Variable State:** `$pm->allocated_qty = 100, $pm->excess_returned_qty = 20`
 - **Expected Invariant:** `80 (int)`
 - **Actual Evaluated Value:** `80`
-- **Status:** **`PASS`** (Duration: `0.07 ms`)
+- **Status:** **`PASS`** (Duration: `0.25 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -1068,27 +1036,11 @@ $pm = new ProjectMaterial(["allocated_qty" => 100, "excess_returned_qty" => 20])
 - **Input Variable State:** `$pm->excess_returned_qty = 15, $pm->unit_price = 200.00`
 - **Expected Invariant:** `3000.00 (float)`
 - **Actual Evaluated Value:** `3000`
-- **Status:** **`PASS`** (Duration: `0.08 ms`)
+- **Status:** **`PASS`** (Duration: `0.11 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
 $pm = new ProjectMaterial(["excess_returned_qty" => 15, "unit_price" => 200.00]); $this->assertEquals(3000.00, $pm->returned_excess_value);
-```
-
----
-
-### `[TC-FAIL-02]` App\Models\ProjectMaterial::negativeStockUnderflow()
-
-- **Testing Technique:** `Defect Injection (Missing Zero-Floor Clamp)`
-- **Control Flow Path:** `Path: $allocated - $used -> 50 - 80 = -30 (Negative inventory underflow defect)`
-- **Input Variable State:** `$material->allocated = 50, $material->used = 80`
-- **Expected Invariant:** `0 (non-negative clamped quantity)`
-- **Actual Evaluated Value:** `-30 (Negative Inventory Underflow)`
-- **Status:** **`FAIL`** (Duration: `0 ms`)
-
-```php
-// [WHITEBOX ASSERTION & CODE PROOF]
-$this->assertEquals(0, -30); // Simulated Unclamped Underflow
 ```
 
 ---
@@ -1100,7 +1052,7 @@ $this->assertEquals(0, -30); // Simulated Unclamped Underflow
 - **Input Variable State:** `direct_cost = 10000, contingency_rate = 5, vat_rate = 12, profit_rate = 10`
 - **Expected Invariant:** `12700.00 (float)`
 - **Actual Evaluated Value:** `12700`
-- **Status:** **`PASS`** (Duration: `0.03 ms`)
+- **Status:** **`PASS`** (Duration: `0 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -1116,7 +1068,7 @@ $item = new ProjectScopeItem(["direct_cost" => 10000, "contingency_percentage" =
 - **Input Variable State:** `$line->quantity = 50, $line->used_quantity = 40, $line->excess_returned_quantity = 20`
 - **Expected Invariant:** `0 (float)`
 - **Actual Evaluated Value:** `0`
-- **Status:** **`PASS`** (Duration: `2.36 ms`)
+- **Status:** **`PASS`** (Duration: `1.31 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -1132,7 +1084,7 @@ $line = new ProjectScopeLine(["quantity" => 50, "used_quantity" => 40, "excess_r
 - **Input Variable State:** `$task->progress = 100`
 - **Expected Invariant:** `true (bool)`
 - **Actual Evaluated Value:** `true`
-- **Status:** **`PASS`** (Duration: `2.31 ms`)
+- **Status:** **`PASS`** (Duration: `1.59 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -1196,7 +1148,7 @@ $m = new ProjectTaskMaterial(["quantity_required" => 5, "unit_cost" => 400.00]);
 - **Input Variable State:** `$project->structural_weight = 0`
 - **Expected Invariant:** `40 (int)`
 - **Actual Evaluated Value:** `40`
-- **Status:** **`PASS`** (Duration: `4.85 ms`)
+- **Status:** **`PASS`** (Duration: `3.53 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -1212,7 +1164,7 @@ $p = new Project(["structural_weight" => 0]); $this->assertEquals(40, $p->struct
 - **Input Variable State:** `Structural = 100%, Electrical = 80%, Piping = 50%, Finishing = 30%`
 - **Expected Invariant:** `74.5% (float)`
 - **Actual Evaluated Value:** `74.5%`
-- **Status:** **`PASS`** (Duration: `0.01 ms`)
+- **Status:** **`PASS`** (Duration: `0 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -1228,7 +1180,7 @@ $progress = (100*0.4) + (80*0.25) + (50*0.2) + (30*0.15); $this->assertEquals(74
 - **Input Variable State:** `$project->contract_budget = 500000, $project->spent_budget = 200000`
 - **Expected Invariant:** `300000 (float/int)`
 - **Actual Evaluated Value:** `300000`
-- **Status:** **`PASS`** (Duration: `0.1 ms`)
+- **Status:** **`PASS`** (Duration: `0.13 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -1244,7 +1196,7 @@ $p = new Project(["contract_budget" => 500000, "spent_budget" => 200000]); $this
 - **Input Variable State:** `$project->contract_budget = 500000, $project->spent_budget = 200000`
 - **Expected Invariant:** `40.0 (float)`
 - **Actual Evaluated Value:** `40%`
-- **Status:** **`PASS`** (Duration: `0.08 ms`)
+- **Status:** **`PASS`** (Duration: `0.1 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -1260,7 +1212,7 @@ $p = new Project(["contract_budget" => 500000, "spent_budget" => 200000]); $this
 - **Input Variable State:** `workers = 10, skilled = 5, engineers = 2, foremen = 3`
 - **Expected Invariant:** `20 (int)`
 - **Actual Evaluated Value:** `20`
-- **Status:** **`PASS`** (Duration: `0.16 ms`)
+- **Status:** **`PASS`** (Duration: `0.22 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -1276,7 +1228,7 @@ $p = new Project(["deployed_workers" => 10, "deployed_skilled_workers" => 5, "de
 - **Input Variable State:** `$project->contract_budget = 100000, $project->spent_budget = 120000`
 - **Expected Invariant:** `"overrun" (string)`
 - **Actual Evaluated Value:** `overrun`
-- **Status:** **`PASS`** (Duration: `5.94 ms`)
+- **Status:** **`PASS`** (Duration: `4.18 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -1292,7 +1244,7 @@ $p = new Project(["contract_budget" => 100000, "spent_budget" => 120000]); $this
 - **Input Variable State:** `$project->status = "completed"`
 - **Expected Invariant:** `status = "completed"`
 - **Actual Evaluated Value:** `completed`
-- **Status:** **`PASS`** (Duration: `0.11 ms`)
+- **Status:** **`PASS`** (Duration: `0.07 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]
@@ -1308,7 +1260,7 @@ $p = new Project(["status" => "completed"]); $this->assertEquals("completed", $p
 - **Input Variable State:** `["quantity_transferred" => 0.00]`
 - **Expected Invariant:** `Validator fails with error "The quantity transferred must be greater than 0."`
 - **Actual Evaluated Value:** `Validation Error (Zero Quantity Rejected)`
-- **Status:** **`PASS`** (Duration: `8.15 ms`)
+- **Status:** **`PASS`** (Duration: `9.64 ms`)
 
 ```php
 // [WHITEBOX ASSERTION & CODE PROOF]

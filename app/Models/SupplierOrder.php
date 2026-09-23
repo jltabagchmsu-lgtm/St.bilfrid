@@ -104,10 +104,16 @@ class SupplierOrder extends Model
                 };
                 $code = $codePrefix . strtoupper(substr(uniqid(), -5));
 
+                $category = match($this->supplier->category ?? '') {
+                    'Roofing' => 'Roofing & Metal Sheets',
+                    'Structural' => 'Structural & Masonry',
+                    default => $this->supplier->category ?? 'General Building Materials',
+                };
+
                 $material = Material::create([
                     'material_code' => $code,
                     'name' => $item->material_name,
-                    'category' => $this->supplier->category ?? 'General',
+                    'category' => $category,
                     'unit' => $item->unit,
                     'unit_cost' => $item->unit_price,
                     'stock_quantity' => $item->quantity,

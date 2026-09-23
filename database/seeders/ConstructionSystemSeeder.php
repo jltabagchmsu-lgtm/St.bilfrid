@@ -127,15 +127,15 @@ class ConstructionSystemSeeder extends Seeder
         ]);
 
         // 2. Master Materials Catalog in Warehouse
-        $m1 = Material::create(['material_code' => 'MAT-CEM-01', 'name' => 'Portland Cement (Type I)', 'category' => 'Structural', 'unit' => 'bags', 'unit_cost' => 225.00, 'stock_quantity' => 15000]);
-        $m2 = Material::create(['material_code' => 'MAT-STEEL-16', 'name' => '16mm Deformed Bar (Grade 60)', 'category' => 'Structural', 'unit' => 'pcs', 'unit_cost' => 450.00, 'stock_quantity' => 8500]);
-        $m3 = Material::create(['material_code' => 'MAT-STEEL-12', 'name' => '12mm Deformed Bar', 'category' => 'Structural', 'unit' => 'pcs', 'unit_cost' => 310.00, 'stock_quantity' => 12000]);
-        $m4 = Material::create(['material_code' => 'MAT-STEEL-10', 'name' => '10mm Deformed Bar', 'category' => 'Structural', 'unit' => 'pcs', 'unit_cost' => 220.00, 'stock_quantity' => 18000]);
-        $m5 = Material::create(['material_code' => 'MAT-STEEL-08', 'name' => '8mm Deformed Bar', 'category' => 'Structural', 'unit' => 'pcs', 'unit_cost' => 120.00, 'stock_quantity' => 14000]);
-        $m6 = Material::create(['material_code' => 'MAT-AGG-SAND', 'name' => 'Mixing Sand (Coarse / Fine)', 'category' => 'Structural', 'unit' => 'cu.m', 'unit_cost' => 850.00, 'stock_quantity' => 2500]);
-        $m7 = Material::create(['material_code' => 'MAT-AGG-GRAV', 'name' => '3/4 Crushed Gravel', 'category' => 'Structural', 'unit' => 'cu.m', 'unit_cost' => 1410.00, 'stock_quantity' => 2000]);
-        $m8 = Material::create(['material_code' => 'MAT-CHB-04', 'name' => '4" Concrete Hollow Block (CHB)', 'category' => 'Structural', 'unit' => 'pcs', 'unit_cost' => 13.00, 'stock_quantity' => 35000]);
-        $m9 = Material::create(['material_code' => 'MAT-CHB-06', 'name' => '6" Concrete Hollow Block (CHB)', 'category' => 'Structural', 'unit' => 'pcs', 'unit_cost' => 16.00, 'stock_quantity' => 15000]);
+        $m1 = Material::create(['material_code' => 'MAT-CEM-01', 'name' => 'Portland Cement (Type I)', 'category' => 'Structural & Masonry', 'unit' => 'bags', 'unit_cost' => 225.00, 'stock_quantity' => 15000]);
+        $m2 = Material::create(['material_code' => 'MAT-STEEL-16', 'name' => '16mm Deformed Bar (Grade 60)', 'category' => 'Structural & Masonry', 'unit' => 'pcs', 'unit_cost' => 450.00, 'stock_quantity' => 8500]);
+        $m3 = Material::create(['material_code' => 'MAT-STEEL-12', 'name' => '12mm Deformed Bar', 'category' => 'Structural & Masonry', 'unit' => 'pcs', 'unit_cost' => 310.00, 'stock_quantity' => 12000]);
+        $m4 = Material::create(['material_code' => 'MAT-STEEL-10', 'name' => '10mm Deformed Bar', 'category' => 'Structural & Masonry', 'unit' => 'pcs', 'unit_cost' => 220.00, 'stock_quantity' => 18000]);
+        $m5 = Material::create(['material_code' => 'MAT-STEEL-08', 'name' => '8mm Deformed Bar', 'category' => 'Structural & Masonry', 'unit' => 'pcs', 'unit_cost' => 120.00, 'stock_quantity' => 14000]);
+        $m6 = Material::create(['material_code' => 'MAT-AGG-SAND', 'name' => 'Mixing Sand (Coarse / Fine)', 'category' => 'Structural & Masonry', 'unit' => 'cu.m', 'unit_cost' => 850.00, 'stock_quantity' => 2500]);
+        $m7 = Material::create(['material_code' => 'MAT-AGG-GRAV', 'name' => '3/4 Crushed Gravel', 'category' => 'Structural & Masonry', 'unit' => 'cu.m', 'unit_cost' => 1410.00, 'stock_quantity' => 2000]);
+        $m8 = Material::create(['material_code' => 'MAT-CHB-04', 'name' => '4" Concrete Hollow Block (CHB)', 'category' => 'Structural & Masonry', 'unit' => 'pcs', 'unit_cost' => 13.00, 'stock_quantity' => 35000]);
+        $m9 = Material::create(['material_code' => 'MAT-CHB-06', 'name' => '6" Concrete Hollow Block (CHB)', 'category' => 'Structural & Masonry', 'unit' => 'pcs', 'unit_cost' => 16.00, 'stock_quantity' => 15000]);
         
         // Roofing Specific Catalog Items
         $m10 = Material::create(['material_code' => 'MAT-ROOF-RIB', 'name' => 'Rib-Type Pre-Painted Long Span Roofing (0.40mm)', 'category' => 'Roofing & Metal Sheets', 'unit' => 'ln.m.', 'unit_cost' => 410.00, 'stock_quantity' => 5000]);
@@ -163,8 +163,8 @@ class ConstructionSystemSeeder extends Seeder
         $mWinSlide60 = Material::create(['material_code' => 'MAT-WIN-SLD60', 'name' => '0.60m x 0.90m Bathroom Frosted Sliding Window Aluminum Frame', 'category' => 'Windows & Doors', 'unit' => 'units', 'unit_cost' => 2360.00, 'stock_quantity' => 100]);
         $mWinAwn180 = Material::create(['material_code' => 'MAT-WIN-AWN180', 'name' => '1.80m x 0.45m Awning Casement Window Aluminum Frame', 'category' => 'Windows & Doors', 'unit' => 'units', 'unit_cost' => 3540.00, 'stock_quantity' => 65]);
 
-        $m11 = Material::create(['material_code' => 'MAT-ELE-THW12', 'name' => 'THW Copper Wire #12 (3.5mm²)', 'category' => 'Electrical', 'unit' => 'boxes', 'unit_cost' => 5000.00, 'stock_quantity' => 250]);
-        $m12 = Material::create(['material_code' => 'MAT-PIP-PVC04', 'name' => '4" Sanitary PVC Pipe', 'category' => 'Piping/Plumbing', 'unit' => 'pcs', 'unit_cost' => 420.00, 'stock_quantity' => 3500]);
+        $m11 = Material::create(['material_code' => 'MAT-ELE-THW12', 'name' => 'THW Copper Wire #12 (3.5mm²)', 'category' => 'Electrical Works', 'unit' => 'boxes', 'unit_cost' => 5000.00, 'stock_quantity' => 250]);
+        $m12 = Material::create(['material_code' => 'MAT-PIP-PVC04', 'name' => '4" Sanitary PVC Pipe', 'category' => 'Plumbing & Sanitary', 'unit' => 'pcs', 'unit_cost' => 420.00, 'stock_quantity' => 3500]);
 
         // ==========================================
         // 3. Active Project: Apex Horizon Commercial Tower

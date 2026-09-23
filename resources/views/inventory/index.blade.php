@@ -347,12 +347,15 @@
                     <label class="form-label">Category</label>
                     <select name="category" class="form-select" required>
                         <option value="Windows & Doors">Windows & Doors</option>
-                        <option value="Roofing">Roofing</option>
+                        <option value="Roofing & Metal Sheets">Roofing & Metal Sheets</option>
                         <option value="Structural & Masonry">Structural & Masonry</option>
-                        <option value="Electrical">Electrical</option>
-                        <option value="Piping/Plumbing">Piping/Plumbing</option>
-                        <option value="Finishing">Finishing</option>
-                        <option value="General">General</option>
+                        <option value="Electrical Works">Electrical Works</option>
+                        <option value="Plumbing & Sanitary">Plumbing & Sanitary</option>
+                        <option value="Architectural & Finishes">Architectural & Finishes</option>
+                        <option value="Rebar & Structural Steel">Rebar & Structural Steel</option>
+                        <option value="Formworks & Lumber">Formworks & Lumber</option>
+                        <option value="Concrete & Masonry">Concrete & Masonry</option>
+                        <option value="General Building Materials">General Building Materials</option>
                     </select>
                 </div>
                 <div class="form-group">
