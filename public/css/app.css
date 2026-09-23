@@ -623,7 +623,7 @@ select option {
 /* ====================================================
    Universal Grid Tables & Badges
    ==================================================== */
-.custom-table, .grid-table {
+.custom-table, .grid-table, .data-table {
     width: 100%;
     border-collapse: collapse;
     text-align: left;
@@ -632,7 +632,7 @@ select option {
     overflow: hidden;
 }
 
-.custom-table th, .grid-table th {
+.custom-table th, .grid-table th, .data-table th {
     padding: 13px 16px;
     font-size: 0.75rem;
     font-weight: 800;
@@ -643,7 +643,7 @@ select option {
     letter-spacing: 0.05em;
 }
 
-.custom-table td, .grid-table td {
+.custom-table td, .grid-table td, .data-table td {
     padding: 14px 16px;
     font-size: 0.875rem;
     border-bottom: 1px solid #f1f5f9;
@@ -651,7 +651,7 @@ select option {
     color: var(--text-primary);
 }
 
-.custom-table tr:hover td, .grid-table tbody tr:hover td {
+.custom-table tr:hover td, .grid-table tbody tr:hover td, .data-table tbody tr:hover td {
     background: var(--primary-red-light);
 }
 

@@ -1574,25 +1574,25 @@
     </div>
 
     <div style="overflow-x: auto;">
-        <table class="data-table">
+        <table class="custom-table data-table" style="width: 100%;">
             <thead>
                 <tr>
-                    <th>Task & Trade Discipline</th>
-                    <th>Assigned Lead</th>
-                    <th>Schedule Window</th>
-                    <th>Task Budget</th>
-                    <th>Actual Incurred</th>
-                    <th>Completion %</th>
-                    <th style="text-align: center; width: 110px;">Proof Photo</th>
-                    <th>Status</th>
-                    <th style="text-align: right;">Action</th>
+                    <th style="min-width: 200px;">Task & Trade Discipline</th>
+                    <th style="min-width: 130px;">Assigned Lead</th>
+                    <th style="min-width: 160px;">Schedule Window</th>
+                    <th style="min-width: 130px;">Task Budget</th>
+                    <th style="min-width: 130px;">Actual Incurred</th>
+                    <th style="min-width: 180px;">Completion %</th>
+                    <th style="text-align: center; width: 100px;">Proof Photo</th>
+                    <th style="width: 110px;">Status</th>
+                    <th style="text-align: right; width: 90px;">Action</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($project->tasks as $task)
                     <tr>
                         <td>
-                            <strong style="color: var(--text-primary);">{{ $task->task_name }}</strong>
+                            <strong style="color: var(--text-primary); font-size: 0.925rem;">{{ $task->task_name }}</strong>
                             <div style="font-size: 0.75rem; color: var(--text-muted);">{{ $task->category }}</div>
                         </td>
                         <td>
@@ -1603,14 +1603,14 @@
                         <td style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-secondary);">
                             {{ $task->start_date->format('M d') }} &rarr; {{ $task->due_date->format('M d, Y') }}
                         </td>
-                        <td style="font-family: var(--font-mono); color: var(--text-primary);">₱{{ number_format($task->allocated_budget, 2) }}</td>
+                        <td style="font-family: var(--font-mono); font-weight: 700; color: var(--text-primary);">₱{{ number_format($task->allocated_budget, 2) }}</td>
                         <td style="font-family: var(--font-mono); color: #d97706; font-weight: 700;">₱{{ number_format($task->actual_cost, 2) }}</td>
                         <td>
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                <div style="flex: 1; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; width: 60px;">
+                            <div style="display: flex; align-items: center; gap: 10px; width: 100%;">
+                                <div style="flex: 1; height: 7px; background: #e2e8f0; border-radius: 4px; overflow: hidden; min-width: 80px;">
                                     <div style="width: {{ $task->progress }}%; height: 100%; background: {{ $task->progress >= 100 ? '#059669' : 'var(--primary-red)' }};"></div>
                                 </div>
-                                <span style="font-family: var(--font-mono); font-size: 0.8rem; font-weight: 700; color: var(--text-primary);">{{ $task->progress }}%</span>
+                                <span style="font-family: var(--font-mono); font-size: 0.825rem; font-weight: 700; color: var(--text-primary); min-width: 42px; text-align: right;">{{ $task->progress }}%</span>
                             </div>
                         </td>
                         <td style="text-align: center; vertical-align: middle;">
@@ -1702,7 +1702,7 @@
     </div>
 
     <div style="overflow-x: auto;">
-        <table class="data-table">
+        <table class="custom-table data-table" style="width: 100%;">
             <thead>
                 <tr>
                     <th>Official Receipt / Invoice</th>
