@@ -234,7 +234,7 @@
                             <div class="code-box">$user = new User([&quot;role&quot; =&gt; null]); $this-&gt;assertTrue($user-&gt;isAdmin());</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">5.57 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">4.29 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B002</span></td>
@@ -255,7 +255,7 @@
                             <div class="code-box">$user = new User([&quot;role&quot; =&gt; &quot;admin&quot;]); $this-&gt;assertTrue($user-&gt;isAdmin());</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.05 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.04 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B003</span></td>
@@ -339,7 +339,7 @@
                             <div class="code-box">$user = new User([&quot;role&quot; =&gt; &quot;windows_doors_transfer&quot;]); $this-&gt;assertTrue($user-&gt;isWindowsDoorsOfficer());</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.02 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.03 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B007</span></td>
@@ -381,7 +381,7 @@
                             <div class="code-box">$user = new User([&quot;role&quot; =&gt; &quot;supplier&quot;, &quot;supplier_id&quot; =&gt; null]); $this-&gt;assertTrue($user-&gt;isSupplier());</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.05 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.02 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B009</span></td>
@@ -402,7 +402,7 @@
                             <div class="code-box">$user = new User([&quot;role&quot; =&gt; null, &quot;supplier_id&quot; =&gt; 99]); $this-&gt;assertTrue($user-&gt;isSupplier());</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.03 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.02 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B010</span></td>
@@ -444,7 +444,7 @@
                             <div class="code-box">$user-&gt;setRelation(&quot;supplier&quot;, $supplier); $this-&gt;assertEquals(&quot;Steel Corp (Structural)&quot;, $user-&gt;role_title);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.13 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.12 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B012</span></td>
@@ -465,7 +465,7 @@
                             <div class="code-box">$user = new User([&quot;role&quot; =&gt; &quot;supplier&quot;]); $this-&gt;assertEquals(&quot;Supplier Account&quot;, $user-&gt;role_title);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">2.75 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">3.82 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B013</span></td>
@@ -486,7 +486,7 @@
                             <div class="code-box">$user = new User([&quot;role&quot; =&gt; &quot;roofing_transfer&quot;]); $this-&gt;assertEquals(&quot;Roofing Transfer Officer&quot;, $user-&gt;role_title);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.05 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.07 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B014</span></td>
@@ -549,7 +549,7 @@
                             <div class="code-box">$user = new User([&quot;role&quot; =&gt; &quot;supplier&quot;]); $this-&gt;assertStringContainsString(&quot;supplier/dashboard&quot;, $user-&gt;portal_route);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">2.44 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">4.50 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B017</span></td>
@@ -570,7 +570,7 @@
                             <div class="code-box">$user = new User([&quot;role&quot; =&gt; &quot;roofing_transfer&quot;]); $this-&gt;assertNotEmpty($user-&gt;portal_route);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.10 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.13 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B018</span></td>
@@ -591,7 +591,7 @@
                             <div class="code-box">$user = new User([&quot;role&quot; =&gt; &quot;windows_doors_transfer&quot;]); $this-&gt;assertNotEmpty($user-&gt;portal_route);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.08 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.10 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B019</span></td>
@@ -612,7 +612,7 @@
                             <div class="code-box">$user = new User([&quot;role&quot; =&gt; &quot;admin&quot;]); $this-&gt;assertEquals(url(&quot;/&quot;), $user-&gt;portal_route);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.11 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.13 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B020</span></td>
@@ -633,7 +633,7 @@
                             <div class="code-box">$s = new Supplier([&quot;status&quot; =&gt; &quot;active&quot;]); $this-&gt;assertTrue($s-&gt;isActive());</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.05 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.09 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B021</span></td>
@@ -654,7 +654,7 @@
                             <div class="code-box">$s = new Supplier([&quot;status&quot; =&gt; &quot;inactive&quot;]); $this-&gt;assertFalse($s-&gt;isActive());</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.01 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.02 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B022</span></td>
@@ -738,7 +738,7 @@
                             <div class="code-box">$v = Validator::make($data, [&quot;start_date&quot; =&gt; &quot;after_or_equal:project_start&quot;]); $this-&gt;assertTrue($v-&gt;fails());</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">21.93 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">39.45 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B026</span></td>
@@ -759,7 +759,7 @@
                             <div class="code-box">$sm = new SupplierMaterial([&quot;is_active&quot; =&gt; false, &quot;availability_status&quot; =&gt; &quot;available&quot;]); $this-&gt;assertEquals(&quot;Unavailable&quot;, $sm-&gt;status_badge[&quot;label&quot;]);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">1.18 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.76 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B027</span></td>
@@ -780,7 +780,7 @@
                             <div class="code-box">$sm = new SupplierMaterial([&quot;is_active&quot; =&gt; true, &quot;availability_status&quot; =&gt; &quot;unavailable&quot;]); $this-&gt;assertEquals(&quot;Unavailable&quot;, $sm-&gt;status_badge[&quot;label&quot;]);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.03 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.15 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B028</span></td>
@@ -801,7 +801,7 @@
                             <div class="code-box">$sm = new SupplierMaterial([&quot;is_active&quot; =&gt; true, &quot;availability_status&quot; =&gt; &quot;available&quot;]); $this-&gt;assertEquals(&quot;Available&quot;, $sm-&gt;status_badge[&quot;label&quot;]);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.03 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.05 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B029</span></td>
@@ -822,7 +822,7 @@
                             <div class="code-box">$so = new SupplierOrder([&quot;status&quot; =&gt; &quot;pending&quot;]); $this-&gt;assertEquals(&quot;Pending Approval&quot;, $so-&gt;status_badge[&quot;label&quot;]);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">1.56 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">1.62 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B030</span></td>
@@ -843,7 +843,7 @@
                             <div class="code-box">$so = new SupplierOrder([&quot;status&quot; =&gt; &quot;confirmed&quot;]); $this-&gt;assertEquals(&quot;Confirmed&quot;, $so-&gt;status_badge[&quot;label&quot;]);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.03 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.02 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B031</span></td>
@@ -927,7 +927,7 @@
                             <div class="code-box">$so = new SupplierOrder([&quot;status&quot; =&gt; &quot;completed&quot;]); $this-&gt;assertEquals(&quot;Completed&quot;, $so-&gt;status_badge[&quot;label&quot;]);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.02 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.01 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B035</span></td>
@@ -1011,7 +1011,7 @@
                             <div class="code-box">$log = new InventoryLog([&quot;transaction_type&quot; =&gt; &quot;excess_return&quot;]); $this-&gt;assertEquals(&quot;Excess Material Returned&quot;, $log-&gt;transaction_badge[&quot;label&quot;]);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">1.21 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">1.28 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B039</span></td>
@@ -1116,7 +1116,7 @@
                             <div class="code-box">$p = new Payment([&quot;receipt_file&quot; =&gt; null]); $this-&gt;assertNull($p-&gt;receipt_url);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.98 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">1.05 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B044</span></td>
@@ -1137,7 +1137,7 @@
                             <div class="code-box">$v = Validator::make([&quot;ext&quot; =&gt; &quot;jfif&quot;], [&quot;ext&quot; =&gt; &quot;in:jpeg,jpg,png,jfif,webp,pdf&quot;]); $this-&gt;assertFalse($v-&gt;fails());</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.16 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.17 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B045</span></td>
@@ -1158,7 +1158,7 @@
                             <div class="code-box">$p = new Payment([&quot;receipt_file&quot; =&gt; &quot;/uploads/doc.pdf&quot;]); $this-&gt;assertEquals(&quot;/uploads/doc.pdf&quot;, $p-&gt;receipt_url);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.07 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.05 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B046</span></td>
@@ -1179,7 +1179,7 @@
                             <div class="code-box">$p = new Payment([&quot;receipt_file&quot; =&gt; &quot;slip.jpg&quot;]); $this-&gt;assertEquals(&quot;/uploads/receipts/slip.jpg&quot;, $p-&gt;receipt_url);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.04 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.03 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B047</span></td>
@@ -1200,7 +1200,7 @@
                             <div class="code-box">$p = new Payment([&quot;official_receipt_no&quot; =&gt; &quot;OR-999&quot;]); $this-&gt;assertEquals(&quot;OR-999&quot;, $p-&gt;effective_or_number);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.06 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.04 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B048</span></td>
@@ -1221,7 +1221,7 @@
                             <div class="code-box">$p = new Payment([&quot;official_receipt_no&quot; =&gt; null, &quot;payment_date&quot; =&gt; &quot;2026-09-01&quot;]); $p-&gt;id = 5; $this-&gt;assertEquals(&quot;OR-202609-0005&quot;, $p-&gt;effective_or_number);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.57 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.47 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B049</span></td>
@@ -1242,7 +1242,7 @@
                             <div class="code-box">$p = new Payment([&quot;financing_type&quot; =&gt; &quot;bank_loan&quot;]); $this-&gt;assertEquals(&quot;Bank Construction Loan&quot;, $p-&gt;financing_type_label);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.05 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.04 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B050</span></td>
@@ -1326,7 +1326,7 @@
                             <div class="code-box">$badge = $p-&gt;construction_clearance_badge; $this-&gt;assertTrue($badge[&quot;cleared&quot;]); $this-&gt;assertEquals(&quot;#10b981&quot;, $badge[&quot;color&quot;]);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.05 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.04 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B054</span></td>
@@ -1347,7 +1347,7 @@
                             <div class="code-box">$badge = $p-&gt;construction_clearance_badge; $this-&gt;assertFalse($badge[&quot;cleared&quot;]); $this-&gt;assertEquals(&quot;#38bdf8&quot;, $badge[&quot;color&quot;]);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Fail</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.06 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.05 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B055</span></td>
@@ -1368,7 +1368,7 @@
                             <div class="code-box">$person = new Personnel([&quot;license_status&quot; =&gt; &quot;expired&quot;]); $this-&gt;assertTrue($person-&gt;isLicenseExpired());</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">1.03 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">1.09 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B056</span></td>
@@ -1389,7 +1389,7 @@
                             <div class="code-box">$person = new Personnel([&quot;license_expiry_date&quot; =&gt; &quot;2024-01-01&quot;, &quot;license_status&quot; =&gt; &quot;active&quot;]); $this-&gt;assertTrue($person-&gt;isLicenseExpired());</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.36 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.39 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B057</span></td>
@@ -1410,7 +1410,7 @@
                             <div class="code-box">$person = new Personnel([&quot;license_expiry_date&quot; =&gt; &quot;2028-12-31&quot;, &quot;license_status&quot; =&gt; &quot;active&quot;]); $this-&gt;assertFalse($person-&gt;isLicenseExpired());</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.14 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.10 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B058</span></td>
@@ -1452,7 +1452,7 @@
                             <div class="code-box">$person = new Personnel([&quot;license_status&quot; =&gt; &quot;active&quot;, &quot;license_expiry_date&quot; =&gt; &quot;2029-01-01&quot;]); $this-&gt;assertEquals(&quot;ACTIVE&quot;, $person-&gt;license_status_badge[&quot;label&quot;]);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.13 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.10 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B060</span></td>
@@ -1473,7 +1473,7 @@
                             <div class="code-box">$cost = new ProjectCost([&quot;estimated_cost&quot; =&gt; 100000, &quot;actual_cost&quot; =&gt; 80000]); $this-&gt;assertEquals(20000.00, $cost-&gt;variance);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">1.06 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">1.45 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B061</span></td>
@@ -1494,7 +1494,7 @@
                             <div class="code-box">$cost = new ProjectCost([&quot;estimated_cost&quot; =&gt; 0, &quot;actual_cost&quot; =&gt; 5000]); $this-&gt;assertEquals(&quot;0.0%&quot;, $cost-&gt;variance_percent);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Fail</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.06 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.04 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B062</span></td>
@@ -1536,7 +1536,7 @@
                             <div class="code-box">$pm = new ProjectMaterial([&quot;allocated_quantity&quot; =&gt; 100, &quot;used_quantity&quot; =&gt; 60, &quot;excess_quantity&quot; =&gt; 20]); $this-&gt;assertEquals(20, $pm-&gt;remaining_quantity);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Fail</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">1.02 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.93 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B064</span></td>
@@ -1578,7 +1578,7 @@
                             <div class="code-box">$pm = new ProjectMaterial([&quot;excess_quantity&quot; =&gt; 15, &quot;unit_price&quot; =&gt; 200.00]); $this-&gt;assertEquals(3000.00, $pm-&gt;returned_excess_value);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Fail</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.11 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.10 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B066</span></td>
@@ -1620,7 +1620,7 @@
                             <div class="code-box">$line = new ProjectScopeLine([&quot;quantity&quot; =&gt; 50, &quot;used_quantity&quot; =&gt; 40, &quot;excess_quantity&quot; =&gt; 20]); $this-&gt;assertEquals(0, $line-&gt;remaining_quantity);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Fail</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.97 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">1.67 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B068</span></td>
@@ -1641,7 +1641,7 @@
                             <div class="code-box">$task = new ProjectTask([&quot;progress_percentage&quot; =&gt; 100]); $this-&gt;assertTrue($task-&gt;is_completed);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Fail</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.95 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.82 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B069</span></td>
@@ -1683,7 +1683,7 @@
                             <div class="code-box">$task = new ProjectTask([&quot;timeline_phase&quot; =&gt; &quot;Phase 2: Superstructure&quot;]); $this-&gt;assertNotEmpty($task-&gt;timeline_phase_key);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.08 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.06 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B071</span></td>
@@ -1725,7 +1725,7 @@
                             <div class="code-box">$p = new Project([&quot;structural_weight&quot; =&gt; 0]); $this-&gt;assertEquals(40.0, $p-&gt;structural_weight);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">3.12 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">2.47 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B073</span></td>
@@ -1767,7 +1767,7 @@
                             <div class="code-box">$p = new Project([&quot;contract_amount&quot; =&gt; 500000, &quot;actual_spent&quot; =&gt; 200000]); $this-&gt;assertEquals(300000.00, $p-&gt;remaining_budget);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Fail</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.09 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.05 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B075</span></td>
@@ -1788,7 +1788,7 @@
                             <div class="code-box">$p = new Project([&quot;contract_amount&quot; =&gt; 500000, &quot;actual_spent&quot; =&gt; 200000]); $this-&gt;assertEquals(40.0, $p-&gt;budget_usage_percent);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Fail</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.03 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.02 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B076</span></td>
@@ -1809,7 +1809,7 @@
                             <div class="code-box">$p = new Project([&quot;general_workers&quot; =&gt; 10, &quot;skilled_workers&quot; =&gt; 5, &quot;site_engineers&quot; =&gt; 2, &quot;sub_contractors&quot; =&gt; 3]); $this-&gt;assertEquals(20, $p-&gt;total_deployed_manpower);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Fail</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.13 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.09 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B077</span></td>
@@ -1830,7 +1830,7 @@
                             <div class="code-box">$p = new Project([&quot;contract_amount&quot; =&gt; 100000, &quot;actual_spent&quot; =&gt; 120000]); $this-&gt;assertEquals(&quot;overrun&quot;, $p-&gt;cost_health_status);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Fail</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.03 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.02 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B078</span></td>
@@ -1851,7 +1851,7 @@
                             <div class="code-box">$p = new Project([&quot;status&quot; =&gt; &quot;completed&quot;]); $this-&gt;assertEquals(&quot;completed&quot;, $p-&gt;schedule_health_status);</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Fail</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.04 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">0.03 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B079</span></td>
@@ -1872,7 +1872,7 @@
                             <div class="code-box">$v = Validator::make([&quot;quantity_transferred&quot; =&gt; 0.00], [&quot;quantity_transferred&quot; =&gt; &quot;required|numeric|gt:0&quot;]); $this-&gt;assertTrue($v-&gt;fails());</div>
                         </td>
                         <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">5.82 ms</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace;">6.49 ms</td>
                     </tr>
                     <tr>
                         <td><span class="tc-pill">TC-B080</span></td>

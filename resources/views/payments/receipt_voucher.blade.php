@@ -38,7 +38,7 @@
             max-width: 760px;
             margin: 0 auto 20px auto;
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
             align-items: center;
         }
 
@@ -55,17 +55,6 @@
             align-items: center;
             gap: 8px;
             box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-        }
-
-        .btn-back {
-            background: #fafbfc;
-            color: #334155;
-            border: 1px solid #cbd5e1;
-            padding: 10px 18px;
-            font-weight: 600;
-            border-radius: 6px;
-            font-size: 14px;
-            text-decoration: none;
         }
 
         .header {
@@ -226,7 +215,6 @@
 <body>
 
     <div class="print-actions">
-        <a href="{{ route('payments.index', ['project_id' => $payment->project_id]) }}" class="btn-back" onclick="navigateBack(event)">&larr; Back to System</a>
         <button class="btn-print" onclick="window.print()">
             Print Official Receipt Voucher
         </button>
@@ -366,24 +354,5 @@
         </div>
     </div>
 
-    <script>
-        function navigateBack(e) {
-            // Check if opened from within the application history
-            if (window.history.length > 1 && document.referrer && document.referrer.indexOf(window.location.host) !== -1) {
-                e.preventDefault();
-                window.history.back();
-                return;
-            }
-            
-            // If opened in a popup/child window
-            if (window.opener && !window.opener.closed) {
-                e.preventDefault();
-                window.close();
-                return;
-            }
-            
-            // Otherwise, let the fallback href execute normally
-        }
-    </script>
 </body>
 </html>

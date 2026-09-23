@@ -1,1077 +1,802 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>White Box Testing - Model Logic & Control Flow Analysis</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <meta charset='UTF-8'>
+    <title>Whitebox Test Execution Report — St. Bilfrid CMS</title>
     <style>
-        @page {
-            size: A4 landscape;
-            margin: 10mm;
-        }
-
-        :root {
-            --primary-navy: #0f2b48;
-            --header-navy: #16385c;
-            --section-banner: #1e4a78;
-            --border-color: #cbd5e1;
-            --text-dark: #1e293b;
-            --text-muted: #64748b;
-            --bg-light: #f8fafc;
-            --row-even: #f1f5f9;
-            --row-odd: #ffffff;
-            --pass-green: #16a34a;
-            --pass-bg: #dcfce7;
-            --tc-badge-bg: #e0f2fe;
-            --tc-badge-text: #0284c7;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #f1f5f9;
-            color: var(--text-dark);
-            padding: 24px;
-            font-size: 12px;
-            line-height: 1.4;
-        }
-
-        .container {
-            max-width: 1700px;
-            margin: 0 auto;
-            background: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-        }
-
-        .action-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #ffffff;
-            padding: 14px 24px;
-            border-bottom: 1px solid var(--border-color);
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .action-bar-title {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--primary-navy);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 16px;
-            font-size: 12px;
-            font-weight: 600;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.15s ease;
-        }
-
-        .btn-primary {
-            background: #0284c7;
-            color: #ffffff;
-        }
-        .btn-primary:hover {
-            background: #0369a1;
-        }
-
-        .btn-success {
-            background: #16a34a;
-            color: #ffffff;
-        }
-        .btn-success:hover {
-            background: #15803d;
-        }
-
-        .btn-secondary {
-            background: #e2e8f0;
-            color: #334155;
-        }
-        .btn-secondary:hover {
-            background: #cbd5e1;
-        }
-
-        .main-header {
-            background: linear-gradient(135deg, var(--primary-navy) 0%, var(--header-navy) 100%);
-            color: #ffffff;
-            text-align: center;
-            padding: 16px 20px;
-        }
-
-        .main-header h1 {
-            font-size: 18px;
-            font-weight: 800;
-            letter-spacing: 0.02em;
-            text-transform: uppercase;
-        }
-
-        .main-header p {
-            font-size: 12px;
-            color: #93c5fd;
-            margin-top: 4px;
-            font-weight: 500;
-        }
-
-        .table-container {
-            width: 100%;
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 11.5px;
-            text-align: left;
-        }
-
-        thead th {
-            background-color: var(--header-navy);
-            color: #ffffff;
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 11px;
-            letter-spacing: 0.04em;
-            padding: 10px 12px;
-            border: 1px solid #1e3a5f;
-            white-space: nowrap;
-            position: sticky;
-            top: 0;
-            z-index: 20;
-        }
-
-        .section-header-row td {
-            background-color: var(--section-banner) !important;
-            color: #ffffff;
-            font-weight: 700;
-            font-size: 12px;
-            letter-spacing: 0.03em;
-            padding: 8px 14px;
-            border-top: 2px solid #0f2b48;
-            border-bottom: 2px solid #0f2b48;
-            text-transform: uppercase;
-        }
-
-        tbody tr:nth-child(even) {
-            background-color: var(--row-even);
-        }
-
-        tbody tr:nth-child(odd) {
-            background-color: var(--row-odd);
-        }
-
-        tbody tr:hover {
-            background-color: #e0f2fe !important;
-        }
-
-        td {
-            padding: 9px 12px;
-            border: 1px solid var(--border-color);
-            vertical-align: top;
-            color: var(--text-dark);
-        }
-
-        .tc-id {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--tc-badge-text);
-            background: var(--tc-badge-bg);
-            padding: 2px 6px;
-            border-radius: 4px;
-            display: inline-block;
-            white-space: nowrap;
-            border: 1px solid #bae6fd;
-        }
-
-        .code-segment {
-            font-weight: 600;
-            color: #0f172a;
-            white-space: nowrap;
-        }
-
-        .test-desc {
-            font-weight: 500;
-            color: #334155;
-            min-width: 220px;
-        }
-
-        .input-val {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 10.5px;
-            color: #0f766e;
-            background: #f0fdfa;
-            padding: 3px 6px;
-            border-radius: 4px;
-            border: 1px solid #ccfbf1;
-            word-break: break-all;
-            min-width: 140px;
-        }
-
-        .expected-val {
-            color: #1e3a8a;
-            font-size: 11px;
-            min-width: 160px;
-        }
-
-        .actual-val {
-            color: #15803d;
-            font-size: 11px;
-            font-weight: 500;
-            min-width: 160px;
-        }
-
-        .badge-pass {
-            background-color: var(--pass-bg);
-            color: var(--pass-green);
-            font-weight: 700;
-            font-size: 11px;
-            padding: 3px 8px;
-            border-radius: 12px;
-            display: inline-block;
-            text-align: center;
-            border: 1px solid #bbf7d0;
-            white-space: nowrap;
-        }
-
-        .duration {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 10.5px;
-            color: var(--text-muted);
-            white-space: nowrap;
-            text-align: right;
-        }
-
-        @media print {
-            body {
-                padding: 0;
-                background: #ffffff;
-            }
-            .action-bar {
-                display: none !important;
-            }
-            .container {
-                box-shadow: none;
-                border: none;
-            }
-            table {
-                font-size: 9.5px;
-            }
-            td, th {
-                padding: 5px 8px;
-            }
-        }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0b1120; color: #f8fafc; margin: 0; padding: 30px; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header { background: #1e293b; border-radius: 12px; padding: 24px; margin-bottom: 24px; border: 1px solid #334155; }
+        .stats-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-top: 16px; }
+        .stat-card { background: #0f172a; padding: 16px; border-radius: 8px; border: 1px solid #334155; text-align: center; }
+        .stat-val { font-size: 28px; font-weight: bold; color: #38bdf8; }
+        .stat-label { font-size: 12px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+        table { width: 100%; border-collapse: collapse; background: #1e293b; border-radius: 12px; overflow: hidden; border: 1px solid #334155; }
+        th { background: #0f172a; color: #94a3b8; font-size: 11px; text-transform: uppercase; padding: 12px 16px; text-align: left; letter-spacing: 0.5px; }
+        td { padding: 10px 16px; border-bottom: 1px solid #334155; font-size: 13px; color: #cbd5e1; }
+        tr:hover { background: #243248; }
+        .badge { display: inline-block; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 11px; }
+        .badge-pass { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.4); }
+        .badge-fail { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="action-bar">
-            <div class="action-bar-title">
-                <span>📋 White-Box Testing Document &bull; 78 Basis Path Test Cases &bull; 100% Pass Rate</span>
+    <div class='container'>
+        <div class='header'>
+            <h1 style='margin:0; font-size: 24px; color: #f8fafc;'>St. Bilfrid Construction Management Information System</h1>
+            <p style='color: #94a3b8; margin: 6px 0 0 0;'>Automated Whitebox Test Battery & Structural Invariant Verification Report</p>
+            <div class='stats-grid'>
+                <div class='stat-card'><div class='stat-val'>83</div><div class='stat-label'>Total Test Cases</div></div>
+                <div class='stat-card'><div class='stat-val' style='color: #4ade80;'>80</div><div class='stat-label'>Passed Cases</div></div>
+                <div class='stat-card'><div class='stat-val' style='color: #f87171;'>3</div><div class='stat-label'>Failed Cases</div></div>
+                <div class='stat-card'><div class='stat-val' style='color: #f87171;'>96.39%</div><div class='stat-label'>Pass Rate</div></div>
+                <div class='stat-card'><div class='stat-val' style='color: #fbbf24;'>83.77 ms</div><div class='stat-label'>Total Duration</div></div>
             </div>
-            <div class="btn-group">
-                <button class="btn btn-success" onclick="downloadCSV()">⬇ Download CSV</button>
-                <button class="btn btn-primary" onclick="window.print()">🖨 Print / Save as PDF</button>
-                <button class="btn btn-secondary" onclick="downloadTSV()">⬇ Download TSV</button>
-            </div>
         </div>
-
-        <div class="main-header">
-            <h1>White Box Testing - Model Logic & Control Flow Analysis</h1>
-            <p>NewConstuc.FIRM Enterprise Construction Management &bull; Comprehensive Eloquent Model Validation</p>
-        </div>
-
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width: 75px;">Test Case ID</th>
-                        <th style="width: 130px;">Tested Code Segment</th>
-                        <th>Test Description</th>
-                        <th>Input Values</th>
-                        <th>Expected Behavior</th>
-                        <th>Actual Behavior</th>
-                        <th style="width: 70px; text-align: center;">Result</th>
-                        <th style="width: 65px; text-align: right;">Duration</th>
-                    </tr>
-                </thead>
-                <tbody>                    <tr class="section-header-row">
-                        <td colspan="8"><strong>Use Case: User Authentication &amp; Roles</strong></td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-001</span></td>
-                        <td><span class="code-segment">Model Method</span></td>
-                        <td><div class="test-desc">User isAdmin() should evaluate empty role to true as fallback admin</div></td>
-                        <td><div class="input-val">role = null</div></td>
-                        <td><div class="expected-val">Should return true for master admin default</div></td>
-                        <td><div class="actual-val">Evaluated to true as master administrator fallback</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">8 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-002</span></td>
-                        <td><span class="code-segment">Model Method</span></td>
-                        <td><div class="test-desc">User isAdmin() should evaluate explicit admin role to true</div></td>
-                        <td><div class="input-val">role = &quot;admin&quot;</div></td>
-                        <td><div class="expected-val">Should return true for explicit admin role</div></td>
-                        <td><div class="actual-val">Successfully identified admin authorization</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-003</span></td>
-                        <td><span class="code-segment">Model Method</span></td>
-                        <td><div class="test-desc">User isAdmin() should evaluate non-admin role to false</div></td>
-                        <td><div class="input-val">role = &quot;roofing_transfer&quot;</div></td>
-                        <td><div class="expected-val">Should return false for non-admin role</div></td>
-                        <td><div class="actual-val">Correctly denied administrative access</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-004</span></td>
-                        <td><span class="code-segment">Model Method</span></td>
-                        <td><div class="test-desc">User isRoofingOfficer() should identify roofing portal officer</div></td>
-                        <td><div class="input-val">role = &quot;roofing_transfer&quot;</div></td>
-                        <td><div class="expected-val">Should return true for roofing officer</div></td>
-                        <td><div class="actual-val">Identified roofing transfer officer correctly</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-005</span></td>
-                        <td><span class="code-segment">Model Method</span></td>
-                        <td><div class="test-desc">User isRoofingOfficer() should reject non-roofing role</div></td>
-                        <td><div class="input-val">role = &quot;admin&quot;</div></td>
-                        <td><div class="expected-val">Should return false for admin role</div></td>
-                        <td><div class="actual-val">Properly restricted roofing transfer scope</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-006</span></td>
-                        <td><span class="code-segment">Model Method</span></td>
-                        <td><div class="test-desc">User isWindowsDoorsOfficer() should identify windows &amp; doors officer</div></td>
-                        <td><div class="input-val">role = &quot;windows_doors_transfer&quot;</div></td>
-                        <td><div class="expected-val">Should return true for windows officer</div></td>
-                        <td><div class="actual-val">Identified windows &amp; doors officer correctly</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-007</span></td>
-                        <td><span class="code-segment">Model Method</span></td>
-                        <td><div class="test-desc">User isWindowsDoorsOfficer() should reject non-windows role</div></td>
-                        <td><div class="input-val">role = &quot;roofing_transfer&quot;</div></td>
-                        <td><div class="expected-val">Should return false for roofing role</div></td>
-                        <td><div class="actual-val">Properly restricted windows &amp; doors scope</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-008</span></td>
-                        <td><span class="code-segment">Model Method</span></td>
-                        <td><div class="test-desc">User isSupplier() should identify user with supplier role</div></td>
-                        <td><div class="input-val">role = &quot;supplier&quot;, supplier_id = null</div></td>
-                        <td><div class="expected-val">Should return true for supplier role</div></td>
-                        <td><div class="actual-val">Recognized external trade supplier account</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-009</span></td>
-                        <td><span class="code-segment">Model Method</span></td>
-                        <td><div class="test-desc">User isSupplier() should identify user with linked supplier_id</div></td>
-                        <td><div class="input-val">role = null, supplier_id = 15</div></td>
-                        <td><div class="expected-val">Should return true for linked supplier ID</div></td>
-                        <td><div class="actual-val">Recognized supplier affiliation via ID</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-010</span></td>
-                        <td><span class="code-segment">Model Method</span></td>
-                        <td><div class="test-desc">User isSupplier() should return false for internal personnel</div></td>
-                        <td><div class="input-val">role = &quot;admin&quot;, supplier_id = null</div></td>
-                        <td><div class="expected-val">Should return false for internal personnel</div></td>
-                        <td><div class="actual-val">Properly verified internal non-supplier user</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-011</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">User role_title should format supplier company name and category</div></td>
-                        <td><div class="input-val">supplier={name: &quot;Apex Steel&quot;, category: &quot;Structural &amp; Masonry&quot;}</div></td>
-                        <td><div class="expected-val">Should return &quot;Apex Steel (Structural &amp; Masonry)&quot;</div></td>
-                        <td><div class="actual-val">Formatted full supplier company title with trade category</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-012</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">User role_title fallback for supplier without relation</div></td>
-                        <td><div class="input-val">supplier = null, role = &quot;supplier&quot;</div></td>
-                        <td><div class="expected-val">Should return &quot;Supplier Account&quot;</div></td>
-                        <td><div class="actual-val">Returned generic Supplier Account fallback title</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">4 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-013</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">User role_title should return Roofing Transfer Officer title</div></td>
-                        <td><div class="input-val">role = &quot;roofing_transfer&quot;</div></td>
-                        <td><div class="expected-val">Should return &quot;Roofing Transfer Officer&quot;</div></td>
-                        <td><div class="actual-val">Returned exact Roofing Transfer Officer designation</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-014</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">User role_title should return Windows &amp; Doors Transfer Officer title</div></td>
-                        <td><div class="input-val">role = &quot;windows_doors_transfer&quot;</div></td>
-                        <td><div class="expected-val">Should return &quot;Windows &amp; Doors Transfer Officer&quot;</div></td>
-                        <td><div class="actual-val">Returned exact Windows &amp; Doors Officer designation</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-015</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">User role_title should return Master Administrator title</div></td>
-                        <td><div class="input-val">role = &quot;admin&quot; or null</div></td>
-                        <td><div class="expected-val">Should return &quot;Master Administrator&quot;</div></td>
-                        <td><div class="actual-val">Returned Master Administrator title</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-016</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">User portal_route should route supplier to supplier dashboard</div></td>
-                        <td><div class="input-val">role = &quot;supplier&quot;</div></td>
-                        <td><div class="expected-val">Should return supplier.dashboard route URL</div></td>
-                        <td><div class="actual-val">Resolved supplier portal dashboard route cleanly</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">4 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-017</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">User portal_route should route roofing officer to roofing transfer index</div></td>
-                        <td><div class="input-val">role = &quot;roofing_transfer&quot;</div></td>
-                        <td><div class="expected-val">Should return roofing.index route URL</div></td>
-                        <td><div class="actual-val">Resolved roofing transfer portal route URL</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-018</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">User portal_route should route windows officer to windows transfer index</div></td>
-                        <td><div class="input-val">role = &quot;windows_doors_transfer&quot;</div></td>
-                        <td><div class="expected-val">Should return windowsDoors.index route URL</div></td>
-                        <td><div class="actual-val">Resolved windows &amp; doors transfer portal route URL</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-019</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">User portal_route should route admin to main system dashboard</div></td>
-                        <td><div class="input-val">role = &quot;admin&quot;</div></td>
-                        <td><div class="expected-val">Should return main dashboard route URL</div></td>
-                        <td><div class="actual-val">Resolved master admin landing dashboard route</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr class="section-header-row">
-                        <td colspan="8"><strong>Use Case: Supplier &amp; Catalog Management</strong></td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-020</span></td>
-                        <td><span class="code-segment">Model Method</span></td>
-                        <td><div class="test-desc">Supplier isActive() should return true for active status</div></td>
-                        <td><div class="input-val">status = &quot;active&quot;</div></td>
-                        <td><div class="expected-val">Should evaluate to true</div></td>
-                        <td><div class="actual-val">Confirmed active supplier standing</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-021</span></td>
-                        <td><span class="code-segment">Model Method</span></td>
-                        <td><div class="test-desc">Supplier isActive() should return false for inactive status</div></td>
-                        <td><div class="input-val">status = &quot;inactive&quot;</div></td>
-                        <td><div class="expected-val">Should evaluate to false</div></td>
-                        <td><div class="actual-val">Flagged inactive supplier status correctly</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-022</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">Supplier category_color should return sky blue for Windows &amp; Doors</div></td>
-                        <td><div class="input-val">category = &quot;Windows &amp; Doors&quot;</div></td>
-                        <td><div class="expected-val">Should return #38bdf8</div></td>
-                        <td><div class="actual-val">Mapped category badge color to sky blue (#38bdf8)</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-023</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">Supplier category_color should return red for Roofing</div></td>
-                        <td><div class="input-val">category = &quot;Roofing&quot;</div></td>
-                        <td><div class="expected-val">Should return #ef4444</div></td>
-                        <td><div class="actual-val">Mapped category badge color to roofing red (#ef4444)</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-024</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">Supplier category_color should return emerald for Structural &amp; Masonry</div></td>
-                        <td><div class="input-val">category = &quot;Structural &amp; Masonry&quot;</div></td>
-                        <td><div class="expected-val">Should return #10b981</div></td>
-                        <td><div class="actual-val">Mapped category badge color to emerald (#10b981)</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-025</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">Supplier category_color should return indigo for default category</div></td>
-                        <td><div class="input-val">category = &quot;Plumbing&quot;</div></td>
-                        <td><div class="expected-val">Should return #818cf8</div></td>
-                        <td><div class="actual-val">Mapped category badge color to default indigo (#818cf8)</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-026</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">SupplierMaterial status_badge should return Unavailable when inactive</div></td>
-                        <td><div class="input-val">is_active = false, availability_status = &quot;available&quot;</div></td>
-                        <td><div class="expected-val">Should return Unavailable badge</div></td>
-                        <td><div class="actual-val">Correctly flagged inactive product as Unavailable</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-027</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">SupplierMaterial status_badge should return Unavailable when status is unavailable</div></td>
-                        <td><div class="input-val">is_active = true, availability_status = &quot;unavailable&quot;</div></td>
-                        <td><div class="expected-val">Should return Unavailable badge</div></td>
-                        <td><div class="actual-val">Correctly flagged out of stock item as Unavailable</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-028</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">SupplierMaterial status_badge should return Available for active available item</div></td>
-                        <td><div class="input-val">is_active = true, availability_status = &quot;available&quot;</div></td>
-                        <td><div class="expected-val">Should return Available badge</div></td>
-                        <td><div class="actual-val">Displayed active Available status badge</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr class="section-header-row">
-                        <td colspan="8"><strong>Use Case: Purchase Orders &amp; Inventory Sync</strong></td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-029</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">SupplierOrder status_badge should format pending status</div></td>
-                        <td><div class="input-val">status = &quot;pending&quot;</div></td>
-                        <td><div class="expected-val">Should return Pending Approval (#f59e0b)</div></td>
-                        <td><div class="actual-val">Formatted pending PO badge with amber styling</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-030</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">SupplierOrder status_badge should format confirmed status</div></td>
-                        <td><div class="input-val">status = &quot;confirmed&quot;</div></td>
-                        <td><div class="expected-val">Should return Confirmed (#38bdf8)</div></td>
-                        <td><div class="actual-val">Formatted confirmed PO badge with sky blue styling</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-031</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">SupplierOrder status_badge should format processing status</div></td>
-                        <td><div class="input-val">status = &quot;processing&quot;</div></td>
-                        <td><div class="expected-val">Should return Processing (#818cf8)</div></td>
-                        <td><div class="actual-val">Formatted processing PO badge with indigo styling</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-032</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">SupplierOrder status_badge should format ready_for_delivery status</div></td>
-                        <td><div class="input-val">status = &quot;ready_for_delivery&quot;</div></td>
-                        <td><div class="expected-val">Should return Ready for Delivery (#ec4899)</div></td>
-                        <td><div class="actual-val">Formatted delivery dispatch ready badge</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-033</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">SupplierOrder status_badge should format delivered status</div></td>
-                        <td><div class="input-val">status = &quot;delivered&quot;</div></td>
-                        <td><div class="expected-val">Should return Delivered (#10b981)</div></td>
-                        <td><div class="actual-val">Formatted delivered badge with emerald styling</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-034</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">SupplierOrder status_badge should format completed status</div></td>
-                        <td><div class="input-val">status = &quot;completed&quot;</div></td>
-                        <td><div class="expected-val">Should return Completed (#22c55e)</div></td>
-                        <td><div class="actual-val">Formatted completed PO badge with green styling</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-035</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">SupplierOrder status_badge should format cancelled status</div></td>
-                        <td><div class="input-val">status = &quot;cancelled&quot;</div></td>
-                        <td><div class="expected-val">Should return Cancelled (#ef4444)</div></td>
-                        <td><div class="actual-val">Formatted cancelled PO badge with danger red styling</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-036</span></td>
-                        <td><span class="code-segment">Model Method</span></td>
-                        <td><div class="test-desc">SupplierOrder syncToInventory() idempotency protection against double execution</div></td>
-                        <td><div class="input-val">is_synced_to_inventory = true</div></td>
-                        <td><div class="expected-val">Should return false and skip inventory modification</div></td>
-                        <td><div class="actual-val">Safely bypassed sync to prevent double stock incrementation</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-037</span></td>
-                        <td><span class="code-segment">Model Method</span></td>
-                        <td><div class="test-desc">SupplierOrder syncToInventory() execution creates central stock &amp; logs</div></td>
-                        <td><div class="input-val">Supplier PO items delivered</div></td>
-                        <td><div class="expected-val">Should create Material, increment stock, and write InventoryLog</div></td>
-                        <td><div class="actual-val">Delivered PO products synced to Material inventory and logged</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">30 ms</td>
-                    </tr>                    <tr class="section-header-row">
-                        <td colspan="8"><strong>Use Case: Warehouse &amp; Inventory Movements</strong></td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-038</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">InventoryLog transaction_badge formats excess return movements</div></td>
-                        <td><div class="input-val">transaction_type = &quot;excess_return&quot;</div></td>
-                        <td><div class="expected-val">Should return Excess Material Returned</div></td>
-                        <td><div class="actual-val">Formatted Excess Material Returned movement badge</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-039</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">InventoryLog transaction_badge formats site BOM allocations</div></td>
-                        <td><div class="input-val">transaction_type = &quot;allocation&quot;</div></td>
-                        <td><div class="expected-val">Should return Site BOM Allocation</div></td>
-                        <td><div class="actual-val">Formatted Site BOM Allocation badge</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-040</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">InventoryLog transaction_badge formats daily consumption usage</div></td>
-                        <td><div class="input-val">transaction_type = &quot;usage&quot;</div></td>
-                        <td><div class="expected-val">Should return Site Consumption Recorded</div></td>
-                        <td><div class="actual-val">Formatted Site Consumption Recorded badge</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-041</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">InventoryLog transaction_badge formats PO restock deliveries</div></td>
-                        <td><div class="input-val">transaction_type = &quot;restock&quot;</div></td>
-                        <td><div class="expected-val">Should return Warehouse Restock / PO</div></td>
-                        <td><div class="actual-val">Formatted Warehouse Restock PO badge</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-042</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">InventoryLog transaction_badge formats manual inventory adjustments</div></td>
-                        <td><div class="input-val">transaction_type = &quot;adjustment&quot;</div></td>
-                        <td><div class="expected-val">Should return Inventory Adjustment</div></td>
-                        <td><div class="actual-val">Formatted general Inventory Adjustment fallback badge</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr class="section-header-row">
-                        <td colspan="8"><strong>Use Case: Billing &amp; Financial Tranches</strong></td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-043</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">Payment receipt_url handles null receipt file</div></td>
-                        <td><div class="input-val">receipt_file = null</div></td>
-                        <td><div class="expected-val">Should return null</div></td>
-                        <td><div class="actual-val">Returned null cleanly for absent receipt attachment</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-044</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">Payment receipt_url preserves fully-qualified HTTPS URLs</div></td>
-                        <td><div class="input-val">receipt_file = &quot;https://cdn.example.com/receipt.pdf&quot;</div></td>
-                        <td><div class="expected-val">Should return unchanged URL</div></td>
-                        <td><div class="actual-val">Preserved remote HTTPS storage CDN URL</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-045</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">Payment receipt_url preserves absolute root paths</div></td>
-                        <td><div class="input-val">receipt_file = &quot;/storage/receipts/doc.pdf&quot;</div></td>
-                        <td><div class="expected-val">Should return unchanged root path</div></td>
-                        <td><div class="actual-val">Preserved absolute root path cleanly</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-046</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">Payment receipt_url prepends /uploads/receipts/ to relative filenames</div></td>
-                        <td><div class="input-val">receipt_file = &quot;or_receipt_001.jpg&quot;</div></td>
-                        <td><div class="expected-val">Should return /uploads/receipts/or_receipt_001.jpg</div></td>
-                        <td><div class="actual-val">Prepended standard receipt storage directory</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-047</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">Payment effective_or_number returns explicit official receipt number</div></td>
-                        <td><div class="input-val">official_receipt_no = &quot;OR-2026-7777&quot;</div></td>
-                        <td><div class="expected-val">Should return &quot;OR-2026-7777&quot;</div></td>
-                        <td><div class="actual-val">Returned registered official receipt number</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-048</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">Payment effective_or_number generates formatted fallback OR string</div></td>
-                        <td><div class="input-val">official_receipt_no = null, date=&quot;2026-09-12&quot;, id=8</div></td>
-                        <td><div class="expected-val">Should return &quot;OR-202609-0008&quot;</div></td>
-                        <td><div class="actual-val">Generated padded sequential OR fallback code</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">2 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-049</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">Payment financing_type_label returns Bank Construction Loan</div></td>
-                        <td><div class="input-val">financing_type = &quot;bank_loan&quot;</div></td>
-                        <td><div class="expected-val">Should return Bank Construction Loan</div></td>
-                        <td><div class="actual-val">Mapped bank financing label correctly</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-050</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">Payment financing_type_label returns Pag-IBIG (HDMF) Loan</div></td>
-                        <td><div class="input-val">financing_type = &quot;pagibig_loan&quot;</div></td>
-                        <td><div class="expected-val">Should return Pag-IBIG (HDMF) Loan</div></td>
-                        <td><div class="actual-val">Mapped Pag-IBIG institutional loan label</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-051</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">Payment financing_type_label returns Client Direct Equity</div></td>
-                        <td><div class="input-val">financing_type = &quot;client_equity&quot;</div></td>
-                        <td><div class="expected-val">Should return Client Direct Equity</div></td>
-                        <td><div class="actual-val">Mapped client direct equity label</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-052</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">Payment financing_type_label returns Direct Progress Cash</div></td>
-                        <td><div class="input-val">financing_type = &quot;cash_progress&quot;</div></td>
-                        <td><div class="expected-val">Should return Direct Progress Cash</div></td>
-                        <td><div class="actual-val">Mapped direct cash progress payment label</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-053</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">Payment construction_clearance_badge authorizes construction when paid</div></td>
-                        <td><div class="input-val">status = &quot;paid&quot;</div></td>
-                        <td><div class="expected-val">Should return cleared=true and Authorized to Construct label</div></td>
-                        <td><div class="actual-val">Authorized on-site construction works based on cleared payment</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-054</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">Payment construction_clearance_badge indicates bank inspection scheduled</div></td>
-                        <td><div class="input-val">status = &quot;pending&quot;, clearance_status = &quot;inspection_scheduled&quot;</div></td>
-                        <td><div class="expected-val">Should return cleared=false and inspection scheduled message</div></td>
-                        <td><div class="actual-val">Flagged bank/HDMF site inspection in progress</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr class="section-header-row">
-                        <td colspan="8"><strong>Use Case: PRC Personnel &amp; Compliance</strong></td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-055</span></td>
-                        <td><span class="code-segment">Model Method</span></td>
-                        <td><div class="test-desc">Personnel isLicenseExpired() identifies expired license status</div></td>
-                        <td><div class="input-val">license_status = &quot;expired&quot;</div></td>
-                        <td><div class="expected-val">Should evaluate to true</div></td>
-                        <td><div class="actual-val">Detected expired professional engineer license status</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">2 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-056</span></td>
-                        <td><span class="code-segment">Model Method</span></td>
-                        <td><div class="test-desc">Personnel isLicenseExpired() detects past license expiration date</div></td>
-                        <td><div class="input-val">license_status = &quot;active&quot;, expiry = yesterday</div></td>
-                        <td><div class="expected-val">Should evaluate to true</div></td>
-                        <td><div class="actual-val">Detected past license expiry date boundary</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-057</span></td>
-                        <td><span class="code-segment">Model Method</span></td>
-                        <td><div class="test-desc">Personnel isLicenseExpired() validates active valid license</div></td>
-                        <td><div class="input-val">license_status = &quot;active&quot;, expiry = next year</div></td>
-                        <td><div class="expected-val">Should evaluate to false</div></td>
-                        <td><div class="actual-val">Validated active compliant license with future expiry</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-058</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">Personnel license_status_badge displays EXPIRED LICENSE badge</div></td>
-                        <td><div class="input-val">license_status = &quot;revoked&quot;</div></td>
-                        <td><div class="expected-val">Should return EXPIRED LICENSE badge with danger red background</div></td>
-                        <td><div class="actual-val">Rendered EXPIRED LICENSE compliance alert</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-059</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">Personnel license_status_badge displays ACTIVE badge</div></td>
-                        <td><div class="input-val">license_status = &quot;active&quot;, expiry in future</div></td>
-                        <td><div class="expected-val">Should return ACTIVE badge with emerald background</div></td>
-                        <td><div class="actual-val">Rendered ACTIVE compliant practitioner badge</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr class="section-header-row">
-                        <td colspan="8"><strong>Use Case: Project Costing &amp; Budgeting</strong></td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-060</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">ProjectCost variance calculates budget difference</div></td>
-                        <td><div class="input-val">estimated = 100000, actual = 85000</div></td>
-                        <td><div class="expected-val">Should return positive variance of 15000.00</div></td>
-                        <td><div class="actual-val">Calculated accurate cost variance of +PHP 15,000.00</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">2 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-061</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">ProjectCost variance_percent handles zero estimated cost boundary</div></td>
-                        <td><div class="input-val">estimated = 0, actual = 5000</div></td>
-                        <td><div class="expected-val">Should return 0.0 to prevent division by zero</div></td>
-                        <td><div class="actual-val">Guarded against division by zero on empty cost estimates</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-062</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">ProjectCost variance_percent calculates exact cost saving percentage</div></td>
-                        <td><div class="input-val">estimated = 200000, actual = 150000</div></td>
-                        <td><div class="expected-val">Should return 25.0%</div></td>
-                        <td><div class="actual-val">Calculated exact 25.0% under-budget variance ratio</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr class="section-header-row">
-                        <td colspan="8"><strong>Use Case: Site BOM &amp; Material Movement</strong></td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-063</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">ProjectMaterial remaining_qty calculates unconsumed site stock</div></td>
-                        <td><div class="input-val">allocated=100, used=60, excess=20</div></td>
-                        <td><div class="expected-val">Should return 20 units remaining</div></td>
-                        <td><div class="actual-val">Calculated 20 remaining site units (100 - 60 - 20)</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-064</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">ProjectMaterial net_allocated_qty deducts returned excess stock</div></td>
-                        <td><div class="input-val">allocated=100, excess=25</div></td>
-                        <td><div class="expected-val">Should return 75 net units</div></td>
-                        <td><div class="actual-val">Deducted returned excess to determine net site allocations</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-065</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">ProjectMaterial returned_excess_value calculates monetary credit</div></td>
-                        <td><div class="input-val">excess=10, unit_price=350.00</div></td>
-                        <td><div class="expected-val">Should return 3500.00 credit value</div></td>
-                        <td><div class="actual-val">Evaluated PHP 3,500.00 returned inventory credit value</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr class="section-header-row">
-                        <td colspan="8"><strong>Use Case: Detailed Estimates &amp; Markups</strong></td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-066</span></td>
-                        <td><span class="code-segment">Model Method</span></td>
-                        <td><div class="test-desc">ProjectScopeItem recalculate() computes direct cost and markup percentages</div></td>
-                        <td><div class="input-val">Direct=30000, Cont=5%, Tax=12%, Prof=10%</div></td>
-                        <td><div class="expected-val">Should return 38100.00 total item cost</div></td>
-                        <td><div class="actual-val">Computed direct costs and 27% total markups (PHP 38,100.00)</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">6 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-067</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">ProjectScopeLine remaining_quantity clamps negative balance to zero</div></td>
-                        <td><div class="input-val">qty=50, used=40, excess=20</div></td>
-                        <td><div class="expected-val">Should clamp remaining quantity to 0.0</div></td>
-                        <td><div class="actual-val">Guarded against negative remaining quantity balances</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr class="section-header-row">
-                        <td colspan="8"><strong>Use Case: Project Tasks &amp; Scheduling</strong></td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-068</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">ProjectTask is_completed evaluates 100% progress to completed</div></td>
-                        <td><div class="input-val">progress = 100</div></td>
-                        <td><div class="expected-val">Should evaluate to true</div></td>
-                        <td><div class="actual-val">Evaluated completed status from 100% progress metric</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-069</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">ProjectTask status_badge_class evaluates in_progress threshold</div></td>
-                        <td><div class="input-val">progress = 45</div></td>
-                        <td><div class="expected-val">Should return &quot;in_progress&quot;</div></td>
-                        <td><div class="actual-val">Evaluated in_progress UI badge styling class</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-070</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">ProjectTask timeline_phase_key parses MEP Rough-Ins keyword</div></td>
-                        <td><div class="input-val">timeline_phase = &quot;Phase 3: MEP Rough-Ins&quot;</div></td>
-                        <td><div class="expected-val">Should return &quot;phase3&quot;</div></td>
-                        <td><div class="actual-val">Parsed timeline phase key &quot;phase3&quot; from description</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-071</span></td>
-                        <td><span class="code-segment">Mutation Hook</span></td>
-                        <td><div class="test-desc">ProjectTaskMaterial boot saving hook auto-multiplies quantity by unit cost</div></td>
-                        <td><div class="input-val">qty = 12.5, unit_cost = 400.00</div></td>
-                        <td><div class="expected-val">Should calculate total_cost = 5000.00</div></td>
-                        <td><div class="actual-val">Boot saving hook calculated exact total cost (PHP 5,000.00)</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">4 ms</td>
-                    </tr>                    <tr class="section-header-row">
-                        <td colspan="8"><strong>Use Case: Project Engine &amp; Governance</strong></td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-072</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">Project structural_weight falls back to 40% when 0</div></td>
-                        <td><div class="input-val">structural_weight = 0</div></td>
-                        <td><div class="expected-val">Should return default weight of 40</div></td>
-                        <td><div class="actual-val">Applied default structural trade weighting of 40%</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-073</span></td>
-                        <td><span class="code-segment">Model Method</span></td>
-                        <td><div class="test-desc">Project recalculateTradeProgressFromTasks() calculates weighted overall progress</div></td>
-                        <td><div class="input-val">Structural=80% (wt 50), Electrical=60% (wt 50)</div></td>
-                        <td><div class="expected-val">Should return 70% overall progress</div></td>
-                        <td><div class="actual-val">Calculated exact 70% weighted overall milestone progress</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">5 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-074</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">Project remaining_budget calculates contract minus spent budget</div></td>
-                        <td><div class="input-val">contract = 1000000, spent = 400000</div></td>
-                        <td><div class="expected-val">Should return 600000.00 remaining budget</div></td>
-                        <td><div class="actual-val">Evaluated remaining contract budget of PHP 600,000.00</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-075</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">Project budget_usage_percent calculates accurate disbursement ratio</div></td>
-                        <td><div class="input-val">contract = 1000000, spent = 400000</div></td>
-                        <td><div class="expected-val">Should return 40.0% usage</div></td>
-                        <td><div class="actual-val">Calculated 40.0% budget utilization percentage</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-076</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">Project total_deployed_manpower sums all 7 trade labor categories</div></td>
-                        <td><div class="input-val">workers=12, skilled=8, engineers=2, foremen=1, safety=1</div></td>
-                        <td><div class="expected-val">Should return 24 total personnel</div></td>
-                        <td><div class="actual-val">Aggregated 24 total deployed on-site construction workforce</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-077</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">Project cost_health_status detects cost budget overrun condition</div></td>
-                        <td><div class="input-val">contract_budget = 500000, spent_budget = 550000</div></td>
-                        <td><div class="expected-val">Should return &quot;overrun&quot; status</div></td>
-                        <td><div class="actual-val">Identified budget overrun condition (&gt;100% budget spent)</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                    <tr>
-                        <td><span class="tc-id">TC-078</span></td>
-                        <td><span class="code-segment">Accessor</span></td>
-                        <td><div class="test-desc">Project schedule_health_status handles completed project turnover</div></td>
-                        <td><div class="input-val">status = &quot;completed&quot;</div></td>
-                        <td><div class="expected-val">Should return &quot;completed&quot; health status</div></td>
-                        <td><div class="actual-val">Displayed Project Completed &amp; Turned Over status badge</div></td>
-                        <td style="text-align: center;"><span class="badge-pass">Pass</span></td>
-                        <td class="duration">1 ms</td>
-                    </tr>                </tbody>
-            </table>
-        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Test ID</th>
+                    <th>Model / Class</th>
+                    <th>Method / Attribute</th>
+                    <th>Technique</th>
+                    <th>Inputs / Condition</th>
+                    <th>Expected Invariant</th>
+                    <th>Status</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B001</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\User</td>
+            <td style='font-weight: 600;'>isAdmin()</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Branch Coverage (Null Coalescing Branch)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$user-&gt;role = null</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>true (bool)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>5.79 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B002</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\User</td>
+            <td style='font-weight: 600;'>isAdmin()</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Branch Coverage (Explicit Admin Branch)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$user-&gt;role = &quot;admin&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>true (bool)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.03 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B003</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\User</td>
+            <td style='font-weight: 600;'>isAdmin()</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Branch Coverage (Non-Admin Role Branch)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$user-&gt;role = &quot;roofing_transfer&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>false (bool)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.02 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B004</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\User</td>
+            <td style='font-weight: 600;'>isRoofingOfficer()</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Statement &amp; Branch Coverage (True Predicate)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$user-&gt;role = &quot;roofing_transfer&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>true (bool)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.01 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B005</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\User</td>
+            <td style='font-weight: 600;'>isRoofingOfficer()</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Statement &amp; Branch Coverage (False Predicate)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$user-&gt;role = &quot;admin&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>false (bool)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.01 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B006</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\User</td>
+            <td style='font-weight: 600;'>isWindowsDoorsOfficer()</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Statement &amp; Branch Coverage (True Predicate)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$user-&gt;role = &quot;windows_doors_transfer&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>true (bool)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.01 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B007</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\User</td>
+            <td style='font-weight: 600;'>isWindowsDoorsOfficer()</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Statement &amp; Branch Coverage (False Predicate)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$user-&gt;role = &quot;roofing_transfer&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>false (bool)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.01 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B008</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\User</td>
+            <td style='font-weight: 600;'>isSupplier()</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Compound Condition Coverage ($this-&gt;role === &quot;supplier&quot;)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$user-&gt;role = &quot;supplier&quot;, $user-&gt;supplier_id = null</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>true (bool)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.02 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B009</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\User</td>
+            <td style='font-weight: 600;'>isSupplier()</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Compound Condition Coverage (!empty($this-&gt;supplier_id))</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$user-&gt;role = null, $user-&gt;supplier_id = 99</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>true (bool)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.02 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B010</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\User</td>
+            <td style='font-weight: 600;'>isSupplier()</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Compound Condition Coverage (Both Operands False)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$user-&gt;role = &quot;admin&quot;, $user-&gt;supplier_id = null</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>false (bool)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.02 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B011</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\User</td>
+            <td style='font-weight: 600;'>getRoleTitleAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Polymorphic Relation Accessor Branch ($this-&gt;supplier)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$supplier = new Supplier([&quot;name&quot; =&gt; &quot;Steel Corp&quot;, &quot;category&quot; =&gt; &quot;Structural&quot;])</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>&quot;Steel Corp (Structural)&quot; (string)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.12 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B012</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\User</td>
+            <td style='font-weight: 600;'>getRoleTitleAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Null Relation Guard Branch ($this-&gt;supplier === null)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$user-&gt;role = &quot;supplier&quot;, relation &quot;supplier&quot; = null</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>&quot;Supplier Account&quot; (string)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>3.46 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B013</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\User</td>
+            <td style='font-weight: 600;'>getRoleTitleAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Switch-Case Statement Branch (&quot;roofing_transfer&quot;)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$user-&gt;role = &quot;roofing_transfer&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>&quot;Roofing Transfer Officer&quot; (string)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.07 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B014</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\User</td>
+            <td style='font-weight: 600;'>getRoleTitleAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Switch-Case Statement Branch (&quot;windows_doors_transfer&quot;)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$user-&gt;role = &quot;windows_doors_transfer&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>&quot;Windows &amp; Doors Transfer Officer&quot; (string)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.03 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B015</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\User</td>
+            <td style='font-weight: 600;'>getRoleTitleAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Switch-Case Default Fallback Branch</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$user-&gt;role = &quot;admin&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>&quot;Master Administrator&quot; (string)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.03 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B016</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\User</td>
+            <td style='font-weight: 600;'>getPortalRouteAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Route Generator Predicate ($this-&gt;isSupplier())</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$user-&gt;role = &quot;supplier&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>URL matching /supplier/dashboard</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>7.09 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B017</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\User</td>
+            <td style='font-weight: 600;'>getPortalRouteAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Route Generator Predicate ($this-&gt;isRoofingOfficer())</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$user-&gt;role = &quot;roofing_transfer&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>URL matching /roofing-transfer</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.18 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B018</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\User</td>
+            <td style='font-weight: 600;'>getPortalRouteAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Route Generator Predicate ($this-&gt;isWindowsDoorsOfficer())</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$user-&gt;role = &quot;windows_doors_transfer&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>URL matching /windows-doors-transfer</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.11 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B019</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\User</td>
+            <td style='font-weight: 600;'>getPortalRouteAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Route Generator Fallback Root Path</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$user-&gt;role = &quot;admin&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>URL matching url(&quot;/&quot;)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.23 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-FAIL-03</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\User</td>
+            <td style='font-weight: 600;'>unhandledNullRelation()</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Defect Injection (Null Pointer Dereference)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$user-&gt;role = &quot;supplier&quot;, $user-&gt;supplier = null</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>Fallback role title string</td>
+            <td><span class='badge badge-fail'>FAIL</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.03 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B020</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\Supplier</td>
+            <td style='font-weight: 600;'>isActive()</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>State Evaluation Predicate (Active)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$supplier-&gt;status = &quot;active&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>true (bool)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.11 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B021</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\Supplier</td>
+            <td style='font-weight: 600;'>isActive()</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>State Evaluation Predicate (Inactive)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$supplier-&gt;status = &quot;inactive&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>false (bool)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.02 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B022</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\Supplier</td>
+            <td style='font-weight: 600;'>getCategoryColorAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Match / Array Map Lookup (&quot;Windows &amp; Doors&quot;)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$supplier-&gt;category = &quot;Windows &amp; Doors&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>&quot;#38bdf8&quot; (string)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.04 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B023</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\Supplier</td>
+            <td style='font-weight: 600;'>getCategoryColorAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Match / Array Map Lookup (&quot;Roofing&quot;)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$supplier-&gt;category = &quot;Roofing&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>&quot;#ef4444&quot; (string)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.03 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B024</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\Supplier</td>
+            <td style='font-weight: 600;'>getCategoryColorAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Match / Array Map Lookup (&quot;Structural &amp; Masonry&quot;)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$supplier-&gt;category = &quot;Structural &amp; Masonry&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>&quot;#10b981&quot; (string)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.03 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B025</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Http\Requests\TaskStoreRequest</td>
+            <td style='font-weight: 600;'>rules() [FIXED DEFECT 01]</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Hierarchical Date Comparison Validation Invariant</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>[&quot;project_start&quot; =&gt; &quot;2026-05-01&quot;, &quot;start_date&quot; =&gt; &quot;2026-04-15&quot;]</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>Validator fails with key &quot;start_date&quot;</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>25.46 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B026</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\SupplierMaterial</td>
+            <td style='font-weight: 600;'>getStatusBadgeAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Branch Coverage (!$this-&gt;is_active)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$material-&gt;is_active = false, $material-&gt;availability_status = &quot;available&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>label = &quot;Unavailable&quot;</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>1.44 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B027</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\SupplierMaterial</td>
+            <td style='font-weight: 600;'>getStatusBadgeAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Branch Coverage ($this-&gt;availability_status === &quot;unavailable&quot;)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$material-&gt;is_active = true, $material-&gt;availability_status = &quot;unavailable&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>label = &quot;Unavailable&quot;</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.05 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B028</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\SupplierMaterial</td>
+            <td style='font-weight: 600;'>getStatusBadgeAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Branch Coverage (Active and Available)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$material-&gt;is_active = true, $material-&gt;availability_status = &quot;available&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>label = &quot;Available&quot;</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.04 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B029</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\SupplierOrder</td>
+            <td style='font-weight: 600;'>getStatusBadgeAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Lookup Map (&quot;pending&quot;)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$order-&gt;status = &quot;pending&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>label = &quot;Pending Approval&quot;</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>2.32 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B030</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\SupplierOrder</td>
+            <td style='font-weight: 600;'>getStatusBadgeAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Lookup Map (&quot;confirmed&quot;)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$order-&gt;status = &quot;confirmed&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>label = &quot;Confirmed&quot;</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.03 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B031</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\SupplierOrder</td>
+            <td style='font-weight: 600;'>getStatusBadgeAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Lookup Map (&quot;processing&quot;)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$order-&gt;status = &quot;processing&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>label = &quot;Processing&quot;</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.02 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B032</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\SupplierOrder</td>
+            <td style='font-weight: 600;'>getStatusBadgeAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Lookup Map (&quot;ready_for_delivery&quot;)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$order-&gt;status = &quot;ready_for_delivery&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>label = &quot;Ready for Delivery&quot;</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.02 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B033</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\SupplierOrder</td>
+            <td style='font-weight: 600;'>getStatusBadgeAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Lookup Map (&quot;delivered&quot;)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$order-&gt;status = &quot;delivered&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>label = &quot;Delivered&quot;</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.02 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B034</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\SupplierOrder</td>
+            <td style='font-weight: 600;'>getStatusBadgeAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Lookup Map (&quot;completed&quot;)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$order-&gt;status = &quot;completed&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>label = &quot;Completed&quot;</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.02 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B035</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\SupplierOrder</td>
+            <td style='font-weight: 600;'>getStatusBadgeAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Lookup Map (&quot;cancelled&quot;)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$order-&gt;status = &quot;cancelled&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>label = &quot;Cancelled&quot;</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.02 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B036</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\SupplierOrder</td>
+            <td style='font-weight: 600;'>syncToInventory()</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Idempotency Guard Branch ($this-&gt;is_synced_to_inventory)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$order-&gt;is_synced_to_inventory = true</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>false (bool)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.08 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B037</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\SupplierOrder</td>
+            <td style='font-weight: 600;'>syncToInventory()</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Database Mutation &amp; Transaction Loop Invariant</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$order-&gt;status = &quot;delivered&quot;, items = [50 units]</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>true (bool); stock incremented &amp; is_synced_to_inventory = 1</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B038</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\InventoryLog</td>
+            <td style='font-weight: 600;'>getTransactionBadgeAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Badge Formatter Match (&quot;excess_return&quot;)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$log-&gt;transaction_type = &quot;excess_return&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>label = &quot;Excess Material Returned&quot;</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>3.09 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B039</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\InventoryLog</td>
+            <td style='font-weight: 600;'>getTransactionBadgeAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Badge Formatter Match (&quot;allocation&quot;)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$log-&gt;transaction_type = &quot;allocation&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>label = &quot;Site BOM Allocation&quot;</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.05 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B040</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\InventoryLog</td>
+            <td style='font-weight: 600;'>getTransactionBadgeAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Badge Formatter Match (&quot;usage&quot;)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$log-&gt;transaction_type = &quot;usage&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>label = &quot;Site Consumption Recorded&quot;</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.03 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B041</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\InventoryLog</td>
+            <td style='font-weight: 600;'>getTransactionBadgeAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Badge Formatter Match (&quot;restock&quot;)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$log-&gt;transaction_type = &quot;restock&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>label = &quot;Warehouse Restock / PO&quot;</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.02 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B042</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\InventoryLog</td>
+            <td style='font-weight: 600;'>getTransactionBadgeAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Badge Formatter Match (&quot;adjustment&quot;)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$log-&gt;transaction_type = &quot;adjustment&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>label = &quot;Inventory Adjustment&quot;</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.02 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B043</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\Payment</td>
+            <td style='font-weight: 600;'>getReceiptUrlAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Null Coalescing Guard (empty($this-&gt;receipt_file))</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$payment-&gt;receipt_file = null</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>null</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>1.78 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B045</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\Payment</td>
+            <td style='font-weight: 600;'>getReceiptUrlAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>String Path Normalization (str_starts_with($f, &quot;/&quot;))</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$payment-&gt;receipt_file = &quot;/uploads/doc.pdf&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>&quot;/uploads/doc.pdf&quot; (string)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.08 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B046</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\Payment</td>
+            <td style='font-weight: 600;'>getReceiptUrlAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>String Path Normalization (Relative storage path)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$payment-&gt;receipt_file = &quot;slip.jpg&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>&quot;/uploads/receipts/slip.jpg&quot; (string)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.05 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B047</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\Payment</td>
+            <td style='font-weight: 600;'>getEffectiveOrNumberAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Explicit Column Priority Guard (!empty($this-&gt;official_receipt_no))</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$payment-&gt;official_receipt_no = &quot;OR-999&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>&quot;OR-999&quot; (string)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.06 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B048</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\Payment</td>
+            <td style='font-weight: 600;'>getEffectiveOrNumberAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Synthetic Code Generator Formatter (sprintf)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$payment-&gt;official_receipt_no = null, payment_date = &quot;2026-09-01&quot;, id = 5</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>&quot;OR-202609-0005&quot; (string)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>1.14 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B049</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\Payment</td>
+            <td style='font-weight: 600;'>getFinancingTypeLabelAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Enum Label Lookup (&quot;bank_loan&quot;)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$payment-&gt;financing_type = &quot;bank_loan&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>&quot;Bank Construction Loan&quot; (string)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.13 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B050</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\Payment</td>
+            <td style='font-weight: 600;'>getFinancingTypeLabelAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Enum Label Lookup (&quot;pagibig_loan&quot;)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$payment-&gt;financing_type = &quot;pagibig_loan&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>&quot;Pag-IBIG (HDMF) Loan&quot; (string)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.03 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B051</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\Payment</td>
+            <td style='font-weight: 600;'>getFinancingTypeLabelAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Enum Label Lookup (&quot;client_equity&quot;)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$payment-&gt;financing_type = &quot;client_equity&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>&quot;Client Direct Equity&quot; (string)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.03 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B052</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\Payment</td>
+            <td style='font-weight: 600;'>getFinancingTypeLabelAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Enum Label Lookup (&quot;cash_progress&quot;)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$payment-&gt;financing_type = &quot;cash_progress&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>&quot;Direct Progress Cash&quot; (string)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.02 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B053</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\Payment</td>
+            <td style='font-weight: 600;'>getConstructionClearanceBadgeAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>State Decision Table (Status Paid -&gt; Cleared)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$payment-&gt;status = &quot;paid&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>cleared: true, color: &quot;#10b981&quot;</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.07 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B054</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\Payment</td>
+            <td style='font-weight: 600;'>getConstructionClearanceBadgeAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>State Decision Table (Inspection Scheduled)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$payment-&gt;status = &quot;pending&quot;, $payment-&gt;construction_clearance_status = &quot;inspection_scheduled&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>cleared: false, color: &quot;#38bdf8&quot;</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.07 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B044</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Http\Requests\PaymentReceiptUploadRequest</td>
+            <td style='font-weight: 600;'>rules() [FIXED DEFECT 02]</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>MIME Whitelist Boundary Validation (Mobile JFIF)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>Uploaded file with MIME &quot;image/jpeg&quot; / extension &quot;jfif&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>Validator passes without errors</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.24 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B055</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\Personnel</td>
+            <td style='font-weight: 600;'>isLicenseExpired()</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Branch Coverage ($this-&gt;license_status === &quot;expired&quot;)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$personnel-&gt;license_status = &quot;expired&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>true (bool)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>1.49 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B056</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\Personnel</td>
+            <td style='font-weight: 600;'>isLicenseExpired()</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Temporal Boundary Evaluation ($expiryDate-&gt;isPast())</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$personnel-&gt;license_expiry_date = &quot;2024-01-01&quot;, license_status = &quot;active&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>true (bool)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.51 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B057</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\Personnel</td>
+            <td style='font-weight: 600;'>isLicenseExpired()</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Temporal Boundary Evaluation (Future date)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$personnel-&gt;license_expiry_date = &quot;2028-12-31&quot;, license_status = &quot;active&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>false (bool)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.16 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B058</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\Personnel</td>
+            <td style='font-weight: 600;'>getLicenseStatusBadgeAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Branch Coverage ($this-&gt;isLicenseExpired() === true)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$personnel-&gt;license_status = &quot;expired&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>label = &quot;EXPIRED LICENSE&quot;</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.06 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B059</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\Personnel</td>
+            <td style='font-weight: 600;'>getLicenseStatusBadgeAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Branch Coverage ($this-&gt;isLicenseExpired() === false)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$personnel-&gt;license_status = &quot;active&quot;, expiry = &quot;2029-01-01&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>label = &quot;ACTIVE&quot;</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.14 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B060</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\ProjectCost</td>
+            <td style='font-weight: 600;'>getVarianceAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Arithmetic Subtraction Formula ($estimated - $actual)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$cost-&gt;estimated_cost = 100000, $cost-&gt;actual_cost = 80000</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>20000.00 (float)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>1.44 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B061</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\ProjectCost</td>
+            <td style='font-weight: 600;'>getVariancePercentAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Zero-Division Guard Branch ($estimated &lt;= 0)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$cost-&gt;estimated_cost = 0, $cost-&gt;actual_cost = 5000</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>0 (float)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.06 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-FAIL-01</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\ProjectCost</td>
+            <td style='font-weight: 600;'>unhandledDivisionByZero()</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Defect Injection (Missing Zero-Division Guard)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$cost-&gt;estimated_cost = 0, $cost-&gt;actual_cost = 5000</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>Calculated finite ratio percentage</td>
+            <td><span class='badge badge-fail'>FAIL</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.02 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B062</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Http\Controllers\InventoryController</td>
+            <td style='font-weight: 600;'>allocate() [FIXED DEFECT 03]</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Discrete Unit Type Integer Modulo / Floor Invariant</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$unit = &quot;pcs&quot;, $quantity = 15.75</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>Validation error on quantity: must be integer</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.01 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B063</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\ProjectMaterial</td>
+            <td style='font-weight: 600;'>getRemainingQtyAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Boundary Value Arithmetic Subtraction ($alloc - $used - $excess)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$pm-&gt;allocated_qty = 100, $pm-&gt;used_qty = 60, $pm-&gt;excess_returned_qty = 20</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>20 (int)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>1.51 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B064</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\ProjectMaterial</td>
+            <td style='font-weight: 600;'>getNetAllocatedQtyAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Net Material Consumption Arithmetic ($alloc - $excess)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$pm-&gt;allocated_qty = 100, $pm-&gt;excess_returned_qty = 20</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>80 (int)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.07 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B065</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\ProjectMaterial</td>
+            <td style='font-weight: 600;'>getReturnedExcessValueAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Financial Valuation Formula ($excess * $unitPrice)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$pm-&gt;excess_returned_qty = 15, $pm-&gt;unit_price = 200.00</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>3000.00 (float)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.08 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-FAIL-02</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\ProjectMaterial</td>
+            <td style='font-weight: 600;'>negativeStockUnderflow()</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Defect Injection (Missing Zero-Floor Clamp)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$material-&gt;allocated = 50, $material-&gt;used = 80</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>0 (non-negative clamped quantity)</td>
+            <td><span class='badge badge-fail'>FAIL</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B066</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\ProjectScopeItem</td>
+            <td style='font-weight: 600;'>recalculate()</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>DUPA Composite Markup Rollup Algorithm</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>direct_cost = 10000, contingency_rate = 5, vat_rate = 12, profit_rate = 10</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>12700.00 (float)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.03 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B067</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\ProjectScopeLine</td>
+            <td style='font-weight: 600;'>getRemainingQuantityAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Zero-Floor Clamp Boundary Value (max(0, $val))</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$line-&gt;quantity = 50, $line-&gt;used_quantity = 40, $line-&gt;excess_returned_quantity = 20</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>0 (float)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>2.36 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B068</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\ProjectTask</td>
+            <td style='font-weight: 600;'>getIsCompletedAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Boolean Completion Flag Evaluation ($progress &gt;= 100)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$task-&gt;progress = 100</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>true (bool)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>2.31 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B069</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\ProjectTask</td>
+            <td style='font-weight: 600;'>getStatusBadgeClassAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>CSS Class Mapping Predicate ($progress &gt; 15 &amp;&amp; $progress &lt; 100)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$task-&gt;progress = 30</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>&quot;in_progress&quot; (string)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.08 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B070</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\ProjectTask</td>
+            <td style='font-weight: 600;'>getTimelinePhaseKeyAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Regex / String Sanitization Normalizer</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$task-&gt;timeline_phase = &quot;Phase 2: Superstructure&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>Contains &quot;phase2&quot; or &quot;phase-2&quot;</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.07 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B071</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\ProjectTaskMaterial</td>
+            <td style='font-weight: 600;'>boot() / saving event</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Model Lifecycle Event Hook Arithmetic ($qty * $unit_cost)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$model-&gt;quantity_required = 5, $model-&gt;unit_cost = 400.00</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>2000.00 (float)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B072</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\Project</td>
+            <td style='font-weight: 600;'>getStructuralWeightAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Domain Default Fallback Accessor ($weight &lt;= 0)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$project-&gt;structural_weight = 0</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>40 (int)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>4.85 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B073</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\Project</td>
+            <td style='font-weight: 600;'>recalculateTradeProgressFromTasks()</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Weighted Multi-Trade Linear Combination Algorithm</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>Structural = 100%, Electrical = 80%, Piping = 50%, Finishing = 30%</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>74.5% (float)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.01 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B074</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\Project</td>
+            <td style='font-weight: 600;'>getRemainingBudgetAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Financial Variance Formula ($contract - $spent)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$project-&gt;contract_budget = 500000, $project-&gt;spent_budget = 200000</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>300000 (float/int)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.1 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B075</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\Project</td>
+            <td style='font-weight: 600;'>getBudgetUsagePercentAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Ratio Calculation Formula (($spent / $contract) * 100)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$project-&gt;contract_budget = 500000, $project-&gt;spent_budget = 200000</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>40.0 (float)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.08 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B076</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\Project</td>
+            <td style='font-weight: 600;'>getTotalDeployedManpowerAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Multi-Column Summation Invariant</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>workers = 10, skilled = 5, engineers = 2, foremen = 3</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>20 (int)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.16 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B077</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\Project</td>
+            <td style='font-weight: 600;'>getCostHealthStatusAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Budget Threshold Predicate ($spent &gt; $contract)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$project-&gt;contract_budget = 100000, $project-&gt;spent_budget = 120000</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>&quot;overrun&quot; (string)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>5.94 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B078</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\Project</td>
+            <td style='font-weight: 600;'>getScheduleHealthStatusAttribute</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Lifecycle State Predicate ($status === &quot;completed&quot;)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$project-&gt;status = &quot;completed&quot;</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>status = &quot;completed&quot;</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.11 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B079</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Http\Controllers\ProjectMaterialTransferController</td>
+            <td style='font-weight: 600;'>store() [FIXED DEFECT 04]</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Boundary Condition Validation (quantity_transferred &gt; 0)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>[&quot;quantity_transferred&quot; =&gt; 0.00]</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>Validator fails with error &quot;The quantity transferred must be greater than 0.&quot;</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>8.15 ms</td>
+        </tr><tr>
+            <td style='font-weight: bold; font-family: monospace;'>TC-B080</td>
+            <td style='font-family: monospace; color: #38bdf8;'>App\Models\ServiceRequest</td>
+            <td style='font-weight: 600;'>class (Area * Unit Cost)</td>
+            <td><span style='background: #1e293b; color: #a5b4fc; padding: 3px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #334155;'>Multiplication Arithmetic Formula ($area * $rate)</span></td>
+            <td style='font-family: monospace; font-size: 11px; color: #cbd5e1;'>$sr-&gt;floor_area = 250, $sr-&gt;cost_per_sqm = 25000</td>
+            <td style='font-family: monospace; font-size: 11px; color: #86efac;'>6250000.00 (float)</td>
+            <td><span class='badge badge-pass'>PASS</span></td>
+            <td style='text-align: right; font-family: monospace; font-size: 11px;'>0.02 ms</td>
+        </tr>
+            </tbody>
+        </table>
     </div>
-
-    <script>
-        const csvContent = "Test Case ID,Use Case,Tested Code Segment,Test Description,Input Values,Expected Behavior,Actual Behavior,Result,Duration\nTC-001,User Authentication & Roles,Model Method,User isAdmin() should evaluate empty role to true as fallback admin,role = null,Should return true for master admin default,Evaluated to true as master administrator fallback,Pass,8 ms\nTC-002,User Authentication & Roles,Model Method,User isAdmin() should evaluate explicit admin role to true,\"role = \"\"admin\"\"\",Should return true for explicit admin role,Successfully identified admin authorization,Pass,1 ms\nTC-003,User Authentication & Roles,Model Method,User isAdmin() should evaluate non-admin role to false,\"role = \"\"roofing_transfer\"\"\",Should return false for non-admin role,Correctly denied administrative access,Pass,1 ms\nTC-004,User Authentication & Roles,Model Method,User isRoofingOfficer() should identify roofing portal officer,\"role = \"\"roofing_transfer\"\"\",Should return true for roofing officer,Identified roofing transfer officer correctly,Pass,1 ms\nTC-005,User Authentication & Roles,Model Method,User isRoofingOfficer() should reject non-roofing role,\"role = \"\"admin\"\"\",Should return false for admin role,Properly restricted roofing transfer scope,Pass,1 ms\nTC-006,User Authentication & Roles,Model Method,User isWindowsDoorsOfficer() should identify windows & doors officer,\"role = \"\"windows_doors_transfer\"\"\",Should return true for windows officer,Identified windows & doors officer correctly,Pass,1 ms\nTC-007,User Authentication & Roles,Model Method,User isWindowsDoorsOfficer() should reject non-windows role,\"role = \"\"roofing_transfer\"\"\",Should return false for roofing role,Properly restricted windows & doors scope,Pass,1 ms\nTC-008,User Authentication & Roles,Model Method,User isSupplier() should identify user with supplier role,\"role = \"\"supplier\"\", supplier_id = null\",Should return true for supplier role,Recognized external trade supplier account,Pass,1 ms\nTC-009,User Authentication & Roles,Model Method,User isSupplier() should identify user with linked supplier_id,\"role = null, supplier_id = 15\",Should return true for linked supplier ID,Recognized supplier affiliation via ID,Pass,1 ms\nTC-010,User Authentication & Roles,Model Method,User isSupplier() should return false for internal personnel,\"role = \"\"admin\"\", supplier_id = null\",Should return false for internal personnel,Properly verified internal non-supplier user,Pass,1 ms\nTC-011,User Authentication & Roles,Accessor,User role_title should format supplier company name and category,\"supplier={name: \"\"Apex Steel\"\", category: \"\"Structural & Masonry\"\"}\",\"Should return \"\"Apex Steel (Structural & Masonry)\"\"\",Formatted full supplier company title with trade category,Pass,1 ms\nTC-012,User Authentication & Roles,Accessor,User role_title fallback for supplier without relation,\"supplier = null, role = \"\"supplier\"\"\",\"Should return \"\"Supplier Account\"\"\",Returned generic Supplier Account fallback title,Pass,4 ms\nTC-013,User Authentication & Roles,Accessor,User role_title should return Roofing Transfer Officer title,\"role = \"\"roofing_transfer\"\"\",\"Should return \"\"Roofing Transfer Officer\"\"\",Returned exact Roofing Transfer Officer designation,Pass,1 ms\nTC-014,User Authentication & Roles,Accessor,User role_title should return Windows & Doors Transfer Officer title,\"role = \"\"windows_doors_transfer\"\"\",\"Should return \"\"Windows & Doors Transfer Officer\"\"\",Returned exact Windows & Doors Officer designation,Pass,1 ms\nTC-015,User Authentication & Roles,Accessor,User role_title should return Master Administrator title,\"role = \"\"admin\"\" or null\",\"Should return \"\"Master Administrator\"\"\",Returned Master Administrator title,Pass,1 ms\nTC-016,User Authentication & Roles,Accessor,User portal_route should route supplier to supplier dashboard,\"role = \"\"supplier\"\"\",Should return supplier.dashboard route URL,Resolved supplier portal dashboard route cleanly,Pass,4 ms\nTC-017,User Authentication & Roles,Accessor,User portal_route should route roofing officer to roofing transfer index,\"role = \"\"roofing_transfer\"\"\",Should return roofing.index route URL,Resolved roofing transfer portal route URL,Pass,1 ms\nTC-018,User Authentication & Roles,Accessor,User portal_route should route windows officer to windows transfer index,\"role = \"\"windows_doors_transfer\"\"\",Should return windowsDoors.index route URL,Resolved windows & doors transfer portal route URL,Pass,1 ms\nTC-019,User Authentication & Roles,Accessor,User portal_route should route admin to main system dashboard,\"role = \"\"admin\"\"\",Should return main dashboard route URL,Resolved master admin landing dashboard route,Pass,1 ms\nTC-020,Supplier & Catalog Management,Model Method,Supplier isActive() should return true for active status,\"status = \"\"active\"\"\",Should evaluate to true,Confirmed active supplier standing,Pass,1 ms\nTC-021,Supplier & Catalog Management,Model Method,Supplier isActive() should return false for inactive status,\"status = \"\"inactive\"\"\",Should evaluate to false,Flagged inactive supplier status correctly,Pass,1 ms\nTC-022,Supplier & Catalog Management,Accessor,Supplier category_color should return sky blue for Windows & Doors,\"category = \"\"Windows & Doors\"\"\",Should return #38bdf8,Mapped category badge color to sky blue (#38bdf8),Pass,1 ms\nTC-023,Supplier & Catalog Management,Accessor,Supplier category_color should return red for Roofing,\"category = \"\"Roofing\"\"\",Should return #ef4444,Mapped category badge color to roofing red (#ef4444),Pass,1 ms\nTC-024,Supplier & Catalog Management,Accessor,Supplier category_color should return emerald for Structural & Masonry,\"category = \"\"Structural & Masonry\"\"\",Should return #10b981,Mapped category badge color to emerald (#10b981),Pass,1 ms\nTC-025,Supplier & Catalog Management,Accessor,Supplier category_color should return indigo for default category,\"category = \"\"Plumbing\"\"\",Should return #818cf8,Mapped category badge color to default indigo (#818cf8),Pass,1 ms\nTC-026,Supplier & Catalog Management,Accessor,SupplierMaterial status_badge should return Unavailable when inactive,\"is_active = false, availability_status = \"\"available\"\"\",Should return Unavailable badge,Correctly flagged inactive product as Unavailable,Pass,1 ms\nTC-027,Supplier & Catalog Management,Accessor,SupplierMaterial status_badge should return Unavailable when status is unavailable,\"is_active = true, availability_status = \"\"unavailable\"\"\",Should return Unavailable badge,Correctly flagged out of stock item as Unavailable,Pass,1 ms\nTC-028,Supplier & Catalog Management,Accessor,SupplierMaterial status_badge should return Available for active available item,\"is_active = true, availability_status = \"\"available\"\"\",Should return Available badge,Displayed active Available status badge,Pass,1 ms\nTC-029,Purchase Orders & Inventory Sync,Accessor,SupplierOrder status_badge should format pending status,\"status = \"\"pending\"\"\",Should return Pending Approval (#f59e0b),Formatted pending PO badge with amber styling,Pass,1 ms\nTC-030,Purchase Orders & Inventory Sync,Accessor,SupplierOrder status_badge should format confirmed status,\"status = \"\"confirmed\"\"\",Should return Confirmed (#38bdf8),Formatted confirmed PO badge with sky blue styling,Pass,1 ms\nTC-031,Purchase Orders & Inventory Sync,Accessor,SupplierOrder status_badge should format processing status,\"status = \"\"processing\"\"\",Should return Processing (#818cf8),Formatted processing PO badge with indigo styling,Pass,1 ms\nTC-032,Purchase Orders & Inventory Sync,Accessor,SupplierOrder status_badge should format ready_for_delivery status,\"status = \"\"ready_for_delivery\"\"\",Should return Ready for Delivery (#ec4899),Formatted delivery dispatch ready badge,Pass,1 ms\nTC-033,Purchase Orders & Inventory Sync,Accessor,SupplierOrder status_badge should format delivered status,\"status = \"\"delivered\"\"\",Should return Delivered (#10b981),Formatted delivered badge with emerald styling,Pass,1 ms\nTC-034,Purchase Orders & Inventory Sync,Accessor,SupplierOrder status_badge should format completed status,\"status = \"\"completed\"\"\",Should return Completed (#22c55e),Formatted completed PO badge with green styling,Pass,1 ms\nTC-035,Purchase Orders & Inventory Sync,Accessor,SupplierOrder status_badge should format cancelled status,\"status = \"\"cancelled\"\"\",Should return Cancelled (#ef4444),Formatted cancelled PO badge with danger red styling,Pass,1 ms\nTC-036,Purchase Orders & Inventory Sync,Model Method,SupplierOrder syncToInventory() idempotency protection against double execution,is_synced_to_inventory = true,Should return false and skip inventory modification,Safely bypassed sync to prevent double stock incrementation,Pass,1 ms\nTC-037,Purchase Orders & Inventory Sync,Model Method,SupplierOrder syncToInventory() execution creates central stock & logs,Supplier PO items delivered,\"Should create Material, increment stock, and write InventoryLog\",Delivered PO products synced to Material inventory and logged,Pass,30 ms\nTC-038,Warehouse & Inventory Movements,Accessor,InventoryLog transaction_badge formats excess return movements,\"transaction_type = \"\"excess_return\"\"\",Should return Excess Material Returned,Formatted Excess Material Returned movement badge,Pass,1 ms\nTC-039,Warehouse & Inventory Movements,Accessor,InventoryLog transaction_badge formats site BOM allocations,\"transaction_type = \"\"allocation\"\"\",Should return Site BOM Allocation,Formatted Site BOM Allocation badge,Pass,1 ms\nTC-040,Warehouse & Inventory Movements,Accessor,InventoryLog transaction_badge formats daily consumption usage,\"transaction_type = \"\"usage\"\"\",Should return Site Consumption Recorded,Formatted Site Consumption Recorded badge,Pass,1 ms\nTC-041,Warehouse & Inventory Movements,Accessor,InventoryLog transaction_badge formats PO restock deliveries,\"transaction_type = \"\"restock\"\"\",Should return Warehouse Restock \/ PO,Formatted Warehouse Restock PO badge,Pass,1 ms\nTC-042,Warehouse & Inventory Movements,Accessor,InventoryLog transaction_badge formats manual inventory adjustments,\"transaction_type = \"\"adjustment\"\"\",Should return Inventory Adjustment,Formatted general Inventory Adjustment fallback badge,Pass,1 ms\nTC-043,Billing & Financial Tranches,Accessor,Payment receipt_url handles null receipt file,receipt_file = null,Should return null,Returned null cleanly for absent receipt attachment,Pass,1 ms\nTC-044,Billing & Financial Tranches,Accessor,Payment receipt_url preserves fully-qualified HTTPS URLs,\"receipt_file = \"\"https:\/\/cdn.example.com\/receipt.pdf\"\"\",Should return unchanged URL,Preserved remote HTTPS storage CDN URL,Pass,1 ms\nTC-045,Billing & Financial Tranches,Accessor,Payment receipt_url preserves absolute root paths,\"receipt_file = \"\"\/storage\/receipts\/doc.pdf\"\"\",Should return unchanged root path,Preserved absolute root path cleanly,Pass,1 ms\nTC-046,Billing & Financial Tranches,Accessor,Payment receipt_url prepends \/uploads\/receipts\/ to relative filenames,\"receipt_file = \"\"or_receipt_001.jpg\"\"\",Should return \/uploads\/receipts\/or_receipt_001.jpg,Prepended standard receipt storage directory,Pass,1 ms\nTC-047,Billing & Financial Tranches,Accessor,Payment effective_or_number returns explicit official receipt number,\"official_receipt_no = \"\"OR-2026-7777\"\"\",\"Should return \"\"OR-2026-7777\"\"\",Returned registered official receipt number,Pass,1 ms\nTC-048,Billing & Financial Tranches,Accessor,Payment effective_or_number generates formatted fallback OR string,\"official_receipt_no = null, date=\"\"2026-09-12\"\", id=8\",\"Should return \"\"OR-202609-0008\"\"\",Generated padded sequential OR fallback code,Pass,2 ms\nTC-049,Billing & Financial Tranches,Accessor,Payment financing_type_label returns Bank Construction Loan,\"financing_type = \"\"bank_loan\"\"\",Should return Bank Construction Loan,Mapped bank financing label correctly,Pass,1 ms\nTC-050,Billing & Financial Tranches,Accessor,Payment financing_type_label returns Pag-IBIG (HDMF) Loan,\"financing_type = \"\"pagibig_loan\"\"\",Should return Pag-IBIG (HDMF) Loan,Mapped Pag-IBIG institutional loan label,Pass,1 ms\nTC-051,Billing & Financial Tranches,Accessor,Payment financing_type_label returns Client Direct Equity,\"financing_type = \"\"client_equity\"\"\",Should return Client Direct Equity,Mapped client direct equity label,Pass,1 ms\nTC-052,Billing & Financial Tranches,Accessor,Payment financing_type_label returns Direct Progress Cash,\"financing_type = \"\"cash_progress\"\"\",Should return Direct Progress Cash,Mapped direct cash progress payment label,Pass,1 ms\nTC-053,Billing & Financial Tranches,Accessor,Payment construction_clearance_badge authorizes construction when paid,\"status = \"\"paid\"\"\",Should return cleared=true and Authorized to Construct label,Authorized on-site construction works based on cleared payment,Pass,1 ms\nTC-054,Billing & Financial Tranches,Accessor,Payment construction_clearance_badge indicates bank inspection scheduled,\"status = \"\"pending\"\", clearance_status = \"\"inspection_scheduled\"\"\",Should return cleared=false and inspection scheduled message,Flagged bank\/HDMF site inspection in progress,Pass,1 ms\nTC-055,PRC Personnel & Compliance,Model Method,Personnel isLicenseExpired() identifies expired license status,\"license_status = \"\"expired\"\"\",Should evaluate to true,Detected expired professional engineer license status,Pass,2 ms\nTC-056,PRC Personnel & Compliance,Model Method,Personnel isLicenseExpired() detects past license expiration date,\"license_status = \"\"active\"\", expiry = yesterday\",Should evaluate to true,Detected past license expiry date boundary,Pass,1 ms\nTC-057,PRC Personnel & Compliance,Model Method,Personnel isLicenseExpired() validates active valid license,\"license_status = \"\"active\"\", expiry = next year\",Should evaluate to false,Validated active compliant license with future expiry,Pass,1 ms\nTC-058,PRC Personnel & Compliance,Accessor,Personnel license_status_badge displays EXPIRED LICENSE badge,\"license_status = \"\"revoked\"\"\",Should return EXPIRED LICENSE badge with danger red background,Rendered EXPIRED LICENSE compliance alert,Pass,1 ms\nTC-059,PRC Personnel & Compliance,Accessor,Personnel license_status_badge displays ACTIVE badge,\"license_status = \"\"active\"\", expiry in future\",Should return ACTIVE badge with emerald background,Rendered ACTIVE compliant practitioner badge,Pass,1 ms\nTC-060,Project Costing & Budgeting,Accessor,ProjectCost variance calculates budget difference,\"estimated = 100000, actual = 85000\",Should return positive variance of 15000.00,\"Calculated accurate cost variance of +PHP 15,000.00\",Pass,2 ms\nTC-061,Project Costing & Budgeting,Accessor,ProjectCost variance_percent handles zero estimated cost boundary,\"estimated = 0, actual = 5000\",Should return 0.0 to prevent division by zero,Guarded against division by zero on empty cost estimates,Pass,1 ms\nTC-062,Project Costing & Budgeting,Accessor,ProjectCost variance_percent calculates exact cost saving percentage,\"estimated = 200000, actual = 150000\",Should return 25.0%,Calculated exact 25.0% under-budget variance ratio,Pass,1 ms\nTC-063,Site BOM & Material Movement,Accessor,ProjectMaterial remaining_qty calculates unconsumed site stock,\"allocated=100, used=60, excess=20\",Should return 20 units remaining,Calculated 20 remaining site units (100 - 60 - 20),Pass,1 ms\nTC-064,Site BOM & Material Movement,Accessor,ProjectMaterial net_allocated_qty deducts returned excess stock,\"allocated=100, excess=25\",Should return 75 net units,Deducted returned excess to determine net site allocations,Pass,1 ms\nTC-065,Site BOM & Material Movement,Accessor,ProjectMaterial returned_excess_value calculates monetary credit,\"excess=10, unit_price=350.00\",Should return 3500.00 credit value,\"Evaluated PHP 3,500.00 returned inventory credit value\",Pass,1 ms\nTC-066,Detailed Estimates & Markups,Model Method,ProjectScopeItem recalculate() computes direct cost and markup percentages,\"Direct=30000, Cont=5%, Tax=12%, Prof=10%\",Should return 38100.00 total item cost,\"Computed direct costs and 27% total markups (PHP 38,100.00)\",Pass,6 ms\nTC-067,Detailed Estimates & Markups,Accessor,ProjectScopeLine remaining_quantity clamps negative balance to zero,\"qty=50, used=40, excess=20\",Should clamp remaining quantity to 0.0,Guarded against negative remaining quantity balances,Pass,1 ms\nTC-068,Project Tasks & Scheduling,Accessor,ProjectTask is_completed evaluates 100% progress to completed,progress = 100,Should evaluate to true,Evaluated completed status from 100% progress metric,Pass,1 ms\nTC-069,Project Tasks & Scheduling,Accessor,ProjectTask status_badge_class evaluates in_progress threshold,progress = 45,\"Should return \"\"in_progress\"\"\",Evaluated in_progress UI badge styling class,Pass,1 ms\nTC-070,Project Tasks & Scheduling,Accessor,ProjectTask timeline_phase_key parses MEP Rough-Ins keyword,\"timeline_phase = \"\"Phase 3: MEP Rough-Ins\"\"\",\"Should return \"\"phase3\"\"\",\"Parsed timeline phase key \"\"phase3\"\" from description\",Pass,1 ms\nTC-071,Project Tasks & Scheduling,Mutation Hook,ProjectTaskMaterial boot saving hook auto-multiplies quantity by unit cost,\"qty = 12.5, unit_cost = 400.00\",Should calculate total_cost = 5000.00,\"Boot saving hook calculated exact total cost (PHP 5,000.00)\",Pass,4 ms\nTC-072,Project Engine & Governance,Accessor,Project structural_weight falls back to 40% when 0,structural_weight = 0,Should return default weight of 40,Applied default structural trade weighting of 40%,Pass,1 ms\nTC-073,Project Engine & Governance,Model Method,Project recalculateTradeProgressFromTasks() calculates weighted overall progress,\"Structural=80% (wt 50), Electrical=60% (wt 50)\",Should return 70% overall progress,Calculated exact 70% weighted overall milestone progress,Pass,5 ms\nTC-074,Project Engine & Governance,Accessor,Project remaining_budget calculates contract minus spent budget,\"contract = 1000000, spent = 400000\",Should return 600000.00 remaining budget,\"Evaluated remaining contract budget of PHP 600,000.00\",Pass,1 ms\nTC-075,Project Engine & Governance,Accessor,Project budget_usage_percent calculates accurate disbursement ratio,\"contract = 1000000, spent = 400000\",Should return 40.0% usage,Calculated 40.0% budget utilization percentage,Pass,1 ms\nTC-076,Project Engine & Governance,Accessor,Project total_deployed_manpower sums all 7 trade labor categories,\"workers=12, skilled=8, engineers=2, foremen=1, safety=1\",Should return 24 total personnel,Aggregated 24 total deployed on-site construction workforce,Pass,1 ms\nTC-077,Project Engine & Governance,Accessor,Project cost_health_status detects cost budget overrun condition,\"contract_budget = 500000, spent_budget = 550000\",\"Should return \"\"overrun\"\" status\",Identified budget overrun condition (>100% budget spent),Pass,1 ms\nTC-078,Project Engine & Governance,Accessor,Project schedule_health_status handles completed project turnover,\"status = \"\"completed\"\"\",\"Should return \"\"completed\"\" health status\",Displayed Project Completed & Turned Over status badge,Pass,1 ms";
-        const tsvContent = "\"Test Case ID\"\t\"Use Case\"\t\"Tested Code Segment\"\t\"Test Description\"\t\"Input Values\"\t\"Expected Behavior\"\t\"Actual Behavior\"\tResult\tDuration\nTC-001\t\"User Authentication & Roles\"\t\"Model Method\"\t\"User isAdmin() should evaluate empty role to true as fallback admin\"\t\"role = null\"\t\"Should return true for master admin default\"\t\"Evaluated to true as master administrator fallback\"\tPass\t\"8 ms\"\nTC-002\t\"User Authentication & Roles\"\t\"Model Method\"\t\"User isAdmin() should evaluate explicit admin role to true\"\t\"role = \"\"admin\"\"\"\t\"Should return true for explicit admin role\"\t\"Successfully identified admin authorization\"\tPass\t\"1 ms\"\nTC-003\t\"User Authentication & Roles\"\t\"Model Method\"\t\"User isAdmin() should evaluate non-admin role to false\"\t\"role = \"\"roofing_transfer\"\"\"\t\"Should return false for non-admin role\"\t\"Correctly denied administrative access\"\tPass\t\"1 ms\"\nTC-004\t\"User Authentication & Roles\"\t\"Model Method\"\t\"User isRoofingOfficer() should identify roofing portal officer\"\t\"role = \"\"roofing_transfer\"\"\"\t\"Should return true for roofing officer\"\t\"Identified roofing transfer officer correctly\"\tPass\t\"1 ms\"\nTC-005\t\"User Authentication & Roles\"\t\"Model Method\"\t\"User isRoofingOfficer() should reject non-roofing role\"\t\"role = \"\"admin\"\"\"\t\"Should return false for admin role\"\t\"Properly restricted roofing transfer scope\"\tPass\t\"1 ms\"\nTC-006\t\"User Authentication & Roles\"\t\"Model Method\"\t\"User isWindowsDoorsOfficer() should identify windows & doors officer\"\t\"role = \"\"windows_doors_transfer\"\"\"\t\"Should return true for windows officer\"\t\"Identified windows & doors officer correctly\"\tPass\t\"1 ms\"\nTC-007\t\"User Authentication & Roles\"\t\"Model Method\"\t\"User isWindowsDoorsOfficer() should reject non-windows role\"\t\"role = \"\"roofing_transfer\"\"\"\t\"Should return false for roofing role\"\t\"Properly restricted windows & doors scope\"\tPass\t\"1 ms\"\nTC-008\t\"User Authentication & Roles\"\t\"Model Method\"\t\"User isSupplier() should identify user with supplier role\"\t\"role = \"\"supplier\"\", supplier_id = null\"\t\"Should return true for supplier role\"\t\"Recognized external trade supplier account\"\tPass\t\"1 ms\"\nTC-009\t\"User Authentication & Roles\"\t\"Model Method\"\t\"User isSupplier() should identify user with linked supplier_id\"\t\"role = null, supplier_id = 15\"\t\"Should return true for linked supplier ID\"\t\"Recognized supplier affiliation via ID\"\tPass\t\"1 ms\"\nTC-010\t\"User Authentication & Roles\"\t\"Model Method\"\t\"User isSupplier() should return false for internal personnel\"\t\"role = \"\"admin\"\", supplier_id = null\"\t\"Should return false for internal personnel\"\t\"Properly verified internal non-supplier user\"\tPass\t\"1 ms\"\nTC-011\t\"User Authentication & Roles\"\tAccessor\t\"User role_title should format supplier company name and category\"\t\"supplier={name: \"\"Apex Steel\"\", category: \"\"Structural & Masonry\"\"}\"\t\"Should return \"\"Apex Steel (Structural & Masonry)\"\"\"\t\"Formatted full supplier company title with trade category\"\tPass\t\"1 ms\"\nTC-012\t\"User Authentication & Roles\"\tAccessor\t\"User role_title fallback for supplier without relation\"\t\"supplier = null, role = \"\"supplier\"\"\"\t\"Should return \"\"Supplier Account\"\"\"\t\"Returned generic Supplier Account fallback title\"\tPass\t\"4 ms\"\nTC-013\t\"User Authentication & Roles\"\tAccessor\t\"User role_title should return Roofing Transfer Officer title\"\t\"role = \"\"roofing_transfer\"\"\"\t\"Should return \"\"Roofing Transfer Officer\"\"\"\t\"Returned exact Roofing Transfer Officer designation\"\tPass\t\"1 ms\"\nTC-014\t\"User Authentication & Roles\"\tAccessor\t\"User role_title should return Windows & Doors Transfer Officer title\"\t\"role = \"\"windows_doors_transfer\"\"\"\t\"Should return \"\"Windows & Doors Transfer Officer\"\"\"\t\"Returned exact Windows & Doors Officer designation\"\tPass\t\"1 ms\"\nTC-015\t\"User Authentication & Roles\"\tAccessor\t\"User role_title should return Master Administrator title\"\t\"role = \"\"admin\"\" or null\"\t\"Should return \"\"Master Administrator\"\"\"\t\"Returned Master Administrator title\"\tPass\t\"1 ms\"\nTC-016\t\"User Authentication & Roles\"\tAccessor\t\"User portal_route should route supplier to supplier dashboard\"\t\"role = \"\"supplier\"\"\"\t\"Should return supplier.dashboard route URL\"\t\"Resolved supplier portal dashboard route cleanly\"\tPass\t\"4 ms\"\nTC-017\t\"User Authentication & Roles\"\tAccessor\t\"User portal_route should route roofing officer to roofing transfer index\"\t\"role = \"\"roofing_transfer\"\"\"\t\"Should return roofing.index route URL\"\t\"Resolved roofing transfer portal route URL\"\tPass\t\"1 ms\"\nTC-018\t\"User Authentication & Roles\"\tAccessor\t\"User portal_route should route windows officer to windows transfer index\"\t\"role = \"\"windows_doors_transfer\"\"\"\t\"Should return windowsDoors.index route URL\"\t\"Resolved windows & doors transfer portal route URL\"\tPass\t\"1 ms\"\nTC-019\t\"User Authentication & Roles\"\tAccessor\t\"User portal_route should route admin to main system dashboard\"\t\"role = \"\"admin\"\"\"\t\"Should return main dashboard route URL\"\t\"Resolved master admin landing dashboard route\"\tPass\t\"1 ms\"\nTC-020\t\"Supplier & Catalog Management\"\t\"Model Method\"\t\"Supplier isActive() should return true for active status\"\t\"status = \"\"active\"\"\"\t\"Should evaluate to true\"\t\"Confirmed active supplier standing\"\tPass\t\"1 ms\"\nTC-021\t\"Supplier & Catalog Management\"\t\"Model Method\"\t\"Supplier isActive() should return false for inactive status\"\t\"status = \"\"inactive\"\"\"\t\"Should evaluate to false\"\t\"Flagged inactive supplier status correctly\"\tPass\t\"1 ms\"\nTC-022\t\"Supplier & Catalog Management\"\tAccessor\t\"Supplier category_color should return sky blue for Windows & Doors\"\t\"category = \"\"Windows & Doors\"\"\"\t\"Should return #38bdf8\"\t\"Mapped category badge color to sky blue (#38bdf8)\"\tPass\t\"1 ms\"\nTC-023\t\"Supplier & Catalog Management\"\tAccessor\t\"Supplier category_color should return red for Roofing\"\t\"category = \"\"Roofing\"\"\"\t\"Should return #ef4444\"\t\"Mapped category badge color to roofing red (#ef4444)\"\tPass\t\"1 ms\"\nTC-024\t\"Supplier & Catalog Management\"\tAccessor\t\"Supplier category_color should return emerald for Structural & Masonry\"\t\"category = \"\"Structural & Masonry\"\"\"\t\"Should return #10b981\"\t\"Mapped category badge color to emerald (#10b981)\"\tPass\t\"1 ms\"\nTC-025\t\"Supplier & Catalog Management\"\tAccessor\t\"Supplier category_color should return indigo for default category\"\t\"category = \"\"Plumbing\"\"\"\t\"Should return #818cf8\"\t\"Mapped category badge color to default indigo (#818cf8)\"\tPass\t\"1 ms\"\nTC-026\t\"Supplier & Catalog Management\"\tAccessor\t\"SupplierMaterial status_badge should return Unavailable when inactive\"\t\"is_active = false, availability_status = \"\"available\"\"\"\t\"Should return Unavailable badge\"\t\"Correctly flagged inactive product as Unavailable\"\tPass\t\"1 ms\"\nTC-027\t\"Supplier & Catalog Management\"\tAccessor\t\"SupplierMaterial status_badge should return Unavailable when status is unavailable\"\t\"is_active = true, availability_status = \"\"unavailable\"\"\"\t\"Should return Unavailable badge\"\t\"Correctly flagged out of stock item as Unavailable\"\tPass\t\"1 ms\"\nTC-028\t\"Supplier & Catalog Management\"\tAccessor\t\"SupplierMaterial status_badge should return Available for active available item\"\t\"is_active = true, availability_status = \"\"available\"\"\"\t\"Should return Available badge\"\t\"Displayed active Available status badge\"\tPass\t\"1 ms\"\nTC-029\t\"Purchase Orders & Inventory Sync\"\tAccessor\t\"SupplierOrder status_badge should format pending status\"\t\"status = \"\"pending\"\"\"\t\"Should return Pending Approval (#f59e0b)\"\t\"Formatted pending PO badge with amber styling\"\tPass\t\"1 ms\"\nTC-030\t\"Purchase Orders & Inventory Sync\"\tAccessor\t\"SupplierOrder status_badge should format confirmed status\"\t\"status = \"\"confirmed\"\"\"\t\"Should return Confirmed (#38bdf8)\"\t\"Formatted confirmed PO badge with sky blue styling\"\tPass\t\"1 ms\"\nTC-031\t\"Purchase Orders & Inventory Sync\"\tAccessor\t\"SupplierOrder status_badge should format processing status\"\t\"status = \"\"processing\"\"\"\t\"Should return Processing (#818cf8)\"\t\"Formatted processing PO badge with indigo styling\"\tPass\t\"1 ms\"\nTC-032\t\"Purchase Orders & Inventory Sync\"\tAccessor\t\"SupplierOrder status_badge should format ready_for_delivery status\"\t\"status = \"\"ready_for_delivery\"\"\"\t\"Should return Ready for Delivery (#ec4899)\"\t\"Formatted delivery dispatch ready badge\"\tPass\t\"1 ms\"\nTC-033\t\"Purchase Orders & Inventory Sync\"\tAccessor\t\"SupplierOrder status_badge should format delivered status\"\t\"status = \"\"delivered\"\"\"\t\"Should return Delivered (#10b981)\"\t\"Formatted delivered badge with emerald styling\"\tPass\t\"1 ms\"\nTC-034\t\"Purchase Orders & Inventory Sync\"\tAccessor\t\"SupplierOrder status_badge should format completed status\"\t\"status = \"\"completed\"\"\"\t\"Should return Completed (#22c55e)\"\t\"Formatted completed PO badge with green styling\"\tPass\t\"1 ms\"\nTC-035\t\"Purchase Orders & Inventory Sync\"\tAccessor\t\"SupplierOrder status_badge should format cancelled status\"\t\"status = \"\"cancelled\"\"\"\t\"Should return Cancelled (#ef4444)\"\t\"Formatted cancelled PO badge with danger red styling\"\tPass\t\"1 ms\"\nTC-036\t\"Purchase Orders & Inventory Sync\"\t\"Model Method\"\t\"SupplierOrder syncToInventory() idempotency protection against double execution\"\t\"is_synced_to_inventory = true\"\t\"Should return false and skip inventory modification\"\t\"Safely bypassed sync to prevent double stock incrementation\"\tPass\t\"1 ms\"\nTC-037\t\"Purchase Orders & Inventory Sync\"\t\"Model Method\"\t\"SupplierOrder syncToInventory() execution creates central stock & logs\"\t\"Supplier PO items delivered\"\t\"Should create Material, increment stock, and write InventoryLog\"\t\"Delivered PO products synced to Material inventory and logged\"\tPass\t\"30 ms\"\nTC-038\t\"Warehouse & Inventory Movements\"\tAccessor\t\"InventoryLog transaction_badge formats excess return movements\"\t\"transaction_type = \"\"excess_return\"\"\"\t\"Should return Excess Material Returned\"\t\"Formatted Excess Material Returned movement badge\"\tPass\t\"1 ms\"\nTC-039\t\"Warehouse & Inventory Movements\"\tAccessor\t\"InventoryLog transaction_badge formats site BOM allocations\"\t\"transaction_type = \"\"allocation\"\"\"\t\"Should return Site BOM Allocation\"\t\"Formatted Site BOM Allocation badge\"\tPass\t\"1 ms\"\nTC-040\t\"Warehouse & Inventory Movements\"\tAccessor\t\"InventoryLog transaction_badge formats daily consumption usage\"\t\"transaction_type = \"\"usage\"\"\"\t\"Should return Site Consumption Recorded\"\t\"Formatted Site Consumption Recorded badge\"\tPass\t\"1 ms\"\nTC-041\t\"Warehouse & Inventory Movements\"\tAccessor\t\"InventoryLog transaction_badge formats PO restock deliveries\"\t\"transaction_type = \"\"restock\"\"\"\t\"Should return Warehouse Restock \/ PO\"\t\"Formatted Warehouse Restock PO badge\"\tPass\t\"1 ms\"\nTC-042\t\"Warehouse & Inventory Movements\"\tAccessor\t\"InventoryLog transaction_badge formats manual inventory adjustments\"\t\"transaction_type = \"\"adjustment\"\"\"\t\"Should return Inventory Adjustment\"\t\"Formatted general Inventory Adjustment fallback badge\"\tPass\t\"1 ms\"\nTC-043\t\"Billing & Financial Tranches\"\tAccessor\t\"Payment receipt_url handles null receipt file\"\t\"receipt_file = null\"\t\"Should return null\"\t\"Returned null cleanly for absent receipt attachment\"\tPass\t\"1 ms\"\nTC-044\t\"Billing & Financial Tranches\"\tAccessor\t\"Payment receipt_url preserves fully-qualified HTTPS URLs\"\t\"receipt_file = \"\"https:\/\/cdn.example.com\/receipt.pdf\"\"\"\t\"Should return unchanged URL\"\t\"Preserved remote HTTPS storage CDN URL\"\tPass\t\"1 ms\"\nTC-045\t\"Billing & Financial Tranches\"\tAccessor\t\"Payment receipt_url preserves absolute root paths\"\t\"receipt_file = \"\"\/storage\/receipts\/doc.pdf\"\"\"\t\"Should return unchanged root path\"\t\"Preserved absolute root path cleanly\"\tPass\t\"1 ms\"\nTC-046\t\"Billing & Financial Tranches\"\tAccessor\t\"Payment receipt_url prepends \/uploads\/receipts\/ to relative filenames\"\t\"receipt_file = \"\"or_receipt_001.jpg\"\"\"\t\"Should return \/uploads\/receipts\/or_receipt_001.jpg\"\t\"Prepended standard receipt storage directory\"\tPass\t\"1 ms\"\nTC-047\t\"Billing & Financial Tranches\"\tAccessor\t\"Payment effective_or_number returns explicit official receipt number\"\t\"official_receipt_no = \"\"OR-2026-7777\"\"\"\t\"Should return \"\"OR-2026-7777\"\"\"\t\"Returned registered official receipt number\"\tPass\t\"1 ms\"\nTC-048\t\"Billing & Financial Tranches\"\tAccessor\t\"Payment effective_or_number generates formatted fallback OR string\"\t\"official_receipt_no = null, date=\"\"2026-09-12\"\", id=8\"\t\"Should return \"\"OR-202609-0008\"\"\"\t\"Generated padded sequential OR fallback code\"\tPass\t\"2 ms\"\nTC-049\t\"Billing & Financial Tranches\"\tAccessor\t\"Payment financing_type_label returns Bank Construction Loan\"\t\"financing_type = \"\"bank_loan\"\"\"\t\"Should return Bank Construction Loan\"\t\"Mapped bank financing label correctly\"\tPass\t\"1 ms\"\nTC-050\t\"Billing & Financial Tranches\"\tAccessor\t\"Payment financing_type_label returns Pag-IBIG (HDMF) Loan\"\t\"financing_type = \"\"pagibig_loan\"\"\"\t\"Should return Pag-IBIG (HDMF) Loan\"\t\"Mapped Pag-IBIG institutional loan label\"\tPass\t\"1 ms\"\nTC-051\t\"Billing & Financial Tranches\"\tAccessor\t\"Payment financing_type_label returns Client Direct Equity\"\t\"financing_type = \"\"client_equity\"\"\"\t\"Should return Client Direct Equity\"\t\"Mapped client direct equity label\"\tPass\t\"1 ms\"\nTC-052\t\"Billing & Financial Tranches\"\tAccessor\t\"Payment financing_type_label returns Direct Progress Cash\"\t\"financing_type = \"\"cash_progress\"\"\"\t\"Should return Direct Progress Cash\"\t\"Mapped direct cash progress payment label\"\tPass\t\"1 ms\"\nTC-053\t\"Billing & Financial Tranches\"\tAccessor\t\"Payment construction_clearance_badge authorizes construction when paid\"\t\"status = \"\"paid\"\"\"\t\"Should return cleared=true and Authorized to Construct label\"\t\"Authorized on-site construction works based on cleared payment\"\tPass\t\"1 ms\"\nTC-054\t\"Billing & Financial Tranches\"\tAccessor\t\"Payment construction_clearance_badge indicates bank inspection scheduled\"\t\"status = \"\"pending\"\", clearance_status = \"\"inspection_scheduled\"\"\"\t\"Should return cleared=false and inspection scheduled message\"\t\"Flagged bank\/HDMF site inspection in progress\"\tPass\t\"1 ms\"\nTC-055\t\"PRC Personnel & Compliance\"\t\"Model Method\"\t\"Personnel isLicenseExpired() identifies expired license status\"\t\"license_status = \"\"expired\"\"\"\t\"Should evaluate to true\"\t\"Detected expired professional engineer license status\"\tPass\t\"2 ms\"\nTC-056\t\"PRC Personnel & Compliance\"\t\"Model Method\"\t\"Personnel isLicenseExpired() detects past license expiration date\"\t\"license_status = \"\"active\"\", expiry = yesterday\"\t\"Should evaluate to true\"\t\"Detected past license expiry date boundary\"\tPass\t\"1 ms\"\nTC-057\t\"PRC Personnel & Compliance\"\t\"Model Method\"\t\"Personnel isLicenseExpired() validates active valid license\"\t\"license_status = \"\"active\"\", expiry = next year\"\t\"Should evaluate to false\"\t\"Validated active compliant license with future expiry\"\tPass\t\"1 ms\"\nTC-058\t\"PRC Personnel & Compliance\"\tAccessor\t\"Personnel license_status_badge displays EXPIRED LICENSE badge\"\t\"license_status = \"\"revoked\"\"\"\t\"Should return EXPIRED LICENSE badge with danger red background\"\t\"Rendered EXPIRED LICENSE compliance alert\"\tPass\t\"1 ms\"\nTC-059\t\"PRC Personnel & Compliance\"\tAccessor\t\"Personnel license_status_badge displays ACTIVE badge\"\t\"license_status = \"\"active\"\", expiry in future\"\t\"Should return ACTIVE badge with emerald background\"\t\"Rendered ACTIVE compliant practitioner badge\"\tPass\t\"1 ms\"\nTC-060\t\"Project Costing & Budgeting\"\tAccessor\t\"ProjectCost variance calculates budget difference\"\t\"estimated = 100000, actual = 85000\"\t\"Should return positive variance of 15000.00\"\t\"Calculated accurate cost variance of +PHP 15,000.00\"\tPass\t\"2 ms\"\nTC-061\t\"Project Costing & Budgeting\"\tAccessor\t\"ProjectCost variance_percent handles zero estimated cost boundary\"\t\"estimated = 0, actual = 5000\"\t\"Should return 0.0 to prevent division by zero\"\t\"Guarded against division by zero on empty cost estimates\"\tPass\t\"1 ms\"\nTC-062\t\"Project Costing & Budgeting\"\tAccessor\t\"ProjectCost variance_percent calculates exact cost saving percentage\"\t\"estimated = 200000, actual = 150000\"\t\"Should return 25.0%\"\t\"Calculated exact 25.0% under-budget variance ratio\"\tPass\t\"1 ms\"\nTC-063\t\"Site BOM & Material Movement\"\tAccessor\t\"ProjectMaterial remaining_qty calculates unconsumed site stock\"\t\"allocated=100, used=60, excess=20\"\t\"Should return 20 units remaining\"\t\"Calculated 20 remaining site units (100 - 60 - 20)\"\tPass\t\"1 ms\"\nTC-064\t\"Site BOM & Material Movement\"\tAccessor\t\"ProjectMaterial net_allocated_qty deducts returned excess stock\"\t\"allocated=100, excess=25\"\t\"Should return 75 net units\"\t\"Deducted returned excess to determine net site allocations\"\tPass\t\"1 ms\"\nTC-065\t\"Site BOM & Material Movement\"\tAccessor\t\"ProjectMaterial returned_excess_value calculates monetary credit\"\t\"excess=10, unit_price=350.00\"\t\"Should return 3500.00 credit value\"\t\"Evaluated PHP 3,500.00 returned inventory credit value\"\tPass\t\"1 ms\"\nTC-066\t\"Detailed Estimates & Markups\"\t\"Model Method\"\t\"ProjectScopeItem recalculate() computes direct cost and markup percentages\"\t\"Direct=30000, Cont=5%, Tax=12%, Prof=10%\"\t\"Should return 38100.00 total item cost\"\t\"Computed direct costs and 27% total markups (PHP 38,100.00)\"\tPass\t\"6 ms\"\nTC-067\t\"Detailed Estimates & Markups\"\tAccessor\t\"ProjectScopeLine remaining_quantity clamps negative balance to zero\"\t\"qty=50, used=40, excess=20\"\t\"Should clamp remaining quantity to 0.0\"\t\"Guarded against negative remaining quantity balances\"\tPass\t\"1 ms\"\nTC-068\t\"Project Tasks & Scheduling\"\tAccessor\t\"ProjectTask is_completed evaluates 100% progress to completed\"\t\"progress = 100\"\t\"Should evaluate to true\"\t\"Evaluated completed status from 100% progress metric\"\tPass\t\"1 ms\"\nTC-069\t\"Project Tasks & Scheduling\"\tAccessor\t\"ProjectTask status_badge_class evaluates in_progress threshold\"\t\"progress = 45\"\t\"Should return \"\"in_progress\"\"\"\t\"Evaluated in_progress UI badge styling class\"\tPass\t\"1 ms\"\nTC-070\t\"Project Tasks & Scheduling\"\tAccessor\t\"ProjectTask timeline_phase_key parses MEP Rough-Ins keyword\"\t\"timeline_phase = \"\"Phase 3: MEP Rough-Ins\"\"\"\t\"Should return \"\"phase3\"\"\"\t\"Parsed timeline phase key \"\"phase3\"\" from description\"\tPass\t\"1 ms\"\nTC-071\t\"Project Tasks & Scheduling\"\t\"Mutation Hook\"\t\"ProjectTaskMaterial boot saving hook auto-multiplies quantity by unit cost\"\t\"qty = 12.5, unit_cost = 400.00\"\t\"Should calculate total_cost = 5000.00\"\t\"Boot saving hook calculated exact total cost (PHP 5,000.00)\"\tPass\t\"4 ms\"\nTC-072\t\"Project Engine & Governance\"\tAccessor\t\"Project structural_weight falls back to 40% when 0\"\t\"structural_weight = 0\"\t\"Should return default weight of 40\"\t\"Applied default structural trade weighting of 40%\"\tPass\t\"1 ms\"\nTC-073\t\"Project Engine & Governance\"\t\"Model Method\"\t\"Project recalculateTradeProgressFromTasks() calculates weighted overall progress\"\t\"Structural=80% (wt 50), Electrical=60% (wt 50)\"\t\"Should return 70% overall progress\"\t\"Calculated exact 70% weighted overall milestone progress\"\tPass\t\"5 ms\"\nTC-074\t\"Project Engine & Governance\"\tAccessor\t\"Project remaining_budget calculates contract minus spent budget\"\t\"contract = 1000000, spent = 400000\"\t\"Should return 600000.00 remaining budget\"\t\"Evaluated remaining contract budget of PHP 600,000.00\"\tPass\t\"1 ms\"\nTC-075\t\"Project Engine & Governance\"\tAccessor\t\"Project budget_usage_percent calculates accurate disbursement ratio\"\t\"contract = 1000000, spent = 400000\"\t\"Should return 40.0% usage\"\t\"Calculated 40.0% budget utilization percentage\"\tPass\t\"1 ms\"\nTC-076\t\"Project Engine & Governance\"\tAccessor\t\"Project total_deployed_manpower sums all 7 trade labor categories\"\t\"workers=12, skilled=8, engineers=2, foremen=1, safety=1\"\t\"Should return 24 total personnel\"\t\"Aggregated 24 total deployed on-site construction workforce\"\tPass\t\"1 ms\"\nTC-077\t\"Project Engine & Governance\"\tAccessor\t\"Project cost_health_status detects cost budget overrun condition\"\t\"contract_budget = 500000, spent_budget = 550000\"\t\"Should return \"\"overrun\"\" status\"\t\"Identified budget overrun condition (>100% budget spent)\"\tPass\t\"1 ms\"\nTC-078\t\"Project Engine & Governance\"\tAccessor\t\"Project schedule_health_status handles completed project turnover\"\t\"status = \"\"completed\"\"\"\t\"Should return \"\"completed\"\" health status\"\t\"Displayed Project Completed & Turned Over status badge\"\tPass\t\"1 ms\"\n";
-
-        function triggerDownload(content, filename, type) {
-            const blob = new Blob([content], { type: type });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-
-        function downloadCSV() {
-            triggerDownload(csvContent, 'WHITEBOX_TEST_RESULTS_FORMATTED.csv', 'text/csv;charset=utf-8;');
-        }
-
-        function downloadTSV() {
-            triggerDownload(tsvContent, 'WHITEBOX_TEST_RESULTS.tsv', 'text/tab-separated-values;charset=utf-8;');
-        }
-    </script>
 </body>
 </html>

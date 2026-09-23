@@ -764,6 +764,21 @@ class ProjectController extends Controller
         $progress = (int) ($validated['progress'] ?? 0);
         $status = $validated['status'] ?? ($progress >= 100 ? 'completed' : ($progress > 15 ? 'in_progress' : ($progress > 0 ? 'started' : 'not_started')));
 
+        if (!empty($validated['start_date']) && !empty($project->start_date)) {
+            $taskStart = \Carbon\Carbon::parse($validated['start_date'])->startOfDay();
+            $projStart = \Carbon\Carbon::parse($project->start_date)->startOfDay();
+            if ($taskStart->lt($projStart)) {
+                return redirect()->back()->withInput()->with('error', 'Task start date cannot precede parent project start date (' . $projStart->format('Y-m-d') . ').');
+            }
+        }
+        if (!empty($validated['start_date']) && !empty($validated['due_date'])) {
+            $taskStart = \Carbon\Carbon::parse($validated['start_date'])->startOfDay();
+            $taskDue = \Carbon\Carbon::parse($validated['due_date'])->startOfDay();
+            if ($taskDue->lt($taskStart)) {
+                return redirect()->back()->withInput()->with('error', 'Task due date cannot precede task start date.');
+            }
+        }
+
         $task = ProjectTask::create([
             'project_id' => $projectId,
             'task_name' => $validated['task_name'],

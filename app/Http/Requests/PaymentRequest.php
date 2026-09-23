@@ -44,7 +44,7 @@ class PaymentRequest extends FormRequest
             'bank_reference' => 'nullable|string|max:100',
             'received_by' => 'nullable|string|max:255',
             'notes' => 'nullable|string',
-            'receipt_file' => 'nullable|file|mimes:jpg,jpeg,png,pdf,webp|max:10240',
+            'receipt_file' => 'nullable|file|mimes:jpg,jpeg,png,pdf,webp,jfif|max:10240',
         ];
     }
 

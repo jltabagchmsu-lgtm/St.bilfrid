@@ -444,6 +444,12 @@ class BomController extends Controller
             }
         }
 
+        $targetUnit = strtolower(trim($material->unit ?? $validated['unit'] ?? 'pcs'));
+        $discreteUnits = ['pcs', 'pc', 'piece', 'pieces', 'set', 'sets', 'unit', 'units', 'pair', 'pairs', 'box', 'boxes', 'bag', 'bags'];
+        if (in_array($targetUnit, $discreteUnits) && fmod($qty, 1.0) !== 0.0) {
+            return redirect()->back()->withInput()->with('error', "Allocation Error: Quantity must be a whole number for discrete unit type '{$targetUnit}'. Fractional quantities are only allowed for continuous units (e.g. kg, meters, liters, cu.m).");
+        }
+
         // Check if warehouse stock is available; if low, top up warehouse inventory to fulfill allocation
         if ($material->stock_quantity < $qty) {
             $material->increment('stock_quantity', (int) ceil($qty * 2));
