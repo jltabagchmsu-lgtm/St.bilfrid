@@ -81,23 +81,6 @@
     </div>
 </div>
 
-<!-- Quick Navigation & Procurement Actions Header -->
-<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
-    <div style="display: flex; align-items: center; gap: 10px;">
-        <a href="{{ route('admin.suppliers.materials') }}" class="btn-secondary" style="font-size: 0.85rem; padding: 10px 18px;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
-            Cross-Supplier Product Matrix
-        </a>
-        <a href="{{ route('admin.suppliers.orders') }}" class="btn-secondary" style="font-size: 0.85rem; padding: 10px 18px;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
-            Purchase Order Master Tracker
-        </a>
-    </div>
-
-    <button type="button" onclick="openModal('createPurchaseOrderModal')" class="btn-primary" style="font-size: 0.85rem; padding: 10px 22px;">
-        + Place New Purchase Order
-    </button>
-</div>
 
 <!-- Three Core Supplier Cards -->
 <div style="margin-bottom: 32px;">

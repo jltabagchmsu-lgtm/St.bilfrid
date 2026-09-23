@@ -121,7 +121,7 @@
         <div>
             <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
                 <h4 style="margin: 0; font-size: 1.05rem; font-weight: 800; color: var(--text-primary);">
-                    {{ $project->status === 'completed' ? '🎉 Project Delivered & Completed — Reconcile Excess Materials to INV' : '📦 Project Site Excess Materials Reconciliation' }}
+                    {{ $project->status === 'completed' ? 'Project Delivered & Completed — Reconcile Excess Materials to INV' : 'Project Site Excess Materials Reconciliation' }}
                 </h4>
                 @if($projReturnedExcessUnits > 0)
                     <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4); font-size: 0.725rem;">
@@ -140,7 +140,7 @@
     </div>
     <div style="display: flex; align-items: center; gap: 10px;">
         <button type="button" class="btn-primary" style="background: #10b981; border-color: #10b981; font-weight: 800; padding: 10px 20px; font-size: 0.875rem; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);" onclick="openReconcileExcessModalForProject({{ $project->id }}, '{{ addslashes($project->project_code) }}', '{{ addslashes($project->title) }}', '{{ $project->status }}')">
-            <span>📦 Add Excess Materials to INV</span>
+            <span>Add Excess Materials to INV</span>
             <span>&rarr;</span>
         </button>
     </div>
@@ -930,7 +930,7 @@
             <!-- Actions & Search Filter for Active Materials -->
             <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                 <button type="button" class="btn-primary" onclick="openReconcileExcessModalForProject({{ $project->id }}, '{{ addslashes($project->project_code) }}', '{{ addslashes($project->title) }}', '{{ $project->status }}')" style="font-size: 0.8rem; padding: 6px 14px; height: 34px; background: #10b981; border-color: #10b981; font-weight: 700; display: flex; align-items: center; gap: 6px;">
-                    <span>📦 Add Excess to INV</span>
+                    <span>Add Excess to INV</span>
                 </button>
                 <input type="text" id="activeMaterialSearchInput" onkeyup="filterActiveMaterialsTable(this.value)" placeholder="Filter active materials..." class="form-input" style="padding: 6px 12px; font-size: 0.825rem; width: 200px; height: 34px;">
                 <button type="button" class="btn-secondary" onclick="refreshActiveMaterialsAjax()" style="font-size: 0.775rem; padding: 6px 12px; height: 34px;" title="Refresh Active Materials">
@@ -2372,7 +2372,7 @@
             <div style="margin-top: 16px; padding: 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 8px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                     <div>
-                        <span style="font-size: 0.85rem; font-weight: 700; color: #38bdf8;">📦 Task Materials (Auto-Syncs to BOM Master Table)</span>
+                        <span style="font-size: 0.85rem; font-weight: 700; color: #38bdf8;">Task Materials (Auto-Syncs to BOM Master Table)</span>
                         <div style="font-size: 0.75rem; color: #94a3b8;">Materials entered here automatically reflect in Bill of Materials without manual re-entry.</div>
                     </div>
                     <button type="button" class="btn-secondary" onclick="addTaskMaterialRow()" style="padding: 4px 10px; font-size: 0.75rem; border-color: #38bdf8; color: #38bdf8;">

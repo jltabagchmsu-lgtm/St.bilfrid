@@ -4,9 +4,6 @@
 @section('page_title', 'Materials Inventory (INV) - Master Warehouse Catalog')
 
 @section('top_actions')
-    <button class="btn-primary" style="background: #10b981; border-color: #10b981; font-weight: 700; display: flex; align-items: center; gap: 6px;" onclick="openSelectProjectForExcessModal()">
-        <span>📦</span> Reconcile Project Excess Materials
-    </button>
     <button class="btn-secondary" onclick="openModal('addMaterialModal')">
         <span>+</span> Add New Material to Catalog
     </button>

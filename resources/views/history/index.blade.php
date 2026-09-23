@@ -226,9 +226,7 @@
                         @endif
                     </td>
                     <td style="text-align: right;">
-                        <button type="button" class="btn-primary" style="font-size: 0.8rem; padding: 6px 14px; background: #10b981; border-color: #10b981; font-weight: 700;" onclick="openReconcileExcessModalForProject({{ $cp->id }}, '{{ addslashes($cp->project_code) }}', '{{ addslashes($cp->title) }}', 'completed')">
-                            📦 Add Excess to INV &rarr;
-                        </button>
+                        <span style="font-size: 0.8rem; color: var(--text-muted);">&mdash;</span>
                     </td>
                 </tr>
                 @empty
@@ -296,9 +294,6 @@
                 </td>
                 <td>
                     <div style="display: flex; flex-direction: column; gap: 4px;">
-                        <button type="button" class="btn-primary" style="font-size: 0.75rem; padding: 4px 8px; text-align: center; background: #10b981; border-color: #10b981; font-weight: 700;" onclick="openReconcileExcessModalForProject({{ $cp->id }}, '{{ addslashes($cp->project_code) }}', '{{ addslashes($cp->title) }}', 'completed')">
-                            📦 Add Excess to INV
-                        </button>
                         <a href="{{ route('projects.show', $cp->id) }}" class="btn-primary" style="font-size: 0.775rem; padding: 4px 8px; text-align: center; white-space: nowrap;">
                             Master Summary &rarr;
                         </a>

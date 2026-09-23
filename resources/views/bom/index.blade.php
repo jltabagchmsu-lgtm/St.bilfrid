@@ -762,7 +762,7 @@
             <div style="display: flex; align-items: center; gap: 8px;">
                 @if($selectedProject)
                     <button type="button" class="btn-primary" style="font-size: 0.825rem; padding: 6px 14px; height: 36px; background: #10b981; border-color: #10b981; font-weight: 700; display: flex; align-items: center; gap: 6px;" onclick="openReconcileExcessModalForProject({{ $selectedProject->id }}, '{{ addslashes($selectedProject->project_code) }}', '{{ addslashes($selectedProject->title) }}', '{{ $selectedProject->status }}')">
-                        <span>📦 Add Excess to INV</span>
+                        <span>Add Excess to INV</span>
                     </button>
                 @endif
                 <button class="btn-primary" style="font-size: 0.825rem; padding: 6px 14px; height: 36px;" onclick="openModal('allocateBomModal')">

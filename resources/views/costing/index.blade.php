@@ -39,17 +39,6 @@
         </select>
     </div>
 
-    @if($selectedProject)
-        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-            <span style="font-size: 0.8rem; color: var(--text-muted);">Category Filter:</span>
-            <a href="{{ route('costing.index', ['project_id' => $selectedProject->id]) }}" class="spec-chip {{ !$selectedCategory || $selectedCategory == 'All' ? 'spec-chip-active' : '' }}">All</a>
-            @foreach($categories as $cat)
-                <a href="{{ route('costing.index', ['project_id' => $selectedProject->id, 'category' => $cat]) }}" class="spec-chip {{ $selectedCategory == $cat ? 'spec-chip-active' : '' }}">
-                    {{ $cat }}
-                </a>
-            @endforeach
-        </div>
-    @endif
 </div>
 
 @if($selectedProject)
