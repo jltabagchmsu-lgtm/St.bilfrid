@@ -452,35 +452,14 @@
 <div class="bom-nav-segmented-card">
     <div class="bom-nav-segmented-list">
         <button type="button" id="tabBtnMaster" class="bom-nav-tab-item active" onclick="switchBomTab('master')">
-            <span class="bom-nav-tab-icon icon-master">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
-                    <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
-                    <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
-                </svg>
-            </span>
             <span class="bom-nav-tab-label">Master Consolidated Materials</span>
             <span class="bom-nav-tab-badge badge-master">{{ $masterMaterialsDistinctCount }}</span>
         </button>
         <button type="button" id="tabBtnScope" class="bom-nav-tab-item" onclick="switchBomTab('scope')">
-            <span class="bom-nav-tab-icon icon-scope">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-                    <polyline points="2 17 12 22 22 17"></polyline>
-                    <polyline points="2 12 12 17 22 12"></polyline>
-                </svg>
-            </span>
             <span class="bom-nav-tab-label">Itemized Scope Breakdown (DUPA)</span>
             <span class="bom-nav-tab-badge badge-scope">{{ $selectedProject ? $selectedProject->scopeItems->count() : 0 }}</span>
         </button>
         <button type="button" id="tabBtnSite" class="bom-nav-tab-item" onclick="switchBomTab('site')">
-            <span class="bom-nav-tab-icon icon-site">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                </svg>
-            </span>
             <span class="bom-nav-tab-label">Site Stock Allocations & Usage</span>
             <span class="bom-nav-tab-badge badge-site">{{ $projectMaterials->count() }}</span>
         </button>
@@ -750,16 +729,6 @@
         <div class="scope-breakdown-card">
             <div class="scope-breakdown-header">
                 <div class="scope-breakdown-title-wrap">
-                    <div class="scope-breakdown-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="8" y1="6" x2="21" y2="6"></line>
-                            <line x1="8" y1="12" x2="21" y2="12"></line>
-                            <line x1="8" y1="18" x2="21" y2="18"></line>
-                            <circle cx="4" cy="6" r="1.5" fill="currentColor"></circle>
-                            <circle cx="4" cy="12" r="1.5" fill="currentColor"></circle>
-                            <circle cx="4" cy="18" r="1.5" fill="currentColor"></circle>
-                        </svg>
-                    </div>
                     <div>
                         <h4 class="scope-breakdown-title">Scope Items Breakdown</h4>
                         <div class="scope-breakdown-subtitle">Filter by individual scope phase or view consolidated project breakdown</div>

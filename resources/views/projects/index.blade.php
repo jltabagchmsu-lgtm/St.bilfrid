@@ -725,7 +725,7 @@
                     <!-- Project Hero Blueprint & 3D Render Image Setup -->
                     <div style="padding: 16px; background: #f8fafc; border-radius: var(--radius-md); border: 1px solid var(--border-color); box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
                         <div style="font-weight: 700; font-size: 0.825rem; color: var(--primary-red); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
-                            <span>[CAD]</span> Update Project Hero Image / CAD Blueprint
+                            Update Project Hero Image / CAD Blueprint
                         </div>
 
                         <div id="indexEditPhotoPreviewWrap" style="display: flex; gap: 14px; margin-bottom: 12px; padding: 10px; background: #fafbfc; border: 1px solid var(--border-color); border-radius: var(--radius-sm); align-items: center;">

@@ -651,7 +651,6 @@
 <div class="glass-panel" style="border: 1px solid var(--border-color); margin-bottom: 28px;">
     <div class="panel-header" style="margin-bottom: 16px;">
         <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: var(--primary-red-light); display: grid; place-items: center; font-size: 0.8rem; font-weight: 800; color: var(--primary-red);">CAD</div>
             <div>
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <h3 class="panel-title" style="font-size: 1.15rem;">Project Design, Technical Blueprints & Site Photos</h3>
@@ -772,7 +771,6 @@
 <div class="glass-panel" style="border: 1px solid var(--border-color); margin-bottom: 28px;">
     <div class="panel-header" style="margin-bottom: 18px;">
         <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: var(--primary-red-light); display: grid; place-items: center; font-size: 0.8rem; font-weight: 800; color: var(--primary-red);">SCH</div>
             <div>
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <h3 class="panel-title" style="font-size: 1.15rem;">Project Master Scheduling & Execution Timeline</h3>
@@ -828,7 +826,6 @@
 <div class="glass-panel" style="border: 1px solid var(--border-color); margin-bottom: 28px;">
     <div class="panel-header" style="margin-bottom: 16px; flex-wrap: wrap; gap: 14px;">
         <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 40px; height: 40px; border-radius: var(--radius-sm); background: var(--primary-red-light); display: grid; place-items: center; font-size: 0.8rem; font-weight: 800; color: var(--primary-red);">CHK</div>
             <div>
                 <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                     <h3 class="panel-title" style="font-size: 1.15rem;">Project Monitoring & Trade Progression (Checklist Method)</h3>
@@ -1096,7 +1093,6 @@
     <div id="activeProjectMaterialsSection" class="glass-panel" style="margin-top: 24px; background: #fafbfc; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; box-shadow: var(--card-shadow);">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 14px; margin-bottom: 18px; border-bottom: 1px solid var(--border-color); padding-bottom: 14px;">
             <div style="display: flex; align-items: center; gap: 12px;">
-                <div style="width: 42px; height: 42px; border-radius: var(--radius-sm); background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); display: grid; place-items: center; font-size: 0.8rem; font-weight: 800; color: #059669;">MAT</div>
                 <div>
                     <div style="display: flex; align-items: center; gap: 8px;">
                         <h4 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: var(--text-primary);">Active Project Materials & On-Site Resource Consumption</h4>
@@ -1334,9 +1330,6 @@
 <div class="glass-panel" style="border: 1px solid var(--border-color); margin-bottom: 28px;">
     <div class="panel-header" style="margin-bottom: 16px;">
         <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: var(--primary-red-light); display: grid; place-items: center; font-size: 0.75rem; font-weight: 800; color: var(--primary-red);">
-                SITE
-            </div>
             <div>
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <h3 class="panel-title" style="font-size: 1.15rem;">On-Site Workforce & Resource Deployment Hub</h3>
@@ -1424,7 +1417,6 @@
 <div class="glass-panel" style="border: 1px solid var(--border-color); margin-bottom: 28px;">
     <div class="panel-header" style="margin-bottom: 18px;">
         <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: var(--primary-red-light); display: grid; place-items: center; font-size: 0.8rem; font-weight: 800; color: var(--primary-red);">BOM</div>
             <div>
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <h3 class="panel-title" style="font-size: 1.15rem;">Itemized Bill of Materials & Detailed Unit Price Analysis (DUPA)</h3>
@@ -1487,16 +1479,6 @@
         <div class="scope-breakdown-card">
             <div class="scope-breakdown-header">
                 <div class="scope-breakdown-title-wrap">
-                    <div class="scope-breakdown-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="8" y1="6" x2="21" y2="6"></line>
-                            <line x1="8" y1="12" x2="21" y2="12"></line>
-                            <line x1="8" y1="18" x2="21" y2="18"></line>
-                            <circle cx="4" cy="6" r="1.5" fill="currentColor"></circle>
-                            <circle cx="4" cy="12" r="1.5" fill="currentColor"></circle>
-                            <circle cx="4" cy="18" r="1.5" fill="currentColor"></circle>
-                        </svg>
-                    </div>
                     <div>
                         <h4 class="scope-breakdown-title">Scope Items Breakdown</h4>
                         <div class="scope-breakdown-subtitle">Filter by individual scope phase or view consolidated project breakdown</div>
@@ -1750,7 +1732,6 @@
 <div class="glass-panel" style="margin-bottom: 28px;">
     <div class="panel-header" style="margin-bottom: 16px;">
         <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: var(--primary-red-light); display: grid; place-items: center; font-size: 0.8rem; font-weight: 800; color: var(--primary-red);">TSK</div>
             <div>
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <h3 class="panel-title" style="font-size: 1.15rem;">Task Tracking & Milestone Execution Matrix</h3>
@@ -1846,7 +1827,6 @@
 <div class="glass-panel" style="margin-bottom: 28px;">
     <div class="panel-header" style="margin-bottom: 16px;">
         <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: rgba(16, 185, 129, 0.15); display: grid; place-items: center; font-size: 0.8rem; font-weight: 800; color: #059669;">PAY</div>
             <div>
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <h3 class="panel-title" style="font-size: 1.15rem;">Project Billing, Financial Payments & Official Receipts (OR)</h3>
