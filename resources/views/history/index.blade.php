@@ -66,9 +66,6 @@
 <div class="glass-panel" style="border: 1px solid rgba(56, 189, 248, 0.25); margin-bottom: 28px;">
     <div class="panel-header" style="margin-bottom: 16px;">
         <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: rgba(56, 189, 248, 0.2); display: grid; place-items: center; font-size: 0.75rem; font-weight: 800; color: #38bdf8;">
-                HIST
-            </div>
             <div>
                 <h3 class="panel-title" style="font-size: 1.15rem;">Historical Workforce & Resource Mobilization Archive</h3>
                 <span style="font-size: 0.85rem; color: var(--text-muted);">
@@ -151,9 +148,6 @@
 <div class="glass-panel" style="border: 1px solid rgba(16, 185, 129, 0.35); background: linear-gradient(135deg, rgba(16, 185, 129, 0.04) 0%, rgba(56, 189, 248, 0.02) 100%); margin-bottom: 28px;">
     <div class="panel-header" style="margin-bottom: 16px;">
         <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); display: grid; place-items: center; font-size: 0.8rem; font-weight: 800; color: #10b981;">
-                INV
-            </div>
             <div>
                 <h3 class="panel-title" style="font-size: 1.15rem; color: #10b981;">Completed Projects Material Recovery & Inventory Reconciliation</h3>
                 <span style="font-size: 0.85rem; color: var(--text-muted);">

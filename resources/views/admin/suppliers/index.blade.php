@@ -12,9 +12,6 @@
     <div class="supplier-kpi-card" style="--card-accent: linear-gradient(90deg, #38bdf8, #0284c7);">
         <div class="supplier-kpi-header">
             <span class="supplier-kpi-label">Active Suppliers</span>
-            <div class="supplier-kpi-icon" style="background: rgba(56, 189, 248, 0.12); color: #38bdf8; border-color: rgba(56, 189, 248, 0.25);">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
-            </div>
         </div>
         <div class="supplier-kpi-val" style="color: #38bdf8;">{{ number_format($totalSuppliers) }}</div>
         <div class="supplier-kpi-sub">3 Verified Trade Partners</div>
@@ -24,9 +21,6 @@
     <div class="supplier-kpi-card" style="--card-accent: linear-gradient(90deg, #10b981, #059669);">
         <div class="supplier-kpi-header">
             <span class="supplier-kpi-label">Available Materials</span>
-            <div class="supplier-kpi-icon" style="background: rgba(16, 185, 129, 0.12); color: #10b981; border-color: rgba(16, 185, 129, 0.25);">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
-            </div>
         </div>
         <div class="supplier-kpi-val" style="color: #10b981;">{{ number_format($totalAvailableMaterials) }}</div>
         <div class="supplier-kpi-sub">Ready for PO Generation</div>
@@ -36,9 +30,6 @@
     <div class="supplier-kpi-card" style="--card-accent: linear-gradient(90deg, #f59e0b, #d97706);">
         <div class="supplier-kpi-header">
             <span class="supplier-kpi-label">Pending Orders</span>
-            <div class="supplier-kpi-icon" style="background: rgba(245, 158, 11, 0.12); color: #f59e0b; border-color: rgba(245, 158, 11, 0.25);">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-            </div>
         </div>
         <div class="supplier-kpi-val" style="color: #f59e0b;">{{ number_format($pendingOrders) }}</div>
         <div class="supplier-kpi-sub">Supplier confirmation pending</div>
@@ -48,9 +39,6 @@
     <div class="supplier-kpi-card" style="--card-accent: linear-gradient(90deg, #38bdf8, #818cf8);">
         <div class="supplier-kpi-header">
             <span class="supplier-kpi-label">Active Orders</span>
-            <div class="supplier-kpi-icon" style="background: rgba(56, 189, 248, 0.12); color: #38bdf8; border-color: rgba(56, 189, 248, 0.25);">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-            </div>
         </div>
         <div class="supplier-kpi-val" style="color: #38bdf8;">{{ number_format($activeOrders) }}</div>
         <div class="supplier-kpi-sub">In fabrication & transit</div>
@@ -60,9 +48,6 @@
     <div class="supplier-kpi-card" style="--card-accent: linear-gradient(90deg, #22c55e, #16a34a);">
         <div class="supplier-kpi-header">
             <span class="supplier-kpi-label">Completed Orders</span>
-            <div class="supplier-kpi-icon" style="background: rgba(34, 197, 94, 0.12); color: #22c55e; border-color: rgba(34, 197, 94, 0.25);">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-            </div>
         </div>
         <div class="supplier-kpi-val" style="color: #22c55e;">{{ number_format($completedOrders) }}</div>
         <div class="supplier-kpi-sub">Successfully fulfilled</div>
@@ -72,9 +57,6 @@
     <div class="supplier-kpi-card" style="--card-accent: linear-gradient(90deg, #818cf8, #6366f1);">
         <div class="supplier-kpi-header">
             <span class="supplier-kpi-label">Fulfilled Volume</span>
-            <div class="supplier-kpi-icon" style="background: rgba(129, 140, 248, 0.12); color: #818cf8; border-color: rgba(129, 140, 248, 0.25);">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-            </div>
         </div>
         <div class="supplier-kpi-val" style="color: #818cf8; font-size: 1.35rem;">PHP {{ number_format($totalProcurementCost, 0) }}</div>
         <div class="supplier-kpi-sub">Delivered expenditure</div>

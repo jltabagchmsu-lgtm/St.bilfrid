@@ -80,9 +80,6 @@
         <div class="supplier-kpi-card" style="--card-accent: linear-gradient(90deg, #38bdf8, #0284c7);">
             <div class="supplier-kpi-header">
                 <span class="supplier-kpi-label">Warehouse Stock</span>
-                <div class="supplier-kpi-icon" style="background: rgba(56, 189, 248, 0.12); color: #0284c7; border-color: rgba(56, 189, 248, 0.25);">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="3" x2="12" y2="21"></line><line x1="3" y1="12" x2="21" y2="12"></line></svg>
-                </div>
             </div>
             <div class="supplier-kpi-val" style="color: #0284c7;">
                 {{ number_format($totalWarehouseStockUnits) }}
@@ -97,9 +94,6 @@
         <div class="supplier-kpi-card" style="--card-accent: linear-gradient(90deg, #8b5cf6, #6d28d9);">
             <div class="supplier-kpi-header">
                 <span class="supplier-kpi-label">Allocated to Projects</span>
-                <div class="supplier-kpi-icon" style="background: rgba(139, 92, 246, 0.12); color: #7c3aed; border-color: rgba(139, 92, 246, 0.25);">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                </div>
             </div>
             <div class="supplier-kpi-val" style="color: #7c3aed;">
                 {{ number_format($totalAllocatedUnits) }}
@@ -114,9 +108,6 @@
         <div class="supplier-kpi-card" style="--card-accent: linear-gradient(90deg, #f59e0b, #d97706);">
             <div class="supplier-kpi-header">
                 <span class="supplier-kpi-label">Installed / Fitted</span>
-                <div class="supplier-kpi-icon" style="background: rgba(245, 158, 11, 0.12); color: #d97706; border-color: rgba(245, 158, 11, 0.25);">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                </div>
             </div>
             <div class="supplier-kpi-val" style="color: #d97706;">
                 {{ number_format($totalUsedUnits) }}
@@ -131,9 +122,6 @@
         <div class="supplier-kpi-card" style="--card-accent: linear-gradient(90deg, #10b981, #059669);">
             <div class="supplier-kpi-header">
                 <span class="supplier-kpi-label">Remaining Site Balance</span>
-                <div class="supplier-kpi-icon" style="background: rgba(16, 185, 129, 0.12); color: #059669; border-color: rgba(16, 185, 129, 0.25);">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
-                </div>
             </div>
             <div class="supplier-kpi-val" style="color: #059669;">
                 {{ number_format($totalRemainingOnSite) }}

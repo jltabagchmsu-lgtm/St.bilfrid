@@ -74,9 +74,6 @@
 <!-- Procurement-Governed Inventory Control Briefing Banner -->
 <div style="background: #fafbfc; border: 1px solid var(--border-color); border-left: 4px solid var(--primary-red); border-radius: 12px; padding: 16px 20px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
     <div style="display: flex; align-items: center; gap: 14px;">
-        <div style="width: 40px; height: 40px; border-radius: 10px; background: #fef2f2; display: flex; align-items: center; justify-content: center; color: var(--primary-red); flex-shrink: 0; border: 1px solid rgba(220, 38, 38, 0.2);">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-        </div>
         <div>
             <h4 style="font-size: 0.95rem; font-weight: 800; color: #000000; margin-bottom: 2px;">Procurement-Governed Inventory System</h4>
             <p style="font-size: 0.8rem; color: #000000; margin: 0;">Warehouse inventory is replenished exclusively through verified outside Trade Suppliers (Mils Glass, Colorsteel, Titan Structural). In-stock quantities automatically increment upon PO delivery receipts and cannot be manually overridden.</p>
