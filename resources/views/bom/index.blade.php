@@ -52,11 +52,325 @@
         font-family: var(--font-mono);
         font-variant-numeric: tabular-nums;
     }
+
+    /* Modern Segmented Navigation Bar */
+    .bom-nav-segmented-card {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 6px;
+        margin-bottom: 24px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    }
+    .bom-nav-segmented-list {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+    .bom-nav-tab-item {
+        appearance: none;
+        -webkit-appearance: none;
+        outline: none;
+        border: 1.5px solid transparent;
+        background: transparent;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 10px 18px;
+        border-radius: 10px;
+        color: #64748b;
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        white-space: nowrap;
+        user-select: none;
+        text-decoration: none;
+        flex: 1 1 240px;
+        min-height: 46px;
+    }
+    .bom-nav-tab-item:hover {
+        color: #0f172a;
+        background: rgba(255, 255, 255, 0.7);
+        border-color: rgba(226, 232, 240, 0.9);
+        transform: translateY(-1px);
+    }
+    .bom-nav-tab-item.active {
+        background: #ffffff !important;
+        color: #0f172a !important;
+        font-weight: 800 !important;
+        border-color: #cbd5e1 !important;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+        transform: translateY(-1px);
+    }
+    .bom-nav-tab-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        background: rgba(100, 116, 139, 0.08);
+        color: #64748b;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+    }
+    .bom-nav-tab-item.active .bom-nav-tab-icon.icon-master {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+    .bom-nav-tab-item.active .bom-nav-tab-icon.icon-scope {
+        background: #e0f2fe;
+        color: #0284c7;
+    }
+    .bom-nav-tab-item.active .bom-nav-tab-icon.icon-site {
+        background: #d1fae5;
+        color: #059669;
+    }
+    .bom-nav-tab-label {
+        letter-spacing: -0.01em;
+    }
+    .bom-nav-tab-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2px 8px;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-family: var(--font-mono);
+        font-weight: 700;
+        background: #e2e8f0;
+        color: #475569;
+        letter-spacing: 0.02em;
+        transition: all 0.2s ease;
+    }
+    .bom-nav-tab-item.active .bom-nav-tab-badge.badge-master {
+        background: #fef2f2 !important;
+        color: #dc2626 !important;
+        border: 1px solid rgba(220, 38, 38, 0.2);
+    }
+    .bom-nav-tab-item.active .bom-nav-tab-badge.badge-scope {
+        background: #f0f9ff !important;
+        color: #0284c7 !important;
+        border: 1px solid rgba(2, 132, 199, 0.2);
+    }
+    .bom-nav-tab-item.active .bom-nav-tab-badge.badge-site {
+        background: #ecfdf5 !important;
+        color: #059669 !important;
+        border: 1px solid rgba(5, 150, 105, 0.2);
+    }
+
+    /* Scope Items Breakdown Modern Container & Chip Grid */
+    .scope-breakdown-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 18px 20px;
+        margin-bottom: 24px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03), 0 4px 12px rgba(0, 0, 0, 0.02);
+    }
+    .scope-breakdown-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 14px;
+        margin-bottom: 16px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid #f1f5f9;
+    }
+    .scope-breakdown-title-wrap {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+    .scope-breakdown-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        color: #2563eb;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    .scope-breakdown-title {
+        font-size: 0.95rem;
+        font-weight: 800;
+        color: #0f172a;
+        letter-spacing: -0.01em;
+        margin: 0;
+    }
+    .scope-breakdown-subtitle {
+        font-size: 0.775rem;
+        color: #64748b;
+        margin-top: 1px;
+    }
+    .scope-breakdown-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 3px 9px;
+        border-radius: 9999px;
+        background: #f1f5f9;
+        color: #475569;
+        font-size: 0.725rem;
+        font-weight: 700;
+        font-family: var(--font-mono);
+    }
+    .scope-breakdown-total-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 14px;
+        background: #f0fdf4;
+        border: 1px solid #86efac;
+        border-radius: 10px;
+    }
+    .total-pill-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #15803d;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+    }
+    .total-pill-amount {
+        font-size: 0.95rem;
+        font-weight: 800;
+        color: #166534;
+        font-family: var(--font-mono);
+    }
+    .scope-matrix-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: stretch;
+    }
+    .scope-chip-card {
+        appearance: none;
+        -webkit-appearance: none;
+        outline: none;
+        border: 1.5px solid #e2e8f0;
+        background: #f8fafc;
+        border-radius: 10px;
+        padding: 8px 12px;
+        min-height: 42px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        user-select: none;
+        text-decoration: none;
+        flex: 0 1 auto;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    }
+    .scope-chip-card:hover {
+        background: #ffffff;
+        border-color: #cbd5e1;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06);
+    }
+    .scope-chip-card.active {
+        background: #ffffff !important;
+        border-color: #dc2626 !important;
+        box-shadow: 0 4px 14px rgba(220, 38, 38, 0.16), 0 1px 3px rgba(220, 38, 38, 0.08) !important;
+        transform: translateY(-1px);
+    }
+    .scope-chip-left {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        overflow: hidden;
+    }
+    .scope-chip-tag, .scope-chip-num {
+        font-family: var(--font-mono);
+        font-size: 0.725rem;
+        font-weight: 800;
+        padding: 4px 8px;
+        border-radius: 6px;
+        background: #e2e8f0;
+        color: #334155;
+        flex-shrink: 0;
+        letter-spacing: 0.02em;
+        transition: all 0.2s ease;
+    }
+    .scope-chip-tag.tag-all {
+        background: #e0f2fe;
+        color: #0284c7;
+    }
+    .scope-chip-card.active .scope-chip-tag,
+    .scope-chip-card.active .scope-chip-num {
+        background: #dc2626 !important;
+        color: #ffffff !important;
+    }
+    .scope-chip-name {
+        font-size: 0.825rem;
+        font-weight: 600;
+        color: #1e293b;
+        max-width: 220px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        letter-spacing: -0.01em;
+    }
+    .scope-chip-card.active .scope-chip-name {
+        font-weight: 700;
+        color: #0f172a;
+    }
+    .scope-chip-metric, .scope-chip-cost {
+        font-family: var(--font-mono);
+        font-size: 0.775rem;
+        font-weight: 700;
+        padding: 3px 8px;
+        border-radius: 6px;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        color: #047857;
+        flex-shrink: 0;
+        transition: all 0.2s ease;
+    }
+    .scope-chip-metric.metric-count {
+        color: #475569;
+    }
+    .scope-chip-card.active .scope-chip-metric,
+    .scope-chip-card.active .scope-chip-cost {
+        background: #fef2f2 !important;
+        border-color: rgba(220, 38, 38, 0.3) !important;
+        color: #dc2626 !important;
+    }
+
     .cat-pill {
+        appearance: none;
+        -webkit-appearance: none;
+        outline: none;
+        border: 1px solid var(--border-color);
+        background: #f8fafc;
+        color: var(--text-secondary);
+        padding: 6px 14px;
+        font-size: 0.775rem;
+        font-weight: 600;
+        border-radius: 20px;
+        cursor: pointer;
         transition: all 0.2s ease;
     }
     .cat-pill:hover {
+        background: #ffffff;
+        border-color: #cbd5e1;
         transform: translateY(-1px);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+    .cat-pill.active {
+        background: #fef2f2 !important;
+        border-color: rgba(220, 38, 38, 0.3) !important;
+        color: var(--primary-red) !important;
+        font-weight: 700 !important;
+        box-shadow: 0 2px 8px rgba(220, 38, 38, 0.12) !important;
     }
 </style>
 
@@ -133,24 +447,42 @@
 @endif
 
 <!-- ====================================================
-     3-TAB NAVIGATION BAR FOR BILL OF MATERIALS (NN/g Standard Tabs)
+     3-TAB NAVIGATION BAR FOR BILL OF MATERIALS (Segmented Control)
      ==================================================== -->
-<div class="nng-tabs-container" style="margin-bottom: 24px;">
-    <div class="nng-tabs-list">
-        <button type="button" id="tabBtnMaster" class="nng-tab-item active" onclick="switchBomTab('master')">
-            <span class="discipline-dot" style="background: var(--primary-red);"></span>
-            <span>Master Consolidated Materials</span>
-            <span class="nng-tab-badge">{{ $masterMaterialsDistinctCount }}</span>
+<div class="bom-nav-segmented-card">
+    <div class="bom-nav-segmented-list">
+        <button type="button" id="tabBtnMaster" class="bom-nav-tab-item active" onclick="switchBomTab('master')">
+            <span class="bom-nav-tab-icon icon-master">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                    <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+                    <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+                </svg>
+            </span>
+            <span class="bom-nav-tab-label">Master Consolidated Materials</span>
+            <span class="bom-nav-tab-badge badge-master">{{ $masterMaterialsDistinctCount }}</span>
         </button>
-        <button type="button" id="tabBtnScope" class="nng-tab-item" onclick="switchBomTab('scope')">
-            <span class="discipline-dot" style="background: #0284c7;"></span>
-            <span>Itemized Scope Breakdown (DUPA)</span>
-            <span class="nng-tab-badge">{{ $selectedProject ? $selectedProject->scopeItems->count() : 0 }}</span>
+        <button type="button" id="tabBtnScope" class="bom-nav-tab-item" onclick="switchBomTab('scope')">
+            <span class="bom-nav-tab-icon icon-scope">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                    <polyline points="2 17 12 22 22 17"></polyline>
+                    <polyline points="2 12 12 17 22 12"></polyline>
+                </svg>
+            </span>
+            <span class="bom-nav-tab-label">Itemized Scope Breakdown (DUPA)</span>
+            <span class="bom-nav-tab-badge badge-scope">{{ $selectedProject ? $selectedProject->scopeItems->count() : 0 }}</span>
         </button>
-        <button type="button" id="tabBtnSite" class="nng-tab-item" onclick="switchBomTab('site')">
-            <span class="discipline-dot" style="background: #059669;"></span>
-            <span>Site Stock Allocations & Usage</span>
-            <span class="nng-tab-badge">{{ $projectMaterials->count() }}</span>
+        <button type="button" id="tabBtnSite" class="bom-nav-tab-item" onclick="switchBomTab('site')">
+            <span class="bom-nav-tab-icon icon-site">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                </svg>
+            </span>
+            <span class="bom-nav-tab-label">Site Stock Allocations & Usage</span>
+            <span class="bom-nav-tab-badge badge-site">{{ $projectMaterials->count() }}</span>
         </button>
     </div>
 </div>
@@ -415,19 +747,29 @@
 
     @if($selectedProject && $selectedProject->scopeItems->count() > 0)
         <!-- All Scope Items / DUPA Scope Chips Matrix (Naturally Wrapping Multi-Row Grid) -->
-        <div class="scope-matrix-container">
-            <div class="scope-matrix-header">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <span style="font-size: 0.775rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.04em;">
-                        Scope Items Breakdown
-                    </span>
-                    <span class="discipline-count-badge" style="background: #f1f5f9; color: #475569;">{{ $selectedProject->scopeItems->count() }} Items</span>
+        <div class="scope-breakdown-card">
+            <div class="scope-breakdown-header">
+                <div class="scope-breakdown-title-wrap">
+                    <div class="scope-breakdown-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="8" y1="6" x2="21" y2="6"></line>
+                            <line x1="8" y1="12" x2="21" y2="12"></line>
+                            <line x1="8" y1="18" x2="21" y2="18"></line>
+                            <circle cx="4" cy="6" r="1.5" fill="currentColor"></circle>
+                            <circle cx="4" cy="12" r="1.5" fill="currentColor"></circle>
+                            <circle cx="4" cy="18" r="1.5" fill="currentColor"></circle>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4 class="scope-breakdown-title">Scope Items Breakdown</h4>
+                        <div class="scope-breakdown-subtitle">Filter by individual scope phase or view consolidated project breakdown</div>
+                    </div>
+                    <span class="scope-breakdown-badge">{{ $selectedProject->scopeItems->count() }} {{ \Illuminate\Support\Str::plural('Item', $selectedProject->scopeItems->count()) }}</span>
                 </div>
 
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <span style="font-size: 0.75rem; color: #64748b; font-weight: 600;">
-                        Total DUPA Cost: <strong style="font-family: var(--font-mono); color: #047857; font-weight: 700;">₱{{ number_format($scopeGrandTotal, 2) }}</strong>
-                    </span>
+                <div class="scope-breakdown-total-pill">
+                    <span class="total-pill-label">Total DUPA Cost:</span>
+                    <span class="total-pill-amount col-num">₱{{ number_format($scopeGrandTotal, 2) }}</span>
                 </div>
             </div>
 
@@ -435,20 +777,20 @@
                 <!-- All Scope Items Chip -->
                 <button type="button" class="scope-chip-card active" onclick="switchBomScopeItemTab('all', this)" id="bomDupaTabBtn_all">
                     <div class="scope-chip-left">
-                        <span class="scope-chip-num">ALL</span>
+                        <span class="scope-chip-tag tag-all">ALL</span>
                         <span class="scope-chip-name">All Scope Items</span>
                     </div>
-                    <span class="scope-chip-cost">{{ $selectedProject->scopeItems->count() }} Items</span>
+                    <span class="scope-chip-metric metric-count">{{ $selectedProject->scopeItems->count() }} Items</span>
                 </button>
 
                 <!-- Individual Scope Items Chips -->
                 @foreach($selectedProject->scopeItems as $item)
                     <button type="button" class="scope-chip-card" onclick="switchBomScopeItemTab({{ $item->id }}, this)" id="bomDupaTabBtn_{{ $item->id }}" data-item-id="{{ $item->id }}">
                         <div class="scope-chip-left">
-                            <span class="scope-chip-num">Item {{ $item->item_number }}</span>
+                            <span class="scope-chip-tag tag-item">Item {{ $item->item_number }}</span>
                             <span class="scope-chip-name" title="{{ $item->item_name }}">{{ Str::title($item->item_name) }}</span>
                         </div>
-                        <span class="scope-chip-cost">₱{{ number_format($item->total_item_cost, 0) }}</span>
+                        <span class="scope-chip-metric metric-price">₱{{ number_format($item->total_item_cost, 0) }}</span>
                     </button>
                 @endforeach
             </div>

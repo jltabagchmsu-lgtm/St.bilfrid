@@ -1914,60 +1914,96 @@ select option {
 }
 
 /* ====================================================
-   NN/g Standard Tab Navigation & Form Controls
+   Segmented Tab Navigation & Form Controls
    ==================================================== */
-.section-filter-toolbar, .nng-tabs-container {
-    background: #ffffff;
-    border-bottom: 2px solid #e2e8f0;
-    margin-bottom: 22px;
-    padding: 0 4px;
+.section-filter-toolbar, .nng-tabs-container, .bom-nav-segmented-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 6px;
+    margin-bottom: 24px;
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
+    align-items: center;
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 }
 
-.discipline-tabs-bar, .trade-tabs-nav, .nng-tabs-list {
+.discipline-tabs-bar, .trade-tabs-nav, .nng-tabs-list, .bom-nav-segmented-list {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 6px;
     flex-wrap: wrap;
-    margin-bottom: -2px; /* Locks active underline directly over baseline */
+    flex: 1;
 }
 
-.discipline-tab-btn, .trade-nav-tab, .btn-tab, .nng-tab-item {
+.discipline-tab-btn, .trade-nav-tab, .btn-tab, .nng-tab-item, .bom-nav-tab-item {
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    border: 1.5px solid transparent;
+    background: transparent;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 10px 12px 14px 12px;
-    background: transparent;
-    border: none;
-    border-bottom: 3.5px solid transparent;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border-radius: 10px;
     color: #64748b;
     font-size: 0.875rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.15s ease-in-out;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     white-space: nowrap;
     user-select: none;
     text-decoration: none;
-    border-radius: 0;
-    box-shadow: none;
+    flex: 1 1 auto;
+    min-height: 44px;
 }
 
-.discipline-tab-btn:hover, .trade-nav-tab:hover, .btn-tab:hover, .nng-tab-item:hover {
+.discipline-tab-btn:hover, .trade-nav-tab:hover, .btn-tab:hover, .nng-tab-item:hover, .bom-nav-tab-item:hover {
     color: #0f172a;
-    border-bottom-color: #cbd5e1;
-    background: transparent;
+    background: rgba(255, 255, 255, 0.7);
+    border-color: rgba(226, 232, 240, 0.9);
+    transform: translateY(-1px);
 }
 
-.discipline-tab-btn.active, .trade-nav-tab.active, .btn-tab.active, .nng-tab-item.active {
-    background: transparent !important;
+.discipline-tab-btn.active, .trade-nav-tab.active, .btn-tab.active, .nng-tab-item.active, .bom-nav-tab-item.active {
+    background: #ffffff !important;
     color: #0f172a !important;
     font-weight: 800 !important;
-    border-bottom: 3.5px solid var(--primary-red) !important;
-    box-shadow: none !important;
+    border-color: #cbd5e1 !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+    transform: translateY(-1px);
+}
+
+.bom-nav-tab-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: rgba(100, 116, 139, 0.08);
+    color: #64748b;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.bom-nav-tab-item.active .bom-nav-tab-icon.icon-master {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.bom-nav-tab-item.active .bom-nav-tab-icon.icon-scope {
+    background: #e0f2fe;
+    color: #0284c7;
+}
+
+.bom-nav-tab-item.active .bom-nav-tab-icon.icon-site {
+    background: #d1fae5;
+    color: #059669;
 }
 
 .discipline-dot, .tab-dot, .nng-tab-dot {
@@ -1978,29 +2014,41 @@ select option {
     flex-shrink: 0;
 }
 
-.discipline-count-badge, .tab-count-pill, .nng-tab-badge {
+.discipline-count-badge, .tab-count-pill, .nng-tab-badge, .bom-nav-tab-badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 2px 7px;
+    padding: 2px 8px;
     border-radius: 9999px;
     font-size: 0.75rem;
     font-family: var(--font-mono);
     font-weight: 700;
-    background: #f1f5f9;
-    color: #64748b;
-    margin-left: 2px;
-    transition: all 0.15s ease;
+    background: #e2e8f0;
+    color: #475569;
+    letter-spacing: 0.02em;
+    transition: all 0.2s ease;
 }
 
 .discipline-tab-btn.active .discipline-count-badge,
 .trade-nav-tab.active .tab-count-pill,
 .btn-tab.active .tab-count-pill,
 .nng-tab-item.active .nng-tab-badge,
-.trade-nav-tab.active span[id^="tabCount"],
-.btn-tab.active span[id^="tabCount"] {
-    background: #fee2e2 !important;
+.bom-nav-tab-item.active .bom-nav-tab-badge.badge-master {
+    background: #fef2f2 !important;
     color: #dc2626 !important;
+    border: 1px solid rgba(220, 38, 38, 0.2);
+}
+
+.bom-nav-tab-item.active .bom-nav-tab-badge.badge-scope {
+    background: #f0f9ff !important;
+    color: #0284c7 !important;
+    border: 1px solid rgba(2, 132, 199, 0.2);
+}
+
+.bom-nav-tab-item.active .bom-nav-tab-badge.badge-site {
+    background: #ecfdf5 !important;
+    color: #059669 !important;
+    border: 1px solid rgba(5, 150, 105, 0.2);
 }
 
 /* Toolbar Form Controls Right Side */
@@ -2059,127 +2107,95 @@ select option {
 /* ====================================================
    All Scope Items Matrix / Multi-Row Wrapped Chips Grid
    ==================================================== */
-.scope-matrix-container {
+.scope-breakdown-card, .scope-matrix-container {
     background: #ffffff;
     border: 1px solid #e2e8f0;
-    border-radius: 12px;
+    border-radius: 14px;
     padding: 18px 20px;
     margin-bottom: 24px;
-    box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.03);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03), 0 4px 12px rgba(0, 0, 0, 0.02);
 }
 
-.scope-matrix-header {
+.scope-breakdown-header, .scope-matrix-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: 14px;
-    padding-bottom: 12px;
+    gap: 14px;
+    margin-bottom: 16px;
+    padding-bottom: 14px;
     border-bottom: 1px solid #f1f5f9;
 }
 
-.scope-matrix-grid, .dupa-tabs-container {
+.scope-breakdown-title-wrap {
     display: flex;
+    align-items: center;
+    gap: 12px;
     flex-wrap: wrap;
-    gap: 10px;
-    align-items: stretch;
 }
 
-.scope-chip-card, .dupa-tab-btn {
+.scope-breakdown-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #2563eb;
     display: inline-flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    padding: 8px 14px;
-    min-height: 42px;
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 10px;
-    color: #334155;
-    font-size: 0.8125rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    white-space: nowrap;
-    user-select: none;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
-    flex: 0 1 auto;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
-.scope-chip-card:hover, .dupa-tab-btn:hover {
-    background: #ffffff;
-    border-color: #cbd5e1;
+.scope-breakdown-title {
+    font-size: 0.95rem;
+    font-weight: 800;
     color: #0f172a;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px -4px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+    letter-spacing: -0.01em;
+    margin: 0;
 }
 
-.scope-chip-card.active, .dupa-tab-btn.active {
-    background: #ffffff !important;
-    border: 1.5px solid var(--primary-red) !important;
-    color: #0f172a !important;
-    font-weight: 700 !important;
-    box-shadow: 0 4px 16px -2px rgba(220, 38, 38, 0.2), 0 2px 4px -1px rgba(220, 38, 38, 0.1) !important;
-    transform: translateY(-1px);
+.scope-breakdown-subtitle {
+    font-size: 0.775rem;
+    color: #64748b;
+    margin-top: 1px;
 }
 
-.scope-chip-left {
+.scope-breakdown-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 9px;
+    border-radius: 9999px;
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 0.725rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+}
+
+.scope-breakdown-total-pill {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    overflow: hidden;
+    padding: 6px 14px;
+    background: #f0fdf4;
+    border: 1px solid #86efac;
+    border-radius: 10px;
 }
 
-.scope-chip-num, .dupa-item-num-chip {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    font-weight: 800;
-    padding: 3px 8px;
-    border-radius: 6px;
-    background: #f1f5f9;
-    color: #475569;
-    border: 1px solid #e2e8f0;
-    flex-shrink: 0;
-    letter-spacing: 0.02em;
-    transition: all 0.2s ease;
-}
-
-.scope-chip-card.active .scope-chip-num, .dupa-tab-btn.active .dupa-item-num-chip {
-    background: var(--primary-red) !important;
-    color: #ffffff !important;
-    border-color: var(--primary-red) !important;
-}
-
-.scope-chip-name, .dupa-tab-title {
-    font-size: 0.8125rem;
-    font-weight: 600;
-    color: #1e293b;
-    max-width: 200px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    letter-spacing: -0.01em;
-}
-
-.scope-chip-cost, .dupa-tab-cost {
-    font-family: var(--font-mono);
+.total-pill-label {
     font-size: 0.75rem;
     font-weight: 700;
-    padding: 3px 9px;
-    border-radius: 6px;
-    background: #ecfdf5;
-    color: #047857;
-    border: 1px solid #a7f3d0;
-    flex-shrink: 0;
-    box-shadow: 0 1px 2px rgba(4, 120, 87, 0.04);
-    transition: all 0.2s ease;
+    color: #15803d;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
 }
 
-.scope-chip-card.active .scope-chip-cost, .dupa-tab-btn.active .dupa-tab-cost {
-    background: #fef2f2 !important;
-    color: #dc2626 !important;
-    border-color: #fecaca !important;
+.total-pill-amount {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #166534;
+    font-family: var(--font-mono);
 }
 
 /* Print Friendly Styles */
@@ -2250,5 +2266,3 @@ select option {
         grid-template-columns: 1fr;
     }
 }
-
-
