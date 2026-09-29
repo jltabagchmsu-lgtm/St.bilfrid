@@ -3,15 +3,6 @@
 @section('title', 'Executive Dashboard & Sales Command - St. Bilfrid Development Corporation')
 @section('page_title', 'Executive Dashboard')
 
-@section('top_actions')
-    <a href="/projects" class="btn-primary" style="font-size: 0.85rem;">
-        <span>+</span> Add / Manage Projects
-    </a>
-    <a href="/estimation" class="btn-secondary" style="font-size: 0.85rem;">
-        + New Service Estimate
-    </a>
-@endsection
-
 @section('content')
 
 <!-- ====================================================
