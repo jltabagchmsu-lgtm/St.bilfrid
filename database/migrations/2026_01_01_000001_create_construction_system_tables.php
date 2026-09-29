@@ -19,13 +19,13 @@ return new class extends Migration
             $table->string('client_name');
             $table->string('location')->nullable();
             $table->enum('project_type', ['Commercial Construction', 'Residential Build', 'Industrial Complex', 'Renovation & Overhaul'])->default('Commercial Construction');
-            $table->decimal('land_area_sqm', 10, 2)->comment('Land area in square meters');
-            $table->decimal('floor_area_sqm', 10, 2)->comment('Floor area in square meters');
+            $table->decimal('land_area_sqm', 10, 2)->default(0.00)->comment('Land area in square meters');
+            $table->decimal('floor_area_sqm', 10, 2)->default(0.00)->comment('Floor area in square meters');
             $table->enum('status', ['pending_approval', 'approved', 'in_progress', 'completed', 'on_hold'])->default('in_progress');
             $table->decimal('contract_budget', 12, 2)->default(0.00);
             $table->decimal('spent_budget', 12, 2)->default(0.00);
-            $table->date('start_date');
-            $table->date('end_date');
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
             $table->date('actual_completion_date')->nullable();
             
             // Trade Work Progression (%)

@@ -84,6 +84,71 @@ class Project extends Model
         'deployed_safety_officers' => 'integer',
     ];
 
+    /**
+     * The "booted" method of the model.
+     */
+    protected static function booted()
+    {
+        static::creating(function ($project) {
+            if (empty($project->project_code)) {
+                $project->project_code = 'PRJ-' . date('Y') . '-' . strtoupper(substr(uniqid(), -4));
+            }
+            if (!isset($project->land_area_sqm) || $project->land_area_sqm === '' || $project->land_area_sqm === null) {
+                $project->land_area_sqm = 120.00;
+            }
+            if (!isset($project->floor_area_sqm) || $project->floor_area_sqm === '' || $project->floor_area_sqm === null) {
+                $project->floor_area_sqm = 80.00;
+            }
+            if (!isset($project->contract_budget) || $project->contract_budget === '' || $project->contract_budget === null) {
+                $project->contract_budget = 0.00;
+            }
+            if (!isset($project->spent_budget) || $project->spent_budget === '' || $project->spent_budget === null) {
+                $project->spent_budget = 0.00;
+            }
+            if (empty($project->start_date)) {
+                $project->start_date = now();
+            }
+            if (empty($project->end_date)) {
+                $project->end_date = now()->addMonths(6);
+            }
+            if (empty($project->status)) {
+                $project->status = 'in_progress';
+            }
+            if (empty($project->project_type)) {
+                $project->project_type = 'Residential Build';
+            }
+            if (empty($project->current_phase)) {
+                $project->current_phase = 'Phase 1: Mobilization & Earthworks';
+            }
+            $sw = (int) ($project->structural_weight ?? 0);
+            $ew = (int) ($project->electrical_weight ?? 0);
+            $pw = (int) ($project->piping_weight ?? 0);
+            $fw = (int) ($project->finishing_weight ?? 0);
+            if (($sw + $ew + $pw + $fw) <= 0) {
+                $project->structural_weight = 40;
+                $project->electrical_weight = 25;
+                $project->piping_weight = 20;
+                $project->finishing_weight = 15;
+            }
+        });
+
+        static::saved(function ($project) {
+            try {
+                \App\Services\DatabaseBackupService::createBackup();
+            } catch (\Throwable $e) {
+                // Ignore backup notice
+            }
+        });
+
+        static::deleted(function ($project) {
+            try {
+                \App\Services\DatabaseBackupService::createBackup();
+            } catch (\Throwable $e) {
+                // Ignore backup notice
+            }
+        });
+    }
+
     // Relationships
     public function personnel()
     {

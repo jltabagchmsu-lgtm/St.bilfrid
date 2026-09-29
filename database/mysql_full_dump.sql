@@ -1,35 +1,17 @@
-﻿-- MariaDB dump 10.19  Distrib 10.4.32-MariaDB, for Win64 (AMD64)
---
--- Host: localhost    Database: new_construction_firm
--- ------------------------------------------------------
--- Server version	10.4.32-MariaDB
+-- ========================================================
+-- St. Bilfrid Development Corporation - Master Database Backup
+-- Generated: 2026-09-29 15:00:46
+-- ========================================================
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+SET FOREIGN_KEY_CHECKS=0;
+SET SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO';
+START TRANSACTION;
+SET time_zone = '+08:00';
 
---
--- Current Database: `new_construction_firm`
---
-
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `new_construction_firm` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
-
+CREATE DATABASE IF NOT EXISTS `new_construction_firm` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE `new_construction_firm`;
 
---
--- Table structure for table `daily_material_usages`
---
-
 DROP TABLE IF EXISTS `daily_material_usages`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `daily_material_usages` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `project_id` bigint(20) unsigned NOT NULL,
@@ -49,25 +31,12 @@ CREATE TABLE `daily_material_usages` (
   CONSTRAINT `daily_material_usages_material_id_foreign` FOREIGN KEY (`material_id`) REFERENCES `materials` (`id`) ON DELETE CASCADE,
   CONSTRAINT `daily_material_usages_project_id_foreign` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE,
   CONSTRAINT `daily_material_usages_project_material_id_foreign` FOREIGN KEY (`project_material_id`) REFERENCES `project_materials` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `daily_material_usages`
---
-
-LOCK TABLES `daily_material_usages` WRITE;
-/*!40000 ALTER TABLE `daily_material_usages` DISABLE KEYS */;
-/*!40000 ALTER TABLE `daily_material_usages` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `inventory_logs`
---
+INSERT INTO `daily_material_usages` (`id`, `project_id`, `project_material_id`, `material_id`, `usage_date`, `quantity_used`, `activity_description`, `logged_by`, `notes`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 1, '2026-09-29', 50.00, 'Level 9 Shear Core Wall Grouting & Pouring', 'Engr. Elena Rostova', '50 bags used today. Remaining on-site stock is ready for tomorrow morning floor screeding.', '2026-09-29 14:56:40', '2026-09-29 14:56:40');
 
 DROP TABLE IF EXISTS `inventory_logs`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `inventory_logs` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `material_id` bigint(20) unsigned NOT NULL,
@@ -85,24 +54,11 @@ CREATE TABLE `inventory_logs` (
   CONSTRAINT `inventory_logs_material_id_foreign` FOREIGN KEY (`material_id`) REFERENCES `materials` (`id`) ON DELETE CASCADE,
   CONSTRAINT `inventory_logs_project_id_foreign` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `inventory_logs`
---
-
-LOCK TABLES `inventory_logs` WRITE;
-/*!40000 ALTER TABLE `inventory_logs` DISABLE KEYS */;
-/*!40000 ALTER TABLE `inventory_logs` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `materials`
---
+INSERT INTO `inventory_logs` (`id`, `material_id`, `project_id`, `transaction_type`, `quantity`, `unit_cost`, `reference_no`, `notes`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 'excess_return', 500, 225.00, 'RET-202604-001', 'Returned 500 bags of unused cement surplus from foundation slab phase.', '2026-09-29 14:56:40', '2026-09-29 14:56:40');
 
 DROP TABLE IF EXISTS `materials`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `materials` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `material_code` varchar(255) NOT NULL,
@@ -117,74 +73,84 @@ CREATE TABLE `materials` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `materials_material_code_unique` (`material_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `materials`
---
-
-LOCK TABLES `materials` WRITE;
-/*!40000 ALTER TABLE `materials` DISABLE KEYS */;
-/*!40000 ALTER TABLE `materials` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `migrations`
---
+INSERT INTO `materials` (`id`, `material_code`, `name`, `category`, `unit`, `unit_cost`, `stock_quantity`, `is_new_product`, `last_purchased_at`, `created_at`, `updated_at`) VALUES
+(1, 'MAT-CEM-01', 'Portland Cement (Type I)', 'Structural & Masonry', 'bags', 225.00, 15000, 0, NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(2, 'MAT-STEEL-16', '16mm Deformed Bar (Grade 60)', 'Structural & Masonry', 'pcs', 450.00, 8500, 0, NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(3, 'MAT-STEEL-12', '12mm Deformed Bar', 'Structural & Masonry', 'pcs', 310.00, 12000, 0, NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(4, 'MAT-STEEL-10', '10mm Deformed Bar', 'Structural & Masonry', 'pcs', 220.00, 18000, 0, NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(5, 'MAT-STEEL-08', '8mm Deformed Bar', 'Structural & Masonry', 'pcs', 120.00, 14000, 0, NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(6, 'MAT-AGG-SAND', 'Mixing Sand (Coarse / Fine)', 'Structural & Masonry', 'cu.m', 850.00, 2500, 0, NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(7, 'MAT-AGG-GRAV', '3/4 Crushed Gravel', 'Structural & Masonry', 'cu.m', 1410.00, 2000, 0, NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(8, 'MAT-CHB-04', '4" Concrete Hollow Block (CHB)', 'Structural & Masonry', 'pcs', 13.00, 35000, 0, NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(9, 'MAT-CHB-06', '6" Concrete Hollow Block (CHB)', 'Structural & Masonry', 'pcs', 16.00, 15000, 0, NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(10, 'MAT-ROOF-RIB', 'Rib-Type Pre-Painted Long Span Roofing (0.40mm)', 'Roofing & Metal Sheets', 'ln.m.', 410.00, 5000, 0, NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(11, 'MAT-ROOF-PUR2X4', 'C-Purlins 2" x 4" x 1.20mm Heavy Gauge', 'Roofing & Metal Sheets', 'pcs', 485.00, 1200, 0, NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(12, 'MAT-ROOF-PUR2X3', 'C-Purlins 2" x 3" x 1.00mm Structural', 'Roofing & Metal Sheets', 'pcs', 390.00, 1500, 0, NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(13, 'MAT-ROOF-FLASH', 'Pre-Painted Ridge Cap & Wall Flashing 8ft', 'Roofing & Metal Sheets', 'pcs', 340.00, 800, 0, NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(14, 'MAT-ROOF-GUTTER', 'Stainless Steel Spanish Box Gutter 8ft', 'Roofing & Metal Sheets', 'pcs', 580.00, 600, 0, NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(15, 'MAT-ROOF-TEK', '2-1/2" Tekscrew Self-Drilling for Metal Roofing', 'Roofing & Metal Sheets', 'boxes', 650.00, 300, 0, NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(16, 'MAT-ROOF-SEAL', 'Elastomeric Weatherproof Roof Sealant (1-Gallon)', 'Roofing & Metal Sheets', 'cans', 920.00, 250, 0, NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(17, 'MAT-ROOF-INSU', 'Double-Sided Aluminum Thermal Roof Insulation (50m)', 'Roofing & Metal Sheets', 'rolls', 2850.00, 120, 0, NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(18, 'MAT-DOOR-PNL90', 'Main Solid Mahogany Panel Door 0.90m x 2.10m', 'Windows & Doors', 'sets', 4500.00, 80, 0, NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(19, 'MAT-DOOR-FLSH80', 'Bedroom Solid Core Flush Door 0.80m x 2.10m', 'Windows & Doors', 'sets', 4200.00, 120, 0, NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(20, 'MAT-DOOR-FLSH70', 'Balcony/Service Flush Door 0.70m x 2.10m', 'Windows & Doors', 'sets', 3800.00, 110, 0, NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(21, 'MAT-DOOR-PVC60', 'Heavy-Duty PVC Door w/ Louver & Jamb 0.60m x 2.10m', 'Windows & Doors', 'sets', 1700.00, 150, 0, NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(22, 'MAT-DOOR-SLD150', '1.50m x 2.10m Sliding Patio Glass Door on Aluminum Frame', 'Windows & Doors', 'sets', 20000.00, 40, 0, NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(23, 'MAT-DOOR-JAMB2X4', 'Treated Solid Wood Door Jamb 2" x 4"', 'Windows & Doors', 'sets', 1300.00, 200, 0, NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(24, 'MAT-DOOR-LCKMAIN', 'Heavy-Duty Lever Entrance Lockset (Main Door)', 'Windows & Doors', 'sets', 3000.00, 140, 0, NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(25, 'MAT-DOOR-LCKBED', 'Cylindrical Bedroom Door Knob Lockset', 'Windows & Doors', 'sets', 1500.00, 250, 0, NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(26, 'MAT-DOOR-HNGE', 'Stainless Steel Ball Bearing Loosepin Hinges 3.5"x3.5"', 'Windows & Doors', 'pairs', 220.00, 600, 0, NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(27, 'MAT-WIN-SLD120', '1.20m x 1.20m Sliding Window 1/4" Glass on Aluminum Frame', 'Windows & Doors', 'units', 6300.00, 90, 0, NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(28, 'MAT-WIN-SLD200', '1.20m x 2.00m Sliding Window 1/4" Glass on Aluminum Frame', 'Windows & Doors', 'units', 10500.00, 45, 0, NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(29, 'MAT-WIN-SLD60', '0.60m x 0.90m Bathroom Frosted Sliding Window Aluminum Frame', 'Windows & Doors', 'units', 2360.00, 100, 0, NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(30, 'MAT-WIN-AWN180', '1.80m x 0.45m Awning Casement Window Aluminum Frame', 'Windows & Doors', 'units', 3540.00, 65, 0, NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(31, 'MAT-ELE-THW12', 'THW Copper Wire #12 (3.5mm²)', 'Electrical Works', 'boxes', 5000.00, 250, 0, NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(32, 'MAT-PIP-PVC04', '4" Sanitary PVC Pipe', 'Plumbing & Sanitary', 'pcs', 420.00, 3500, 0, NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40');
 
 DROP TABLE IF EXISTS `migrations`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `migrations` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `migration` varchar(255) NOT NULL,
   `batch` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `migrations`
---
-
-LOCK TABLES `migrations` WRITE;
-/*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
-INSERT INTO `migrations` VALUES (1,'2019_12_14_000001_create_personal_access_tokens_table',1),(2,'2026_01_01_000000_create_users_table',1),(3,'2026_01_01_000001_create_construction_system_tables',1),(4,'2026_01_01_000002_create_project_costs_table',1),(5,'2026_01_01_000003_add_workforce_deployment_to_projects_table',1),(6,'2026_01_01_000004_create_project_photos_table',1),(7,'2026_01_01_000005_add_receipts_and_excess_fields',1),(8,'2026_01_01_000006_add_loan_and_payment_first_financing_fields',1),(9,'2026_01_01_000007_create_project_scope_items_and_lines_table',1),(10,'2026_01_01_000008_create_daily_material_usages_and_transfers_table',1),(11,'2026_01_01_000009_enhance_project_tasks_table',1),(12,'2026_01_01_000010_add_timeline_fields_to_project_tasks_table',1),(13,'2026_01_01_000011_create_project_task_materials_table',1),(14,'2026_01_01_000012_add_role_to_users_table',1),(15,'2026_01_01_000013_create_supplier_management_tables',1),(16,'2026_09_05_083016_add_client_budget_and_estimated_cost_to_projects_table',1),(17,'2026_09_06_190000_create_supplier_order_messages_and_inquiries_table',1),(18,'2026_09_06_194000_add_is_synced_to_inventory_to_supplier_orders_table',1),(19,'2026_09_06_195500_add_new_product_flags_to_materials_table',1),(20,'2026_09_12_000001_add_unique_index_to_payments_official_receipt_no',1),(21,'2026_09_12_000002_add_license_expiry_fields_to_personnel_table',1),(22,'2026_09_21_000001_add_photo_proof_to_project_tasks_table',1),(23,'2026_09_23_000001_unify_material_category_names',1);
-/*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `password_reset_tokens`
---
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
+(1, '2019_12_14_000001_create_personal_access_tokens_table', 1),
+(2, '2026_01_01_000000_create_users_table', 1),
+(3, '2026_01_01_000001_create_construction_system_tables', 1),
+(4, '2026_01_01_000002_create_project_costs_table', 1),
+(5, '2026_01_01_000003_add_workforce_deployment_to_projects_table', 1),
+(6, '2026_01_01_000004_create_project_photos_table', 1),
+(7, '2026_01_01_000005_add_receipts_and_excess_fields', 1),
+(8, '2026_01_01_000006_add_loan_and_payment_first_financing_fields', 1),
+(9, '2026_01_01_000007_create_project_scope_items_and_lines_table', 1),
+(10, '2026_01_01_000008_create_daily_material_usages_and_transfers_table', 1),
+(11, '2026_01_01_000009_enhance_project_tasks_table', 1),
+(12, '2026_01_01_000010_add_timeline_fields_to_project_tasks_table', 1),
+(13, '2026_01_01_000011_create_project_task_materials_table', 1),
+(14, '2026_01_01_000012_add_role_to_users_table', 1),
+(15, '2026_01_01_000013_create_supplier_management_tables', 1),
+(16, '2026_09_05_083016_add_client_budget_and_estimated_cost_to_projects_table', 1),
+(17, '2026_09_06_190000_create_supplier_order_messages_and_inquiries_table', 1),
+(18, '2026_09_06_194000_add_is_synced_to_inventory_to_supplier_orders_table', 1),
+(19, '2026_09_06_195500_add_new_product_flags_to_materials_table', 1),
+(20, '2026_09_12_000001_add_unique_index_to_payments_official_receipt_no', 1),
+(21, '2026_09_12_000002_add_license_expiry_fields_to_personnel_table', 1),
+(22, '2026_09_21_000001_add_photo_proof_to_project_tasks_table', 1),
+(23, '2026_09_23_000001_unify_material_category_names', 1);
 
 DROP TABLE IF EXISTS `password_reset_tokens`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `password_reset_tokens` (
   `email` varchar(255) NOT NULL,
   `token` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `password_reset_tokens`
---
-
-LOCK TABLES `password_reset_tokens` WRITE;
-/*!40000 ALTER TABLE `password_reset_tokens` DISABLE KEYS */;
-/*!40000 ALTER TABLE `password_reset_tokens` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `payments`
---
 
 DROP TABLE IF EXISTS `payments`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `payments` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `project_id` bigint(20) unsigned NOT NULL,
@@ -214,25 +180,21 @@ CREATE TABLE `payments` (
   UNIQUE KEY `payments_official_receipt_no_unique` (`official_receipt_no`),
   KEY `payments_project_id_foreign` (`project_id`),
   CONSTRAINT `payments_project_id_foreign` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `payments`
---
-
-LOCK TABLES `payments` WRITE;
-/*!40000 ALTER TABLE `payments` DISABLE KEYS */;
-/*!40000 ALTER TABLE `payments` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `personal_access_tokens`
---
+INSERT INTO `payments` (`id`, `project_id`, `invoice_no`, `official_receipt_no`, `payer_name`, `amount`, `payment_date`, `payment_stage`, `payment_method`, `financing_type`, `financing_institution`, `loan_reference_no`, `disbursing_entity`, `drawdown_tranche`, `payment_first_cleared`, `construction_clearance_status`, `bank_reference`, `received_by`, `status`, `notes`, `receipt_file`, `created_at`, `updated_at`) VALUES
+(1, 1, 'INV-2026-001', 'OR-202601-8812', 'BDO Unibank (fbo Apex Global Holdings)', 13500000.00, '2026-01-20', 'Initial Mobilization & Substructure (Tranche 1)', 'Bank Wire (RTGS)', 'bank_loan', 'BDO Unibank', 'BDO-LOG-2026-8812', 'BDO Commercial Loan Disbursement Unit', 'Tranche 1: 30% Foundation & Substructure Release', 1, 'cleared_to_construct', 'MB-TXN-2026-99182301', 'Engr. Sophia Martinez, PMP', 'paid', 'Cleared downpayment per BDO Letter of Guaranty clause 4.1. Construction authorized.', 'proof_payment_deposit.svg', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(2, 1, 'INV-2026-002', 'OR-202605-9014', 'BDO Unibank (fbo Apex Global Holdings)', 13500000.00, '2026-05-10', 'Superstructure & Level 10 Concrete Frame (Tranche 2)', 'Bank Wire (RTGS)', 'bank_loan', 'BDO Unibank', 'BDO-LOG-2026-8812', 'BDO Commercial Loan Disbursement Unit', 'Tranche 2: 30% Superstructure Framing Release', 1, 'cleared_to_construct', 'BDO-WIRE-2026-8840192', 'Engr. Sophia Martinez, PMP', 'paid', 'Substructure inspection passed by BDO Appraiser. Funds cleared. Construction authorized.', 'proof_wire_transfer.svg', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(3, 2, 'INV-VR15-001', 'OR-202406-1501', 'MC HIRO Realty Corp. (Client Equity Downpayment)', 533418.62, '2024-06-10', '30% Mobilization & Substructure Downpayment', 'Bank Wire (RTGS)', 'client_equity', 'BDO Unibank', 'BDO-VR-2024-1501', 'MC HIRO Realty Corp.', 'Tranche 1: 30% Substructure & Foundation Release', 1, 'cleared_to_construct', 'BDO-TXN-VR15-101', 'Engr. Esabyl B. Mitra', 'paid', 'Equity downpayment cleared. Foundation excavation and footing construction authorized.', NULL, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(4, 2, 'INV-VR15-002', 'OR-202410-1502', 'BDO Unibank (fbo MC HIRO Realty Corp.)', 711224.83, '2024-10-15', '40% Superstructure Framing, Masonry & Roofing Milestone', 'Bank Wire (RTGS)', 'bank_loan', 'BDO Unibank', 'BDO-VR-2024-1501', 'BDO Commercial Loan Disbursement Unit', 'Tranche 2: 40% Superstructure & Enclosure Release', 1, 'cleared_to_construct', 'BDO-TXN-VR15-202', 'Engr. Esabyl B. Mitra', 'paid', 'Bank progress inspection passed. Beams, columns, masonry and roofing installation verified.', NULL, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(5, 2, 'INV-VR15-003', 'OR-202501-1503', 'BDO Unibank (fbo MC HIRO Realty Corp.)', 533418.63, '2025-01-07', '30% Final Finishes, Turnover & Retention Settlement', 'Bank Wire (RTGS)', 'bank_loan', 'BDO Unibank', 'BDO-VR-2024-1501', 'BDO Commercial Loan Disbursement Unit', 'Tranche 3: 30% Final Turnover & Retention Release', 1, 'cleared_to_construct', 'BDO-TXN-VR15-303', 'Engr. Esabyl B. Mitra', 'paid', 'Final client turnover and acceptance signed. Certificate of occupancy issued.', NULL, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(6, 3, 'INV-VR16-001', 'OR-202407-1601', 'Engr. Ignacio S. Lonzaga (Client Personal Equity)', 549484.14, '2024-07-12', '30% Equity & Mobilization Drawdown', 'Bank Wire (RTGS)', 'client_equity', 'Client Direct Equity', 'HDMF-VR-2024-1608', 'Owner Personal Account', 'Tranche 1: 30% Substructure Release', 1, 'cleared_to_construct', 'BPI-VR16-01', 'Engr. Esabyl B. Mitra', 'paid', 'Initial equity cleared. Foundation footing and columns construction authorized.', NULL, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(7, 3, 'INV-VR16-002', 'OR-202411-1602', 'Pag-IBIG Fund / HDMF (fbo Engr. Ignacio S. Lonzaga)', 732645.52, '2024-11-18', '40% Superstructure Framing, MEP & Roofing Release', 'Manager Check (HDMF Disbursed)', 'pagibig_loan', 'Pag-IBIG Fund (HDMF)', 'HDMF-VR-2024-1608', 'Pag-IBIG Fund Loan Release Division', 'HDMF Tranche 1: 40% Framing & Enclosure Release', 1, 'cleared_to_construct', 'HDMF-CHK-VR16-02', 'Engr. Esabyl B. Mitra', 'paid', 'HDMF site inspection passed. Funds cleared for architectural finishes and painting.', NULL, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(8, 3, 'INV-VR16-003', 'OR-202501-1603', 'Pag-IBIG Fund / HDMF (fbo Engr. Ignacio S. Lonzaga)', 549484.14, '2025-01-07', '30% Final Turnover & HDMF Final Release', 'Manager Check (HDMF Disbursed)', 'pagibig_loan', 'Pag-IBIG Fund (HDMF)', 'HDMF-VR-2024-1608', 'Pag-IBIG Fund Loan Release Division', 'HDMF Tranche 2: 30% Final Turnover Release', 1, 'cleared_to_construct', 'HDMF-CHK-VR16-03', 'Engr. Esabyl B. Mitra', 'paid', 'Final turnover certified and accepted. Occupancy permit verified.', NULL, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(9, 4, 'INV-VR12-001', 'OR-202308-1201', 'MC HIRO Realty Corp.', 371400.37, '2023-08-15', '50% Initial Downpayment & Mobilization Release', 'Bank Wire (RTGS)', 'client_equity', 'MC HIRO Realty Corp.', 'MCH-VR-2023-1202', 'Corporate Treasury', 'Tranche 1: 50% Substructure Release', 1, 'cleared_to_construct', 'MCH-TXN-2023-01', 'Engr. Ignacio S. Lonzaga', 'paid', 'Initial 50% mobilization cleared. Earthworks and structural framing authorized.', NULL, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(10, 4, 'INV-VR12-002', 'OR-202401-1202', 'MC HIRO Realty Corp.', 371400.37, '2024-01-10', '50% Final Settlement, Turnover & Acceptance', 'Bank Wire (RTGS)', 'client_equity', 'MC HIRO Realty Corp.', 'MCH-VR-2023-1202', 'Corporate Treasury', 'Tranche 2: 50% Final Turnover Release', 1, 'cleared_to_construct', 'MCH-TXN-2024-02', 'Engr. Ignacio S. Lonzaga', 'paid', 'Final turnover certified and accepted. Project successfully completed and turned over.', NULL, '2026-09-29 14:56:42', '2026-09-29 14:56:42');
 
 DROP TABLE IF EXISTS `personal_access_tokens`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `personal_access_tokens` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `tokenable_type` varchar(255) NOT NULL,
@@ -248,24 +210,8 @@ CREATE TABLE `personal_access_tokens` (
   UNIQUE KEY `personal_access_tokens_token_unique` (`token`),
   KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `personal_access_tokens`
---
-
-LOCK TABLES `personal_access_tokens` WRITE;
-/*!40000 ALTER TABLE `personal_access_tokens` DISABLE KEYS */;
-/*!40000 ALTER TABLE `personal_access_tokens` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `personnel`
---
 
 DROP TABLE IF EXISTS `personnel`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `personnel` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -280,25 +226,18 @@ CREATE TABLE `personnel` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `personnel_email_unique` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `personnel`
---
-
-LOCK TABLES `personnel` WRITE;
-/*!40000 ALTER TABLE `personnel` DISABLE KEYS */;
-/*!40000 ALTER TABLE `personnel` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `project_costs`
---
+INSERT INTO `personnel` (`id`, `name`, `title`, `email`, `phone`, `license_no`, `license_expiry_date`, `license_status`, `specialization`, `created_at`, `updated_at`) VALUES
+(1, 'Engr. Ignacio S. Lonzaga', 'Registered Civil Engineer', 'i.lonzaga@newconstuc.firm', '+63 (34) 495-2019', '0042019', NULL, 'active', 'Residential Build, Structural Design & Subdivision Development (PTR: 2901354, Silay City)', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(2, 'Engr. Esabyl B. Mitra', 'Registered Civil Engineer', 'e.mitra@newconstuc.firm', '+63 (34) 495-3199', '0180490', NULL, 'active', 'Civil Engineering, Bill of Materials & Cost Estimation (PTR: 4531999, Silay City)', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(3, 'Arch. Marcus Vance', 'Lead Principal Architect', 'm.vance@newconstuc.firm', '+63 (2) 8892-1090', 'ARC-991204', NULL, 'active', 'Commercial High-Rise & Modern Glassmorphic Structures', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(4, 'Engr. Elena Rostova', 'Chief Structural Engineer', 'e.rostova@newconstuc.firm', '+63 (2) 8892-3412', 'PE-330412', NULL, 'active', 'Seismic & Heavy Steel Foundation Design', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(5, 'Engr. Carlos Rodriguez', 'Lead Electrical Engineer', 'c.rodriguez@newconstuc.firm', '+63 (2) 8892-5501', 'EE-771029', NULL, 'active', 'HVAC, Transformers & High-Voltage Grid Systems', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(6, 'Engr. David Kim', 'Senior Plumbing & Piping Engineer', 'd.kim@newconstuc.firm', '+63 (2) 8892-8877', 'ME-445109', NULL, 'active', 'Hydraulic Risers & Wastewater Treatment', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(7, 'Engr. Sophia Martinez', 'Project Director & Financial Controller', 's.martinez@newconstuc.firm', '+63 (2) 8892-9900', 'PMP-882190', NULL, 'active', 'Project Operations & Financial Auditing', '2026-09-29 14:56:40', '2026-09-29 14:56:40');
 
 DROP TABLE IF EXISTS `project_costs`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `project_costs` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `project_id` bigint(20) unsigned NOT NULL,
@@ -322,25 +261,27 @@ CREATE TABLE `project_costs` (
   UNIQUE KEY `project_costs_cost_code_unique` (`cost_code`),
   KEY `project_costs_project_id_foreign` (`project_id`),
   CONSTRAINT `project_costs_project_id_foreign` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `project_costs`
---
-
-LOCK TABLES `project_costs` WRITE;
-/*!40000 ALTER TABLE `project_costs` DISABLE KEYS */;
-/*!40000 ALTER TABLE `project_costs` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `project_material_transfers`
---
+INSERT INTO `project_costs` (`id`, `project_id`, `cost_code`, `cost_category`, `item_name`, `cost_type`, `quantity`, `unit`, `unit_rate`, `estimated_cost`, `actual_cost`, `status`, `cost_date`, `vendor_payee`, `reference_no`, `notes`, `created_at`, `updated_at`) VALUES
+(1, 1, 'CST-2026-001', 'Materials & Consumables', 'High-Strength Ready-Mix Concrete & Deformed Rebar Package', 'Direct', 1.00, 'lot', 11000000.00, 11000000.00, 10500000.00, 'incurred', '2026-02-10', 'Holcim & SteelAsia Corp', 'PO-ST-8821', 'Basement to 10th floor structural pour requirements.', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(2, 1, 'CST-2026-002', 'Labor & Engineering', 'Master Formwork, Rebar & Carpentry Crew (120 Days)', 'Direct', 120.00, 'days', 52000.00, 6500000.00, 6240000.00, 'incurred', '2026-04-15', 'Summit Manpower Services', 'VOUCH-2026-104', 'Certified structural formwork and tie-wire crew.', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(3, 1, 'CST-2026-003', 'Equipment & Heavy Machinery', 'Tower Crane 55m Jib & Concrete Boom Pump Hire', 'Direct', 6.00, 'months', 650000.00, 4000000.00, 3900000.00, 'incurred', '2026-03-01', 'Pacific Heavy Rigging Ltd.', 'LEAS-CRN-991', 'Includes certified operator and regular OSHA maintenance.', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(4, 2, 'CST-VR15-001', 'Materials & Consumables', 'Structural Cement, Deformed Bars, Gravel, Sand & CHB Package', 'Direct', 1.00, 'lot', 520000.00, 525000.00, 520000.00, 'settled', '2024-06-20', 'Silay Hardware & Building Supply', 'PO-VR15-01', 'Footings, columns, beams and slab materials.', '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(5, 2, 'CST-VR15-002', 'Materials & Consumables', 'Pre-painted Long Span Roofing, C-Purlins, Doors, Windows & Tile Finishes', 'Direct', 1.00, 'lot', 443512.00, 445000.00, 443512.00, 'settled', '2024-09-15', 'Negros Architectural Supplies', 'PO-VR15-02', 'Roofing rib sheets, ficem board ceiling and ceramic tiles.', '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(6, 2, 'CST-VR15-003', 'Labor & Engineering', 'Masonry, Rebar, Carpentry, Plumbing, Electrical & Painting Crew', 'Direct', 1.00, 'lot', 433580.40, 435000.00, 433580.40, 'settled', '2024-12-20', 'Villa Romeo Construction Craftsmen', 'VOUCH-VR15-03', '45% standard labor allocation for items 1-20.1.', '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(7, 2, 'CST-VR15-004', 'Contingency & Testing', 'Price Escalation, Site Testing & 2-Year Force Majeure Insurance', 'Contingency', 1.00, 'lot', 149726.80, 150000.00, 149726.80, 'settled', '2025-01-05', 'Engineering QA & Insurance Group', 'INS-VR15-04', 'Contingencies and 2-year force majeure insurance coverage.', '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(8, 3, 'CST-VR16-001', 'Materials & Consumables', 'Structural Premix Concrete, Deformed Rebars & CHB Masonry', 'Direct', 1.00, 'lot', 650000.00, 660000.00, 650000.00, 'settled', '2024-07-25', 'Silay Builders Center', 'PO-VR16-01', 'Foundation, column, beam premix concrete and rebar cages.', '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(9, 3, 'CST-VR16-002', 'Materials & Consumables', 'Roofing Sheets, C-Purlins, Tiles, Doors, Windows, Plumbing & Electrical', 'Direct', 1.00, 'lot', 550000.00, 555000.00, 550000.00, 'settled', '2024-10-20', 'Negros Architectural Supplies', 'PO-VR16-02', 'Architectural finishes and MEP fixtures.', '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(10, 3, 'CST-VR16-003', 'Labor & Engineering', 'Licensed Trade Craftsmen, Electricians, Plumbers & Carpenters', 'Direct', 1.00, 'lot', 313478.80, 315000.00, 313478.80, 'settled', '2024-12-18', 'Master Trade Guild', 'VOUCH-VR16-03', 'Itemized labor workforce across all 17 direct scope items.', '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(11, 3, 'CST-VR16-004', 'Permits & Regulatory', 'Professional Engineering Sign-off & Municipal Permit Fees', 'Indirect', 1.00, 'lot', 64000.00, 64000.00, 64000.00, 'settled', '2024-07-05', 'Silay City Engineering Office', 'PERM-VR16-04', 'Civil, electrical, sanitary, geodetic engineering sign-off and building permit.', '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(12, 3, 'CST-VR16-005', 'Site Overhead & Utilities', 'Site Equipment, Testing Admixtures & Quality Verification', 'Overhead', 1.00, 'lot', 40000.00, 45000.00, 40000.00, 'settled', '2024-11-05', 'Site Operations', 'OVH-VR16-05', 'Concrete cylinder testing and site power.', '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(13, 4, 'CST-VR12-001', 'Materials & Consumables', 'Cement, Deformed Rebars, CHB, Sand, Gravel & Fencing Materials', 'Direct', 1.00, 'lot', 320000.00, 325000.00, 320000.00, 'settled', '2023-08-28', 'Silay Builders Supply', 'PO-VR12-01', 'Structural framing and perimeter fencing materials.', '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(14, 4, 'CST-VR12-002', 'Materials & Consumables', 'Roofing Sheets, Doors, Windows, Plumbing & Electrical Package', 'Direct', 1.00, 'lot', 124126.00, 125000.00, 124126.00, 'settled', '2023-11-10', 'Negros Architectural Center', 'PO-VR12-02', 'Long span roofing, electrical wires, and sanitary accessories.', '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(15, 4, 'CST-VR12-003', 'Labor & Engineering', 'Direct Construction Workforce & Skilled Tradesmen', 'Direct', 1.00, 'lot', 199856.70, 200000.00, 199856.70, 'settled', '2023-12-28', 'Villa Romeo Construction Team', 'VOUCH-VR12-03', 'Direct masonry, roofing, tiling and fencing labor.', '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(16, 4, 'CST-VR12-004', 'Permits & Regulatory', 'Municipal Building Clearance, Tax Assessments & Verification', 'Indirect', 1.00, 'lot', 6017.30, 7000.00, 6017.30, 'settled', '2023-08-05', 'Silay City Treasury', 'TAX-VR12-04', 'Municipal construction tax and permits.', '2026-09-29 14:56:42', '2026-09-29 14:56:42');
 
 DROP TABLE IF EXISTS `project_material_transfers`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `project_material_transfers` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `source_project_id` bigint(20) unsigned NOT NULL,
@@ -362,24 +303,8 @@ CREATE TABLE `project_material_transfers` (
   CONSTRAINT `project_material_transfers_material_id_foreign` FOREIGN KEY (`material_id`) REFERENCES `materials` (`id`) ON DELETE CASCADE,
   CONSTRAINT `project_material_transfers_source_project_id_foreign` FOREIGN KEY (`source_project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `project_material_transfers`
---
-
-LOCK TABLES `project_material_transfers` WRITE;
-/*!40000 ALTER TABLE `project_material_transfers` DISABLE KEYS */;
-/*!40000 ALTER TABLE `project_material_transfers` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `project_materials`
---
 
 DROP TABLE IF EXISTS `project_materials`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `project_materials` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `project_id` bigint(20) unsigned NOT NULL,
@@ -395,25 +320,13 @@ CREATE TABLE `project_materials` (
   KEY `project_materials_material_id_foreign` (`material_id`),
   CONSTRAINT `project_materials_material_id_foreign` FOREIGN KEY (`material_id`) REFERENCES `materials` (`id`) ON DELETE CASCADE,
   CONSTRAINT `project_materials_project_id_foreign` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `project_materials`
---
-
-LOCK TABLES `project_materials` WRITE;
-/*!40000 ALTER TABLE `project_materials` DISABLE KEYS */;
-/*!40000 ALTER TABLE `project_materials` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `project_personnel`
---
+INSERT INTO `project_materials` (`id`, `project_id`, `material_id`, `allocated_qty`, `used_qty`, `excess_returned_qty`, `unit_price`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 5000, 4200, 500, 225.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(2, 1, 2, 3000, 2500, 200, 450.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40');
 
 DROP TABLE IF EXISTS `project_personnel`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `project_personnel` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `project_id` bigint(20) unsigned NOT NULL,
@@ -426,25 +339,20 @@ CREATE TABLE `project_personnel` (
   KEY `project_personnel_personnel_id_foreign` (`personnel_id`),
   CONSTRAINT `project_personnel_personnel_id_foreign` FOREIGN KEY (`personnel_id`) REFERENCES `personnel` (`id`) ON DELETE CASCADE,
   CONSTRAINT `project_personnel_project_id_foreign` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `project_personnel`
---
-
-LOCK TABLES `project_personnel` WRITE;
-/*!40000 ALTER TABLE `project_personnel` DISABLE KEYS */;
-/*!40000 ALTER TABLE `project_personnel` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `project_photos`
---
+INSERT INTO `project_personnel` (`id`, `project_id`, `personnel_id`, `assignment_role`, `created_at`, `updated_at`) VALUES
+(1, 1, 3, 'Lead Architect', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(2, 1, 4, 'Project Lead & Structural Engineer', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(3, 1, 5, 'Electrical Specialist', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(4, 1, 6, 'Plumbing Engineer', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(5, 2, 2, 'Certified Civil Engineer & Cost Estimator', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(6, 2, 1, 'Project Owner & Executive Civil Engineer', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(7, 3, 2, 'Certified Civil Engineer & Cost Estimator', '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(8, 3, 1, 'Project Owner & Executive Civil Engineer', '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(9, 4, 1, 'Certified Civil Engineer & Developer Lead', '2026-09-29 14:56:41', '2026-09-29 14:56:41');
 
 DROP TABLE IF EXISTS `project_photos`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `project_photos` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `project_id` bigint(20) unsigned NOT NULL,
@@ -459,25 +367,23 @@ CREATE TABLE `project_photos` (
   PRIMARY KEY (`id`),
   KEY `project_photos_project_id_foreign` (`project_id`),
   CONSTRAINT `project_photos_project_id_foreign` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `project_photos`
---
-
-LOCK TABLES `project_photos` WRITE;
-/*!40000 ALTER TABLE `project_photos` DISABLE KEYS */;
-/*!40000 ALTER TABLE `project_photos` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `project_scope_items`
---
+INSERT INTO `project_photos` (`id`, `project_id`, `photo_type`, `title`, `description`, `file_path`, `is_primary`, `taken_at`, `created_at`, `updated_at`) VALUES
+(1, 1, 'blueprint', 'Structural Framing & Column Grid CAD Drawing', 'Approved Level 1-15 structural framing plan showing shear wall core and 56m grid layout.', '/uploads/projects/blueprint_tower_cad.svg', 0, '2026-01-10', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(2, 1, '3d_render', '3D Architectural Exterior Glass Facade Concept Render', 'Client target design with glassmorphic curtain wall, rooftop crown spire, and pedestrian entrance.', '/uploads/projects/render_tower_3d.svg', 1, '2026-01-12', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(3, 1, 'actual_site', 'Level 8 Concrete Slab Pouring & Tower Crane In-Progress', 'Active site photograph showing 55m jib tower crane, rebar formwork, and green safety netting.', '/uploads/projects/site_progress_concrete.svg', 0, '2026-05-18', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(4, 2, 'blueprint', 'Approved 3BR Bungalow Architectural & Structural Plan', 'Official structural layout, foundation footing plan, and 3-bedroom interior partitions blueprint.', '/uploads/projects/blueprint_villa_floorplan.svg', 0, '2024-05-25', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(5, 2, '3d_render', '3D Architectural Exterior Concept Render', '3D render of 3-bedroom single detached bungalow with perimeter fencing, porch, and long span roofing.', '/uploads/projects/render_villa_luxury.svg', 0, '2024-05-28', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(6, 2, 'actual_site', 'Turned Over 3BR Bungalow As-Built Residence', 'Completed and turned over single detached residential unit at Block 15 Lot 1, Villa Romeo Subd., Silay City.', '/uploads/projects/site_progress_concrete.svg', 1, '2025-01-07', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(7, 3, 'blueprint', 'Architectural Ground Floor Plan & Elevation Blueprint', 'Approved 2-bedroom floor plan showing master bedroom, bedroom 2, 2 CRs, kitchen counter, and porch.', '/uploads/projects/blueprint_villa_floorplan.svg', 0, '2024-06-25', '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(8, 3, '3d_render', '3D Architectural Exterior Concept Render', 'Photorealistic render showing travertine stone accent wall, front canopy molding, and sliding aluminum windows.', '/uploads/projects/render_villa_luxury.svg', 0, '2024-06-28', '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(9, 3, 'actual_site', 'Turned Over 2BR Bungalow As-Built Residence', 'Completed and turned over single-detached 2-bedroom residence at Block 16 Lot 8, Villa Romeo Subdivision.', '/uploads/projects/site_progress_concrete.svg', 1, '2025-01-07', '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(10, 4, 'blueprint', '31m² Residential Duplex Floor Plan & Elevation CAD Drawing', 'Approved 31 sq.m duplex blueprint showing living/dining area, bedroom, toilet & bath, kitchen counter and setback perimeter fencing.', '/uploads/projects/blueprint_villa_floorplan.svg', 0, '2023-07-20', '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(11, 4, '3d_render', '3D Architectural Duplex Housing Concept Render', '3D exterior perspective showing contemporary modern duplex housing with perimeter fence and entry gate.', '/uploads/projects/render_villa_luxury.svg', 0, '2023-07-25', '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(12, 4, 'actual_site', 'Turned Over 31m² Duplex Unit As-Built Residence', 'Completed and delivered duplex housing unit at Block 12 Lot 2, Villa Romeo Subdivision.', '/uploads/projects/site_progress_concrete.svg', 1, '2024-01-10', '2026-09-29 14:56:41', '2026-09-29 14:56:41');
 
 DROP TABLE IF EXISTS `project_scope_items`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `project_scope_items` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `project_id` bigint(20) unsigned NOT NULL,
@@ -501,25 +407,70 @@ CREATE TABLE `project_scope_items` (
   PRIMARY KEY (`id`),
   KEY `project_scope_items_project_id_foreign` (`project_id`),
   CONSTRAINT `project_scope_items_project_id_foreign` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `project_scope_items`
---
-
-LOCK TABLES `project_scope_items` WRITE;
-/*!40000 ALTER TABLE `project_scope_items` DISABLE KEYS */;
-/*!40000 ALTER TABLE `project_scope_items` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `project_scope_lines`
---
+INSERT INTO `project_scope_items` (`id`, `project_id`, `item_number`, `item_name`, `volume_or_area`, `notes`, `materials_subtotal`, `labor_subtotal`, `equipment_subtotal`, `direct_cost`, `contingency_percent`, `contingency_amount`, `taxes_percent`, `taxes_amount`, `profit_percent`, `profit_amount`, `total_item_cost`, `created_at`, `updated_at`) VALUES
+(1, 2, 1, 'Foundation and Footings', 'V=9.4m³', 'Layout, excavation, footings rebar, formwork and concrete pour', 56225.00, 25301.25, 8433.75, 89960.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 89960.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(2, 2, 2, 'Columns', 'V=4.67m³', 'Column rebar cage, phenolic formworks, and concrete pour', 49780.00, 22401.00, 7467.00, 79648.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 79648.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(3, 2, 3, 'Beams', 'V=6.13m³', 'Roof beams and tie beams framing and concrete pour', 55160.00, 24822.00, 8274.00, 88256.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 88256.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(4, 2, 4, 'Slab on Fill', 'V=9.97m³', 'Earth backfill, gravel bedding, wire mesh & slab topping', 34055.00, 15324.75, 5108.25, 54488.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 54488.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(5, 2, 5, 'Suspended Slab (for two storey only)', 'N/A (Single Storey Bungalow)', 'Not applicable for single-detached bungalow unit', 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(6, 2, 6, 'Exterior Walls', '4" CHB Walls', 'Perimeter concrete hollow block masonry and plastering', 51066.00, 22979.70, 7659.90, 81705.60, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 81705.60, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(7, 2, 7, 'Interior Walls with Partitions', '4" & 6" CHB Partitions', 'Dividing interior masonry walls and plastering', 68617.00, 30877.65, 10292.55, 109787.20, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 109787.20, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(8, 2, 8, 'Roofing', '155 ln.m. Pre-painted Long Span', 'C-Purlins framing, long span sheets, gutters, and flashing', 117865.00, 53039.25, 17679.75, 188584.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 188584.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(9, 2, 9, 'Ceiling', 'Ficem Board & Metal Furring', 'Suspension system, angle bars, and hardiflex fascia board', 32085.00, 14438.25, 4812.75, 51336.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 51336.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(10, 2, 10, 'Floor Finishes', '0.5x0.5 & 0.3x0.3 Tiles', 'Granite & ceramic tiles with cement screed', 25425.00, 11441.25, 3813.75, 40680.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 40680.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(11, 2, 11, 'Wall Finishes', 'Wall Plaster & 0.3x0.3 Tiles', 'Waterproofing compound, plastering and wall tiles', 49705.00, 22367.25, 7455.75, 79528.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 79528.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(12, 2, 12, 'Doors', 'Panel, Flush & PVC Doors', 'Complete door sets, locksets, hinges, jambs, and wood preservative', 46400.00, 20880.00, 6960.00, 74240.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 74240.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(13, 2, 13, 'Windows', 'Sliding Analoc Aluminum Frame Windows', 'Complete window fabrication, delivery and installation', 20000.00, 9000.00, 3000.00, 32000.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 32000.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(14, 2, 14, 'Kitchen Counter', 'Precast Counter & Stainless Sink', 'Precast slab, stainless sink, faucet, and ceramic tiles', 14936.00, 6721.20, 2240.40, 23897.60, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 23897.60, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(15, 2, 15, 'Plumbing', '2 Full Toilet & Bath + Kitchen Drainage', 'Toilet sets, shower sets, PPR hot/cold lines, cleanouts & fittings', 53325.00, 23996.25, 7998.75, 85320.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 85320.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(16, 2, 16, 'Electrical', 'Complete Service Entrance & Wiring', 'Panelboard 60A/20A, LED lights, THHN wires #12/#14/#6, switches & outlets', 68035.00, 30615.75, 10205.25, 108856.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 108856.00, '2026-09-29 14:56:40', '2026-09-29 14:56:41'),
+(17, 2, 17, 'Painting', 'Interior & Exterior Painting', 'Primer, semi-gloss latex topcoat, skimcoat, and surface prep', 52010.00, 23404.50, 7801.50, 83216.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 83216.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(18, 2, 18, 'Stairs', 'N/A (Single Storey Bungalow)', 'Not applicable for single-detached bungalow unit', 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(19, 2, 19, 'Septic Tank', 'Sanitary Septic Digester', 'CHB chamber, 10mm rebar, cement, sand, gravel & manhole cover', 13214.00, 5946.30, 1982.10, 21142.40, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 21142.40, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(20, 2, 20, 'Others (Fencing, Taxes, Profit & Insurance)', 'Perimeter Fence, 5% Taxes, 10% Contractor Profit & Insurance', '20.1 Fencing (₱248,974.40) + 20.2 Taxes 5% (₱77,080.96) + 20.3 Profit 10% (₱154,161.92) + 20.4 Insurance 2-Yr (₱5,200.00)', 392051.88, 70024.05, 23341.35, 485417.28, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 485417.28, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(21, 3, 1, 'FOUNDATION AND FOOTING', 'Volume of Concrete : 2.61 cu.m', 'Structural excavation, footing rebar, formwork, and concrete pour.', 34283.00, 19936.00, 3500.00, 57719.00, 15.00, 8658.00, 6.00, 3464.00, 10.00, 5772.00, 75613.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(22, 3, 2, 'COLUMNS', 'Volume 3.46 cu.m', '4 units C1, 5 units C2, 3 units C3 & 2 units C4', 61472.00, 27803.00, 6148.00, 95423.00, 15.00, 14314.00, 6.00, 5726.00, 10.00, 9543.00, 125006.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(23, 3, 3, 'BEAMS', 'Volume 2.07 cu.m', 'Roof beams and tie beams framing.', 37729.00, 18173.30, 3773.00, 59675.30, 15.00, 8952.00, 6.00, 3581.00, 10.00, 5968.00, 78176.30, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(24, 3, 4, 'SLAB ON FILL', 'Volume 3.90 cu.m (0.075m thk or 75mm)', 'Earth fill, compaction, rebar mesh, and concrete topping.', 39240.00, 16750.00, 3924.00, 59914.00, 15.00, 8988.00, 6.00, 3595.00, 10.00, 5992.00, 78489.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(25, 3, 5, 'EXTERIOR WALLS', '6in CHB: 55.18 sq.m Firewall | 4in CHB: 71.75 sq.m', 'Perimeter walls and firewall construction.', 94606.00, 42573.00, 9461.00, 146640.00, 15.00, 21996.00, 6.00, 8799.00, 10.00, 14664.00, 192099.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(26, 3, 6, 'INTERIOR WALLS/PARTITION', 'A= 60.18 Sq.m', 'Bedroom, bathroom, and kitchen dividing walls.', 39641.00, 17839.00, 3900.00, 61380.00, 15.00, 9207.00, 6.00, 3683.00, 10.00, 6138.00, 80408.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(27, 3, 7, 'ROOFING', 'Area : 79.24 Sq.m More or Less', 'Pre-painted rib type roofing sheets, C-purlins, flashing, and gutters.', 69234.00, 31155.00, 6900.00, 107289.00, 15.00, 16094.00, 6.00, 6438.00, 10.00, 10729.00, 140550.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(28, 3, 8, 'CEILING', 'EAVES: 33.84 Sq.m More or Less', 'Hardiflex ceiling on metal furring framework.', 53635.00, 24136.00, 5300.00, 83071.00, 15.00, 12461.00, 6.00, 4985.00, 10.00, 8308.00, 108825.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(29, 3, 9, 'FLOOR FINISHES', '2 CR Floor: 4.95 sq.m | Wall: 18 sq.m | Floor Master Bed: 10.73 sq.m | Bed: 7.54 sq.m | Dining/Living/Kit: 20.33 sq.m | Porch: 3.45 sq.m | Hall: 7.34 sq.m', 'Granite floor tiles and ceramic wall tiles.', 58450.00, 26303.00, 5845.00, 90598.00, 15.00, 13590.00, 6.00, 5436.00, 10.00, 9060.00, 118684.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(30, 3, 10, 'WALL FINISHES', 'Front Grooving 6.60 sq.m | Natural Stone : 1.98 sq.m', 'Natural stone accent cladding and front concrete canopy molding.', 9516.00, 4283.00, 1000.00, 14799.00, 15.00, 2220.00, 6.00, 888.00, 10.00, 1480.00, 19387.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(31, 3, 11, 'DOORS', '7 Total Door Sets', 'Main panel door, bedroom doors, PVC doors, and sliding glass door.', 63750.00, 7500.00, 1000.00, 72250.00, 15.00, 10838.00, 6.00, 4335.00, 10.00, 7225.00, 94648.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(32, 3, 12, 'WINDOWS', '8 Total Window Openings', 'Materials (Including Installation) for aluminum frame glass sliding & awning windows', 43008.00, 0.00, 0.00, 43008.00, 15.00, 6452.00, 6.00, 2581.00, 10.00, 4301.00, 56342.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(33, 3, 13, 'KITCHEN COUNTER', '1.50m x 0.60m Granite slab', 'Precast counter, granite slab, and prefabricated cabinet doors', 23100.00, 10395.00, 2310.00, 35805.00, 15.00, 5371.00, 6.00, 2149.00, 10.00, 3581.00, 46906.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(34, 3, 14, 'PLUMBING', 'PVC Sanitary, Moldex Waterlines & Fixtures', 'Water closets, lavatories, faucets, and kitchen sink fixtures', 49850.00, 22432.50, 4985.00, 77267.50, 15.00, 11591.00, 6.00, 4637.00, 10.00, 7727.00, 101222.50, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(35, 3, 15, 'ELECTRICAL', 'Complete Rough-in, Fixtures & Service Entrance', 'Panelboard, breakers, THHN wires, switches, outlets, downlights & chandelier', 145100.00, 65295.00, 1192.00, 211587.00, 15.00, 31739.00, 6.00, 12696.00, 10.00, 21159.00, 277181.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(36, 3, 16, 'PAINTING', 'Exterior Wall 126.93 sq.m | Interior Wall 120.36 sq.m | Fire Wall 55.18 sq.m', 'Mortaflex, skimcoat, primer white, semi gloss latex & marine epoxy', 66785.00, 30053.00, 6500.00, 103338.00, 15.00, 15501.00, 6.00, 6201.00, 10.00, 10334.00, 135374.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(37, 3, 17, 'SEPTIC TANK', 'Standard Sanitary Digester', 'CHB, 10mm rebar, cement, tie wire, and phenolic formworks', 19060.00, 8577.00, 1906.00, 29543.00, 15.00, 4432.00, 6.00, 1773.00, 10.00, 2955.00, 38703.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(38, 3, 18, 'OTHERS', 'Professional & Permit Fees', 'Professional Fee (Civil Engr., Electrical Engr., Master Plumber, Geodetic Engr.) and Permit Fee', 64000.00, 0.00, 0.00, 64000.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 64000.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(39, 4, 1, 'Foundation and Footings', 'V=7m³', 'Layout, excavation, rebar, cement, sand, gravel, soil guard and formworks', 25480.00, 11466.00, 3822.00, 40768.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 40768.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(40, 4, 2, 'Columns', 'Duplex Columns', 'Column rebar, cement, sand, gravel, phenolic board and formworks', 18815.00, 8466.75, 2822.25, 30104.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 30104.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(41, 4, 3, 'Beams', 'Duplex Tie Beams & Roof Beams', '10mm & 8mm rebar, cement, sand, gravel and phenolic formworks', 20835.00, 9375.75, 3125.25, 33336.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 33336.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(42, 4, 4, 'Slab on Fill', 'Duplex Ground Slab', 'Backfill 9 m³, rebar, cement, sand, and gravel', 19280.00, 8676.00, 2892.00, 30848.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 30848.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(43, 4, 5, 'Suspended Slab (for two storey only)', 'N/A (Single Storey Duplex Unit)', 'Not applicable for single-storey duplex unit', 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(44, 4, 6, 'Exterior Walls', '4" CHB Perimeter Walls', '4" CHB 603 pcs, 10mm rebar, cement, sand and scaffolding', 30329.00, 13648.05, 4549.35, 48526.40, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 48526.40, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(45, 4, 7, 'Interior Walls / Partitions', 'Interior CHB & Hardiflex Partitions', '4" CHB 489 pcs, 3.5mm Hardiflex 8 pcs, 2x3 C-purlins & cement', 34337.00, 15451.65, 5150.55, 54939.20, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 54939.20, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(46, 4, 8, 'Roofing', '49 ln.m. Rib-Type Pre-Painted Long Span', 'C-Purlins (2x4 & 2x3), long span roofing, gutters, wall flashing, end flashing', 49090.00, 22090.50, 7363.50, 78544.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 78544.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(47, 4, 9, 'Ceiling', 'Ficem Board & Metal Furring', '4.5mm Ficem Board 16 pcs, metal furring 43 pcs, blind rivets & nails', 13410.00, 6034.50, 2011.50, 21456.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 21456.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(48, 4, 10, 'Floor Finishes', 'Power Floor & 0.3x0.3 Tiles', 'Power floor coating, cement, sand and floor tiles', 15415.00, 6936.75, 2312.25, 24664.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 24664.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(49, 4, 11, 'Wall Finishes', 'Cement Plaster, 0.3x0.3 Tiles & Hardware Cloth', 'Waterproofing compound, plastering, tiles and wire reinforcement', 20010.00, 9004.50, 3001.50, 32016.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 32016.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(50, 4, 12, 'Doors', 'Panel, PVC & Door Jambs', 'Panel doors 0.80m & 0.70m, PVC door 0.60m, locksets and loosepin hinges', 24670.00, 11101.50, 3700.50, 39472.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 39472.00, '2026-09-29 14:56:41', '2026-09-29 14:56:42');
+INSERT INTO `project_scope_items` (`id`, `project_id`, `item_number`, `item_name`, `volume_or_area`, `notes`, `materials_subtotal`, `labor_subtotal`, `equipment_subtotal`, `direct_cost`, `contingency_percent`, `contingency_amount`, `taxes_percent`, `taxes_amount`, `profit_percent`, `profit_amount`, `total_item_cost`, `created_at`, `updated_at`) VALUES
+(51, 4, 13, 'Windows', 'Sliding Analoc Aluminum Frame Windows', 'Complete window fabrication, delivery and installation', 15000.00, 6750.00, 2250.00, 24000.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 24000.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(52, 4, 14, 'Kitchen Counter', 'Precast Counter & Kitchen Sink', 'Precast slab, stainless kitchen sink, cement, sand, CHB and tiles', 5323.00, 2395.35, 798.45, 8516.80, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 8516.80, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(53, 4, 15, 'Plumbing', 'Sanitary & Waterline System', 'PVC sanitary pipes (4" & 2"), solvent, toilet bowl set, shower, drain, cleanouts & fittings', 13809.00, 6214.05, 2071.35, 22094.40, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 22094.40, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(54, 4, 16, 'Electrical', 'Duplex Electrical Installation', 'Conduit, THHN wires (3.5mm, 5.5mm, #6, #10), boxes, switches, 10W ceiling lights, breakers & ground rod', 36105.00, 16247.25, 5415.75, 57768.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 57768.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(55, 4, 17, 'Painting', 'Duplex Painting Finishes', 'Flat white, concrete primer, brushes, rollers, skim coat, epoxy primer, thinner, Gibson compound, mortaflex & vulca seal', 16305.00, 7337.25, 2445.75, 26088.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 26088.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(56, 4, 18, 'Stairs', 'N/A (Single Storey Duplex)', 'Not applicable for single-storey unit', 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(57, 4, 19, 'Septic Tank', 'Precast Sanitary Septic Tank & Casing', 'Septic tank set, precast casing, rough plumbing installation to catch basin', 12600.00, 5670.00, 1890.00, 20160.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 20160.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(58, 4, 20, 'Others (Fencing & 5% Taxes)', 'Perimeter Fencing & Taxes', '20.1 Fencing (₱117,300.80) + 20.2 Taxes @ 5% (₱32,199.14)', 105512.14, 32990.85, 10996.95, 149499.94, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 149499.94, '2026-09-29 14:56:42', '2026-09-29 14:56:42');
 
 DROP TABLE IF EXISTS `project_scope_lines`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `project_scope_lines` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `project_scope_item_id` bigint(20) unsigned NOT NULL,
@@ -539,25 +490,646 @@ CREATE TABLE `project_scope_lines` (
   KEY `project_scope_lines_material_id_foreign` (`material_id`),
   CONSTRAINT `project_scope_lines_material_id_foreign` FOREIGN KEY (`material_id`) REFERENCES `materials` (`id`) ON DELETE SET NULL,
   CONSTRAINT `project_scope_lines_project_scope_item_id_foreign` FOREIGN KEY (`project_scope_item_id`) REFERENCES `project_scope_items` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB AUTO_INCREMENT=624 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `project_scope_lines`
---
-
-LOCK TABLES `project_scope_lines` WRITE;
-/*!40000 ALTER TABLE `project_scope_lines` DISABLE KEYS */;
-/*!40000 ALTER TABLE `project_scope_lines` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `project_task_materials`
---
+INSERT INTO `project_scope_lines` (`id`, `project_scope_item_id`, `category`, `description`, `quantity`, `unit`, `unit_price`, `total_cost`, `material_id`, `used_quantity`, `excess_returned_quantity`, `created_at`, `updated_at`) VALUES
+(1, 1, 'material', 'Layout & Excavation', 25.00, 'm³', 600.00, 15000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(2, 1, 'material', '12 mm Deformed Bar', 19.00, 'pcs', 310.00, 5890.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(3, 1, 'material', '10 mm Deformed Bar', 33.00, 'pcs', 220.00, 7260.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(4, 1, 'material', '8 mm Deformed Bar', 12.00, 'pcs', 120.00, 1440.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(5, 1, 'material', 'Cement', 44.00, 'bags', 225.00, 9900.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(6, 1, 'material', 'Mixing Sand', 3.00, 'm³', 850.00, 2550.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(7, 1, 'material', '3/4 Gravel', 6.00, 'm³', 1410.00, 8460.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(8, 1, 'material', '#18 Tie Wire', 8.00, 'kgs', 85.00, 680.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(9, 1, 'material', 'Masonry Pail', 1.00, 'pcs', 70.00, 70.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(10, 1, 'material', '2"x3"x10ft Coco Lumber', 10.00, 'pcs', 140.00, 1400.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(11, 1, 'material', '2"x2"x10ft Coco Lumber', 5.00, 'pcs', 100.00, 500.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(12, 1, 'material', '4" Common Nails', 5.00, 'kgs', 70.00, 350.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(13, 1, 'material', 'Phenolic Board', 2.00, 'pcs', 1300.00, 2600.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(14, 1, 'material', '#100 Nylon String', 5.00, 'roll', 25.00, 125.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(15, 1, 'labor', 'Foundation & Footings Labor (45%)', 1.00, 'Lump Sum', 25301.25, 25301.25, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(16, 1, 'equipment', 'Contingencies and Price Escalation (15%)', 1.00, 'Lump Sum', 8433.75, 8433.75, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(17, 2, 'material', '16 mm Deformed Bar', 13.00, 'pcs', 450.00, 5850.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(18, 2, 'material', '12 mm Deformed Bar', 19.00, 'pcs', 310.00, 5890.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(19, 2, 'material', '10 mm Deformed Bar', 21.00, 'pcs', 220.00, 4620.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(20, 2, 'material', '8 mm Deformed Bar', 31.00, 'pcs', 120.00, 3720.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(21, 2, 'material', 'Cement', 22.00, 'bags', 225.00, 4950.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(22, 2, 'material', 'Mixing Sand', 2.00, 'm³', 850.00, 1700.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(23, 2, 'material', 'Gravel', 3.00, 'm³', 1410.00, 4230.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(24, 2, 'material', '#18 Tie Wire', 12.00, 'kgs', 85.00, 1020.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(25, 2, 'material', '2"x2"x8\' Coco Lumber', 77.00, 'pcs', 90.00, 6930.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(26, 2, 'material', 'Phenolic Board', 8.00, 'pcs', 1300.00, 10400.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(27, 2, 'material', '2.5" Common Nails', 5.00, 'kgs', 80.00, 400.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(28, 2, 'material', 'Masonry Pail', 1.00, 'pcs', 70.00, 70.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(29, 2, 'labor', 'Columns Labor (45%)', 1.00, 'Lump Sum', 22401.00, 22401.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(30, 2, 'equipment', 'Contingencies and Price Escalation (15%)', 1.00, 'Lump Sum', 7467.00, 7467.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(31, 3, 'material', '16 mm Deformed Bar', 30.00, 'pcs', 450.00, 13500.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(32, 3, 'material', '10 mm Deformed Bar', 17.00, 'pcs', 220.00, 3740.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(33, 3, 'material', '8 mm Deformed Bar', 57.00, 'pcs', 120.00, 6840.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(34, 3, 'material', 'Cement', 29.00, 'bags', 225.00, 6525.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(35, 3, 'material', 'Mixing Sand', 2.00, 'm³', 850.00, 1700.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(36, 3, 'material', 'Gravel', 4.00, 'm³', 1410.00, 5640.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(37, 3, 'material', '#18 Tie Wire', 17.00, 'kgs', 85.00, 1445.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(38, 3, 'material', '2"x2"x8\' Coco Lumber', 40.00, 'pcs', 90.00, 3600.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(39, 3, 'material', 'Phenolic Board', 9.00, 'pcs', 1300.00, 11700.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(40, 3, 'material', '2.5" Common Nail', 5.00, 'kgs', 80.00, 400.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(41, 3, 'material', 'Masonry Pail', 1.00, 'pcs', 70.00, 70.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(42, 3, 'labor', 'Beams Labor (45%)', 1.00, 'Lump Sum', 24822.00, 24822.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(43, 3, 'equipment', 'Contingencies and Price Escalation (15%)', 1.00, 'Lump Sum', 8274.00, 8274.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(44, 4, 'material', '8 mm Deformed Bar', 33.00, 'pcs', 120.00, 3960.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(45, 4, 'material', 'Cement', 45.00, 'bags', 225.00, 10125.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(46, 4, 'material', 'Mixing Sand', 3.00, 'm³', 850.00, 2550.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(47, 4, 'material', 'Gravel', 5.00, 'm³', 1410.00, 7050.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(48, 4, 'material', '#18 Tie Wire', 2.00, 'kgs', 85.00, 170.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(49, 4, 'material', 'Backfill', 17.00, 'm³', 600.00, 10200.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(50, 4, 'labor', 'Slab on Fill Labor (45%)', 1.00, 'Lump Sum', 15324.75, 15324.75, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40');
+INSERT INTO `project_scope_lines` (`id`, `project_scope_item_id`, `category`, `description`, `quantity`, `unit`, `unit_price`, `total_cost`, `material_id`, `used_quantity`, `excess_returned_quantity`, `created_at`, `updated_at`) VALUES
+(51, 4, 'equipment', 'Contingencies and Price Escalation (15%)', 1.00, 'Lump Sum', 5108.25, 5108.25, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(52, 6, 'material', '10 mm Deformed Bar', 59.00, 'pcs', 220.00, 12980.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(53, 6, 'material', 'Cement', 51.00, 'bags', 225.00, 11475.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(54, 6, 'material', 'Mixing Sand', 5.00, 'm³', 850.00, 4250.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(55, 6, 'material', '4" CHB', 957.00, 'pcs', 13.00, 12441.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(56, 6, 'material', '#18 Tie Wire', 2.00, 'kgs', 85.00, 170.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(57, 6, 'material', 'Bamboo', 8.00, 'pcs', 200.00, 1600.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(58, 6, 'material', '2"x2"x10ft Coco Lumber', 13.00, 'pcs', 100.00, 1300.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(59, 6, 'material', 'Scaffolding Steel', 5.00, 'pcs', 1300.00, 6500.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(60, 6, 'material', 'Assorted Common Nail', 5.00, 'kgs', 70.00, 350.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(61, 6, 'labor', 'Exterior Walls Labor (45%)', 1.00, 'Lump Sum', 22979.70, 22979.70, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(62, 6, 'equipment', 'Contingencies and Price Escalation (15%)', 1.00, 'Lump Sum', 7659.90, 7659.90, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(63, 7, 'material', '10 mm Deformed Bar', 75.00, 'pcs', 220.00, 16500.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(64, 7, 'material', 'Cement', 78.00, 'bags', 225.00, 17550.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(65, 7, 'material', 'Mixing Sand', 7.00, 'm³', 850.00, 5950.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(66, 7, 'material', '4" CHB', 1098.00, 'pcs', 13.00, 14274.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(67, 7, 'material', '6" CHB', 438.00, 'pcs', 16.00, 7008.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(68, 7, 'material', '#18 Tie Wire', 3.00, 'kgs', 85.00, 255.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(69, 7, 'material', 'Bamboo', 4.00, 'pcs', 200.00, 800.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(70, 7, 'material', '2"x2"x10ft Coco Lumber', 8.00, 'pcs', 100.00, 800.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(71, 7, 'material', 'Scaffolding Steel', 4.00, 'pcs', 1300.00, 5200.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(72, 7, 'material', 'Assorted Common Nail', 4.00, 'kgs', 70.00, 280.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(73, 7, 'labor', 'Interior Walls Labor (45%)', 1.00, 'Lump Sum', 30877.65, 30877.65, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(74, 7, 'equipment', 'Contingencies and Price Escalation (15%)', 1.00, 'Lump Sum', 10292.55, 10292.55, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(75, 8, 'material', 'GA. 20 (2x4) C-Purlins', 33.00, 'pcs', 600.00, 19800.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(76, 8, 'material', 'GA. 20 (2x3) C-Purlins', 33.00, 'pcs', 480.00, 15840.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(77, 8, 'material', 'Hacksaw Blade', 2.00, 'pcs', 50.00, 100.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(78, 8, 'material', 'Tekscrew', 3.00, 'box', 510.00, 1530.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(79, 8, 'material', 'Welding rod', 25.00, 'kgs', 120.00, 3000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(80, 8, 'material', 'Rib-Type pre-painted long span roofing', 155.00, 'ln.m.', 410.00, 63550.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(81, 8, 'material', 'False Gutter', 9.00, 'pcs', 450.00, 4050.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(82, 8, 'material', 'End Flashing', 9.00, 'pcs', 585.00, 5265.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(83, 8, 'material', 'Roof Sealant', 2.00, 'pcs', 210.00, 420.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(84, 8, 'material', '4" Disc for Grinder', 8.00, 'pcs', 335.00, 2680.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(85, 8, 'material', '1/8x1x1 Angle Bars', 3.00, 'pcs', 450.00, 1350.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(86, 8, 'material', '1/8"x1/2" Blind Rivets', 1.00, 'box', 280.00, 280.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(87, 8, 'labor', 'Roofing Installation Labor (45%)', 1.00, 'Lump Sum', 53039.25, 53039.25, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(88, 8, 'equipment', 'Contingencies and Price Escalation (15%)', 1.00, 'Lump Sum', 17679.75, 17679.75, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(89, 9, 'material', '4.5mm Ficem Board', 32.00, 'pcs', 450.00, 14400.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(90, 9, 'material', '1/8x1x1 Angle Bars', 12.00, 'pcs', 450.00, 5400.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(91, 9, 'material', 'Carrying Channel', 9.00, 'pcs', 120.00, 1080.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(92, 9, 'material', 'Metal Furring', 30.00, 'pcs', 120.00, 3600.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(93, 9, 'material', '1/8"x1/2" Blind Rivets', 3.00, 'box', 280.00, 840.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(94, 9, 'material', 'Assorted Common Nails', 3.00, 'kgs', 70.00, 210.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(95, 9, 'material', '10 mm Suspension Rods', 27.00, 'pcs', 65.00, 1755.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(96, 9, 'material', 'Hardiflex for fascia Board', 3.00, 'pcs', 1600.00, 4800.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(97, 9, 'labor', 'Ceiling Labor (45%)', 1.00, 'Lump Sum', 14438.25, 14438.25, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(98, 9, 'equipment', 'Contingencies and Price Escalation (15%)', 1.00, 'Lump Sum', 4812.75, 4812.75, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(99, 10, 'material', 'Cement', 25.00, 'bags', 225.00, 5625.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(100, 10, 'material', 'Mixing Sand', 3.00, 'm³', 850.00, 2550.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40');
+INSERT INTO `project_scope_lines` (`id`, `project_scope_item_id`, `category`, `description`, `quantity`, `unit`, `unit_price`, `total_cost`, `material_id`, `used_quantity`, `excess_returned_quantity`, `created_at`, `updated_at`) VALUES
+(101, 10, 'material', '0.3x0.3 Tiles', 60.00, 'pcs', 45.00, 2700.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(102, 10, 'material', '0.5x0.5 Tiles', 194.00, 'pcs', 75.00, 14550.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(103, 10, 'labor', 'Floor Tile Setting Labor (45%)', 1.00, 'Lump Sum', 11441.25, 11441.25, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(104, 10, 'equipment', 'Contingencies and Price Escalation (15%)', 1.00, 'Lump Sum', 3813.75, 3813.75, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(105, 11, 'material', 'Cement Waterproofing Compound', 15.00, 'pack', 60.00, 900.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(106, 11, 'material', 'Cement', 125.00, 'bags', 225.00, 28125.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(107, 11, 'material', 'Mixing Sand', 12.00, 'm³', 850.00, 10200.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(108, 11, 'material', '0.3x0.3 Tiles', 208.00, 'pcs', 45.00, 9360.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(109, 11, 'material', 'Hardware Cloth', 1.00, 'roll', 1120.00, 1120.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(110, 11, 'labor', 'Wall Finishes Labor (45%)', 1.00, 'Lump Sum', 22367.25, 22367.25, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(111, 11, 'equipment', 'Contingencies and Price Escalation (15%)', 1.00, 'Lump Sum', 7455.75, 7455.75, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(112, 12, 'material', 'PVC Door w/ Jamb 0.60mx2.10m', 2.00, 'sets', 1700.00, 3400.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(113, 12, 'material', 'Panel Door 0.90mx2.10m', 1.00, 'sets', 4500.00, 4500.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(114, 12, 'material', 'Flush Door 0.80mx2.10', 2.00, 'sets', 4200.00, 8400.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(115, 12, 'material', 'Flush Door 0.70mx2.10', 2.00, 'sets', 3800.00, 7600.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(116, 12, 'material', 'Door Lockset (Main Door)', 1.00, 'sets', 3000.00, 3000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(117, 12, 'material', 'Door Lockset (Exit/Bedrooms)', 4.00, 'sets', 1500.00, 6000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(118, 12, 'material', 'Door Lockset (T & B)', 2.00, 'sets', 450.00, 900.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(119, 12, 'material', 'Door Jamb 0.90m (2x4)', 1.00, 'sets', 1300.00, 1300.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(120, 12, 'material', 'Door Jamb 0.80m (2x4)', 2.00, 'sets', 1300.00, 2600.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(121, 12, 'material', 'Door Jamb 0.70m (2x4)', 2.00, 'sets', 1300.00, 2600.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(122, 12, 'material', 'Loosepin Hinges 3½x3½', 7.00, 'pairs', 170.00, 1190.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(123, 12, 'material', 'Solignum Clear', 1.00, 'gals', 3000.00, 3000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(124, 12, 'material', 'Assorted Common Nails', 3.00, 'kgs', 70.00, 210.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(125, 12, 'material', 'Stikwell', 2.00, 'qrt', 850.00, 1700.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(126, 12, 'labor', 'Doors Installation Labor (45%)', 1.00, 'Lump Sum', 20880.00, 20880.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(127, 12, 'equipment', 'Contingencies and Price Escalation (15%)', 1.00, 'Lump Sum', 6960.00, 6960.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(128, 13, 'material', 'Sliding Analoc Window w/ Alum. Frame', 1.00, 'LS', 20000.00, 20000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(129, 13, 'labor', 'Window Installation Labor (45%)', 1.00, 'Lump Sum', 9000.00, 9000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(130, 13, 'equipment', 'Contingencies and Price Escalation (15%)', 1.00, 'Lump Sum', 3000.00, 3000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(131, 14, 'material', 'Precast Kitchen Counter', 2.00, 'pcs', 1800.00, 3600.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(132, 14, 'material', 'Kitchen Sink with Fittings', 1.00, 'set', 3520.00, 3520.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(133, 14, 'material', 'Stainless Kitchen Sink', 1.00, 'set', 3500.00, 3500.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(134, 14, 'material', 'Faucet', 1.00, 'set', 350.00, 350.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(135, 14, 'material', 'Cement', 6.00, 'bags', 225.00, 1350.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(136, 14, 'material', 'Mixing Sand', 1.00, 'm³', 850.00, 850.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(137, 14, 'material', 'CHB', 32.00, 'pcs', 13.00, 416.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(138, 14, 'material', '0.3x0.3 Tiles', 30.00, 'pcs', 45.00, 1350.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(139, 14, 'labor', 'Kitchen Counter Labor (45%)', 1.00, 'Lump Sum', 6721.20, 6721.20, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(140, 14, 'equipment', 'Contingencies and Price Escalation (15%)', 1.00, 'Lump Sum', 2240.40, 2240.40, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(141, 15, 'material', 'Head Shower set', 2.00, 'sets', 1500.00, 3000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(142, 15, 'material', 'Faucet', 2.00, 'sets', 350.00, 700.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(143, 15, 'material', 'Toilet Bowl with Comp. Accs.', 2.00, 'sets', 8500.00, 17000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(144, 15, 'material', 'Floor Drain', 2.00, 'pcs', 450.00, 900.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(145, 15, 'material', 'Catch Basin', 1.00, 'pcs', 750.00, 750.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(146, 15, 'material', 'PPR Pipes, Elbows And Fittings', 1.00, 'LS', 30000.00, 30000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(147, 15, 'material', 'Clean Out 4"', 1.00, 'pcs', 175.00, 175.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(148, 15, 'material', 'Vulca Seal', 2.00, 'qrt', 400.00, 800.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(149, 15, 'labor', 'Master Plumber Labor (45%)', 1.00, 'Lump Sum', 23996.25, 23996.25, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(150, 15, 'equipment', 'Contingencies and Price Escalation (15%)', 1.00, 'Lump Sum', 7998.75, 7998.75, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40');
+INSERT INTO `project_scope_lines` (`id`, `project_scope_item_id`, `category`, `description`, `quantity`, `unit`, `unit_price`, `total_cost`, `material_id`, `used_quantity`, `excess_returned_quantity`, `created_at`, `updated_at`) VALUES
+(151, 16, 'material', 'Service Cap', 1.00, 'pcs', 60.00, 60.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(152, 16, 'material', 'Meter Socket Class 100', 1.00, 'pcs', 550.00, 550.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(153, 16, 'material', 'Panel Board with 60A Main and 20A branch', 2.00, 'sets', 3500.00, 7000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(154, 16, 'material', '10Watts LED Light', 28.00, 'pcs', 350.00, 9800.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(155, 16, 'material', 'Wall Light', 7.00, 'pcs', 450.00, 3150.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(156, 16, 'material', 'Convenience Outlets', 19.00, 'pcs', 360.00, 6840.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(157, 16, 'material', 'Utility Box', 18.00, 'pcs', 50.00, 900.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(158, 16, 'material', '2 Gang Switch', 8.00, 'pcs', 200.00, 1600.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(159, 16, 'material', 'Single Switch', 1.00, 'pcs', 60.00, 60.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(160, 16, 'material', 'Junction Box PVC', 15.00, 'pcs', 55.00, 825.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(161, 16, 'material', 'Electrical Tape', 8.00, 'pcs', 45.00, 360.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(162, 16, 'material', 'Plastic Ties', 10.00, 'packs', 15.00, 150.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(163, 16, 'material', '1/2" PVC Pipe Orange', 23.00, 'lengths', 95.00, 2185.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(164, 16, 'material', '1" PVC Pipe Orange', 3.00, 'lengths', 150.00, 450.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(165, 16, 'material', '1/2" PVC Elbow', 23.00, 'pcs', 25.00, 575.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(166, 16, 'material', '1" PVC Elbow', 3.00, 'pcs', 60.00, 180.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(167, 16, 'material', 'Conduit Pipe, Elbow and Coupling', 1.00, 'L.S.', 5500.00, 5500.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(168, 16, 'material', 'Cable, Telephone and Internet Wire', 1.00, 'L.S.', 3500.00, 3500.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(169, 16, 'material', '#12 THHN Wire', 2.00, 'rolls', 7500.00, 15000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(170, 16, 'material', '#14 THHN Wire', 1.00, 'rolls', 7400.00, 7400.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(171, 16, 'material', '#6 THHN Wire', 15.00, 'meters', 130.00, 1950.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(172, 16, 'labor', 'Electrical Wiring Labor (45%)', 1.00, 'Lump Sum', 30615.75, 30615.75, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(173, 16, 'equipment', 'Contingencies and Price Escalation (15%)', 1.00, 'Lump Sum', 10205.25, 10205.25, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(174, 17, 'material', 'Primer White', 12.00, 'gals', 2100.00, 25200.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(175, 17, 'material', 'Latex Semi-Gloss', 21.00, 'gals', 1120.00, 23520.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(176, 17, 'material', 'Skimcoat', 5.00, 'sack', 500.00, 2500.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(177, 17, 'material', 'Sanding Paper #120', 5.00, 'pcs', 15.00, 75.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(178, 17, 'material', '2" Paint Brush', 1.00, 'pcs', 75.00, 75.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(179, 17, 'material', 'Paint Thinner', 2.00, 'gals', 320.00, 640.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(180, 17, 'labor', 'Painting Works Labor (45%)', 1.00, 'Lump Sum', 23404.50, 23404.50, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(181, 17, 'equipment', 'Contingencies and Price Escalation (15%)', 1.00, 'Lump Sum', 7801.50, 7801.50, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(182, 19, 'material', 'Cement', 17.00, 'bags', 225.00, 3825.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(183, 19, 'material', 'Sand', 2.00, 'm³', 850.00, 1700.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(184, 19, 'material', 'Gravel', 1.00, 'm³', 1410.00, 1410.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(185, 19, 'material', '10 mm Deformed Bar', 17.00, 'pcs', 220.00, 3740.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(186, 19, 'material', 'Precast Manhole cover and frame', 3.00, 'pcs', 300.00, 900.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(187, 19, 'material', 'CHB', 113.00, 'pcs', 13.00, 1469.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(188, 19, 'material', 'Tie Wire #18', 2.00, 'kgs', 85.00, 170.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(189, 19, 'labor', 'Septic Tank Labor (45%)', 1.00, 'Lump Sum', 5946.30, 5946.30, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(190, 19, 'equipment', 'Contingencies and Price Escalation (15%)', 1.00, 'Lump Sum', 1982.10, 1982.10, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(191, 20, 'material', '20.1 Fencing - Cement', 121.00, 'bags', 225.00, 27225.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(192, 20, 'material', '20.1 Fencing - 8 mm Deformed Bar', 43.00, 'pcs', 120.00, 5160.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(193, 20, 'material', '20.1 Fencing - 10 mm Deformed Bar', 297.00, 'pcs', 220.00, 65340.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(194, 20, 'material', '20.1 Fencing - GI Square tube 1.0', 59.00, 'pcs', 390.00, 23010.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(195, 20, 'material', '20.1 Fencing - GI Wire #18', 17.00, 'kgs', 85.00, 1445.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(196, 20, 'material', '20.1 Fencing - Mixing Sand', 11.00, 'm³', 850.00, 9350.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(197, 20, 'material', '20.1 Fencing - 3/4 Gravel', 9.00, 'm³', 1410.00, 12690.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(198, 20, 'material', '20.1 Fencing - 4" CHB', 623.00, 'pcs', 13.00, 8099.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(199, 20, 'material', '20.1 Fencing - Acrylic Thinner', 2.00, 'gal', 440.00, 880.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(200, 20, 'material', '20.1 Fencing - Epoxy Primer', 2.00, 'gal', 950.00, 1900.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41');
+INSERT INTO `project_scope_lines` (`id`, `project_scope_item_id`, `category`, `description`, `quantity`, `unit`, `unit_price`, `total_cost`, `material_id`, `used_quantity`, `excess_returned_quantity`, `created_at`, `updated_at`) VALUES
+(201, 20, 'material', '20.1 Fencing - Paint Brush 2"', 3.00, 'pcs', 75.00, 225.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(202, 20, 'material', '20.1 Fencing - Baby Roller', 3.00, 'pcs', 95.00, 285.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(203, 20, 'material', '20.2 Taxes - 5% of item 1-20.1', 1.00, 'lot', 77080.96, 77080.96, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(204, 20, 'material', '20.3 Profit - 10% of item 1-20.1', 1.00, 'lot', 154161.92, 154161.92, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(205, 20, 'material', '20.4 Force Majeure Insurance (2 yrs @ ₱2,600/yr)', 1.00, 'lot', 5200.00, 5200.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(206, 20, 'labor', '20.1 Fencing Labor (45%)', 1.00, 'Lump Sum', 70024.05, 70024.05, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(207, 20, 'equipment', '20.1 Fencing Contingencies and Price Escalation (15%)', 1.00, 'Lump Sum', 23341.35, 23341.35, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(208, 21, 'material', '16mmx6m Corr. Steel bar', 18.00, 'lghts', 430.00, 7740.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(209, 21, 'material', '10mmx6m Corr. Steel Bars', 31.00, 'lghts', 168.00, 5208.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(210, 21, 'material', '9mmx6m Corr. Steel Bars', 11.00, 'lghts', 120.00, 1320.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(211, 21, 'material', '#18 G.I Tie Wire', 6.00, 'kls', 70.00, 420.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(212, 21, 'material', '2x2x10 Coco Lumber', 60.00, 'pcs', 100.00, 6000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(213, 21, 'material', 'Assorted sizes Nails', 5.00, 'kls', 70.00, 350.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(214, 21, 'material', 'Premix Concrete (3/4in Aggregate 3000 psi)', 2.61, 'cu.m', 4500.00, 11745.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(215, 21, 'material', 'Other Consumables', 1.00, 'Lump Sum', 1500.00, 1500.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(216, 21, 'labor', 'Excavation', 23.90, 'cu.m', 420.00, 10038.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(217, 21, 'labor', 'Rebar', 320.00, 'kgs', 10.00, 3200.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(218, 21, 'labor', 'Lay-out', 1.00, 'Lump Sum', 2000.00, 2000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(219, 21, 'labor', 'Pouring', 2.61, 'cu.m', 1800.00, 4698.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(220, 21, 'equipment', '10% of Materials Equipment Expense', 1.00, 'Lump Sum', 3500.00, 3500.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(221, 22, 'material', '16mmx6m Corr. Steel bar', 16.00, 'lghts', 430.00, 6880.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(222, 22, 'material', '12mmx6m Corr. Steel bar', 20.00, 'lghts', 240.00, 4800.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(223, 22, 'material', '10mmx6m Corr. Steel Bars', 14.00, 'lghts', 168.00, 2352.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(224, 22, 'material', '9mmx6m Corr. Steel Bars', 100.00, 'lghts', 120.00, 12000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(225, 22, 'material', '#18 G.I Tie Wire', 15.00, 'kls', 70.00, 1050.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(226, 22, 'material', 'Premix Concrete (3/4in Aggregate 3000 psi)', 3.50, 'cu.m', 4500.00, 15750.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(227, 22, 'material', 'Phenolic board 3/8x4x8', 6.00, 'sheets', 1300.00, 7800.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(228, 22, 'material', '2x2x10 Coco Lumber', 100.00, 'pcs', 100.00, 10000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(229, 22, 'material', 'Assorted sizes Nails', 12.00, 'kls', 70.00, 840.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(230, 22, 'labor', 'Formworks', 44.30, 'sq.m', 350.00, 15505.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(231, 22, 'labor', 'Rebar', 607.00, 'kgs', 10.00, 6070.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(232, 22, 'labor', 'Pouring', 3.46, 'cu.m', 1800.00, 6228.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(233, 22, 'equipment', '10% of Materials Equipment Expense', 1.00, 'Lump Sum', 6148.00, 6148.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(234, 23, 'material', '10mmx6m Corr. Steel Bars', 43.00, 'lghts', 168.00, 7224.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(235, 23, 'material', '9mmx6m Corr. Steel Bars', 50.00, 'lghts', 120.00, 6000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(236, 23, 'material', '#18 G.I Tie Wire', 9.00, 'kls', 70.00, 630.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(237, 23, 'material', 'Premix Concrete (3/4in Aggregate 3000 psi)', 2.07, 'cu.m', 4500.00, 9315.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(238, 23, 'material', 'Phenolic board 3/8x4x8', 5.00, 'sheets', 1300.00, 6500.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(239, 23, 'material', '2x2x10 Coco Lumber', 60.00, 'pcs', 100.00, 6000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(240, 23, 'material', 'Assorted sizes Nails', 8.00, 'kls', 70.00, 560.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(241, 23, 'material', 'Other Consumables', 1.00, 'Lump Sum', 1500.00, 1500.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(242, 23, 'labor', 'Formworks', 31.67, 'sq.m', 350.00, 11084.50, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(243, 23, 'labor', 'Rebar', 336.28, 'kgs', 10.00, 3362.80, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(244, 23, 'labor', 'Pouring', 2.07, 'cu.m', 1800.00, 3726.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(245, 23, 'equipment', '10% of Materials Equipment Expense', 1.00, 'Lump Sum', 3773.00, 3773.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(246, 24, 'material', 'Backfill', 25.00, 'cu.m', 700.00, 17500.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(247, 24, 'material', 'Premix Concrete (3/4in Aggregate 3000 psi)', 3.90, 'cu.m', 4500.00, 17550.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(248, 24, 'material', '9mmx6m Corr. Steel Bars', 32.00, 'lghts', 120.00, 3840.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(249, 24, 'material', '#18 G.I Tie Wire', 5.00, 'kls', 70.00, 350.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(250, 24, 'labor', 'Backfilling and Compaction', 25.00, 'cu.m', 350.00, 8750.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41');
+INSERT INTO `project_scope_lines` (`id`, `project_scope_item_id`, `category`, `description`, `quantity`, `unit`, `unit_price`, `total_cost`, `material_id`, `used_quantity`, `excess_returned_quantity`, `created_at`, `updated_at`) VALUES
+(251, 24, 'labor', 'Rebar', 98.00, 'kgs', 10.00, 980.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(252, 24, 'labor', 'Pouring', 3.90, 'cu.m', 1800.00, 7020.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(253, 24, 'equipment', '10% of Materials Equipment Expense', 1.00, 'Lump Sum', 3924.00, 3924.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(254, 25, 'material', '6inx8inx16in CHB', 718.00, 'pcs', 19.50, 14001.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(255, 25, 'material', '4inx8inx16in CHB', 933.00, 'pcs', 15.00, 13995.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(256, 25, 'material', '10mmx6m Corr. Steel Bars', 90.00, 'lghts', 168.00, 15120.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(257, 25, 'material', '#18 G.I Tie Wire', 3.00, 'kls', 70.00, 210.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(258, 25, 'material', 'Mixing Sand for Filler', 9.00, 'cu.m', 800.00, 7200.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(259, 25, 'material', 'Screened Sand for Finishing', 6.00, 'cu.m', 1300.00, 7800.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(260, 25, 'material', 'Cement', 147.00, 'bags', 240.00, 35280.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(261, 25, 'material', 'Other Consumables', 1.00, 'Lump Sum', 1000.00, 1000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(262, 25, 'labor', 'Masonry & Plastering Labor', 1.00, 'Lump Sum', 42573.00, 42573.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(263, 25, 'equipment', '10% of Materials Equipment Expense', 1.00, 'Lump Sum', 9461.00, 9461.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(264, 26, 'material', '4inx8inx16in CHB', 783.00, 'pcs', 15.00, 11745.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(265, 26, 'material', '10mmx6m Corr. Steel Bars', 42.00, 'lghts', 168.00, 7056.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(266, 26, 'material', '#18 G.I Tie Wire', 2.00, 'kls', 70.00, 140.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(267, 26, 'material', 'Mixing Sand for Filler', 3.00, 'cu.m', 800.00, 2400.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(268, 26, 'material', 'Screend Sand for Finishing', 3.00, 'cu.m', 1300.00, 3900.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(269, 26, 'material', 'Cement', 60.00, 'bags', 240.00, 14400.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(270, 26, 'labor', 'Interior Masonry Labor', 1.00, 'Lump Sum', 17839.00, 17839.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(271, 26, 'equipment', '10% of Materials Equipment Expense', 1.00, 'Lump Sum', 3900.00, 3900.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(272, 27, 'material', '6.20mx1.05mx0.40mm pre painted Roofing rib type', 9.00, 'shts', 1736.00, 15624.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(273, 27, 'material', '4.0mx1.05x0.40mm pre painted Roofing rib type', 7.00, 'shts', 1120.00, 7840.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(274, 27, 'material', '4.60mx1.05x0.40mm pre painted Roofing Rib type', 1.00, 'sht', 450.00, 450.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(275, 27, 'material', '0.40mm pre painted fascia board', 18.00, 'pcs', 450.00, 8100.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(276, 27, 'material', '3/8in.x4inx8ft pre cut hardiflex', 18.00, 'pcs', 150.00, 2700.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(277, 27, 'material', 'wall cap 0.40mm', 6.00, 'pcs', 700.00, 4200.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(278, 27, 'material', '0.40mm end flashing', 3.00, 'pcs', 480.00, 1440.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(279, 27, 'material', '10mmx2x6x20ft C-Purlins', 8.00, 'lghts', 1200.00, 9600.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(280, 27, 'material', '10mmx2x3x20ft C-Purlins', 25.00, 'lghts', 670.00, 16750.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(281, 27, 'material', 'Tekscrew 2in', 700.00, 'pcs', 1.50, 1050.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(282, 27, 'material', 'Blind Rivets', 2.00, 'boxes', 260.00, 520.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(283, 27, 'material', 'Welding Rod', 8.00, 'kls', 120.00, 960.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(284, 27, 'labor', 'Roof Truss & Sheet Installation Labor', 1.00, 'Lump Sum', 31155.00, 31155.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(285, 27, 'equipment', '10% of Materials Equipment Expense', 1.00, 'Lump Sum', 6900.00, 6900.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(286, 28, 'material', '0.5mm metal furring', 201.00, 'pcs', 145.00, 29145.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(287, 28, 'material', 'Light Hardiflex', 27.00, 'pcs', 500.00, 13500.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(288, 28, 'material', 'Blind Rivets', 2.00, 'boxes', 300.00, 600.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(289, 28, 'material', '1x1x21ft tubular aluminum', 14.00, 'lghts', 540.00, 7560.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(290, 28, 'material', 'Aluminum screw', 150.00, 'pcs', 2.00, 300.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(291, 28, 'material', '0.40 Screen', 22.00, 'meters', 115.00, 2530.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(292, 28, 'labor', 'Ceiling Installation & Framing Labor', 1.00, 'Lump Sum', 24136.00, 24136.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(293, 28, 'equipment', '10% of Materials Equipment Expense', 1.00, 'Lump Sum', 5300.00, 5300.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(294, 29, 'material', '0.30x0.30 floor tiles', 70.00, 'pcs', 40.00, 2800.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(295, 29, 'material', '0.30x0.30 wall tiles', 220.00, 'pcs', 45.00, 9900.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(296, 29, 'material', '0.60x0.60 floor tiles', 141.00, 'pcs', 250.00, 35250.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(297, 29, 'material', 'Port Tile 0.60x0.60', 42.00, 'pcs', 250.00, 10500.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(298, 29, 'labor', 'Tile Setting & Grouting Labor', 1.00, 'Lump Sum', 26303.00, 26303.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(299, 29, 'equipment', '10% of Materials Equipment Expense', 1.00, 'Lump Sum', 5845.00, 5845.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(300, 30, 'material', 'Natural Stone', 2.00, 'sq.m', 1200.00, 2400.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41');
+INSERT INTO `project_scope_lines` (`id`, `project_scope_item_id`, `category`, `description`, `quantity`, `unit`, `unit_price`, `total_cost`, `material_id`, `used_quantity`, `excess_returned_quantity`, `created_at`, `updated_at`) VALUES
+(301, 30, 'material', 'Front Canopy: 9.60x0.40x0.10m thk', 9.60, 'meters', 480.00, 4608.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(302, 30, 'material', '0.10x0.025m concrete molding', 6.60, 'ln.m', 380.00, 2508.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(303, 30, 'labor', 'Stone Masonry & Canopy Labor', 1.00, 'Lump Sum', 4283.00, 4283.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(304, 30, 'equipment', 'Equipment Expense', 1.00, 'Lump Sum', 1000.00, 1000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(305, 31, 'material', 'Main Panel Door 0.90x2.10 with Door Jamb', 1.00, 'set', 8500.00, 8500.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(306, 31, 'material', 'Bedroom Door 0.80x2.10 with Door Jamb', 2.00, 'sets', 8200.00, 16400.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(307, 31, 'material', 'PVC Door 0.60x2.10', 2.00, 'sets', 2000.00, 4000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(308, 31, 'material', '1.50mx2.10m Sliding Door 1/4 in glass on aluminum Frame', 1.00, 'set', 20000.00, 20000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(309, 31, 'material', 'Door Knob', 3.00, 'sets', 3500.00, 10500.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(310, 31, 'material', 'CR Door Knob', 1.00, 'set', 750.00, 750.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(311, 31, 'material', '3½x3½in Loose pin hinges', 12.00, 'pcs', 300.00, 3600.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(312, 31, 'labor', 'Door with Door Jamb Installation', 3.00, 'Sets', 2000.00, 6000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(313, 31, 'labor', 'PVC Door', 1.00, 'Set', 1500.00, 1500.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(314, 31, 'equipment', 'Equipment Expense', 1.00, 'Lump Sum', 1000.00, 1000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(315, 32, 'material', '1.20x2.0m 1/4 glass on aluminum frame sliding window', 1.00, 'unit', 10500.00, 10500.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(316, 32, 'material', '1.20x1.20m 1/4 glass on aluminum frame sliding window', 3.00, 'units', 6300.00, 18900.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(317, 32, 'material', '0.60mx0.90m 1/4in glass on aluminum frame sliding window', 2.00, 'units', 2363.00, 4726.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(318, 32, 'material', 'Awning window 1.80mx0.45m', 2.00, 'units', 3544.00, 7088.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(319, 32, 'material', '0.90x0.450 awning window', 1.00, 'unit', 1794.00, 1794.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(320, 33, 'material', '1.50mx0.60m Granite slab', 1.00, 'lot', 14000.00, 14000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(321, 33, 'material', '1.50x0.60mx0.075m Precast Concrete Counter', 1.00, 'lot', 2500.00, 2500.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(322, 33, 'material', '14in wide pre fabricated Cabinet Door', 4.00, 'sets', 850.00, 3400.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(323, 33, 'material', 'Hinges', 4.00, 'pcs', 350.00, 1400.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(324, 33, 'material', 'Cab Door Handle', 4.00, 'pcs', 250.00, 1000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(325, 33, 'material', 'Door Frame', 1.00, 'set', 800.00, 800.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(326, 33, 'labor', 'Counter Fabrication Labor', 1.00, 'Lump Sum', 10395.00, 10395.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(327, 33, 'equipment', 'Equipment Expense', 1.00, 'Lump Sum', 2310.00, 2310.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(328, 34, 'material', '4inꝊx10ft Sanitary PVC Pipe', 12.00, 'lghts', 420.00, 5040.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(329, 34, 'material', '3inꝊx10ft Sanitary PVC Pipe', 10.00, 'lghts', 360.00, 3600.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(330, 34, 'material', '4inꝊx90ᵒ PVC Elbow', 4.00, 'pcs', 90.00, 360.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(331, 34, 'material', '4inꝊ PVC Coupling', 4.00, 'pcs', 90.00, 360.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(332, 34, 'material', '3inꝊ PVC Wye', 3.00, 'pcs', 130.00, 390.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(333, 34, 'material', '3inꝊ PVC Tee', 3.00, 'pcs', 85.00, 255.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(334, 34, 'material', '3inꝊ PVC Clean Out', 3.00, 'pcs', 175.00, 525.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(335, 34, 'material', '3inꝊ PVC Elbow 90ᵒ', 4.00, 'pcs', 85.00, 340.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(336, 34, 'material', '3inꝊ PVC Elbow 45ᵒ', 3.00, 'pcs', 85.00, 255.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(337, 34, 'material', '4in PVC Cleanout', 4.00, 'pcs', 220.00, 880.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(338, 34, 'material', '20mmꝊx10ft Moldex Waterline', 12.00, 'rolls', 100.00, 1200.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(339, 34, 'material', '20mmꝊx90ᵒ Elbow (Moldex)', 5.00, 'pcs', 15.00, 75.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(340, 34, 'material', '20mmꝊ Coupling Moldex', 7.00, 'pcs', 15.00, 105.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(341, 34, 'material', 'Water Closet with Filling', 2.00, 'sets', 9500.00, 19000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(342, 34, 'material', 'Lavatory', 2.00, 'sets', 4500.00, 9000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(343, 34, 'material', 'Stainless faucet 20mm', 6.00, 'pcs', 450.00, 2700.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(344, 34, 'material', 'Shower valve 20mm', 2.00, 'pcs', 750.00, 1500.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(345, 34, 'material', 'Solvent', 5.00, 'cans', 75.00, 375.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(346, 34, 'material', 'Stainless Sink', 1.00, 'set', 2500.00, 2500.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(347, 34, 'material', 'Kitchen Sink faucet', 1.00, 'set', 1200.00, 1200.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(348, 34, 'material', 'P-Trap 2inꝊ PVC', 2.00, 'pcs', 95.00, 190.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(349, 34, 'labor', 'Plumbing Installation Labor', 1.00, 'Lump Sum', 22432.50, 22432.50, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(350, 34, 'equipment', 'Equipment Expense', 1.00, 'Lump Sum', 4985.00, 4985.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41');
+INSERT INTO `project_scope_lines` (`id`, `project_scope_item_id`, `category`, `description`, `quantity`, `unit`, `unit_price`, `total_cost`, `material_id`, `used_quantity`, `excess_returned_quantity`, `created_at`, `updated_at`) VALUES
+(351, 35, 'material', 'Utility Box 2x4', 35.00, 'pcs', 35.00, 1225.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(352, 35, 'material', 'Junction Box 4x4', 35.00, 'pcs', 40.00, 1400.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(353, 35, 'material', 'Flexible Pipe 1/2', 3.00, 'rolls', 900.00, 2700.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(354, 35, 'material', '1/2x10ft PVC Pipes (for electrical)', 35.00, 'pcs', 135.00, 4725.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(355, 35, 'material', 'PVC Elbow 1/2', 35.00, 'pcs', 18.00, 630.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(356, 35, 'material', 'Solvet', 2.00, 'cans', 95.00, 190.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(357, 35, 'material', 'THW wire #12', 3.00, 'boxes', 5000.00, 15000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(358, 35, 'material', 'THW wire #10', 3.00, 'boxes', 4800.00, 14400.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(359, 35, 'material', 'Electrical Tape', 10.00, 'pcs', 60.00, 600.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(360, 35, 'material', 'RG 6 Cable wire', 60.00, 'mts', 32.00, 1920.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(361, 35, 'material', 'Telephone wire #22', 60.00, 'mts', 30.00, 1800.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(362, 35, 'material', 'ACB plug-in (67) 12 holes allied', 1.00, 'set', 2000.00, 2000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(363, 35, 'material', '100A main', 1.00, 'pc', 1750.00, 1750.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(364, 35, 'material', '20A', 5.00, 'pcs', 900.00, 4500.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(365, 35, 'material', '30A', 1.00, 'pc', 900.00, 900.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(366, 35, 'material', '15A', 5.00, 'pcs', 900.00, 4500.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(367, 35, 'material', 'Flexible Connection 1/2', 105.00, 'pcs', 12.00, 1260.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(368, 35, 'material', 'High capacity Meter sucket hub 1½', 1.00, 'pc', 2000.00, 2000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(369, 35, 'material', 'Service Cap 1½', 1.00, 'pc', 140.00, 140.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(370, 35, 'material', 'Metal Clamp 1½', 5.00, 'pcs', 50.00, 250.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(371, 35, 'material', 'RSC Pipe 1½', 1.00, 'lght', 1650.00, 1650.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(372, 35, 'material', 'Secondary rack 2 spool', 1.00, 'pc', 400.00, 400.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(373, 35, 'material', 'Machine Bolt 1/2x14', 2.00, 'pcs', 100.00, 200.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(374, 35, 'material', 'THW #38mm² (black)', 30.00, 'mts', 400.00, 12000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(375, 35, 'material', 'THW #38mm² (white)', 30.00, 'mts', 400.00, 12000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(376, 35, 'material', 'THW #8mm (Green)', 30.00, 'mts', 90.00, 2700.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(377, 35, 'material', 'PVC pipe 1½', 10.00, 'pcs', 400.00, 4000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(378, 35, 'material', 'PVC Elbow 1½', 10.00, 'pcs', 90.00, 900.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(379, 35, 'material', 'Ground rod w/ clamp', 1.00, 'set', 1000.00, 1000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(380, 35, 'material', '2 gang outlet universal panasonic', 20.00, 'sets', 260.00, 5200.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(381, 35, 'material', '2 aircon outlet', 2.00, 'sets', 400.00, 800.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(382, 35, 'material', 'Water proof cover panasonic', 2.00, 'pcs', 1150.00, 2300.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(383, 35, 'material', 'water proof cover', 4.00, 'pcs', 65.00, 260.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(384, 35, 'material', '2 gang switch', 10.00, 'sets', 250.00, 2500.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(385, 35, 'material', '3 gang switch', 10.00, 'sets', 340.00, 3400.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(386, 35, 'material', '1 gang switch', 10.00, 'sets', 160.00, 1600.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(387, 35, 'material', 'Chandeller w/ fan', 2.00, 'sets', 10500.00, 21000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(388, 35, 'material', 'Telephone outlet', 2.00, 'sets', 450.00, 900.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(389, 35, 'material', 'Cable outlet', 2.00, 'sets', 450.00, 900.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(390, 35, 'material', '2 gang outlet panasonic (GFA)', 1.00, 'set', 1850.00, 1850.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(391, 35, 'material', '4" Down Light', 30.00, 'pcs', 130.00, 3900.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(392, 35, 'material', 'Led Bulb 5watts', 30.00, 'pcs', 95.00, 2850.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(393, 35, 'material', 'Led Bulb 3watts', 10.00, 'pcs', 90.00, 900.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(394, 35, 'labor', 'Master Electrician & Wiring Labor', 1.00, 'Lump Sum', 65295.00, 65295.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(395, 35, 'equipment', 'Equipment Expense', 1.00, 'Lump Sum', 1192.00, 1192.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(396, 36, 'material', 'Mortaflex', 12.00, 'gals', 500.00, 6000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(397, 36, 'material', 'Skimcoat', 30.00, 'bags', 550.00, 16500.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(398, 36, 'material', 'Primer White', 5.00, 'pails', 2500.00, 12500.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(399, 36, 'material', 'Semi Gloss latex', 9.00, 'pails', 2580.00, 23220.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(400, 36, 'material', 'Marine Epoxy Bostik', 1.00, 'set', 2800.00, 2800.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41');
+INSERT INTO `project_scope_lines` (`id`, `project_scope_item_id`, `category`, `description`, `quantity`, `unit`, `unit_price`, `total_cost`, `material_id`, `used_quantity`, `excess_returned_quantity`, `created_at`, `updated_at`) VALUES
+(401, 36, 'material', '#120 Sanding Paper', 35.00, 'pcs', 19.00, 665.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(402, 36, 'material', '8in Roller', 10.00, 'pcs', 60.00, 600.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(403, 36, 'material', '3in Paint Brush', 10.00, 'pcs', 35.00, 350.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(404, 36, 'material', 'Neutralizer', 7.00, 'gals', 500.00, 3500.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(405, 36, 'material', 'Joint Tape', 5.00, 'rolls', 130.00, 650.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(406, 36, 'labor', 'Surface Preparation & Painting Labor', 1.00, 'Lump Sum', 30053.00, 30053.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(407, 36, 'equipment', 'Equipment Expense', 1.00, 'Lump Sum', 6500.00, 6500.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(408, 37, 'material', '4"x8"x16" CHB', 290.00, 'pcs', 15.00, 4350.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(409, 37, 'material', '10mmx6m Corr. Steel Bar', 30.00, 'lghts', 168.00, 5040.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(410, 37, 'material', '#18 G.I Tie Wire', 4.00, 'kls', 70.00, 280.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(411, 37, 'material', 'Cement', 28.00, 'bags', 240.00, 6720.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(412, 37, 'material', 'Phenolic Board', 2.00, 'pcs', 1300.00, 2600.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(413, 37, 'material', 'Nail', 1.00, 'kl', 70.00, 70.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(414, 37, 'labor', 'Septic Tank Excavation & Masonry Labor', 1.00, 'Lump Sum', 8577.00, 8577.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(415, 37, 'equipment', 'Equipment Expense', 1.00, 'Lump Sum', 1906.00, 1906.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(416, 38, 'material', 'Professional Fee (Civil Engr., Electrical Engr., Master Plumber, Geodetic Engr.)', 1.00, 'lot', 50000.00, 50000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(417, 38, 'material', 'Permit Fee', 1.00, 'lot', 14000.00, 14000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(418, 39, 'material', 'Layout & Excavation', 7.00, 'm³', 600.00, 4200.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(419, 39, 'material', '10 mm Deformed Bar', 26.00, 'pcs', 220.00, 5720.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(420, 39, 'material', '8 mm Deformed Bar', 7.00, 'pcs', 120.00, 840.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(421, 39, 'material', 'Cement', 18.00, 'bags', 225.00, 4050.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(422, 39, 'material', 'Mixing Sand', 1.00, 'm³', 850.00, 850.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(423, 39, 'material', '3/4 Gravel', 3.00, 'm³', 1410.00, 4230.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(424, 39, 'material', '#18 Tie Wire', 3.00, 'kgs', 85.00, 255.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(425, 39, 'material', 'Masonry Pail', 1.00, 'pcs', 70.00, 70.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(426, 39, 'material', '2"x3"x10ft Coco Lumber', 5.00, 'pcs', 140.00, 700.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(427, 39, 'material', '2"x2"x10ft Coco Lumber', 3.00, 'pcs', 100.00, 300.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(428, 39, 'material', '4" Common Nails', 2.00, 'kgs', 70.00, 140.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(429, 39, 'material', 'Phenolic Board', 1.00, 'pcs', 1300.00, 1300.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(430, 39, 'material', 'Soil Guard', 2.00, 'liters', 1350.00, 2700.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(431, 39, 'material', '#100 Nylon String', 5.00, 'roll', 25.00, 125.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(432, 39, 'labor', 'Foundation & Footings Labor (45%)', 1.00, 'Lump Sum', 11466.00, 11466.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(433, 39, 'equipment', 'Contingencies and Price Escalation (15%)', 1.00, 'Lump Sum', 3822.00, 3822.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(434, 40, 'material', '10 mm Deformed Bar', 19.00, 'pcs', 220.00, 4180.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(435, 40, 'material', '8 mm Deformed Bar', 22.00, 'pcs', 120.00, 2640.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(436, 40, 'material', 'Cement', 9.00, 'bags', 225.00, 2025.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(437, 40, 'material', 'Mixing Sand', 1.00, 'm³', 850.00, 850.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(438, 40, 'material', 'Gravel', 1.00, 'm³', 1410.00, 1410.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(439, 40, 'material', '#18 Tie Wire', 8.00, 'kgs', 85.00, 680.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(440, 40, 'material', '2"x2"x8\' Coco Lumber', 33.00, 'pcs', 90.00, 2970.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(441, 40, 'material', 'Phenolic Board', 3.00, 'pcs', 1300.00, 3900.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(442, 40, 'material', '2.5" Common Nails', 2.00, 'kgs', 80.00, 160.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(443, 40, 'labor', 'Columns Labor (45%)', 1.00, 'Lump Sum', 8466.75, 8466.75, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(444, 40, 'equipment', 'Contingencies and Price Escalation (15%)', 1.00, 'Lump Sum', 2822.25, 2822.25, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(445, 41, 'material', '10 mm Deformed Bar', 26.00, 'pcs', 220.00, 5720.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(446, 41, 'material', '8 mm Deformed Bar', 31.00, 'pcs', 120.00, 3720.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(447, 41, 'material', 'Cement', 12.00, 'bags', 225.00, 2700.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(448, 41, 'material', 'Mixing Sand', 1.00, 'm³', 850.00, 850.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(449, 41, 'material', 'Gravel', 1.00, 'm³', 1410.00, 1410.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(450, 41, 'material', '#18 Tie Wire', 11.00, 'kgs', 85.00, 935.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41');
+INSERT INTO `project_scope_lines` (`id`, `project_scope_item_id`, `category`, `description`, `quantity`, `unit`, `unit_price`, `total_cost`, `material_id`, `used_quantity`, `excess_returned_quantity`, `created_at`, `updated_at`) VALUES
+(451, 41, 'material', '2"x2"x8\' Coco Lumber', 16.00, 'pcs', 90.00, 1440.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(452, 41, 'material', 'Phenolic Board', 3.00, 'pcs', 1300.00, 3900.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(453, 41, 'material', '2.5" Common Nail', 2.00, 'kgs', 80.00, 160.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(454, 41, 'labor', 'Beams Labor (45%)', 1.00, 'Lump Sum', 9375.75, 9375.75, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(455, 41, 'equipment', 'Contingencies and Price Escalation (15%)', 1.00, 'Lump Sum', 3125.25, 3125.25, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(456, 42, 'material', '8 mm Deformed Bar', 21.00, 'pcs', 120.00, 2520.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(457, 42, 'material', 'Cement', 23.00, 'bags', 225.00, 5175.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(458, 42, 'material', 'Mixing Sand', 2.00, 'm³', 850.00, 1700.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(459, 42, 'material', 'Gravel', 3.00, 'm³', 1410.00, 4230.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(460, 42, 'material', '#18 Tie Wire', 3.00, 'kgs', 85.00, 255.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(461, 42, 'material', 'Backfill', 9.00, 'm³', 600.00, 5400.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(462, 42, 'labor', 'Slab on Fill Labor (45%)', 1.00, 'Lump Sum', 8676.00, 8676.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(463, 42, 'equipment', 'Contingencies and Price Escalation (15%)', 1.00, 'Lump Sum', 2892.00, 2892.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(464, 44, 'material', '10 mm Deformed Bar', 34.00, 'pcs', 220.00, 7480.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(465, 44, 'material', 'Cement', 30.00, 'bags', 225.00, 6750.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(466, 44, 'material', 'Mixing Sand', 3.00, 'm³', 850.00, 2550.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(467, 44, 'material', 'CHB', 603.00, 'pcs', 13.00, 7839.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(468, 44, 'material', '#18 Tie Wire', 2.00, 'kgs', 85.00, 170.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(469, 44, 'material', 'Bamboo', 4.00, 'pcs', 200.00, 800.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(470, 44, 'material', '2"x2"x10ft Coco Lumber', 7.00, 'pcs', 100.00, 700.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(471, 44, 'material', 'Scaffolding Steel', 3.00, 'pcs', 1300.00, 3900.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(472, 44, 'material', 'Assorted Common Nail', 2.00, 'kgs', 70.00, 140.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(473, 44, 'labor', 'Exterior Walls Labor (45%)', 1.00, 'Lump Sum', 13648.05, 13648.05, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(474, 44, 'equipment', 'Contingencies and Price Escalation (15%)', 1.00, 'Lump Sum', 4549.35, 4549.35, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(475, 45, 'material', '10 mm Deformed Bar', 27.00, 'pcs', 220.00, 5940.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(476, 45, 'material', 'Cement', 24.00, 'bags', 225.00, 5400.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(477, 45, 'material', 'Mixing Sand', 3.00, 'm³', 850.00, 2550.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(478, 45, 'material', 'CHB', 489.00, 'pcs', 13.00, 6357.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(479, 45, 'material', '#18 Tie Wire', 2.00, 'kgs', 85.00, 170.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(480, 45, 'material', '3.5mm Hardiflex', 8.00, 'pcs', 455.00, 3640.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(481, 45, 'material', '2x3 C-Purlins', 9.00, 'pcs', 480.00, 4320.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(482, 45, 'material', 'Welding Rod', 7.00, 'kgs', 120.00, 840.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(483, 45, 'material', '1/8"x1/2" Blind Rivets', 1.00, 'box', 280.00, 280.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(484, 45, 'material', 'Bamboo', 2.00, 'pcs', 200.00, 400.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(485, 45, 'material', '2"x2"x10ft Coco Lumber', 4.00, 'pcs', 100.00, 400.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(486, 45, 'material', 'Scaffolding Steel', 3.00, 'pcs', 1300.00, 3900.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(487, 45, 'material', 'Assorted Common Nail', 2.00, 'kgs', 70.00, 140.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(488, 45, 'labor', 'Interior Walls Labor (45%)', 1.00, 'Lump Sum', 15451.65, 15451.65, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(489, 45, 'equipment', 'Contingencies and Price Escalation (15%)', 1.00, 'Lump Sum', 5150.55, 5150.55, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(490, 46, 'material', 'GA. 20 (2x4) C-Purlins', 11.00, 'pcs', 600.00, 6600.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(491, 46, 'material', 'GA. 20 (2x3) C-Purlins', 27.00, 'pcs', 480.00, 12960.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(492, 46, 'material', 'Tekscrew', 2.00, 'box', 510.00, 1020.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(493, 46, 'material', 'Blind Rivets', 2.00, 'box', 280.00, 560.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(494, 46, 'material', 'Welding rod', 13.00, 'kgs', 120.00, 1560.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(495, 46, 'material', 'Rib-Type pre-painted long span roofing', 49.00, 'ln.m.', 410.00, 20090.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(496, 46, 'material', 'False Gutter 0.4mmx0.6mm', 4.00, 'pcs', 450.00, 1800.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(497, 46, 'material', 'Wall Flashing 0.4mmx18"x8\'', 6.00, 'pcs', 360.00, 2160.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(498, 46, 'material', 'End Flashing 0.4mmx32"x8\'', 4.00, 'pcs', 585.00, 2340.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(499, 46, 'labor', 'Roofing Installation Labor (45%)', 1.00, 'Lump Sum', 22090.50, 22090.50, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(500, 46, 'equipment', 'Contingencies and Price Escalation (15%)', 1.00, 'Lump Sum', 7363.50, 7363.50, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41');
+INSERT INTO `project_scope_lines` (`id`, `project_scope_item_id`, `category`, `description`, `quantity`, `unit`, `unit_price`, `total_cost`, `material_id`, `used_quantity`, `excess_returned_quantity`, `created_at`, `updated_at`) VALUES
+(501, 47, 'material', '4.5mm Ficem Board', 16.00, 'pcs', 450.00, 7200.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(502, 47, 'material', 'Metal Furring', 43.00, 'pcs', 120.00, 5160.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(503, 47, 'material', '1/8"x1/2" Blind Rivets', 3.00, 'box', 280.00, 840.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(504, 47, 'material', 'Assorted Common Nails', 3.00, 'kgs', 70.00, 210.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(505, 47, 'labor', 'Ceiling Installation Labor (45%)', 1.00, 'Lump Sum', 6034.50, 6034.50, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(506, 47, 'equipment', 'Contingencies and Price Escalation (15%)', 1.00, 'Lump Sum', 2011.50, 2011.50, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(507, 48, 'material', 'Power Floor', 5.00, 'gal', 2400.00, 12000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(508, 48, 'material', 'Cement', 6.00, 'bags', 225.00, 1350.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(509, 48, 'material', 'Mixing Sand', 1.00, 'm³', 850.00, 850.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(510, 48, 'material', '0.3x0.3 Tiles', 27.00, 'pcs', 45.00, 1215.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(511, 48, 'labor', 'Floor Finishes Labor (45%)', 1.00, 'Lump Sum', 6936.75, 6936.75, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(512, 48, 'equipment', 'Contingencies and Price Escalation (15%)', 1.00, 'Lump Sum', 2312.25, 2312.25, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(513, 49, 'material', 'Cement Waterproofing Compound', 4.00, 'pack', 60.00, 240.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(514, 49, 'material', 'Cement', 48.00, 'bags', 225.00, 10800.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(515, 49, 'material', 'Mixing Sand', 5.00, 'm³', 850.00, 4250.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(516, 49, 'material', '0.3x0.3 Tiles', 80.00, 'pcs', 45.00, 3600.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(517, 49, 'material', 'Hardware Cloth', 1.00, 'roll', 1120.00, 1120.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(518, 49, 'labor', 'Wall Finishes Labor (45%)', 1.00, 'Lump Sum', 9004.50, 9004.50, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(519, 49, 'equipment', 'Contingencies and Price Escalation (15%)', 1.00, 'Lump Sum', 3001.50, 3001.50, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(520, 50, 'material', 'Door Jamb 0.80m (2x4)', 1.00, 'pcs', 1300.00, 1300.00, NULL, 0.00, 0.00, '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(521, 50, 'material', 'Door Jamb 0.70m (2x4)', 2.00, 'pcs', 1300.00, 2600.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(522, 50, 'material', 'Loosepin Hinges 3½x3½', 4.00, 'set', 170.00, 680.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(523, 50, 'material', 'Assorted Common Nails', 2.00, 'kgs', 70.00, 140.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(524, 50, 'material', 'PVC Door w/ Jamb 0.60mx2.10m', 1.00, 'pcs', 1700.00, 1700.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(525, 50, 'material', 'Panel Door 0.80mx2.10', 1.00, 'pcs', 4200.00, 4200.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(526, 50, 'material', 'Panel Door 0.70mx2.10', 2.00, 'pcs', 3800.00, 7600.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(527, 50, 'material', 'Door Lockset (Main Door)', 1.00, 'set', 3000.00, 3000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(528, 50, 'material', 'Door Lockset (Exit/Bedrooms)', 2.00, 'set', 1500.00, 3000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(529, 50, 'material', 'Door Lockset (T & B)', 1.00, 'set', 450.00, 450.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(530, 50, 'labor', 'Doors Installation Labor (45%)', 1.00, 'Lump Sum', 11101.50, 11101.50, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(531, 50, 'equipment', 'Contingencies and Price Escalation (15%)', 1.00, 'Lump Sum', 3700.50, 3700.50, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(532, 51, 'material', 'Sliding Analoc Window w/ Alum. Frame', 1.00, 'LS', 15000.00, 15000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(533, 51, 'labor', 'Windows Labor (45%)', 1.00, 'Lump Sum', 6750.00, 6750.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(534, 51, 'equipment', 'Contingencies and Price Escalation (15%)', 1.00, 'Lump Sum', 2250.00, 2250.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(535, 52, 'material', 'Precast Kitchen Counter', 1.00, 'Pcs', 1800.00, 1800.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(536, 52, 'material', 'Kitchen Sink', 1.00, 'set', 890.00, 890.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(537, 52, 'material', 'Cement', 4.00, 'bags', 225.00, 900.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(538, 52, 'material', 'Mixing Sand', 1.00, 'm³', 850.00, 850.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(539, 52, 'material', 'CHB', 16.00, 'pcs', 13.00, 208.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(540, 52, 'material', '0.3x0.3 Tiles', 15.00, 'pcs', 45.00, 675.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(541, 52, 'labor', 'Kitchen Counter Labor (45%)', 1.00, 'Lump Sum', 2395.35, 2395.35, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(542, 52, 'equipment', 'Contingencies and Price Escalation (15%)', 1.00, 'Lump Sum', 798.45, 798.45, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(543, 53, 'material', 'PVC Sanitary Pipe 2"', 4.00, 'pcs', 180.00, 720.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(544, 53, 'material', 'PVC Sanitary Pipe 4"', 2.00, 'pcs', 420.00, 840.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(545, 53, 'material', 'Solvent 400cc', 2.00, 'can', 225.00, 450.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(546, 53, 'material', 'Toilet Bowl with Complete Accessories', 1.00, 'sets', 8500.00, 8500.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(547, 53, 'material', 'Telephone Shower', 1.00, 'sets', 620.00, 620.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(548, 53, 'material', 'Floor Drain', 1.00, 'sets', 450.00, 450.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(549, 53, 'material', 'Clean Out 2"', 1.00, 'pcs', 150.00, 150.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(550, 53, 'material', 'Clean Out 4"', 1.00, 'pcs', 175.00, 175.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42');
+INSERT INTO `project_scope_lines` (`id`, `project_scope_item_id`, `category`, `description`, `quantity`, `unit`, `unit_price`, `total_cost`, `material_id`, `used_quantity`, `excess_returned_quantity`, `created_at`, `updated_at`) VALUES
+(551, 53, 'material', 'SAN Elbow 4x45', 2.00, 'pcs', 98.00, 196.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(552, 53, 'material', 'SAN Elbow 2x45', 2.00, 'pcs', 55.00, 110.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(553, 53, 'material', 'SAN Elbow 2x90', 2.00, 'pcs', 39.00, 78.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(554, 53, 'material', 'WYE 2x2', 1.00, 'pcs', 45.00, 45.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(555, 53, 'material', 'TEE 2x2', 1.00, 'pcs', 65.00, 65.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(556, 53, 'material', 'TEE 4x4', 1.00, 'pcs', 215.00, 215.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(557, 53, 'material', 'WYE 4x2', 2.00, 'pcs', 130.00, 260.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(558, 53, 'material', 'Elbow 1/2"', 11.00, 'pcs', 25.00, 275.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(559, 53, 'material', 'TEE 1/2"', 3.00, 'pcs', 20.00, 60.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(560, 53, 'material', 'Water Pipe 1/2"', 4.00, 'pcs', 150.00, 600.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(561, 53, 'labor', 'Plumbing Installation Labor (45%)', 1.00, 'Lump Sum', 6214.05, 6214.05, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(562, 53, 'equipment', 'Contingencies and Price Escalation (15%)', 1.00, 'Lump Sum', 2071.35, 2071.35, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(563, 54, 'material', 'Flexible Hose 1/2"', 1.00, 'pcs', 950.00, 950.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(564, 54, 'material', 'PVC Pipe 1"', 2.00, 'pcs', 150.00, 300.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(565, 54, 'material', 'PVC Elbow 1/2"', 5.00, 'pcs', 25.00, 125.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(566, 54, 'material', 'PVC Pipe 1/2"', 11.00, 'pcs', 95.00, 1045.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(567, 54, 'material', 'TEE 1/2"', 5.00, 'pcs', 20.00, 100.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(568, 54, 'material', 'THHN Wire 3.5mm', 1.00, 'box', 4300.00, 4300.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(569, 54, 'material', 'THHN Wire 5.5mm', 40.00, 'meters', 130.00, 5200.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(570, 54, 'material', 'Utility Box', 8.00, 'pcs', 50.00, 400.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(571, 54, 'material', 'Junction Box', 5.00, 'pcs', 55.00, 275.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(572, 54, 'material', '2 Gang Outlet', 1.00, 'pcs', 200.00, 200.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(573, 54, 'material', 'Receptacle', 8.00, 'pcs', 25.00, 200.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(574, 54, 'material', '2 Gang Switch', 2.00, 'pcs', 200.00, 400.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(575, 54, 'material', '10W Ceiling Lights', 8.00, 'pcs', 620.00, 4960.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(576, 54, 'material', '3 Gang Switch', 1.00, 'pcs', 250.00, 250.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(577, 54, 'material', 'Single Switch', 1.00, 'pcs', 60.00, 60.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(578, 54, 'material', 'Breaker 20A', 1.00, 'pcs', 790.00, 790.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(579, 54, 'material', 'Breaker 30A', 1.00, 'pcs', 790.00, 790.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(580, 54, 'material', 'Breaker 60A', 3.00, 'pcs', 110.00, 330.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(581, 54, 'material', 'Ground Rod', 1.00, 'length', 990.00, 990.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(582, 54, 'material', 'RSC Pipe', 1.00, 'length', 700.00, 700.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(583, 54, 'material', 'THHN Wire #6 BLK', 19.00, 'meters', 155.00, 2945.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(584, 54, 'material', 'THHN Wire #6 WHITE', 19.00, 'meters', 155.00, 2945.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(585, 54, 'material', 'THHN Wire #10 GREEN', 1.00, 'roll', 7300.00, 7300.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(586, 54, 'material', 'Meter Socket 1"', 1.00, 'pcs', 550.00, 550.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(587, 54, 'labor', 'Electrical Works Labor (45%)', 1.00, 'Lump Sum', 16247.25, 16247.25, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(588, 54, 'equipment', 'Contingencies and Price Escalation (15%)', 1.00, 'Lump Sum', 5415.75, 5415.75, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(589, 55, 'material', 'Flat White', 1.00, 'pail', 2100.00, 2100.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(590, 55, 'material', 'Concrete Primer', 2.00, 'pail', 2100.00, 4200.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(591, 55, 'material', 'Roller #7', 4.00, 'pcs', 120.00, 480.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(592, 55, 'material', 'Paint Brush 1"', 2.00, 'pcs', 60.00, 120.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(593, 55, 'material', 'Paint Brush 2"', 2.00, 'pcs', 75.00, 150.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(594, 55, 'material', 'Paint Brush 4"', 2.00, 'pcs', 115.00, 230.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(595, 55, 'material', 'Skim Coat', 2.00, 'sack', 500.00, 1000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(596, 55, 'material', 'Epoxy Primer', 2.00, 'gal', 950.00, 1900.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(597, 55, 'material', 'Paint Thinner', 2.00, 'gal', 320.00, 640.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(598, 55, 'material', 'Gibson Compound', 1.00, 'bag', 345.00, 345.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(599, 55, 'material', 'Mortaflex', 2.00, 'gal', 720.00, 1440.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(600, 55, 'material', 'Vulca Seal', 2.00, 'gal', 1850.00, 3700.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42');
+INSERT INTO `project_scope_lines` (`id`, `project_scope_item_id`, `category`, `description`, `quantity`, `unit`, `unit_price`, `total_cost`, `material_id`, `used_quantity`, `excess_returned_quantity`, `created_at`, `updated_at`) VALUES
+(601, 55, 'labor', 'Painting Labor (45%)', 1.00, 'Lump Sum', 7337.25, 7337.25, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(602, 55, 'equipment', 'Contingencies and Price Escalation (15%)', 1.00, 'Lump Sum', 2445.75, 2445.75, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(603, 57, 'material', 'Septic tank', 1.00, 'set', 7100.00, 7100.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(604, 57, 'material', 'Precast Septic Tank Casing', 1.00, 'set', 3500.00, 3500.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(605, 57, 'material', 'Rough Plumbing Installation to Catch Basin', 1.00, 'LS', 2000.00, 2000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(606, 57, 'labor', 'Septic Tank Labor', 1.00, 'Lump Sum', 5670.00, 5670.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(607, 57, 'equipment', 'Contingencies and Price Escalation', 1.00, 'Lump Sum', 1890.00, 1890.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(608, 58, 'material', '20.1 Fencing - Cement', 65.00, 'bags', 225.00, 14625.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(609, 58, 'material', '20.1 Fencing - 8 mm Deformed Bar', 27.00, 'pcs', 120.00, 3240.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(610, 58, 'material', '20.1 Fencing - 10 mm Deformed Bar', 59.00, 'pcs', 220.00, 12980.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(611, 58, 'material', '20.1 Fencing - GI Square tube 1.0', 35.00, 'pcs', 390.00, 13650.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(612, 58, 'material', '20.1 Fencing - GI Wire #18', 4.00, 'kgs', 85.00, 340.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(613, 58, 'material', '20.1 Fencing - Mixing Sand', 6.00, 'm³', 850.00, 5100.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(614, 58, 'material', '20.1 Fencing - 3/4 Gravel', 5.00, 'm³', 1410.00, 7050.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(615, 58, 'material', '20.1 Fencing - 4" CHB', 316.00, 'pcs', 13.00, 4108.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(616, 58, 'material', '20.1 Fencing - Acrylic Thinner', 2.00, 'gal', 440.00, 880.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(617, 58, 'material', '20.1 Fencing - Epoxy Primer', 2.00, 'gal', 950.00, 1900.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(618, 58, 'material', '20.1 Fencing - Paint Brush 2"', 2.00, 'pcs', 75.00, 150.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(619, 58, 'material', '20.1 Fencing - Baby Roller', 2.00, 'pcs', 95.00, 190.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(620, 58, 'material', '20.1 Fencing - 1" GI Pipe', 7.00, 'pcs', 1300.00, 9100.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(621, 58, 'material', '20.2 Taxes @ 5%', 1.00, 'lot', 32199.14, 32199.14, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(622, 58, 'labor', '20.1 Fencing Labor', 1.00, 'Lump Sum', 32990.85, 32990.85, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(623, 58, 'equipment', '20.1 Fencing Contingencies and Price Escalation', 1.00, 'Lump Sum', 10996.95, 10996.95, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42');
 
 DROP TABLE IF EXISTS `project_task_materials`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `project_task_materials` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `project_task_id` bigint(20) unsigned NOT NULL,
@@ -576,25 +1148,9 @@ CREATE TABLE `project_task_materials` (
   KEY `project_task_materials_material_id_foreign` (`material_id`),
   CONSTRAINT `project_task_materials_material_id_foreign` FOREIGN KEY (`material_id`) REFERENCES `materials` (`id`) ON DELETE SET NULL,
   CONSTRAINT `project_task_materials_project_task_id_foreign` FOREIGN KEY (`project_task_id`) REFERENCES `project_tasks` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `project_task_materials`
---
-
-LOCK TABLES `project_task_materials` WRITE;
-/*!40000 ALTER TABLE `project_task_materials` DISABLE KEYS */;
-/*!40000 ALTER TABLE `project_task_materials` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `project_tasks`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `project_tasks`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `project_tasks` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `project_id` bigint(20) unsigned NOT NULL,
@@ -620,24 +1176,14 @@ CREATE TABLE `project_tasks` (
   CONSTRAINT `project_tasks_assigned_personnel_id_foreign` FOREIGN KEY (`assigned_personnel_id`) REFERENCES `personnel` (`id`) ON DELETE SET NULL,
   CONSTRAINT `project_tasks_project_id_foreign` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `project_tasks`
---
-
-LOCK TABLES `project_tasks` WRITE;
-/*!40000 ALTER TABLE `project_tasks` DISABLE KEYS */;
-/*!40000 ALTER TABLE `project_tasks` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `projects`
---
+INSERT INTO `project_tasks` (`id`, `project_id`, `task_name`, `category`, `assigned_personnel_id`, `start_date`, `due_date`, `allocated_budget`, `actual_cost`, `progress`, `status`, `created_at`, `updated_at`, `sort_order`, `timeline_phase`, `timeline_month`, `photo_path`, `photo_caption`) VALUES
+(1, 1, 'Foundation & Basement Structure', 'Structural', 4, '2026-01-15', '2026-04-30', 9500000.00, 9400000.00, 100, 'completed', '2026-09-29 14:56:40', '2026-09-29 14:56:40', 0, NULL, NULL, NULL, NULL),
+(2, 1, 'Main Concrete Frame (Floors 1-15)', 'Structural', 4, '2026-05-01', '2026-08-31', 12000000.00, 9800000.00, 85, 'in_progress', '2026-09-29 14:56:40', '2026-09-29 14:56:40', 0, NULL, NULL, NULL, NULL),
+(3, 1, 'Electrical Conduit & High-Voltage Transformers', 'Electrical', 5, '2026-06-15', '2026-09-30', 6000000.00, 3800000.00, 60, 'in_progress', '2026-09-29 14:56:40', '2026-09-29 14:56:40', 0, NULL, NULL, NULL, NULL),
+(4, 1, 'Water Riser & Fire Sprinkler Piping Lines', 'Piping', 6, '2026-06-20', '2026-10-15', 4500000.00, 2400000.00, 55, 'in_progress', '2026-09-29 14:56:40', '2026-09-29 14:56:40', 0, NULL, NULL, NULL, NULL);
 
 DROP TABLE IF EXISTS `projects`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `projects` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `project_code` varchar(255) NOT NULL,
@@ -686,24 +1232,14 @@ CREATE TABLE `projects` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `projects_project_code_unique` (`project_code`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `projects`
---
-
-LOCK TABLES `projects` WRITE;
-/*!40000 ALTER TABLE `projects` DISABLE KEYS */;
-/*!40000 ALTER TABLE `projects` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `service_requests`
---
+INSERT INTO `projects` (`id`, `project_code`, `title`, `client_name`, `location`, `project_type`, `finish_tier`, `land_area_sqm`, `floor_area_sqm`, `status`, `contract_budget`, `client_budget`, `estimated_cost`, `financing_type`, `financing_institution`, `loan_account_no`, `approved_loan_amount`, `client_equity_amount`, `payment_first_policy`, `spent_budget`, `start_date`, `end_date`, `actual_completion_date`, `structural_progress`, `electrical_progress`, `piping_progress`, `finishing_progress`, `structural_weight`, `electrical_weight`, `piping_weight`, `finishing_weight`, `overall_progress`, `current_phase`, `description`, `schedule_notes`, `created_at`, `updated_at`, `deployed_workers`, `deployed_skilled_workers`, `deployed_engineers`, `deployed_architects`, `deployed_foremen`, `deployed_operators`, `deployed_safety_officers`) VALUES
+(1, 'PRJ-2026-001', 'Apex Horizon Commercial Tower', 'Apex Global Holdings', 'Financial District, Block 4', 'Commercial Construction', 'standard', 1450.00, 8200.00, 'in_progress', 45000000.00, NULL, NULL, 'bank_loan', 'BDO Unibank - Commercial Loan Division', 'BDO-LOG-2026-8812', 36000000.00, 9000000.00, 1, 20640000.00, '2026-01-15', '2026-11-30', NULL, 85, 60, 55, 30, 40, 25, 20, 15, 65, 'Phase 3: MEP Rough-in & Conduits', '15-story modern commercial tower with underground parking, HVAC chillers, and energy-efficient glass facade.', 'Financed via BDO Letter of Guaranty. Payment First policy active: Tranche 2 released. Tranche 3 pending bank inspection.', '2026-09-29 14:56:40', '2026-09-29 14:56:40', 45, 22, 6, 2, 3, 4, 2),
+(2, 'PRJ-2025-VR15', '3 Bedroom Bungalow Single Detached Residential Unit', 'MC HIRO Realty Corp.', 'Block 15 Lot 1, Villa Romeo Subd., Brgy. 5, Silay City, Neg. Occ.', 'Residential Build', 'standard', 150.00, 75.00, 'completed', 1778062.08, NULL, NULL, 'bank_loan', 'BDO Unibank / Residential Financing Division', 'BDO-VR-2024-1501', 1422449.66, 355612.42, 1, 1546819.20, '2024-06-01', '2025-01-15', '2025-01-07', 100, 100, 100, 100, 40, 25, 20, 15, 100, 'Phase 5: Completed & Turned Over', '3-Bedroom single detached bungalow residential unit located at Block 15 Lot 1, Villa Romeo Subdivision, Brgy. 5, Silay City, Negros Occidental. Developer: MC HIRO Realty Corp., Certified by Engr. Esabyl B. Mitra (PRC License No. 0180490, PTR No. 4531999) and approved by Engr. Ignacio S. Lonzaga (Owner / MC HIRO Realty Corp.).', 'Construction successfully completed, inspected, and turned over to owner on January 7, 2025. All warranties, as-built plans, and certificates issued.', '2026-09-29 14:56:40', '2026-09-29 14:56:40', 10, 5, 2, 1, 1, 1, 1),
+(3, 'PRJ-2025-VR16', '2 Bedroom Bungalow, Single Detached Residential Building', 'Engr. Ignacio S. Lonzaga / Villa Romeo Subdivision', 'Block 16 Lot 8, Villa Romeo Subdivision, Brgy. V, Silay City, Negros Occidental', 'Residential Build', 'standard', 135.00, 50.00, 'completed', 1831613.80, NULL, NULL, 'pagibig_loan', 'Pag-IBIG Fund (HDMF) - Housing Loan Division', 'HDMF-VR-2024-1608', 1465291.04, 366322.76, 1, 1617478.80, '2024-07-01', '2025-01-20', '2025-01-07', 100, 100, 100, 100, 40, 25, 20, 15, 100, 'Phase 5: Completed & Turned Over', '2-Bedroom single-detached residential bungalow (50 sq.m floor area on 135 sq.m lot) at Block 16 Lot 8, Villa Romeo Subdivision, Brgy. V, Silay City, Negros Occidental. Certified by Engr. Esabyl B. Mitra (PRC No. 0180490, PTR No. 4531999) and approved by Engr. Ignacio S. Lonzaga (Owner / Developer).', 'All 18 scope milestones completed. HDMF loan take-out finalized. As-built plans and occupancy permit released January 7, 2025.', '2026-09-29 14:56:41', '2026-09-29 14:56:41', 8, 5, 2, 1, 1, 1, 1),
+(4, 'PRJ-2024-VR12', '31 m² Housing Unit (1 Side of Residential Duplex)', 'MC HIRO Realty Corp.', 'Block 12 Lot 2, Villa Romeo Subd., Brgy. 5, Silay City, Neg. Occ.', 'Residential Build', 'standard', 90.00, 31.00, 'completed', 742800.74, NULL, NULL, 'client_equity', 'MC HIRO Realty Corp. Developer Financing', 'MCH-VR-2023-1202', 594240.59, 148560.15, 1, 650000.00, '2023-08-01', '2024-01-20', '2024-01-10', 100, 100, 100, 100, 40, 25, 20, 15, 100, 'Phase 5: Completed & Turned Over', '31 sq.m 1-side residential duplex housing unit constructed at Block 12 Lot 2, Villa Romeo Subd., Brgy. 5, Silay City, Neg. Occ. Developer: MC HIRO Realty Corp., Certified and Approved by Engr. Ignacio S. Lonzaga (PRC License No. 0042019, PTR No. 2901354).', 'Duplex unit delivered 10 days ahead of schedule on January 10, 2024. Full settlement cleared and client accepted.', '2026-09-29 14:56:41', '2026-09-29 14:56:41', 7, 3, 1, 0, 1, 0, 0);
 
 DROP TABLE IF EXISTS `service_requests`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `service_requests` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `request_code` varchar(255) NOT NULL,
@@ -721,25 +1257,13 @@ CREATE TABLE `service_requests` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `service_requests_request_code_unique` (`request_code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `service_requests`
---
-
-LOCK TABLES `service_requests` WRITE;
-/*!40000 ALTER TABLE `service_requests` DISABLE KEYS */;
-/*!40000 ALTER TABLE `service_requests` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `sessions`
---
+INSERT INTO `service_requests` (`id`, `request_code`, `client_name`, `client_email`, `client_phone`, `service_type`, `land_area_sqm`, `floor_area_sqm`, `estimated_cost`, `requested_start_date`, `status`, `notes`, `created_at`, `updated_at`) VALUES
+(1, 'EST-2026-001', 'St. Jude Healthcare Foundation', 'contact@stjude-health.org', '+63 (2) 8900-1122', 'Commercial Construction', 3200.00, 9500.00, 52250000.00, '2026-10-01', 'pending', 'Proposed 8-story specialty hospital wing. Financed via Bank Construction Loan (80% Loanable: ₱41.8M, 20% Equity: ₱10.45M).', '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(2, 'EST-2026-002', 'Vanguard Logistics Group', 'projects@vanguard-logistics.com', '+63 (2) 8900-3344', 'Industrial Complex', 8000.00, 5500.00, 38500000.00, '2026-11-15', 'approved', 'Cavite Cold Storage Hub. Bank Letter of Guaranty issued by BDO. Initialized into project tracker.', '2026-09-29 14:56:42', '2026-09-29 14:56:42');
 
 DROP TABLE IF EXISTS `sessions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sessions` (
   `id` varchar(255) NOT NULL,
   `user_id` bigint(20) unsigned DEFAULT NULL,
@@ -751,24 +1275,8 @@ CREATE TABLE `sessions` (
   KEY `sessions_user_id_index` (`user_id`),
   KEY `sessions_last_activity_index` (`last_activity`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `sessions`
---
-
-LOCK TABLES `sessions` WRITE;
-/*!40000 ALTER TABLE `sessions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `sessions` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `supplier_inquiries`
---
 
 DROP TABLE IF EXISTS `supplier_inquiries`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `supplier_inquiries` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `supplier_id` bigint(20) unsigned NOT NULL,
@@ -791,24 +1299,8 @@ CREATE TABLE `supplier_inquiries` (
   CONSTRAINT `supplier_inquiries_supplier_material_id_foreign` FOREIGN KEY (`supplier_material_id`) REFERENCES `supplier_materials` (`id`) ON DELETE SET NULL,
   CONSTRAINT `supplier_inquiries_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `supplier_inquiries`
---
-
-LOCK TABLES `supplier_inquiries` WRITE;
-/*!40000 ALTER TABLE `supplier_inquiries` DISABLE KEYS */;
-/*!40000 ALTER TABLE `supplier_inquiries` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `supplier_materials`
---
 
 DROP TABLE IF EXISTS `supplier_materials`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `supplier_materials` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `supplier_id` bigint(20) unsigned NOT NULL,
@@ -832,25 +1324,46 @@ CREATE TABLE `supplier_materials` (
   KEY `supplier_materials_supplier_id_foreign` (`supplier_id`),
   CONSTRAINT `supplier_materials_supplier_id_foreign` FOREIGN KEY (`supplier_id`) REFERENCES `suppliers` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `supplier_materials`
---
-
-LOCK TABLES `supplier_materials` WRITE;
-/*!40000 ALTER TABLE `supplier_materials` DISABLE KEYS */;
-INSERT INTO `supplier_materials` VALUES (1,1,'MAT-WNDR-001-SLD120','1.20m x 1.20m Sliding Window 1/4\" Clear Glass Heavy Aluminum Frame','Windows & Doors','Windows','Two-panel horizontal sliding glass window with heavy duty extruded aluminum framing and weatherstripping.','1/4\" (6mm) Clear Tempered Glass, Powder-Coated Aluminum 38mm Section, Heavy-Duty Stainless Bearing Rollers','units',85,6100.00,1,'available',NULL,1,'2026-09-27 06:48:06','2026-09-27 06:48:06'),(2,1,'MAT-WNDR-002-SLD200','1.20m x 2.00m Sliding Window Heavy Aluminum Frame','Windows & Doors','Windows','Large format picture sliding window designed for living rooms and premium residential facades.','6mm Clear Tempered Glass, Heavy-Duty Analok/Powder-Coated Aluminum, Integrated Flyscreen Mesh','units',42,10200.00,1,'available',NULL,1,'2026-09-27 06:48:06','2026-09-27 06:48:06'),(3,1,'MAT-WNDR-003-AWN60','0.60m x 0.90m Bathroom Frosted Awning Window','Windows & Doors','Windows','Top-hinged awning casement window with obscured frosted glass for bathrooms and powder rooms.','Frosted Privacy Tempered Glass 6mm, Stainless Steel Friction Hinges, Aluminum Frame','units',95,2250.00,1,'available',NULL,1,'2026-09-27 06:48:06','2026-09-27 06:48:06'),(4,1,'MAT-WNDR-004-AWN180','1.80m x 0.45m Transom Awning Casement Window','Windows & Doors','Windows','High-level clerestory transom awning window providing natural daylighting and cross ventilation.','Clear Float Glass 6mm, Multi-Point Locking Casement Handle, Extruded Aluminum','units',60,3400.00,1,'available',NULL,1,'2026-09-27 06:48:06','2026-09-27 06:48:06'),(5,1,'MAT-WNDR-005-PNL90','Main Solid Kiln-Dried Mahogany Panel Door 0.90m x 2.10m','Windows & Doors','Doors','Premium solid hardwood front entrance door featuring raised decorative panels.','100% Solid Kiln-Dried Mahogany Hardwood, 44mm Door Thickness, Precision Sanded Finish','sets',75,4350.00,1,'available',NULL,1,'2026-09-27 06:48:06','2026-09-27 06:48:06'),(6,1,'MAT-WNDR-006-FLSH80','Solid Core Interior Flush Door 0.80m x 2.10m','Windows & Doors','Doors','High-durability acoustic flush door engineered for bedrooms and private interior offices.','Solid Particleboard Core, Premium Marine Plywood Facing, Factory Sanded 40mm Thick','sets',110,3950.00,1,'available',NULL,1,'2026-09-27 06:48:06','2026-09-27 06:48:06'),(7,1,'MAT-WNDR-007-FLSH70','Service Flush Door 0.70m x 2.10m Moisture Resistant','Windows & Doors','Doors','Moisture resistant flush door designed for kitchen exits, utility rooms, and balcony access.','Waterproof Marine Core, Anti-Warp Solid Wood Stiles, 38mm Thickness','sets',90,3600.00,1,'available',NULL,1,'2026-09-27 06:48:06','2026-09-27 06:48:06'),(8,1,'MAT-WNDR-008-PVC60','Heavy-Duty Waterproof PVC Door w/ Louver & Jamb 0.60m x 2.10m','Windows & Doors','Doors','Complete PVC door unit with bottom louver and matching PVC jamb for toilet & bath.','High-Impact Resistant Virgin PVC, Reinforced Core, Includes Complete PVC Jamb & Hinges','sets',140,1650.00,1,'available',NULL,1,'2026-09-27 06:48:06','2026-09-27 06:48:06'),(9,1,'MAT-WNDR-009-SLD150','1.50m x 2.10m Sliding Patio Double Glass Door Aluminum Frame','Windows & Doors','Doors','Heavy duty sliding patio door offering wide garden views and smooth floor-level threshold.','6mm Tempered Safety Glass, Heavy Extruded Powder-Coated Aluminum Track, Stainless Mortise Lock','sets',35,19500.00,1,'available',NULL,1,'2026-09-27 06:48:06','2026-09-27 06:48:06'),(10,1,'MAT-WNDR-010-JAMB2X4','Treated Solid Hardwood Door Jamb 2\" x 4\" Double Rabbeted','Windows & Doors','Frames','Precision milled hardwood door frames with pressure treated anti-termite protection.','Kiln-Dried Philippine Hardwood, 2\" x 4\" Cross-Section, Double Rabbet Profile','sets',180,1250.00,2,'available',NULL,1,'2026-09-27 06:48:06','2026-09-27 06:48:06'),(11,1,'MAT-WNDR-011-LCKMAIN','Heavy-Duty Stainless Steel Lever Entrance Lockset (Main Door)','Windows & Doors','Locks','Commercial grade lever entrance lockset with solid brass mortise cylinder and anti-drill pins.','SUS304 Stainless Steel Construction, Grade 2 Commercial Standard, 3 Computer-Cut Keys','sets',130,2850.00,1,'available',NULL,1,'2026-09-27 06:48:06','2026-09-27 06:48:06'),(12,1,'MAT-WNDR-012-LCKBED','Cylindrical Stainless Steel Bedroom Door Knob Lockset','Windows & Doors','Handles','Residential tubular cylindrical door knob lockset for interior privacy and passage doors.','SUS304 Stainless Steel Finish, Heavy Brass Core Latch Mechanism, Push-Button Lock','sets',220,1350.00,2,'available',NULL,1,'2026-09-27 06:48:06','2026-09-27 06:48:06'),(13,1,'MAT-WNDR-013-HNGE','Stainless Steel Ball Bearing Loosepin Hinges 3.5\" x 3.5\" (Pair)','Windows & Doors','Hardware','Non-corrosive door hinges with four internal ball bearing rings for silent and smooth swing.','SUS304 Stainless Steel 2.5mm Thick, 4 Ball Bearing Rings per Leaf, Matching Screws','pairs',550,195.00,6,'available',NULL,1,'2026-09-27 06:48:06','2026-09-27 06:48:06'),(14,2,'MAT-ROOF-001-RIB40','Rib-Type Pre-Painted Long Span Roofing Sheet (0.40mm TCT)','Roofing','Roofing sheets','High-profile rib-type roofing engineered with deep water channels for maximum rainfall discharge.','0.40mm Total Coated Thickness (TCT), AZ150 Zinc-Aluminum Anti-Rust Coating, Spanish Red / Evergreen','ln.m.',4800,395.00,10,'available',NULL,1,'2026-09-27 06:48:07','2026-09-27 06:48:07'),(15,2,'MAT-ROOF-002-CORR40','Corrugated Pre-Painted Galvanized Iron (PGI) Sheet 0.40mm','Roofing','Roofing sheets','Traditional wave corrugated metal sheet with multi-layer baked polyester color finish.','Standard Wave Profile, UV-Resistant Polyester Top Coat, 0.40mm Base Metal Thickness','ln.m.',3200,380.00,10,'available',NULL,1,'2026-09-27 06:48:07','2026-09-27 06:48:07'),(16,2,'MAT-ROOF-003-PUPNL50','High-Density Polyurethane (PU) Sandwich Roof Panel 50mm','Roofing','Roof panels','Insulated composite roof panel with injected high-density rigid polyurethane core.','50mm Injected Rigid PU Foam (40kg/m┬│), Dual 0.40mm Pre-Painted Steel Skin, K-Value 0.024 W/mK','sq.m.',650,1150.00,20,'available',NULL,1,'2026-09-27 06:48:07','2026-09-27 06:48:07'),(17,2,'MAT-ROOF-004-PUR2X4','Structural C-Purlins 2\" x 4\" x 1.20mm Heavy Gauge Galvanized','Roofing','Roofing accessories','Cold-formed structural roof purlins with high tensile strength and anti-corrosion galvanized zinc coating.','Galvanized High-Yield Steel Grade 275, 6.00m Standard Length, 1.20mm Actual Thickness','pcs',1100,465.00,5,'available',NULL,1,'2026-09-27 06:48:07','2026-09-27 06:48:07'),(18,2,'MAT-ROOF-005-PUR2X3','Structural C-Purlins 2\" x 3\" x 1.00mm Commercial Grade','Roofing','Roofing accessories','Standard roof purlin sections suitable for residential rafters and secondary roof bracing.','6.00m Standard Length, High Tensile Cold-Formed Section, 1.00mm Nominal Thickness','pcs',1400,375.00,5,'available',NULL,1,'2026-09-27 06:48:07','2026-09-27 06:48:07'),(19,2,'MAT-ROOF-006-RDGCAP','Pre-Painted Ridge Cap Roll-Top 8-Foot Section','Roofing','Flashing','Crest flashing cover that seals the roof apex against wind-driven torrential rain.','0.40mm Pre-Painted Steel, 2.44m (8ft) Girth 18\", Color-Matched with Rib-Type Sheets','pcs',750,320.00,2,'available',NULL,1,'2026-09-27 06:48:07','2026-09-27 06:48:07'),(20,2,'MAT-ROOF-007-WALLFLSH','Wall Flashing & Counter Flashing Sheet 8-Foot (0.40mm)','Roofing','Flashing','Precision bent flashing with hemmed drip edge to seal roof-to-masonry wall junctions.','0.40mm Anti-Rust Coated Sheet, 2.44m Length, Hemmed Water Drip Edge','pcs',820,290.00,2,'available',NULL,1,'2026-09-27 06:48:07','2026-09-27 06:48:07'),(21,2,'MAT-ROOF-008-GUTTERSS','Stainless Steel 304 Spanish Box Gutter 8-Foot Section','Roofing','Gutters','Heavy-duty commercial rain gutter made from architectural grade stainless steel.','Grade 304 Stainless Steel 0.50mm Thick, Box Profile with Stiffened Lip, 2.44m Length','pcs',580,560.00,2,'available',NULL,1,'2026-09-27 06:48:07','2026-09-27 06:48:07'),(22,2,'MAT-ROOF-009-TEKSCREW','Self-Drilling 2-1/2\" Tekscrew for Metal Roofing (Box of 500)','Roofing','Roofing accessories','Hex-head self-drilling fastener with weatherproofing EPDM bonded sealing washer.','Ruspert Multi-Layer Anti-Corrosion Coating (1,000 hrs Salt Spray), High-Grade EPDM Washer','boxes',280,620.00,1,'available',NULL,1,'2026-09-27 06:48:07','2026-09-27 06:48:07'),(23,2,'MAT-ROOF-010-SEAL1GAL','Elastomeric Weatherproof Polyurethane Roof Sealant (1 Gallon)','Roofing','Roofing accessories','Flexible rubberized waterproofing compound for sealing lap joints, tek fasteners, and flashing.','100% Elastomeric Waterproof Polyurethane, UV & Thermal Shock Resistant, Non-Sag','cans',230,890.00,1,'available',NULL,1,'2026-09-27 06:48:07','2026-09-27 06:48:07'),(24,2,'MAT-ROOF-011-INSU50M','Double-Sided Aluminum Foil Thermal Roof Insulation (1.2m x 50m)','Roofing','Roofing accessories','High-efficiency radiant heat barrier with fiberglass reinforced scrim.','97% Radiant Heat Reflectance, High Tear Resistance Reinforced Scrim, Roll Coverage 60 sq.m','rolls',115,2750.00,1,'available',NULL,1,'2026-09-27 06:48:07','2026-09-27 06:48:07'),(25,3,'MAT-STRC-001-CEM40','Portland Cement (Type I) 40kg Premium High-Strength','Structural & Masonry','Cement','General purpose hydraulic cement formulated for structural concrete columns, beams, and suspended slabs.','ASTM C150 Type I Standard, 28-day Compressive Strength >= 40.0 MPa (5,800 psi)','bags',14500,220.00,50,'available',NULL,1,'2026-09-27 06:48:07','2026-09-27 06:48:07'),(26,3,'MAT-STRC-002-POZZ40','Pozzolan Cement 40kg (Type IP) Blended Masonry Cement','Structural & Masonry','Cement','Blended hydraulic pozzolan cement engineered for masonry block laying, plastering, and floor screeds.','PNS 63 / ASTM C595 Blended Hydraulic Cement, High Sulfate Resistance, Reduced Heat of Hydration','bags',8000,205.00,50,'available',NULL,1,'2026-09-27 06:48:07','2026-09-27 06:48:07'),(27,3,'MAT-STRC-003-ST16G60','16mm Deformed Steel Rebar (Grade 60) High Tensile (6.0m)','Structural & Masonry','Structural Steel','High-yield deformed steel reinforcing bars for heavy structural column main bars and foundation footings.','PNS 49 / ASTM A615 Grade 60 (Yield Strength >= 415 MPa), 6.00m Standard Length, Micro-Alloyed','pcs',8200,440.00,20,'available',NULL,1,'2026-09-27 06:48:07','2026-09-27 06:48:07'),(28,3,'MAT-STRC-004-ST12G40','12mm Deformed Steel Rebar (Grade 40) (6.0m)','Structural & Masonry','Structural Steel','Standard structural grade rebar for floor slab reinforcement grids and retaining wall cages.','PNS 49 / ASTM A615 Grade 40 (Yield Strength >= 275 MPa), 6.00m Length, Hot-Rolled High Ductility','pcs',11500,300.00,20,'available',NULL,1,'2026-09-27 06:48:07','2026-09-27 06:48:07'),(29,3,'MAT-STRC-005-ST10G40','10mm Deformed Steel Rebar (Grade 40) (6.0m)','Structural & Masonry','Structural Steel','Structural rebar widely used for beam lateral ties, column stirrup rings, and CHB wall dowels.','Standard 6.00m Length, PNS 49 Certified, Grade 40','pcs',17500,215.00,25,'available',NULL,1,'2026-09-27 06:48:07','2026-09-27 06:48:07'),(30,3,'MAT-STRC-006-ST08','8mm Plain Round Steel Bar / Rebar (6.0m)','Structural & Masonry','Structural Steel','Round structural carbon steel used for temperature reinforcement and concrete crack control mesh.','Structural Mild Steel, 6.00m Length, Smooth Round Profile','pcs',13500,115.00,30,'available',NULL,1,'2026-09-27 06:48:07','2026-09-27 06:48:07'),(31,3,'MAT-STRC-007-SNDRIV','Mixing Sand (Coarse / Fine River Sand)','Structural & Masonry','Aggregates','Clean washed river aggregate sand free of silt and organic contaminants for concrete and mortar.','Washed River Sand, Fineness Modulus 2.6 - 2.9, Specific Gravity >= 2.60','cu.m',2400,820.00,5,'available',NULL,1,'2026-09-27 06:48:07','2026-09-27 06:48:07'),(32,3,'MAT-STRC-008-GRV34','3/4\" Crushed Basalt Gravel Aggregate','Structural & Masonry','Aggregates','100% crushed hard basalt quarry rock for high-strength structural concrete ready-mix.','19mm (3/4\") Nominal Sieve Size, 100% Angular Crushed Basalt, Abrasion Loss < 25%','cu.m',1900,1380.00,5,'available',NULL,1,'2026-09-27 06:48:07','2026-09-27 06:48:07'),(33,3,'MAT-STRC-009-CHB04','4\" Concrete Hollow Block (CHB) Load-Bearing Machine-Pressed','Structural & Masonry','Masonry Blocks','Machine vibrated concrete blocks for exterior non-loadbearing partitions and interior divider walls.','100mm x 200mm x 400mm (4\" x 8\" x 16\"), Compressive Strength >= 4.5 MPa (650 psi)','pcs',34000,12.50,500,'available',NULL,1,'2026-09-27 06:48:07','2026-09-27 06:48:07'),(34,3,'MAT-STRC-010-CHB06','6\" Concrete Hollow Block (CHB) Heavy-Duty Load-Bearing','Structural & Masonry','Masonry Blocks','High-strength structural hollow blocks designed for perimeter firewall enclosures and structural core walls.','150mm x 200mm x 400mm (6\" x 8\" x 16\"), Compressive Strength >= 5.5 MPa (800 psi)','pcs',14500,15.50,300,'available',NULL,1,'2026-09-27 06:48:07','2026-09-27 06:48:07'),(35,3,'MAT-STRC-011-PHEN12','Phenolic Plywood 1/2\" x 4\' x 8\' Film-Faced Formworks','Structural & Masonry','Formworks','Waterproof film faced plywood providing fair-faced smooth architectural concrete finishes.','12mm WBP Phenolic Glue, Double-Sided Dynea Film, Reusable 8-10 Concrete Pours','sheets',450,1150.00,10,'available',NULL,1,'2026-09-27 06:48:07','2026-09-27 06:48:07'),(36,3,'MAT-STRC-012-TIEW16','#16 G.I. Tie Wire (35kg Roll)','Structural & Masonry','Structural Steel','Soft annealed galvanized iron wire for securing steel rebar intersections and stirrups.','16-Gauge Annealed Galvanized Iron, High Pliability & Tensile Strength, 35kg Gross Weight','rolls',120,2100.00,2,'available',NULL,1,'2026-09-27 06:48:07','2026-09-27 06:48:07');
-/*!40000 ALTER TABLE `supplier_materials` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `supplier_notifications`
---
+INSERT INTO `supplier_materials` (`id`, `supplier_id`, `material_code`, `name`, `category`, `subcategory`, `description`, `specifications`, `unit`, `available_quantity`, `unit_price`, `min_order_qty`, `availability_status`, `image_url`, `is_active`, `created_at`, `updated_at`) VALUES
+(1, 1, 'MAT-WNDR-001-SLD120', '1.20m x 1.20m Sliding Window 1/4" Clear Glass Heavy Aluminum Frame', 'Windows & Doors', 'Windows', 'Two-panel horizontal sliding glass window with heavy duty extruded aluminum framing and weatherstripping.', '1/4" (6mm) Clear Tempered Glass, Powder-Coated Aluminum 38mm Section, Heavy-Duty Stainless Bearing Rollers', 'units', 85, 6100.00, 1, 'available', NULL, 1, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(2, 1, 'MAT-WNDR-002-SLD200', '1.20m x 2.00m Sliding Window Heavy Aluminum Frame', 'Windows & Doors', 'Windows', 'Large format picture sliding window designed for living rooms and premium residential facades.', '6mm Clear Tempered Glass, Heavy-Duty Analok/Powder-Coated Aluminum, Integrated Flyscreen Mesh', 'units', 42, 10200.00, 1, 'available', NULL, 1, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(3, 1, 'MAT-WNDR-003-AWN60', '0.60m x 0.90m Bathroom Frosted Awning Window', 'Windows & Doors', 'Windows', 'Top-hinged awning casement window with obscured frosted glass for bathrooms and powder rooms.', 'Frosted Privacy Tempered Glass 6mm, Stainless Steel Friction Hinges, Aluminum Frame', 'units', 95, 2250.00, 1, 'available', NULL, 1, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(4, 1, 'MAT-WNDR-004-AWN180', '1.80m x 0.45m Transom Awning Casement Window', 'Windows & Doors', 'Windows', 'High-level clerestory transom awning window providing natural daylighting and cross ventilation.', 'Clear Float Glass 6mm, Multi-Point Locking Casement Handle, Extruded Aluminum', 'units', 60, 3400.00, 1, 'available', NULL, 1, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(5, 1, 'MAT-WNDR-005-PNL90', 'Main Solid Kiln-Dried Mahogany Panel Door 0.90m x 2.10m', 'Windows & Doors', 'Doors', 'Premium solid hardwood front entrance door featuring raised decorative panels.', '100% Solid Kiln-Dried Mahogany Hardwood, 44mm Door Thickness, Precision Sanded Finish', 'sets', 75, 4350.00, 1, 'available', NULL, 1, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(6, 1, 'MAT-WNDR-006-FLSH80', 'Solid Core Interior Flush Door 0.80m x 2.10m', 'Windows & Doors', 'Doors', 'High-durability acoustic flush door engineered for bedrooms and private interior offices.', 'Solid Particleboard Core, Premium Marine Plywood Facing, Factory Sanded 40mm Thick', 'sets', 110, 3950.00, 1, 'available', NULL, 1, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(7, 1, 'MAT-WNDR-007-FLSH70', 'Service Flush Door 0.70m x 2.10m Moisture Resistant', 'Windows & Doors', 'Doors', 'Moisture resistant flush door designed for kitchen exits, utility rooms, and balcony access.', 'Waterproof Marine Core, Anti-Warp Solid Wood Stiles, 38mm Thickness', 'sets', 90, 3600.00, 1, 'available', NULL, 1, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(8, 1, 'MAT-WNDR-008-PVC60', 'Heavy-Duty Waterproof PVC Door w/ Louver & Jamb 0.60m x 2.10m', 'Windows & Doors', 'Doors', 'Complete PVC door unit with bottom louver and matching PVC jamb for toilet & bath.', 'High-Impact Resistant Virgin PVC, Reinforced Core, Includes Complete PVC Jamb & Hinges', 'sets', 140, 1650.00, 1, 'available', NULL, 1, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(9, 1, 'MAT-WNDR-009-SLD150', '1.50m x 2.10m Sliding Patio Double Glass Door Aluminum Frame', 'Windows & Doors', 'Doors', 'Heavy duty sliding patio door offering wide garden views and smooth floor-level threshold.', '6mm Tempered Safety Glass, Heavy Extruded Powder-Coated Aluminum Track, Stainless Mortise Lock', 'sets', 35, 19500.00, 1, 'available', NULL, 1, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(10, 1, 'MAT-WNDR-010-JAMB2X4', 'Treated Solid Hardwood Door Jamb 2" x 4" Double Rabbeted', 'Windows & Doors', 'Frames', 'Precision milled hardwood door frames with pressure treated anti-termite protection.', 'Kiln-Dried Philippine Hardwood, 2" x 4" Cross-Section, Double Rabbet Profile', 'sets', 180, 1250.00, 2, 'available', NULL, 1, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(11, 1, 'MAT-WNDR-011-LCKMAIN', 'Heavy-Duty Stainless Steel Lever Entrance Lockset (Main Door)', 'Windows & Doors', 'Locks', 'Commercial grade lever entrance lockset with solid brass mortise cylinder and anti-drill pins.', 'SUS304 Stainless Steel Construction, Grade 2 Commercial Standard, 3 Computer-Cut Keys', 'sets', 130, 2850.00, 1, 'available', NULL, 1, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(12, 1, 'MAT-WNDR-012-LCKBED', 'Cylindrical Stainless Steel Bedroom Door Knob Lockset', 'Windows & Doors', 'Handles', 'Residential tubular cylindrical door knob lockset for interior privacy and passage doors.', 'SUS304 Stainless Steel Finish, Heavy Brass Core Latch Mechanism, Push-Button Lock', 'sets', 220, 1350.00, 2, 'available', NULL, 1, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(13, 1, 'MAT-WNDR-013-HNGE', 'Stainless Steel Ball Bearing Loosepin Hinges 3.5" x 3.5" (Pair)', 'Windows & Doors', 'Hardware', 'Non-corrosive door hinges with four internal ball bearing rings for silent and smooth swing.', 'SUS304 Stainless Steel 2.5mm Thick, 4 Ball Bearing Rings per Leaf, Matching Screws', 'pairs', 550, 195.00, 6, 'available', NULL, 1, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(14, 2, 'MAT-ROOF-001-RIB40', 'Rib-Type Pre-Painted Long Span Roofing Sheet (0.40mm TCT)', 'Roofing', 'Roofing sheets', 'High-profile rib-type roofing engineered with deep water channels for maximum rainfall discharge.', '0.40mm Total Coated Thickness (TCT), AZ150 Zinc-Aluminum Anti-Rust Coating, Spanish Red / Evergreen', 'ln.m.', 4800, 395.00, 10, 'available', NULL, 1, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(15, 2, 'MAT-ROOF-002-CORR40', 'Corrugated Pre-Painted Galvanized Iron (PGI) Sheet 0.40mm', 'Roofing', 'Roofing sheets', 'Traditional wave corrugated metal sheet with multi-layer baked polyester color finish.', 'Standard Wave Profile, UV-Resistant Polyester Top Coat, 0.40mm Base Metal Thickness', 'ln.m.', 3200, 380.00, 10, 'available', NULL, 1, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(16, 2, 'MAT-ROOF-003-PUPNL50', 'High-Density Polyurethane (PU) Sandwich Roof Panel 50mm', 'Roofing', 'Roof panels', 'Insulated composite roof panel with injected high-density rigid polyurethane core.', '50mm Injected Rigid PU Foam (40kg/m³), Dual 0.40mm Pre-Painted Steel Skin, K-Value 0.024 W/mK', 'sq.m.', 650, 1150.00, 20, 'available', NULL, 1, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(17, 2, 'MAT-ROOF-004-PUR2X4', 'Structural C-Purlins 2" x 4" x 1.20mm Heavy Gauge Galvanized', 'Roofing', 'Roofing accessories', 'Cold-formed structural roof purlins with high tensile strength and anti-corrosion galvanized zinc coating.', 'Galvanized High-Yield Steel Grade 275, 6.00m Standard Length, 1.20mm Actual Thickness', 'pcs', 1100, 465.00, 5, 'available', NULL, 1, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(18, 2, 'MAT-ROOF-005-PUR2X3', 'Structural C-Purlins 2" x 3" x 1.00mm Commercial Grade', 'Roofing', 'Roofing accessories', 'Standard roof purlin sections suitable for residential rafters and secondary roof bracing.', '6.00m Standard Length, High Tensile Cold-Formed Section, 1.00mm Nominal Thickness', 'pcs', 1400, 375.00, 5, 'available', NULL, 1, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(19, 2, 'MAT-ROOF-006-RDGCAP', 'Pre-Painted Ridge Cap Roll-Top 8-Foot Section', 'Roofing', 'Flashing', 'Crest flashing cover that seals the roof apex against wind-driven torrential rain.', '0.40mm Pre-Painted Steel, 2.44m (8ft) Girth 18", Color-Matched with Rib-Type Sheets', 'pcs', 750, 320.00, 2, 'available', NULL, 1, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(20, 2, 'MAT-ROOF-007-WALLFLSH', 'Wall Flashing & Counter Flashing Sheet 8-Foot (0.40mm)', 'Roofing', 'Flashing', 'Precision bent flashing with hemmed drip edge to seal roof-to-masonry wall junctions.', '0.40mm Anti-Rust Coated Sheet, 2.44m Length, Hemmed Water Drip Edge', 'pcs', 820, 290.00, 2, 'available', NULL, 1, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(21, 2, 'MAT-ROOF-008-GUTTERSS', 'Stainless Steel 304 Spanish Box Gutter 8-Foot Section', 'Roofing', 'Gutters', 'Heavy-duty commercial rain gutter made from architectural grade stainless steel.', 'Grade 304 Stainless Steel 0.50mm Thick, Box Profile with Stiffened Lip, 2.44m Length', 'pcs', 580, 560.00, 2, 'available', NULL, 1, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(22, 2, 'MAT-ROOF-009-TEKSCREW', 'Self-Drilling 2-1/2" Tekscrew for Metal Roofing (Box of 500)', 'Roofing', 'Roofing accessories', 'Hex-head self-drilling fastener with weatherproofing EPDM bonded sealing washer.', 'Ruspert Multi-Layer Anti-Corrosion Coating (1,000 hrs Salt Spray), High-Grade EPDM Washer', 'boxes', 280, 620.00, 1, 'available', NULL, 1, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(23, 2, 'MAT-ROOF-010-SEAL1GAL', 'Elastomeric Weatherproof Polyurethane Roof Sealant (1 Gallon)', 'Roofing', 'Roofing accessories', 'Flexible rubberized waterproofing compound for sealing lap joints, tek fasteners, and flashing.', '100% Elastomeric Waterproof Polyurethane, UV & Thermal Shock Resistant, Non-Sag', 'cans', 230, 890.00, 1, 'available', NULL, 1, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(24, 2, 'MAT-ROOF-011-INSU50M', 'Double-Sided Aluminum Foil Thermal Roof Insulation (1.2m x 50m)', 'Roofing', 'Roofing accessories', 'High-efficiency radiant heat barrier with fiberglass reinforced scrim.', '97% Radiant Heat Reflectance, High Tear Resistance Reinforced Scrim, Roll Coverage 60 sq.m', 'rolls', 115, 2750.00, 1, 'available', NULL, 1, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(25, 3, 'MAT-STRC-001-CEM40', 'Portland Cement (Type I) 40kg Premium High-Strength', 'Structural & Masonry', 'Cement', 'General purpose hydraulic cement formulated for structural concrete columns, beams, and suspended slabs.', 'ASTM C150 Type I Standard, 28-day Compressive Strength >= 40.0 MPa (5,800 psi)', 'bags', 14500, 220.00, 50, 'available', NULL, 1, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(26, 3, 'MAT-STRC-002-POZZ40', 'Pozzolan Cement 40kg (Type IP) Blended Masonry Cement', 'Structural & Masonry', 'Cement', 'Blended hydraulic pozzolan cement engineered for masonry block laying, plastering, and floor screeds.', 'PNS 63 / ASTM C595 Blended Hydraulic Cement, High Sulfate Resistance, Reduced Heat of Hydration', 'bags', 8000, 205.00, 50, 'available', NULL, 1, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(27, 3, 'MAT-STRC-003-ST16G60', '16mm Deformed Steel Rebar (Grade 60) High Tensile (6.0m)', 'Structural & Masonry', 'Structural Steel', 'High-yield deformed steel reinforcing bars for heavy structural column main bars and foundation footings.', 'PNS 49 / ASTM A615 Grade 60 (Yield Strength >= 415 MPa), 6.00m Standard Length, Micro-Alloyed', 'pcs', 8200, 440.00, 20, 'available', NULL, 1, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(28, 3, 'MAT-STRC-004-ST12G40', '12mm Deformed Steel Rebar (Grade 40) (6.0m)', 'Structural & Masonry', 'Structural Steel', 'Standard structural grade rebar for floor slab reinforcement grids and retaining wall cages.', 'PNS 49 / ASTM A615 Grade 40 (Yield Strength >= 275 MPa), 6.00m Length, Hot-Rolled High Ductility', 'pcs', 11500, 300.00, 20, 'available', NULL, 1, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(29, 3, 'MAT-STRC-005-ST10G40', '10mm Deformed Steel Rebar (Grade 40) (6.0m)', 'Structural & Masonry', 'Structural Steel', 'Structural rebar widely used for beam lateral ties, column stirrup rings, and CHB wall dowels.', 'Standard 6.00m Length, PNS 49 Certified, Grade 40', 'pcs', 17500, 215.00, 25, 'available', NULL, 1, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(30, 3, 'MAT-STRC-006-ST08', '8mm Plain Round Steel Bar / Rebar (6.0m)', 'Structural & Masonry', 'Structural Steel', 'Round structural carbon steel used for temperature reinforcement and concrete crack control mesh.', 'Structural Mild Steel, 6.00m Length, Smooth Round Profile', 'pcs', 13500, 115.00, 30, 'available', NULL, 1, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(31, 3, 'MAT-STRC-007-SNDRIV', 'Mixing Sand (Coarse / Fine River Sand)', 'Structural & Masonry', 'Aggregates', 'Clean washed river aggregate sand free of silt and organic contaminants for concrete and mortar.', 'Washed River Sand, Fineness Modulus 2.6 - 2.9, Specific Gravity >= 2.60', 'cu.m', 2400, 820.00, 5, 'available', NULL, 1, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(32, 3, 'MAT-STRC-008-GRV34', '3/4" Crushed Basalt Gravel Aggregate', 'Structural & Masonry', 'Aggregates', '100% crushed hard basalt quarry rock for high-strength structural concrete ready-mix.', '19mm (3/4") Nominal Sieve Size, 100% Angular Crushed Basalt, Abrasion Loss < 25%', 'cu.m', 1900, 1380.00, 5, 'available', NULL, 1, '2026-09-29 14:56:43', '2026-09-29 14:56:43'),
+(33, 3, 'MAT-STRC-009-CHB04', '4" Concrete Hollow Block (CHB) Load-Bearing Machine-Pressed', 'Structural & Masonry', 'Masonry Blocks', 'Machine vibrated concrete blocks for exterior non-loadbearing partitions and interior divider walls.', '100mm x 200mm x 400mm (4" x 8" x 16"), Compressive Strength >= 4.5 MPa (650 psi)', 'pcs', 34000, 12.50, 500, 'available', NULL, 1, '2026-09-29 14:56:43', '2026-09-29 14:56:43'),
+(34, 3, 'MAT-STRC-010-CHB06', '6" Concrete Hollow Block (CHB) Heavy-Duty Load-Bearing', 'Structural & Masonry', 'Masonry Blocks', 'High-strength structural hollow blocks designed for perimeter firewall enclosures and structural core walls.', '150mm x 200mm x 400mm (6" x 8" x 16"), Compressive Strength >= 5.5 MPa (800 psi)', 'pcs', 14500, 15.50, 300, 'available', NULL, 1, '2026-09-29 14:56:43', '2026-09-29 14:56:43'),
+(35, 3, 'MAT-STRC-011-PHEN12', 'Phenolic Plywood 1/2" x 4\' x 8\' Film-Faced Formworks', 'Structural & Masonry', 'Formworks', 'Waterproof film faced plywood providing fair-faced smooth architectural concrete finishes.', '12mm WBP Phenolic Glue, Double-Sided Dynea Film, Reusable 8-10 Concrete Pours', 'sheets', 450, 1150.00, 10, 'available', NULL, 1, '2026-09-29 14:56:43', '2026-09-29 14:56:43'),
+(36, 3, 'MAT-STRC-012-TIEW16', '#16 G.I. Tie Wire (35kg Roll)', 'Structural & Masonry', 'Structural Steel', 'Soft annealed galvanized iron wire for securing steel rebar intersections and stirrups.', '16-Gauge Annealed Galvanized Iron, High Pliability & Tensile Strength, 35kg Gross Weight', 'rolls', 120, 2100.00, 2, 'available', NULL, 1, '2026-09-29 14:56:43', '2026-09-29 14:56:43');
 
 DROP TABLE IF EXISTS `supplier_notifications`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `supplier_notifications` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `supplier_id` bigint(20) unsigned DEFAULT NULL,
@@ -868,24 +1381,8 @@ CREATE TABLE `supplier_notifications` (
   CONSTRAINT `supplier_notifications_supplier_id_foreign` FOREIGN KEY (`supplier_id`) REFERENCES `suppliers` (`id`) ON DELETE CASCADE,
   CONSTRAINT `supplier_notifications_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `supplier_notifications`
---
-
-LOCK TABLES `supplier_notifications` WRITE;
-/*!40000 ALTER TABLE `supplier_notifications` DISABLE KEYS */;
-/*!40000 ALTER TABLE `supplier_notifications` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `supplier_order_items`
---
 
 DROP TABLE IF EXISTS `supplier_order_items`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `supplier_order_items` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `supplier_order_id` bigint(20) unsigned NOT NULL,
@@ -902,25 +1399,17 @@ CREATE TABLE `supplier_order_items` (
   KEY `supplier_order_items_supplier_material_id_foreign` (`supplier_material_id`),
   CONSTRAINT `supplier_order_items_supplier_material_id_foreign` FOREIGN KEY (`supplier_material_id`) REFERENCES `supplier_materials` (`id`) ON DELETE SET NULL,
   CONSTRAINT `supplier_order_items_supplier_order_id_foreign` FOREIGN KEY (`supplier_order_id`) REFERENCES `supplier_orders` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `supplier_order_items`
---
-
-LOCK TABLES `supplier_order_items` WRITE;
-/*!40000 ALTER TABLE `supplier_order_items` DISABLE KEYS */;
-/*!40000 ALTER TABLE `supplier_order_items` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `supplier_order_logs`
---
+INSERT INTO `supplier_order_items` (`id`, `supplier_order_id`, `supplier_material_id`, `material_name`, `quantity`, `unit`, `unit_price`, `total_price`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, '1.20m x 1.20m Sliding Window 1/4" Clear Glass Heavy Aluminum Frame', 15, 'units', 6100.00, 91500.00, '2026-09-29 14:56:43', '2026-09-29 14:56:43'),
+(2, 1, 5, 'Main Solid Kiln-Dried Mahogany Panel Door 0.90m x 2.10m', 14, 'sets', 4350.00, 60900.00, '2026-09-29 14:56:43', '2026-09-29 14:56:43'),
+(3, 2, 14, 'Rib-Type Pre-Painted Long Span Roofing Sheet (0.40mm TCT)', 400, 'ln.m.', 395.00, 158000.00, '2026-09-29 14:56:43', '2026-09-29 14:56:43'),
+(4, 2, 17, 'Structural C-Purlins 2" x 4" x 1.20mm Heavy Gauge Galvanized', 193, 'pcs', 465.00, 89745.00, '2026-09-29 14:56:43', '2026-09-29 14:56:43'),
+(5, 3, 25, 'Portland Cement (Type I) 40kg Premium High-Strength', 1000, 'bags', 220.00, 220000.00, '2026-09-29 14:56:43', '2026-09-29 14:56:43'),
+(6, 3, 27, '16mm Deformed Steel Rebar (Grade 60) High Tensile (6.0m)', 600, 'pcs', 440.00, 264000.00, '2026-09-29 14:56:43', '2026-09-29 14:56:43');
 
 DROP TABLE IF EXISTS `supplier_order_logs`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `supplier_order_logs` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `supplier_order_id` bigint(20) unsigned NOT NULL,
@@ -935,25 +1424,14 @@ CREATE TABLE `supplier_order_logs` (
   KEY `supplier_order_logs_user_id_foreign` (`user_id`),
   CONSTRAINT `supplier_order_logs_supplier_order_id_foreign` FOREIGN KEY (`supplier_order_id`) REFERENCES `supplier_orders` (`id`) ON DELETE CASCADE,
   CONSTRAINT `supplier_order_logs_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `supplier_order_logs`
---
-
-LOCK TABLES `supplier_order_logs` WRITE;
-/*!40000 ALTER TABLE `supplier_order_logs` DISABLE KEYS */;
-/*!40000 ALTER TABLE `supplier_order_logs` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `supplier_order_messages`
---
+INSERT INTO `supplier_order_logs` (`id`, `supplier_order_id`, `user_id`, `from_status`, `to_status`, `comment`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 'confirmed', 'processing', 'Supplier started fabrication and glazing assembly in factory.', '2026-09-29 14:56:43', '2026-09-29 14:56:43'),
+(2, 2, 1, 'processing', 'ready_for_delivery', 'Materials bundled, banded, and staged at logistics dock ready for dispatch.', '2026-09-29 14:56:43', '2026-09-29 14:56:43'),
+(3, 3, 1, 'delivered', 'completed', 'Delivery verified by site engineer and accepted into project materials ledger.', '2026-09-29 14:56:43', '2026-09-29 14:56:43');
 
 DROP TABLE IF EXISTS `supplier_order_messages`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `supplier_order_messages` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `supplier_order_id` bigint(20) unsigned NOT NULL,
@@ -970,24 +1448,8 @@ CREATE TABLE `supplier_order_messages` (
   CONSTRAINT `supplier_order_messages_supplier_order_id_foreign` FOREIGN KEY (`supplier_order_id`) REFERENCES `supplier_orders` (`id`) ON DELETE CASCADE,
   CONSTRAINT `supplier_order_messages_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `supplier_order_messages`
---
-
-LOCK TABLES `supplier_order_messages` WRITE;
-/*!40000 ALTER TABLE `supplier_order_messages` DISABLE KEYS */;
-/*!40000 ALTER TABLE `supplier_order_messages` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `supplier_orders`
---
 
 DROP TABLE IF EXISTS `supplier_orders`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `supplier_orders` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `order_code` varchar(255) NOT NULL,
@@ -1012,24 +1474,13 @@ CREATE TABLE `supplier_orders` (
   CONSTRAINT `supplier_orders_project_id_foreign` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE SET NULL,
   CONSTRAINT `supplier_orders_supplier_id_foreign` FOREIGN KEY (`supplier_id`) REFERENCES `suppliers` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `supplier_orders`
---
-
-LOCK TABLES `supplier_orders` WRITE;
-/*!40000 ALTER TABLE `supplier_orders` DISABLE KEYS */;
-/*!40000 ALTER TABLE `supplier_orders` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `suppliers`
---
+INSERT INTO `supplier_orders` (`id`, `order_code`, `supplier_id`, `ordered_by_user_id`, `project_id`, `delivery_location`, `requested_delivery_date`, `actual_delivery_date`, `total_amount`, `status`, `is_synced_to_inventory`, `notes`, `created_at`, `updated_at`) VALUES
+(1, 'ORD-2026-0001', 1, 1, 1, 'Financial District, Block 4', '2026-10-04', NULL, 152500.00, 'processing', 0, 'Batch 1 window installations for Blocks 1 to 4. Ensure protective shrink wrapping on aluminum profiles.', '2026-09-29 14:56:43', '2026-09-29 14:56:43'),
+(2, 'ORD-2026-0002', 2, 1, 1, 'Financial District, Block 4', '2026-10-02', NULL, 248000.00, 'ready_for_delivery', 0, 'Roofing sheets and purlins for Roof Truss installation phase. Delivery via 10-wheeler boom truck.', '2026-09-29 14:56:43', '2026-09-29 14:56:43'),
+(3, 'ORD-2026-0003', 3, 1, 1, 'Financial District, Block 4', '2026-09-27', '2026-09-28', 485000.00, 'completed', 0, 'Bulk Portland cement & rebar delivery for foundation structural pour.', '2026-09-29 14:56:43', '2026-09-29 14:56:43');
 
 DROP TABLE IF EXISTS `suppliers`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `suppliers` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -1046,26 +1497,14 @@ CREATE TABLE `suppliers` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `suppliers_code_unique` (`code`),
   UNIQUE KEY `suppliers_email_unique` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `suppliers`
---
-
-LOCK TABLES `suppliers` WRITE;
-/*!40000 ALTER TABLE `suppliers` DISABLE KEYS */;
-INSERT INTO `suppliers` VALUES (1,'Mils Glass and Aluminum Works','SUP-WNDR-01','Windows & Doors','Engr. Roberto M. Santos','windows.doors.supplier@stbilfrid.com','+63 (34) 495-8821','Zone 4 Industrial Park, Silay City, Negros Occidental',4.95,'active','2026-09-27 06:48:06','2026-09-27 06:48:06'),(2,'Colorsteel','SUP-ROOF-01','Roofing','Engr. Danilo V. Tan','roofing.supplier@stbilfrid.com','+63 (34) 495-7744','Km. 14 National Highway, Talisay - Silay Coastal Rd, Negros Occidental',4.90,'active','2026-09-27 06:48:06','2026-09-27 06:48:06'),(3,'Titan Structural & Steel Supplies Corp.','SUP-STRC-01','Structural & Masonry','Engr. Ferdinand G. Tan','structural.supplier@stbilfrid.com','+63 (34) 495-9910','Bacolod Port Area Logistics Hub, Reclamation District, Bacolod City',4.98,'active','2026-09-27 06:48:07','2026-09-27 06:48:07');
-/*!40000 ALTER TABLE `suppliers` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `users`
---
+INSERT INTO `suppliers` (`id`, `name`, `code`, `category`, `contact_person`, `email`, `phone`, `address`, `rating`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Mils Glass and Aluminum Works', 'SUP-WNDR-01', 'Windows & Doors', 'Engr. Roberto M. Santos', 'windows.doors.supplier@stbilfrid.com', '+63 (34) 495-8821', 'Zone 4 Industrial Park, Silay City, Negros Occidental', 4.95, 'active', '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(2, 'Colorsteel', 'SUP-ROOF-01', 'Roofing', 'Engr. Danilo V. Tan', 'roofing.supplier@stbilfrid.com', '+63 (34) 495-7744', 'Km. 14 National Highway, Talisay - Silay Coastal Rd, Negros Occidental', 4.90, 'active', '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
+(3, 'Titan Structural & Steel Supplies Corp.', 'SUP-STRC-01', 'Structural & Masonry', 'Engr. Ferdinand G. Tan', 'structural.supplier@stbilfrid.com', '+63 (34) 495-9910', 'Bacolod Port Area Logistics Hub, Reclamation District, Bacolod City', 4.98, 'active', '2026-09-29 14:56:42', '2026-09-29 14:56:42');
 
 DROP TABLE IF EXISTS `users`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -1081,30 +1520,15 @@ CREATE TABLE `users` (
   UNIQUE KEY `users_email_unique` (`email`),
   KEY `users_supplier_id_foreign` (`supplier_id`),
   CONSTRAINT `users_supplier_id_foreign` FOREIGN KEY (`supplier_id`) REFERENCES `suppliers` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `users`
---
+INSERT INTO `users` (`id`, `name`, `email`, `role`, `supplier_id`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'Master Administrator', 'admin@newconstuc.firm', 'admin', NULL, '2026-09-29 14:56:39', '$2y$12$QpNZTFS0Y9zQG6nLxQA1F.IVgO4ocGj7COsFGzQ1LiK0W4hHGop6m', NULL, '2026-09-29 14:56:39', '2026-09-29 14:56:39'),
+(2, 'Roofing Materials Transfer Officer', 'roofing@newconstuc.firm', 'roofing_transfer', NULL, '2026-09-29 14:56:40', '$2y$12$M8m05BuRZ4aG6/oFYpXISe2tKif6GfKCtdM8iuteWgVVe9.9Dvi7K', NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(3, 'Windows & Doors Materials Transfer Officer', 'windows.doors@newconstuc.firm', 'windows_doors_transfer', NULL, '2026-09-29 14:56:40', '$2y$12$Jm37Vnj5FD2.LjPZrSk9aup1XKLy0lhcnUYPYr./qb1V7W/zQgMU6', NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(4, 'Mils Glass and Aluminum Works Portal', 'windows.doors.supplier@stbilfrid.com', 'supplier', 1, '2026-09-29 14:56:43', '$2y$12$ws6J7uSBgOaJWI7fBdkfqudDBSJc0O66FhMJJ7qtU5dp9s.A.0tRC', NULL, '2026-09-29 14:56:42', '2026-09-29 14:56:43'),
+(5, 'Colorsteel Supplier Portal', 'roofing.supplier@stbilfrid.com', 'supplier', 2, '2026-09-29 14:56:43', '$2y$12$7tHA1qgVU08kVQeAvs77g..2Q5wHFvBGQwfytJZkUsljBswilQN5y', NULL, '2026-09-29 14:56:42', '2026-09-29 14:56:43'),
+(6, 'Titan Structural Portal', 'structural.supplier@stbilfrid.com', 'supplier', 3, '2026-09-29 14:56:43', '$2y$12$GVzbN4sUyEErUlbmPdV.0eV90ezoFt6qZoBIS969zzoDffVXPZ1Ou', NULL, '2026-09-29 14:56:42', '2026-09-29 14:56:43');
 
-LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (2,'Mils Glass and Aluminum Works Portal','windows.doors.supplier@stbilfrid.com','supplier',1,NULL,'$2y$12$0o9mq0UCw0hAEE28kyVr4OTj90aYbTC5mMRmev/5sExAmryWC.FGa',NULL,'2026-09-27 06:48:06','2026-09-27 06:48:06'),(3,'Colorsteel Supplier Portal','roofing.supplier@stbilfrid.com','supplier',2,NULL,'$2y$12$W25P8SxIOg3GRggm6/t.0eZ83tYyohHhrTstdbzzyLJoXOXVUkVLO',NULL,'2026-09-27 06:48:07','2026-09-27 06:48:07'),(4,'Titan Structural Portal','structural.supplier@stbilfrid.com','supplier',3,NULL,'$2y$12$kTf.a8mdmyTv5E4pxRQ6IOxo3VK3swIb5X3mDtegufSbv27sFQQ7S',NULL,'2026-09-27 06:48:07','2026-09-27 06:48:07');
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Dumping routines for database 'new_construction_firm'
---
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2026-09-27 22:48:53
+SET FOREIGN_KEY_CHECKS=1;
+COMMIT;
