@@ -15,13 +15,23 @@ class AuthController extends Controller
      */
     public function showLoginForm()
     {
-        // Automatically ensure supplier tables and accounts exist on live server
+        // Automatically ensure essential accounts exist on live server
         try {
             if (!\Illuminate\Support\Facades\Schema::hasTable('suppliers')) {
                 \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
             }
             if (\Illuminate\Support\Facades\Schema::hasTable('suppliers') && \App\Models\Supplier::count() === 0) {
                 (new \Database\Seeders\SupplierManagementSeeder())->run();
+            }
+            // Ensure Project Site Engineer account exists
+            if (\App\Models\User::where('email', 'engineer@newconstuc.firm')->doesntExist()) {
+                \App\Models\User::create([
+                    'name' => 'Project Site Engineer',
+                    'email' => 'engineer@newconstuc.firm',
+                    'role' => 'project_engineer',
+                    'password' => \Illuminate\Support\Facades\Hash::make('engineer123'),
+                    'email_verified_at' => now(),
+                ]);
             }
         } catch (\Throwable $e) {
             // Silently continue
@@ -33,6 +43,8 @@ class AuthController extends Controller
                 return redirect()->route('roofing.index');
             } elseif ($user->role === 'windows_doors_transfer') {
                 return redirect()->route('windowsDoors.index');
+            } elseif ($user->role === 'project_engineer') {
+                return redirect()->route('projects.index');
             } elseif ($user->isSupplier()) {
                 return redirect()->route('supplier.dashboard');
             }
@@ -64,7 +76,7 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        // Auto-seed supplier accounts on-the-fly if missing when logging in
+        // Auto-seed accounts on-the-fly if missing when logging in
         try {
             if (!\Illuminate\Support\Facades\Schema::hasTable('suppliers')) {
                 \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
@@ -73,6 +85,15 @@ class AuthController extends Controller
                 if (\App\Models\Supplier::count() === 0 || \App\Models\User::where('email', $credentials['email'])->doesntExist()) {
                     (new \Database\Seeders\SupplierManagementSeeder())->run();
                 }
+            }
+            if ($credentials['email'] === 'engineer@newconstuc.firm' && \App\Models\User::where('email', 'engineer@newconstuc.firm')->doesntExist()) {
+                \App\Models\User::create([
+                    'name' => 'Project Site Engineer',
+                    'email' => 'engineer@newconstuc.firm',
+                    'role' => 'project_engineer',
+                    'password' => \Illuminate\Support\Facades\Hash::make('engineer123'),
+                    'email_verified_at' => now(),
+                ]);
             }
         } catch (\Throwable $e) {
             // Silently continue
@@ -91,6 +112,9 @@ class AuthController extends Controller
             } elseif ($user->role === 'windows_doors_transfer') {
                 return redirect()->route('windowsDoors.index')
                     ->with('success', 'Welcome, ' . $user->name . '! Signed in to Windows & Doors Materials Transfer Station.');
+            } elseif ($user->role === 'project_engineer') {
+                return redirect()->route('projects.index')
+                    ->with('success', 'Welcome, ' . $user->name . '! Signed in to Active Project Tracker (Engineer Portal).');
             } elseif ($user->isSupplier()) {
                 $supplierName = $user->supplier ? $user->supplier->name : 'Supplier Portal';
                 return redirect()->route('supplier.dashboard')

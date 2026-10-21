@@ -874,6 +874,15 @@ class Project extends Model
         return $this->hasMany(ProjectScopeItem::class)->orderBy('item_number');
     }
 
+    public function seedDefaultBOM(bool $force = false): float
+    {
+        if (!$force && $this->scopeItems()->count() > 0) {
+            return (float) $this->grand_scope_cost;
+        }
+
+        return app(\App\Http\Controllers\ProjectScopeController::class)->applyCalibratedTemplate($this);
+    }
+
     public function getGrandScopeCostAttribute(): float
     {
         return (float) $this->scopeItems()->sum('total_item_cost');

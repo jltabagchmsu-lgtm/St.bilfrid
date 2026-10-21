@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UML Diagram Suite — Integrated Inventory & Sales Management System</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f1f5f9;
+      color: #0f172a;
+      padding: 30px 20px;
+      line-height: 1.5;
+    }
+    .container {
+      max-width: 1250px;
+      margin: 0 auto;
+    }
+    .header {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+      margin-bottom: 30px;
+      border-left: 6px solid #0284c7;
+    }
+    .header h1 {
+      font-size: 24px;
+      color: #0f172a;
+      margin-bottom: 8px;
+    }
+    .header p {
+      font-size: 14px;
+      color: #64748b;
+    }
+    .nav-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13.5px;
+      cursor: pointer;
+      color: #334155;
+      transition: all 0.2s ease;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .tab-btn:hover {
+      background: #f8fafc;
+      border-color: #94a3b8;
+    }
+    .tab-btn.active {
+      background: #0284c7;
+      color: #ffffff;
+      border-color: #0284c7;
+    }
+    .diagram-card {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      margin-bottom: 40px;
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .action-btn {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      color: #334155;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .action-btn:hover {
+      background: #e2e8f0;
+    }
+    .svg-wrapper {
+      width: 100%;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      overflow-x: auto;
+      display: flex;
+      justify-content: center;
+    }
+    .svg-wrapper img {
+      width: 100%;
+      max-width: 1100px;
+      height: auto;
+      display: block;
+    }
+    .instructions {
+      margin-top: 20px;
+      font-size: 13px;
+      color: #64748b;
+      background: #f8fafc;
+      padding: 12px 16px;
+      border-radius: 6px;
+      border-left: 4px solid #10b981;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>Integrated Inventory and Sales Management System</h1>
+    <p>Chapter 3: System Design & Architecture — Professional Academic UML Diagram Suite</p>
+  </div>
+
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="scrollToSection('sec-op-framework')">Figure 2: Operational Framework</button>
+    <button class="tab-btn" onclick="scrollToSection('sec-auth-uc')">1. Authentication & Role Redirection (Use Case)</button>
+    <button class="tab-btn" onclick="scrollToSection('sec-auth-flow')">2. Authentication Activity / Flowchart</button>
+    <button class="tab-btn" onclick="scrollToSection('sec-owner')">3. Owner (Master Admin) Use Case</button>
+    <button class="tab-btn" onclick="scrollToSection('sec-supplier')">4. Supplier Portal Use Case</button>
+    <button class="tab-btn" onclick="scrollToSection('sec-master')">5. Master System Use Case</button>
+  </div>
+
+  <!-- SECTION 0: OPERATIONAL FRAMEWORK -->
+  <div id="sec-op-framework" class="diagram-card">
+    <div class="card-header">
+      <div class="card-title">Figure 2 — Operational Framework of Integrated Inventory and Sales Management System</div>
+      <div style="display: flex; gap: 10px;">
+        <a class="action-btn" href="operational_framework.jpg" target="_blank" download="operational_framework.jpg">
+          &#128190; Download High-Res JPG
+        </a>
+        <a class="action-btn" href="operational_framework.svg" target="_blank" download="operational_framework.svg">
+          &#128190; Download Vector SVG
+        </a>
+      </div>
+    </div>
+    <div class="svg-wrapper">
+      <img src="operational_framework.jpg" alt="Operational Framework Diagram">
+    </div>
+    <div class="instructions">
+      <strong>Operational Architecture:</strong> Illustrates the direct data and workflow interaction between <strong>Suppliers</strong> (<em>Supplier 1: Windows &amp; Doors</em> / <em>Supplier 2: Roofing Supplies</em>), the <strong>Cloud Database Server</strong>, and the <strong>Owner / Manager</strong>, orchestrated by the <strong>Integrated Inventory and Sales Management System</strong>.
+    </div>
+  </div>
+
+  <!-- SECTION 1: AUTH USE CASE -->
+  <div id="sec-auth-uc" class="diagram-card">
+    <div class="card-header">
+      <div class="card-title">Figure 3.1 — Authentication &amp; Role-Based Access Control (Use Case Diagram)</div>
+      <a class="action-btn" href="auth_use_case_diagram.svg" target="_blank" download="auth_use_case_diagram.svg">
+        &#128190; Download SVG File
+      </a>
+    </div>
+    <div class="svg-wrapper">
+      <img src="auth_use_case_diagram.svg" alt="Authentication Use Case Diagram">
+    </div>
+    <div class="instructions">
+      <strong>Codebase Implementation:</strong> Derived from <code>AuthController.php</code> (Lines 32–66 & 88–101). Models user login submission, security validation inclusions (Rate Limiter, Hash verification), and extended role-based landing routes.
+    </div>
+  </div>
+
+  <!-- SECTION 2: AUTH ACTIVITY FLOW -->
+  <div id="sec-auth-flow" class="diagram-card">
+    <div class="card-header">
+      <div class="card-title">Figure 3.2 — Authentication Execution Flow &amp; Decision Logic (Activity Diagram)</div>
+      <a class="action-btn" href="auth_flow_diagram.svg" target="_blank" download="auth_flow_diagram.svg">
+        &#128190; Download SVG File
+      </a>
+    </div>
+    <div class="svg-wrapper">
+      <img src="auth_flow_diagram.svg" alt="Authentication Activity Flow Diagram">
+    </div>
+    <div class="instructions">
+      <strong>Activity Logic:</strong> Details rate limiter lockout (&gt; 5 attempts in 60s), credential hashing checks, and 4-way conditional branching to designated role portals.
+    </div>
+  </div>
+
+  <!-- SECTION 3: OWNER -->
+  <div id="sec-owner" class="diagram-card">
+    <div class="card-header">
+      <div class="card-title">Figure 3.3 — Owner (Master Admin) Use Case Diagram</div>
+      <a class="action-btn" href="owner_use_case_diagram.svg" target="_blank" download="owner_use_case_diagram.svg">
+        &#128190; Download SVG File
+      </a>
+    </div>
+    <div class="svg-wrapper">
+      <img src="owner_use_case_diagram.svg" alt="Owner Use Case Diagram">
+    </div>
+    <div class="instructions">
+      <strong>Thesis Note:</strong> Features zero overlapping lines with direct connections to all 7 primary operational hubs and horizontal <code>&lt;&lt;include&gt;&gt;</code> / <code>&lt;&lt;extend&gt;&gt;</code> relations.
+    </div>
+  </div>
+
+  <!-- SECTION 4: SUPPLIER -->
+  <div id="sec-supplier" class="diagram-card">
+    <div class="card-header">
+      <div class="card-title">Figure 3.4 — Supplier Portal (Supplier 1 &amp; Supplier 2) Use Case Diagram</div>
+      <a class="action-btn" href="supplier_portal_use_case_diagram.svg" target="_blank" download="supplier_portal_use_case_diagram.svg">
+        &#128190; Download SVG File
+      </a>
+    </div>
+    <div class="svg-wrapper">
+      <img src="supplier_portal_use_case_diagram.svg" alt="Supplier Portal Use Case Diagram">
+    </div>
+    <div class="instructions">
+      <strong>Thesis Note:</strong> Models the tenant-isolated portal for <strong>Supplier 1 (Windows &amp; Doors)</strong> and <strong>Supplier 2 (Roofing Supplies)</strong>.
+    </div>
+  </div>
+
+  <!-- SECTION 5: MASTER -->
+  <div id="sec-master" class="diagram-card">
+    <div class="card-header">
+      <div class="card-title">Figure 3.5 — Master System UML Use Case Diagram</div>
+      <a class="action-btn" href="master_system_use_case_diagram.svg" target="_blank" download="master_system_use_case_diagram.svg">
+        &#128190; Download SVG File
+      </a>
+    </div>
+    <div class="svg-wrapper">
+      <img src="master_system_use_case_diagram.svg" alt="Master System Use Case Diagram">
+    </div>
+    <div class="instructions">
+      <strong>Thesis Note:</strong> Displays the complete enterprise system boundary with Master Admin on the left and Suppliers on the right.
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function scrollToSection(id) {
+    document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+  }
+</script>
+
+</body>
+</html>

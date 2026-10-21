@@ -86,6 +86,45 @@
                     </button>
                 </div>
 
+            @elseif(Auth::check() && Auth::user()->isProjectEngineer())
+                <!-- Project Site Engineer Navigation -->
+                <div class="nav-section-title">Site Operations</div>
+
+                <a href="/projects" class="nav-item {{ request()->is('projects*') ? 'active' : '' }}">
+                    <span class="nav-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20h20"></path><path d="M5 20V8.5L12 3l7 5.5V20"></path><path d="M9 20v-6h6v6"></path></svg>
+                    </span>
+                    Active Project Tracker
+                </a>
+
+                <a href="/bom" class="nav-item {{ request()->is('bom*') ? 'active' : '' }}">
+                    <span class="nav-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                    </span>
+                    Bill of Materials (BOM)
+                </a>
+
+                <a href="/inventory" class="nav-item {{ request()->is('inventory*') ? 'active' : '' }}">
+                    <span class="nav-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                    </span>
+                    Materials Inventory (INV)
+                </a>
+
+                <a href="/personnel" class="nav-item {{ request()->is('personnel*') ? 'active' : '' }}">
+                    <span class="nav-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    </span>
+                    Engineers & Architects
+                </a>
+
+                <a href="/history" class="nav-item {{ request()->is('history*') ? 'active' : '' }}">
+                    <span class="nav-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    </span>
+                    Project History
+                </a>
+
             @else
                 <!-- Master Administrator Navigation -->
                 <div class="nav-section-title">Core Management</div>
@@ -222,18 +261,23 @@
         <!-- User Profile Card & Logout -->
         <div class="sidebar-user-card" style="margin-top: 20px;">
             <div style="display: flex; align-items: center; gap: 10px;">
-                <div class="user-avatar" style="background: {{ Auth::user()->isRoofingOfficer() ? 'rgba(239, 68, 68, 0.2)' : (Auth::user()->isWindowsDoorsOfficer() ? 'rgba(56, 189, 248, 0.2)' : 'rgba(239, 68, 68, 0.15)') }};">
-                    <span style="font-weight: 800; font-size: 0.85rem; color: {{ Auth::user()->isRoofingOfficer() ? '#ef4444' : (Auth::user()->isWindowsDoorsOfficer() ? '#38bdf8' : '#ef4444') }};">
-                        {{ Auth::user()->isRoofingOfficer() ? 'ROOF' : (Auth::user()->isWindowsDoorsOfficer() ? 'WNDR' : 'ADM') }}
+                <div class="user-avatar" style="background: {{ Auth::user()->isRoofingOfficer() ? 'rgba(239, 68, 68, 0.2)' : (Auth::user()->isWindowsDoorsOfficer() ? 'rgba(56, 189, 248, 0.2)' : (Auth::user()->isProjectEngineer() ? 'rgba(139, 92, 246, 0.2)' : 'rgba(239, 68, 68, 0.15)')) }};">
+                    <span style="font-weight: 800; font-size: 0.85rem; color: {{ Auth::user()->isRoofingOfficer() ? '#ef4444' : (Auth::user()->isWindowsDoorsOfficer() ? '#38bdf8' : (Auth::user()->isProjectEngineer() ? '#8b5cf6' : '#ef4444')) }};">
+                        {{ Auth::user()->isRoofingOfficer() ? 'ROOF' : (Auth::user()->isWindowsDoorsOfficer() ? 'WNDR' : (Auth::user()->isProjectEngineer() ? 'ENGR' : 'ADM')) }}
                     </span>
                 </div>
                 <div style="flex: 1; overflow: hidden;">
                     <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-primary); text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
                         {{ Auth::user()->name ?? 'Administrator' }}
                     </div>
-                    <div style="font-size: 0.7rem; color: {{ Auth::user()->isRoofingOfficer() ? '#ef4444' : (Auth::user()->isWindowsDoorsOfficer() ? '#38bdf8' : '#10b981') }}; font-weight: 600;">
+                    <div style="font-size: 0.7rem; color: {{ Auth::user()->isRoofingOfficer() ? '#ef4444' : (Auth::user()->isWindowsDoorsOfficer() ? '#38bdf8' : (Auth::user()->isProjectEngineer() ? '#8b5cf6' : '#10b981')) }}; font-weight: 600;">
                         ● {{ Auth::user()->role_title ?? 'Master Access' }}
                     </div>
+                    @if(session('acting_engineer_id') && ($actingEngr = \App\Models\Personnel::find(session('acting_engineer_id'))))
+                        <div style="font-size: 0.65rem; color: #059669; font-weight: 700; margin-top: 2px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;" title="Acting as {{ $actingEngr->name }}">
+                            👷 {{ $actingEngr->name }}
+                        </div>
+                    @endif
                 </div>
             </div>
             <form action="{{ route('logout') }}" method="POST" style="margin-top: 10px;">

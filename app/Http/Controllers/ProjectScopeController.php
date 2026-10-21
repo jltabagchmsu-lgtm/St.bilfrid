@@ -70,6 +70,7 @@ class ProjectScopeController extends Controller
     public function updateScopeItem(Request $request, $itemId)
     {
         $item = ProjectScopeItem::findOrFail($itemId);
+        app(ProjectController::class)->ensureEngineerCanEdit($item->project, $request);
 
         $validated = $request->validate([
             'item_number' => 'required|integer|min:1',
@@ -93,6 +94,7 @@ class ProjectScopeController extends Controller
     public function destroyScopeItem($itemId)
     {
         $item = ProjectScopeItem::findOrFail($itemId);
+        app(ProjectController::class)->ensureEngineerCanEdit($item->project);
         $itemNumber = $item->item_number;
         $item->delete();
 
@@ -105,6 +107,7 @@ class ProjectScopeController extends Controller
     public function destroyScopeLine($lineId)
     {
         $line = ProjectScopeLine::findOrFail($lineId);
+        app(ProjectController::class)->ensureEngineerCanEdit($line->scopeItem->project);
         $item = $line->scopeItem;
         $desc = $line->description;
         $line->delete();
@@ -119,6 +122,7 @@ class ProjectScopeController extends Controller
     public function updateScopeLine(Request $request, $lineId)
     {
         $line = ProjectScopeLine::findOrFail($lineId);
+        app(ProjectController::class)->ensureEngineerCanEdit($line->scopeItem->project, $request);
         $item = $line->scopeItem;
 
         $validated = $request->validate([
@@ -1675,11 +1679,10 @@ class ProjectScopeController extends Controller
     }
 
     /**
-     * 1-Click Load BOM calibrated specifically to the open project's title, scope, floor area, and budget.
+     * Calibrate and apply 18-item Philippine BOM & DUPA to a project model directly.
      */
-    public function loadProjectTemplate($projectId)
+    public function applyCalibratedTemplate(Project $project): float
     {
-        $project = Project::findOrFail($projectId);
         $projectName = $project->title ?: ($project->project_code ?? 'Project');
         $floorArea = $project->floor_area_sqm > 0 ? (float) $project->floor_area_sqm : 80.0;
 
@@ -2108,6 +2111,17 @@ class ProjectScopeController extends Controller
         ];
 
         $grandTotal = $this->applyTemplate($project, $template);
+        return $grandTotal;
+    }
+
+    /**
+     * 1-Click Load BOM calibrated specifically to the open project's title, scope, floor area, and budget.
+     */
+    public function loadProjectTemplate($projectId)
+    {
+        $project = Project::findOrFail($projectId);
+        $projectName = $project->title ?: ($project->project_code ?? 'Project');
+        $grandTotal = $this->applyCalibratedTemplate($project);
 
         return redirect()->back()->with('success', 'Official Itemized Bill of Materials & DUPA for "' . $projectName . '" (Total ₱' . number_format($grandTotal, 2) . ') generated and matched successfully!');
     }

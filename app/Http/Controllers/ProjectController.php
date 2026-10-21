@@ -10,16 +10,160 @@ use App\Models\ProjectTask;
 use App\Models\ProjectTaskMaterial;
 use App\Models\Payment;
 use App\Models\ProjectPhoto;
+use App\Models\ProjectTaskPhoto;
 use App\Models\ProjectCost;
 use App\Models\InventoryLog;
 use App\Models\ProjectMaterialTransfer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class ProjectController extends Controller
 {
+    /**
+     * Set the acting site engineer in the current session.
+     */
+    public function setActingEngineer(Request $request)
+    {
+        $validated = $request->validate([
+            'personnel_id' => 'required|exists:personnel,id',
+            'project_id' => 'nullable|exists:projects,id',
+        ]);
+
+        $personnel = Personnel::findOrFail($validated['personnel_id']);
+        session(['acting_engineer_id' => $personnel->id]);
+
+        $isAssigned = false;
+        $projectName = '';
+        if (!empty($validated['project_id'])) {
+            $project = Project::find($validated['project_id']);
+            if ($project) {
+                $isAssigned = $project->personnel()->where('personnel.id', $personnel->id)->exists();
+                $projectName = $project->title;
+            }
+        }
+
+        if ($request->ajax() || $request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => "Operating engineer set to {$personnel->name} ({$personnel->title}).",
+                'engineer' => [
+                    'id' => $personnel->id,
+                    'name' => $personnel->name,
+                    'title' => $personnel->title,
+                    'is_assigned' => $isAssigned,
+                ],
+            ]);
+        }
+
+        $flashType = $isAssigned ? 'success' : 'warning';
+        $flashMsg = $isAssigned 
+            ? "Operating as {$personnel->name}. You are assigned to {$projectName} and authorized to make changes."
+            : "Operating as {$personnel->name}. Note: {$personnel->name} is not assigned to {$projectName} (Read-Only Mode).";
+
+        return redirect()->back()->with($flashType, $flashMsg);
+    }
+
+    /**
+     * Clear the acting engineer session.
+     */
+    public function clearActingEngineer(Request $request)
+    {
+        session()->forget('acting_engineer_id');
+        if ($request->ajax() || $request->expectsJson()) {
+            return response()->json(['success' => true]);
+        }
+        return redirect()->back()->with('info', 'Operating engineer selection cleared.');
+    }
+
+    /**
+     * Check if the current user/engineer is authorized to modify the given project.
+     */
+    public static function checkEngineerAuthorization(Project $project, ?Request $request = null): array
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return ['allowed' => false, 'reason' => 'Unauthenticated user.', 'code' => 401];
+        }
+
+        // Master Administrator has full unrestricted modification permissions
+        if ($user->isAdmin()) {
+            return ['allowed' => true, 'is_admin' => true];
+        }
+
+        // For Project Engineer (or other site roles):
+        $engineerId = $request ? $request->input('acting_engineer_id') : null;
+        if (!$engineerId) {
+            $engineerId = session('acting_engineer_id');
+        }
+
+        if (!$engineerId) {
+            return [
+                'allowed' => false,
+                'reason' => 'Please select which engineer is about to make changes before updating this project.',
+                'require_selection' => true,
+                'code' => 403,
+            ];
+        }
+
+        $actingEngineer = Personnel::find($engineerId);
+        if (!$actingEngineer) {
+            return [
+                'allowed' => false,
+                'reason' => 'Selected engineer was not found in the personnel roster.',
+                'code' => 403,
+            ];
+        }
+
+        // Verify that the acting engineer is assigned to this project
+        $isAssigned = $project->personnel()->where('personnel.id', $actingEngineer->id)->exists();
+        if (!$isAssigned) {
+            $assignedNames = $project->personnel->pluck('name')->implode(', ');
+            $assignedMsg = $assignedNames ? "Assigned engineers on this project are: {$assignedNames}." : "No engineers are currently assigned to this project.";
+            return [
+                'allowed' => false,
+                'reason' => "Action Blocked: {$actingEngineer->name} is NOT assigned to {$project->title}. Only engineers assigned to this project can make changes. {$assignedMsg}",
+                'engineer' => $actingEngineer,
+                'code' => 403,
+            ];
+        }
+
+        return [
+            'allowed' => true,
+            'engineer' => $actingEngineer,
+            'is_admin' => false,
+        ];
+    }
+
+    /**
+     * Enforce engineer authorization or throw an exception/abort.
+     */
+    public function ensureEngineerCanEdit(Project $project, ?Request $request = null)
+    {
+        $request = $request ?: request();
+        $auth = self::checkEngineerAuthorization($project, $request);
+        if (!$auth['allowed']) {
+            if ($request->expectsJson() || $request->ajax()) {
+                throw new \Illuminate\Http\Exceptions\HttpResponseException(
+                    response()->json([
+                        'success' => false,
+                        'error' => $auth['reason'],
+                        'message' => $auth['reason'],
+                        'require_engineer_selection' => $auth['require_selection'] ?? false,
+                    ], $auth['code'] ?? 403)
+                );
+            }
+
+            throw new \Illuminate\Http\Exceptions\HttpResponseException(
+                redirect()->back()->with('error', $auth['reason'])
+            );
+        }
+
+        return $auth;
+    }
+
     public function index()
     {
         $projects = Project::whereIn('status', ['in_progress', 'on_hold', 'approved'])
@@ -29,7 +173,10 @@ class ProjectController extends Controller
             
         $personnelList = Personnel::orderBy('name')->get();
 
-        return view('projects.index', compact('projects', 'personnelList'));
+        $actingEngineerId = session('acting_engineer_id');
+        $actingEngineer = $actingEngineerId ? Personnel::find($actingEngineerId) : null;
+
+        return view('projects.index', compact('projects', 'personnelList', 'actingEngineer'));
     }
 
     public function create()
@@ -159,7 +306,8 @@ class ProjectController extends Controller
             ]);
         }
 
-        // Initialize Structural, Electrical, Piping, & Finishing Tasks with materials scaled to the project plan
+        // Initialize Fixed Baseline Bill of Materials (BOM) & Scaled Checklist Tasks
+        $project->seedDefaultBOM();
         $project->seedDefaultChecklist();
 
         $rooms = json_decode($request->input('room_program_json', '[]'), true) ?: [];
@@ -170,6 +318,7 @@ class ProjectController extends Controller
     public function update(Request $request, $id)
     {
         $project = Project::findOrFail($id);
+        $this->ensureEngineerCanEdit($project, $request);
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -405,6 +554,12 @@ class ProjectController extends Controller
             'scopeItems.lines',
         ])->findOrFail($id);
 
+        // Auto-seed fixed baseline BOM if project has no BOM scope items yet
+        if ($project->scopeItems->isEmpty()) {
+            $project->seedDefaultBOM();
+            $project->load('scopeItems.lines');
+        }
+
         // Auto-seed default engineering checklist if project has no tasks
         if ($project->tasks->isEmpty()) {
             $project->seedDefaultChecklist();
@@ -555,6 +710,11 @@ class ProjectController extends Controller
 
         $activeMaterialsData = $project->getActiveMaterialsData();
 
+        $actingEngineerId = session('acting_engineer_id');
+        $actingEngineer = $actingEngineerId ? Personnel::find($actingEngineerId) : null;
+        $isActingEngineerAssigned = $actingEngineer ? $project->personnel->contains('id', $actingEngineer->id) : false;
+        $userCanEditProject = Auth::user()->isAdmin() || $isActingEngineerAssigned;
+
         $incomingTransfers = ProjectMaterialTransfer::with(['sourceProject', 'destinationProject', 'material'])
             ->where('destination_project_id', $project->id)
             ->orderBy('transfer_date', 'desc')
@@ -609,13 +769,17 @@ class ProjectController extends Controller
             'pipingDone',
             'finishingDone',
             'activeMaterialsData',
-            'incomingTransfers'
+            'incomingTransfers',
+            'actingEngineer',
+            'isActingEngineerAssigned',
+            'userCanEditProject'
         ));
     }
 
     public function updateProgress(Request $request, $id)
     {
         $project = Project::findOrFail($id);
+        $this->ensureEngineerCanEdit($project, $request);
 
         $validated = $request->validate([
             'structural_progress' => 'required|integer|min:0|max:100',
@@ -651,6 +815,7 @@ class ProjectController extends Controller
     public function updateProgressionBases(Request $request, $id)
     {
         $project = Project::findOrFail($id);
+        $this->ensureEngineerCanEdit($project, $request);
 
         $validated = $request->validate([
             'structural_weight' => 'required|integer|min:0|max:100',
@@ -682,6 +847,7 @@ class ProjectController extends Controller
     public function updateSchedule(Request $request, $id)
     {
         $project = Project::findOrFail($id);
+        $this->ensureEngineerCanEdit($project, $request);
 
         $validated = $request->validate([
             'start_date' => 'required|date',
@@ -698,6 +864,7 @@ class ProjectController extends Controller
     public function updateFinancing(Request $request, $id)
     {
         $project = Project::findOrFail($id);
+        $this->ensureEngineerCanEdit($project, $request);
 
         $validated = $request->validate([
             'financing_type' => 'required|string|in:bank_loan,pagibig_loan,client_equity,combined',
@@ -722,6 +889,7 @@ class ProjectController extends Controller
     public function updateManpower(Request $request, $id)
     {
         $project = Project::findOrFail($id);
+        $this->ensureEngineerCanEdit($project, $request);
 
         $validated = $request->validate([
             'deployed_workers' => 'required|integer|min:0',
@@ -741,6 +909,7 @@ class ProjectController extends Controller
     public function addTask(Request $request, $projectId)
     {
         $project = Project::findOrFail($projectId);
+        $this->ensureEngineerCanEdit($project, $request);
 
         $validated = $request->validate([
             'task_name' => 'required|string|max:255',
@@ -798,6 +967,23 @@ class ProjectController extends Controller
         // Synchronize Task Materials to Task & BOM Master Table
         $materialsTotal = 0;
         if (!empty($validated['materials']) && is_array($validated['materials'])) {
+            $validMaterials = array_filter($validated['materials'], fn($m) => !empty(trim($m['name'] ?? '')) && (float)($m['quantity'] ?? 0) > 0);
+
+            $scopeItem = null;
+            if (!empty($validMaterials) && $project->scopeItems()->count() > 0) {
+                $lastNumber = (int) $project->scopeItems()->max('item_number');
+                $scopeItem = \App\Models\ProjectScopeItem::create([
+                    'project_id' => $project->id,
+                    'item_number' => $lastNumber + 1,
+                    'item_name' => 'ADDITIONAL TASK: ' . strtoupper($validated['task_name']),
+                    'volume_or_area' => 'Task Scope Addition',
+                    'notes' => 'Materials & specifications added from scheduled task: ' . $validated['task_name'],
+                    'contingency_percent' => 15.00,
+                    'taxes_percent' => 6.00,
+                    'profit_percent' => 10.00,
+                ]);
+            }
+
             foreach ($validated['materials'] as $mat) {
                 $matName = trim($mat['name'] ?? '');
                 $qty = (float) ($mat['quantity'] ?? 0);
@@ -821,7 +1007,23 @@ class ProjectController extends Controller
                         'total_cost' => $total,
                         'status' => 'allocated',
                     ]);
+
+                    if ($scopeItem) {
+                        \App\Models\ProjectScopeLine::create([
+                            'project_scope_item_id' => $scopeItem->id,
+                            'category' => 'material',
+                            'description' => $matName . ' (' . $task->task_name . ')',
+                            'quantity' => $qty,
+                            'unit' => $unit,
+                            'unit_price' => $unitCost,
+                            'total_cost' => $total,
+                        ]);
+                    }
                 }
+            }
+
+            if ($scopeItem) {
+                $scopeItem->recalculate();
             }
         }
 
@@ -837,6 +1039,7 @@ class ProjectController extends Controller
     public function updateTask(Request $request, $taskId)
     {
         $task = ProjectTask::findOrFail($taskId);
+        $this->ensureEngineerCanEdit($task->project, $request);
 
         $validated = $request->validate([
             'task_name' => 'sometimes|required|string|max:255',
@@ -898,6 +1101,7 @@ class ProjectController extends Controller
     public function toggleTaskChecklist(Request $request, $taskId)
     {
         $task = ProjectTask::findOrFail($taskId);
+        $this->ensureEngineerCanEdit($task->project, $request);
 
         // Irreversible Completion: Completed tasks cannot be unchecked or undone
         if ($task->progress >= 100 || $task->status === 'completed') {
@@ -975,6 +1179,7 @@ class ProjectController extends Controller
     public function updateTaskStatusAjax(Request $request, $taskId)
     {
         $task = ProjectTask::findOrFail($taskId);
+        $this->ensureEngineerCanEdit($task->project, $request);
         $newStatus = $request->input('status', 'in_progress');
 
         // Forward-only rule validation
@@ -1064,6 +1269,7 @@ class ProjectController extends Controller
     public function updateTaskQuickProgress(Request $request, $taskId)
     {
         $task = ProjectTask::findOrFail($taskId);
+        $this->ensureEngineerCanEdit($task->project, $request);
         $progress = (int) $request->input('progress', 0);
         $progress = max(0, min(100, $progress));
 
@@ -1141,6 +1347,7 @@ class ProjectController extends Controller
     public function updateTaskQuickTimeline(Request $request, $taskId)
     {
         $task = ProjectTask::findOrFail($taskId);
+        $this->ensureEngineerCanEdit($task->project, $request);
         $phase = $request->input('timeline_phase');
         if ($phase) {
             $task->timeline_phase = $phase;
@@ -1165,7 +1372,7 @@ class ProjectController extends Controller
 
     public function getChecklistStateJson($id)
     {
-        $project = Project::with(['tasks.assignedPersonnel'])->findOrFail($id);
+        $project = Project::with(['tasks.assignedPersonnel', 'tasks.photos'])->findOrFail($id);
 
         $totalTasks = $project->tasks()->count();
         $completedTasks = $project->tasks()->where(function($q) {
@@ -1187,6 +1394,16 @@ class ProjectController extends Controller
                 'progress' => (int) $t->progress,
                 'assigned_to' => $t->assignedPersonnel->name ?? null,
                 'schedule_window' => $t->timeline_window_label,
+                'photo_path' => $t->photo_path ? asset($t->photo_path) : null,
+                'photo_caption' => $t->photo_caption,
+                'photos_count' => $t->photos_count,
+                'photos' => $t->all_photos_list->map(function($p) {
+                    return [
+                        'id' => $p->id,
+                        'url' => $p->url,
+                        'caption' => $p->caption,
+                    ];
+                })->values(),
             ];
         });
 
@@ -1235,6 +1452,7 @@ class ProjectController extends Controller
     public function destroyTask($taskId)
     {
         $task = ProjectTask::findOrFail($taskId);
+        $this->ensureEngineerCanEdit($task->project);
         $project = $task->project;
         $taskName = $task->task_name;
         $task->delete();
@@ -1246,39 +1464,94 @@ class ProjectController extends Controller
 
     public function attachTaskPhoto(Request $request, $taskId)
     {
-        $task = ProjectTask::with('project')->findOrFail($taskId);
+        $task = ProjectTask::with(['project', 'photos'])->findOrFail($taskId);
         $project = $task->project;
 
         $validated = $request->validate([
-            'photo_file' => 'nullable|image|max:10240', // 10MB
+            'photo_files' => 'nullable|array',
+            'photo_files.*' => 'nullable|file|image|max:10240', // 10MB per file
+            'photo_file' => 'nullable|file|image|max:10240', // Single file backward compatibility
             'photo_url' => 'nullable|string|max:1000',
             'caption' => 'nullable|string|max:500',
             'mark_completed' => 'nullable|boolean',
         ]);
 
-        $filePath = null;
+        $uploadedPaths = [];
+        $destinationPath = public_path('uploads/tasks');
+        if (!File::isDirectory($destinationPath)) {
+            File::makeDirectory($destinationPath, 0755, true, true);
+        }
 
+        // Handle multiple files if provided
+        if ($request->hasFile('photo_files')) {
+            foreach ($request->file('photo_files') as $file) {
+                if ($file && $file->isValid()) {
+                    $filename = 'proof_' . $task->id . '_' . time() . '_' . rand(100, 999) . '.' . $file->getClientOriginalExtension();
+                    $file->move($destinationPath, $filename);
+                    $uploadedPaths[] = '/uploads/tasks/' . $filename;
+                }
+            }
+        }
+
+        // Handle single photo_file if provided
         if ($request->hasFile('photo_file')) {
             $file = $request->file('photo_file');
-            $filename = 'proof_' . $task->id . '_' . time() . '.' . $file->getClientOriginalExtension();
-            $destinationPath = public_path('uploads/tasks');
-            if (!File::isDirectory($destinationPath)) {
-                File::makeDirectory($destinationPath, 0755, true, true);
+            if ($file && $file->isValid()) {
+                $filename = 'proof_' . $task->id . '_' . time() . '_' . rand(100, 999) . '.' . $file->getClientOriginalExtension();
+                $file->move($destinationPath, $filename);
+                $uploadedPaths[] = '/uploads/tasks/' . $filename;
             }
-            $file->move($destinationPath, $filename);
-            $filePath = '/uploads/tasks/' . $filename;
-        } elseif ($request->filled('photo_url')) {
-            $filePath = $request->input('photo_url');
-        } else {
+        }
+
+        // Handle photo_url
+        if ($request->filled('photo_url')) {
+            $uploadedPaths[] = $request->input('photo_url');
+        }
+
+        if (empty($uploadedPaths)) {
             if ($request->wantsJson() || $request->ajax()) {
-                return response()->json(['success' => false, 'error' => 'Please select a photo file or provide a valid photo URL.'], 422);
+                return response()->json(['success' => false, 'error' => 'Please select at least one photo image file or enter a valid photo URL.'], 422);
             }
-            return redirect()->back()->with('error', 'Please select an image file to attach as proof.');
+            return redirect()->back()->with('error', 'Please select at least one image file to attach as proof.');
         }
 
         $caption = $validated['caption'] ?? ('Proof of completion for ' . $task->task_name);
 
-        $task->photo_path = $filePath;
+        $photoType = match(strtolower($task->category)) {
+            'electrical' => 'electrical',
+            'piping & plumbing', 'piping', 'plumbing' => 'piping',
+            'design-build / turnkey finishing', 'finishing' => 'finishing',
+            default => 'structural'
+        };
+
+        $existingCount = $task->photos()->count();
+        $counter = $existingCount + 1;
+
+        foreach ($uploadedPaths as $path) {
+            ProjectTaskPhoto::create([
+                'project_task_id' => $task->id,
+                'photo_path' => $path,
+                'caption' => $caption,
+                'sort_order' => $counter,
+            ]);
+
+            // Also add to Project Gallery as a Progress Proof photo
+            ProjectPhoto::create([
+                'project_id' => $project->id,
+                'photo_type' => $photoType,
+                'title' => 'Task Proof: ' . $task->task_name . ($counter > 1 ? " (#{$counter})" : ''),
+                'description' => $caption,
+                'file_path' => $path,
+                'is_primary' => false,
+                'taken_at' => now()->toDateString(),
+            ]);
+
+            $counter++;
+        }
+
+        // Always keep task->photo_path pointing to the primary/first proof photo for backward compatibility
+        $firstPhoto = $task->photos()->first();
+        $task->photo_path = $firstPhoto ? $firstPhoto->photo_path : $uploadedPaths[0];
         $task->photo_caption = $caption;
 
         if ($request->boolean('mark_completed') || $task->progress < 100) {
@@ -1288,45 +1561,75 @@ class ProjectController extends Controller
         }
         $task->save();
 
-        // Also add to Project Gallery as a Progress Proof photo
-        $photoType = match(strtolower($task->category)) {
-            'electrical' => 'electrical',
-            'piping & plumbing', 'piping', 'plumbing' => 'piping',
-            'design-build / turnkey finishing', 'finishing' => 'finishing',
-            default => 'structural'
-        };
-
-        ProjectPhoto::create([
-            'project_id' => $project->id,
-            'photo_type' => $photoType,
-            'title' => 'Task Proof: ' . $task->task_name,
-            'description' => $caption,
-            'file_path' => $filePath,
-            'is_primary' => false,
-            'taken_at' => now()->toDateString(),
-        ]);
-
         $project->recalculateTradeProgressFromTasks();
+
+        $allTaskPhotos = $task->photos()->orderBy('id')->get()->map(function($p) {
+            return [
+                'id' => $p->id,
+                'url' => $p->url,
+                'caption' => $p->caption,
+            ];
+        });
+
+        $countUploaded = count($uploadedPaths);
+        $successMsg = $countUploaded > 1
+            ? "Successfully attached {$countUploaded} proof photos to \"{$task->task_name}\"!"
+            : "Proof photo successfully attached to \"{$task->task_name}\"!";
 
         if ($request->wantsJson() || $request->ajax()) {
             return response()->json([
                 'success' => true,
-                'message' => 'Proof photo attached successfully to "' . $task->task_name . '"!',
+                'message' => $successMsg,
                 'task_id' => $task->id,
                 'photo_path' => $task->photo_path,
                 'photo_caption' => $task->photo_caption,
+                'photos' => $allTaskPhotos,
+                'photos_count' => $allTaskPhotos->count(),
                 'progress' => $task->progress,
                 'status' => $task->status,
                 'is_completed' => $task->is_completed,
             ]);
         }
 
-        return redirect()->back()->with('success', 'Proof of completion photo successfully attached to "' . $task->task_name . '"!');
+        return redirect()->back()->with('success', $successMsg);
     }
 
     public function removeTaskPhoto(Request $request, $taskId)
     {
-        $task = ProjectTask::findOrFail($taskId);
+        $task = ProjectTask::with('photos')->findOrFail($taskId);
+
+        if ($request->filled('photo_id')) {
+            $photoId = $request->input('photo_id');
+            ProjectTaskPhoto::where('project_task_id', $task->id)->where('id', $photoId)->delete();
+
+            $remainingPhoto = $task->photos()->first();
+            $task->photo_path = $remainingPhoto ? $remainingPhoto->photo_path : null;
+            $task->photo_caption = $remainingPhoto ? $remainingPhoto->caption : null;
+            $task->save();
+
+            $allTaskPhotos = $task->photos()->orderBy('id')->get()->map(function($p) {
+                return [
+                    'id' => $p->id,
+                    'url' => $p->url,
+                    'caption' => $p->caption,
+                ];
+            });
+
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Proof photo removed.',
+                    'task_id' => $task->id,
+                    'photos' => $allTaskPhotos,
+                    'photos_count' => $allTaskPhotos->count(),
+                    'photo_path' => $task->photo_path,
+                ]);
+            }
+
+            return redirect()->back()->with('success', 'Proof photo removed from task "' . $task->task_name . '".');
+        }
+
+        $task->photos()->delete();
         $task->photo_path = null;
         $task->photo_caption = null;
         $task->save();
@@ -1334,17 +1637,53 @@ class ProjectController extends Controller
         if ($request->wantsJson() || $request->ajax()) {
             return response()->json([
                 'success' => true,
-                'message' => 'Proof photo removed.',
+                'message' => 'All proof photos removed.',
                 'task_id' => $task->id,
+                'photos' => [],
+                'photos_count' => 0,
+                'photo_path' => null,
             ]);
         }
 
         return redirect()->back()->with('success', 'Proof photo removed from task "' . $task->task_name . '".');
     }
 
+    public function deleteTaskPhoto(Request $request, $taskId, $photoId)
+    {
+        $task = ProjectTask::with('photos')->findOrFail($taskId);
+        ProjectTaskPhoto::where('project_task_id', $task->id)->where('id', $photoId)->delete();
+
+        $remainingPhoto = $task->photos()->first();
+        $task->photo_path = $remainingPhoto ? $remainingPhoto->photo_path : null;
+        $task->photo_caption = $remainingPhoto ? $remainingPhoto->caption : null;
+        $task->save();
+
+        $allTaskPhotos = $task->photos()->orderBy('id')->get()->map(function($p) {
+            return [
+                'id' => $p->id,
+                'url' => $p->url,
+                'caption' => $p->caption,
+            ];
+        });
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Proof photo deleted.',
+                'task_id' => $task->id,
+                'photos' => $allTaskPhotos,
+                'photos_count' => $allTaskPhotos->count(),
+                'photo_path' => $task->photo_path,
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Photo proof removed from task.');
+    }
+
     public function resetChecklist(Request $request, $id)
     {
         $project = Project::findOrFail($id);
+        $this->ensureEngineerCanEdit($project, $request);
         $project->seedDefaultChecklist(true);
 
         return redirect()->back()->with('success', 'Standard 53-item engineering checklist initialized for ' . $project->project_code . '! Structural, Electrical, Piping, and Design-Build tasks loaded.');
@@ -1380,16 +1719,56 @@ class ProjectController extends Controller
     public function uploadPhoto(Request $request, $projectId)
     {
         $project = Project::findOrFail($projectId);
+        $this->ensureEngineerCanEdit($project, $request);
 
-        $validated = $request->validate([
+        $photoType = $request->input('photo_type', 'blueprint');
+        $planDiscipline = $request->input('plan_discipline');
+
+        // Check if this is a blueprint (civil, plumbing, electrical, architectural, other plans)
+        $isBlueprint = str_starts_with($photoType, 'blueprint')
+            || in_array($photoType, ['civil', 'plumbing', 'electrical', 'architectural', 'other'])
+            || !empty($planDiscipline);
+
+        // Strict validation: Blueprints MUST be JPEG (.jpg, .jpeg) and strictly NOT PNG
+        if ($isBlueprint && $request->hasFile('photo_file')) {
+            $uploadedFile = $request->file('photo_file');
+            $ext = strtolower($uploadedFile->getClientOriginalExtension());
+            $mime = strtolower($uploadedFile->getMimeType() ?? '');
+
+            if ($ext === 'png' || str_contains($mime, 'png')) {
+                $errorMsg = 'Blueprints must be uploaded in JPEG format (.jpg, .jpeg). PNG files are strictly not accepted.';
+                if ($request->wantsJson() || $request->ajax()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => $errorMsg,
+                        'errors' => ['photo_file' => [$errorMsg]],
+                    ], 422);
+                }
+                return redirect()->back()
+                    ->withInput()
+                    ->withErrors(['photo_file' => $errorMsg]);
+            }
+        }
+
+        $rules = [
             'title' => 'required|string|max:255',
             'photo_type' => 'required|string',
+            'plan_discipline' => 'nullable|string|in:civil,plumbing,electrical,architectural,other',
             'description' => 'nullable|string',
             'taken_at' => 'nullable|date',
-            'photo_file' => 'nullable|image|max:10240', // 10MB
             'photo_url' => 'nullable|string|max:1000',
             'is_primary' => 'nullable|boolean',
-        ]);
+        ];
+
+        $messages = [];
+        if ($isBlueprint) {
+            $rules['photo_file'] = 'nullable|file|mimes:jpeg,jpg|max:10240';
+            $messages['photo_file.mimes'] = 'Blueprints must be uploaded in JPEG format (.jpg, .jpeg). PNG files are strictly not accepted.';
+        } else {
+            $rules['photo_file'] = 'nullable|file|image|max:10240';
+        }
+
+        $validated = $request->validate($rules, $messages);
 
         $filePath = null;
 
@@ -1419,9 +1798,20 @@ class ProjectController extends Controller
             ProjectPhoto::where('project_id', $project->id)->update(['is_primary' => false]);
         }
 
+        // Normalize photo_type and plan_discipline
+        $savePhotoType = $validated['photo_type'];
+        $discipline = $validated['plan_discipline'] ?? null;
+        if (empty($discipline) && str_starts_with($savePhotoType, 'blueprint_')) {
+            $discipline = str_replace('blueprint_', '', $savePhotoType);
+        }
+        if (!empty($discipline) && $savePhotoType === 'blueprint') {
+            $savePhotoType = 'blueprint_' . $discipline;
+        }
+
         $photo = ProjectPhoto::create([
             'project_id' => $project->id,
-            'photo_type' => $validated['photo_type'],
+            'photo_type' => $savePhotoType,
+            'plan_discipline' => $discipline,
             'title' => $validated['title'],
             'description' => $validated['description'] ?? null,
             'file_path' => $filePath,
@@ -1443,17 +1833,56 @@ class ProjectController extends Controller
     public function updatePhoto(Request $request, $photoId)
     {
         $photo = ProjectPhoto::findOrFail($photoId);
+        $this->ensureEngineerCanEdit($photo->project, $request);
         $project = $photo->project;
 
-        $validated = $request->validate([
+        $photoType = $request->input('photo_type', $photo->photo_type);
+        $planDiscipline = $request->input('plan_discipline', $photo->plan_discipline);
+
+        $isBlueprint = str_starts_with($photoType, 'blueprint')
+            || in_array($photoType, ['civil', 'plumbing', 'electrical', 'architectural', 'other'])
+            || !empty($planDiscipline);
+
+        // Strict validation: Blueprints MUST be JPEG (.jpg, .jpeg) and strictly NOT PNG
+        if ($isBlueprint && $request->hasFile('photo_file')) {
+            $uploadedFile = $request->file('photo_file');
+            $ext = strtolower($uploadedFile->getClientOriginalExtension());
+            $mime = strtolower($uploadedFile->getMimeType() ?? '');
+
+            if ($ext === 'png' || str_contains($mime, 'png')) {
+                $errorMsg = 'Blueprints must be uploaded in JPEG format (.jpg, .jpeg). PNG files are strictly not accepted.';
+                if ($request->wantsJson() || $request->ajax()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => $errorMsg,
+                        'errors' => ['photo_file' => [$errorMsg]],
+                    ], 422);
+                }
+                return redirect()->back()
+                    ->withInput()
+                    ->withErrors(['photo_file' => $errorMsg]);
+            }
+        }
+
+        $rules = [
             'title' => 'required|string|max:255',
             'photo_type' => 'required|string',
+            'plan_discipline' => 'nullable|string|in:civil,plumbing,electrical,architectural,other',
             'description' => 'nullable|string',
             'taken_at' => 'nullable|date',
-            'photo_file' => 'nullable|image|max:10240', // 10MB
             'photo_url' => 'nullable|string|max:1000',
             'is_primary' => 'nullable|boolean',
-        ]);
+        ];
+
+        $messages = [];
+        if ($isBlueprint) {
+            $rules['photo_file'] = 'nullable|file|mimes:jpeg,jpg|max:10240';
+            $messages['photo_file.mimes'] = 'Blueprints must be uploaded in JPEG format (.jpg, .jpeg). PNG files are strictly not accepted.';
+        } else {
+            $rules['photo_file'] = 'nullable|file|image|max:10240';
+        }
+
+        $validated = $request->validate($rules, $messages);
 
         if ($request->hasFile('photo_file')) {
             $file = $request->file('photo_file');
@@ -1476,14 +1905,23 @@ class ProjectController extends Controller
             ProjectPhoto::where('project_id', $project->id)->update(['is_primary' => false]);
             $photo->is_primary = true;
         } else {
-            // Only unset if we are deliberately unsetting it
             if ($request->has('is_primary_submitted')) {
                 $photo->is_primary = false;
             }
         }
 
+        $savePhotoType = $validated['photo_type'];
+        $discipline = $validated['plan_discipline'] ?? null;
+        if (empty($discipline) && str_starts_with($savePhotoType, 'blueprint_')) {
+            $discipline = str_replace('blueprint_', '', $savePhotoType);
+        }
+        if (!empty($discipline) && $savePhotoType === 'blueprint') {
+            $savePhotoType = 'blueprint_' . $discipline;
+        }
+
         $photo->title = $validated['title'];
-        $photo->photo_type = $validated['photo_type'];
+        $photo->photo_type = $savePhotoType;
+        $photo->plan_discipline = $discipline;
         $photo->description = $validated['description'] ?? null;
         if (!empty($validated['taken_at'])) {
             $photo->taken_at = $validated['taken_at'];
@@ -1504,6 +1942,7 @@ class ProjectController extends Controller
     public function deletePhoto($photoId)
     {
         $photo = ProjectPhoto::findOrFail($photoId);
+        $this->ensureEngineerCanEdit($photo->project);
         $photoTitle = $photo->title;
         $photo->delete();
 
@@ -1717,6 +2156,7 @@ class ProjectController extends Controller
     public function addCustomExcessMaterial(Request $request, $id)
     {
         $project = Project::findOrFail($id);
+        $this->ensureEngineerCanEdit($project, $request);
 
         $validated = $request->validate([
             'material_id' => 'nullable|exists:materials,id',

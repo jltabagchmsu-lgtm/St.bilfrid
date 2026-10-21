@@ -1,0 +1,201 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 850" width="100%" height="100%">
+  <defs>
+    <style>
+      .title-figure { font-family: 'Times New Roman', serif; font-size: 20px; font-weight: bold; fill: #111827; }
+      .title-caption { font-family: 'Times New Roman', serif; font-size: 18px; font-style: italic; text-decoration: underline; fill: #111827; }
+      .entity-label { font-family: 'Arial', sans-serif; font-size: 16px; font-weight: bold; fill: #111827; }
+      .sub-entity-label { font-family: 'Arial', sans-serif; font-size: 12px; fill: #4b5563; }
+      .flow-text-left { font-family: 'Arial', sans-serif; font-size: 12px; fill: #1f2937; text-anchor: middle; }
+      .flow-text-right { font-family: 'Arial', sans-serif; font-size: 12px; fill: #1f2937; text-anchor: middle; }
+      .flow-text-center { font-family: 'Arial', sans-serif; font-size: 12px; fill: #1f2937; text-anchor: middle; }
+      .arrow-line { stroke: #1e293b; stroke-width: 1.8; fill: none; }
+    </style>
+
+    <!-- Arrow Markers -->
+    <marker id="arrow-end" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
+    </marker>
+    <marker id="arrow-start" viewBox="0 0 10 10" refX="2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 8 1.5 L 0 5 L 8 8.5 z" fill="#1e293b"/>
+    </marker>
+    
+    <!-- Drop Shadow Filter -->
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="100%" height="100%" fill="#ffffff"/>
+
+  <!-- ==================== HEADER / FIGURE TITLE ==================== -->
+  <g transform="translate(60, 45)">
+    <text x="0" y="0" class="title-figure">Figure 2</text>
+    <text x="0" y="24" class="title-caption">Operational Framework of Integrated Inventory and Sales Management System for St. Bilfrid Development Corporation</text>
+  </g>
+
+  <!-- ==================== CENTRAL CLOUD & DATABASE ==================== -->
+  <g transform="translate(600, 240)" filter="url(#shadow)">
+    <!-- Cloud Icon -->
+    <path d="M -80,-30 
+             A 35,35 0 0,1 -40,-65 
+             A 45,45 0 0,1 40,-65 
+             A 38,38 0 0,1 80,-30 
+             A 32,32 0 0,1 65,25 
+             L -65,25 
+             A 30,30 0 0,1 -80,-30 Z" 
+          fill="#ffffff" stroke="#1e293b" stroke-width="2.5" stroke-linejoin="round"/>
+    <text x="0" y="-12" font-family="'Arial', sans-serif" font-size="14px" font-weight="bold" fill="#0f172a" text-anchor="middle">Cloud</text>
+    <text x="0" y="5" font-family="'Arial', sans-serif" font-size="11px" fill="#475569" text-anchor="middle">(Laravel API &amp; App Host)</text>
+
+    <!-- Database Icon -->
+    <g transform="translate(0, 58)">
+      <ellipse cx="0" cy="-22" rx="32" ry="9" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
+      <path d="M -32,-22 L -32,-7 A 32,9 0 0,0 32,-7 L 32,-22" fill="#bae6fd" stroke="#0284c7" stroke-width="2"/>
+      <path d="M -32,-7 L -32,8 A 32,9 0 0,0 32,8 L 32,-7" fill="#7dd3fc" stroke="#0284c7" stroke-width="2"/>
+      <path d="M -32,8 L -32,23 A 32,9 0 0,0 32,23 L 32,8" fill="#38bdf8" stroke="#0284c7" stroke-width="2"/>
+      <ellipse cx="0" cy="-7" rx="32" ry="9" fill="none" stroke="#0284c7" stroke-width="1.5"/>
+      <ellipse cx="0" cy="8" rx="32" ry="9" fill="none" stroke="#0284c7" stroke-width="1.5"/>
+      <ellipse cx="0" cy="23" rx="32" ry="9" fill="none" stroke="#0284c7" stroke-width="1.5"/>
+      <text x="0" y="42" font-family="'Arial', sans-serif" font-size="13px" font-weight="bold" fill="#0369a1" text-anchor="middle">Database</text>
+    </g>
+  </g>
+
+  <!-- ==================== LEFT ENTITY: SUPPLIERS ==================== -->
+  <g transform="translate(140, 420)">
+    <g transform="translate(0, 0)">
+      <!-- Headset / Support Icon -->
+      <circle cx="-35" cy="-60" r="14" fill="#1e293b"/>
+      <path d="M -55,-40 C -55,-48 -45,-50 -35,-50 C -25,-50 -15,-48 -15,-40 L -15,-15 L -23,-15 L -23,10 L -31,10 L -31,-15 L -39,-15 L -39,10 L -47,10 L -47,-15 L -55,-15 Z" fill="#1e293b"/>
+      
+      <!-- Headset Band & Mic -->
+      <path d="M -50,-62 A 16,16 0 0,1 -20,-62" fill="none" stroke="#0284c7" stroke-width="2.5"/>
+      <circle cx="-50" cy="-60" r="3.5" fill="#0284c7"/>
+      <circle cx="-20" cy="-60" r="3.5" fill="#0284c7"/>
+      <path d="M -20,-60 L -16,-52 L -22,-50" fill="none" stroke="#0284c7" stroke-width="2"/>
+
+      <!-- Phone / Smartphone Icon -->
+      <rect x="5" y="-62" width="22" height="42" rx="4" fill="#ffffff" stroke="#1e293b" stroke-width="2"/>
+      <circle cx="16" cy="-25" r="2" fill="#1e293b"/>
+      <rect x="8" y="-52" width="16" height="24" fill="#e2e8f0"/>
+
+      <!-- Laptop / Catalog terminal -->
+      <rect x="-20" y="-12" width="36" height="25" rx="2" fill="#ffffff" stroke="#1e293b" stroke-width="2"/>
+      <rect x="-17" y="-9" width="30" height="18" fill="#e2e8f0"/>
+      <line x1="-8" y1="13" x2="4" y2="13" stroke="#1e293b" stroke-width="2.5"/>
+    </g>
+
+    <!-- Labels -->
+    <text x="-5" y="42" class="entity-label" text-anchor="middle">Suppliers</text>
+    <text x="-5" y="60" class="sub-entity-label" text-anchor="middle">Supplier 1: Windows &amp; Doors</text>
+    <text x="-5" y="76" class="sub-entity-label" text-anchor="middle">Supplier 2: Roofing Supplies</text>
+  </g>
+
+  <!-- ==================== RIGHT ENTITY: OWNER / MANAGER ==================== -->
+  <g transform="translate(1060, 420)">
+    <g transform="translate(0, 0)">
+      <!-- Person Icon (Head & Torso with Tie) -->
+      <circle cx="35" cy="-60" r="14" fill="#1e293b"/>
+      <path d="M 15,-40 C 15,-48 25,-50 35,-50 C 45,-50 55,-48 55,-40 L 55,-15 L 47,-15 L 47,10 L 39,10 L 39,-15 L 31,-15 L 31,10 L 23,10 L 23,-15 L 15,-15 Z" fill="#1e293b"/>
+      <polygon points="35,-42 38,-35 36,-20 35,-18 34,-20 32,-35" fill="#0284c7"/>
+
+      <!-- Desktop Workstation -->
+      <rect x="-30" y="-62" width="40" height="28" rx="2" fill="#ffffff" stroke="#1e293b" stroke-width="2"/>
+      <rect x="-27" y="-59" width="34" height="21" fill="#e2e8f0"/>
+      <path d="M -23,-44 L -16,-50 L -8,-46 L 1,-54" stroke="#0284c7" stroke-width="2" fill="none"/>
+      <line x1="-15" y1="-34" x2="-5" y2="-34" stroke="#1e293b" stroke-width="2.5"/>
+      <line x1="-10" y1="-34" x2="-10" y2="-30" stroke="#1e293b" stroke-width="3"/>
+
+      <!-- Smartphone -->
+      <rect x="-48" y="-45" width="15" height="28" rx="3" fill="#ffffff" stroke="#1e293b" stroke-width="1.8"/>
+      <circle cx="-40.5" cy="-20" r="1.5" fill="#1e293b"/>
+    </g>
+
+    <!-- Labels -->
+    <text x="5" y="42" class="entity-label" text-anchor="middle">Owner / Manager</text>
+    <text x="5" y="60" class="sub-entity-label" text-anchor="middle">(Master Admin &amp; General Contractor)</text>
+  </g>
+
+  <!-- ==================== BOTTOM ENTITY: INTEGRATED WEB APPLICATION SYSTEM ==================== -->
+  <g transform="translate(600, 715)">
+    <g transform="translate(0, -35)">
+      <!-- Laptop Screen -->
+      <rect x="-55" y="-45" width="110" height="68" rx="4" fill="#1e293b"/>
+      <rect x="-49" y="-39" width="98" height="54" rx="2" fill="#f8fafc"/>
+      <!-- Screen App Mockup -->
+      <rect x="-49" y="-39" width="98" height="12" fill="#0284c7"/>
+      <circle cx="-42" cy="-33" r="2.5" fill="#ffffff"/>
+      <circle cx="-35" cy="-33" r="2.5" fill="#ffffff"/>
+      <circle cx="-28" cy="-33" r="2.5" fill="#ffffff"/>
+      <rect x="-42" y="-22" width="40" height="32" rx="2" fill="#e2e8f0"/>
+      <rect x="3" y="-22" width="40" height="14" rx="2" fill="#e2e8f0"/>
+      <rect x="3" y="-5" width="40" height="15" rx="2" fill="#e2e8f0"/>
+      <polyline points="-33,-6 -25,2 -13,-14" stroke="#0284c7" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Laptop Base -->
+      <path d="M -75,23 L 75,23 L 65,30 L -65,30 Z" fill="#94a3b8" stroke="#475569" stroke-width="1.5"/>
+      <rect x="-18" y="23" width="36" height="3" rx="1.5" fill="#64748b"/>
+    </g>
+
+    <!-- Label -->
+    <text x="0" y="24" class="entity-label" text-anchor="middle">Integrated Inventory and Sales Management System</text>
+    <text x="0" y="42" class="sub-entity-label" text-anchor="middle">(DUPA Engine, BOM Auto-Allocation, Supplier Tenant Portal &amp; Inventory Ledger)</text>
+  </g>
+
+  <!-- ==================== FLOW 1: SUPPLIERS <-> CLOUD ==================== -->
+  <!-- Upper Left Arrow (Suppliers -> Cloud) -->
+  <path d="M 220,380 Q 360,250 515,225" class="arrow-line" marker-end="url(#arrow-end)"/>
+  <g transform="translate(365, 225)">
+    <text x="0" y="-45" class="flow-text-left" font-weight="bold">valid login details</text>
+    <text x="0" y="-30" class="flow-text-left">catalog &amp; price updates</text>
+    <text x="0" y="-15" class="flow-text-left">formal price quotations (RFQ)</text>
+    <text x="0" y="0" class="flow-text-left">order fulfillment status</text>
+    <text x="0" y="15" class="flow-text-left">order direct messages</text>
+  </g>
+
+  <!-- Lower Left Arrow (Cloud -> Suppliers) -->
+  <path d="M 525,275 Q 380,310 225,430" class="arrow-line" marker-end="url(#arrow-end)"/>
+  <g transform="translate(370, 405)">
+    <text x="0" y="-35" class="flow-text-left">purchase order details (PO)</text>
+    <text x="0" y="-20" class="flow-text-left">material technical inquiries</text>
+    <text x="0" y="-5" class="flow-text-left">site delivery address</text>
+    <text x="0" y="10" class="flow-text-left">order notifications</text>
+  </g>
+
+  <!-- ==================== FLOW 2: OWNER/MANAGER <-> CLOUD ==================== -->
+  <!-- Upper Right Arrow (Cloud -> Owner/Manager) -->
+  <path d="M 685,225 Q 840,250 975,380" class="arrow-line" marker-end="url(#arrow-end)"/>
+  <g transform="translate(835, 220)">
+    <text x="0" y="-45" class="flow-text-right" font-weight="bold">inventory stock reports</text>
+    <text x="0" y="-30" class="flow-text-right">procurement summaries</text>
+    <text x="0" y="-15" class="flow-text-right">project costing &amp; BOM status</text>
+    <text x="0" y="0" class="flow-text-right">sales &amp; analytics reports</text>
+    <text x="0" y="15" class="flow-text-right">delivery alert notifications</text>
+  </g>
+
+  <!-- Lower Right Arrow (Owner/Manager -> Cloud) -->
+  <path d="M 975,430 Q 820,310 675,275" class="arrow-line" marker-end="url(#arrow-end)"/>
+  <g transform="translate(830, 405)">
+    <text x="0" y="-35" class="flow-text-right">valid login details</text>
+    <text x="0" y="-20" class="flow-text-right">issue purchase orders</text>
+    <text x="0" y="-5" class="flow-text-right">DUPA scope &amp; BOM allocations</text>
+    <text x="0" y="10" class="flow-text-right">project monitoring updates</text>
+    <text x="0" y="25" class="flow-text-right">1-click stock receive sync</text>
+  </g>
+
+  <!-- ==================== FLOW 3: CLOUD <-> BOTTOM SYSTEM ENGINE ==================== -->
+  <!-- Downward Arrow (Cloud -> Engine) -->
+  <path d="M 585,355 L 585,615" class="arrow-line" marker-end="url(#arrow-end)"/>
+  <g transform="translate(480, 485)">
+    <text x="0" y="0" class="flow-text-center" font-weight="bold">system requests</text>
+    <text x="0" y="16" class="flow-text-center">&amp; queries</text>
+  </g>
+
+  <!-- Upward Arrow (Engine -> Cloud) -->
+  <path d="M 615,615 L 615,355" class="arrow-line" marker-end="url(#arrow-end)"/>
+  <g transform="translate(720, 485)">
+    <text x="0" y="-10" class="flow-text-center" font-weight="bold">data processing</text>
+    <text x="0" y="6" class="flow-text-center">&amp; persistence</text>
+    <text x="0" y="22" class="flow-text-center">DUPA calculations</text>
+    <text x="0" y="38" class="flow-text-center">&amp; stock sync</text>
+  </g>
+</svg>

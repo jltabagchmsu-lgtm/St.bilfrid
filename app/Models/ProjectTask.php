@@ -51,6 +51,45 @@ class ProjectTask extends Model
         return $this->hasMany(ProjectTaskMaterial::class, 'project_task_id');
     }
 
+    public function photos()
+    {
+        return $this->hasMany(ProjectTaskPhoto::class, 'project_task_id')->orderBy('sort_order')->orderBy('id');
+    }
+
+    public function getAllPhotosListAttribute()
+    {
+        $loadedPhotos = $this->relationLoaded('photos') 
+            ? $this->photos 
+            : ($this->exists ? $this->photos()->get() : collect());
+
+        if ($loadedPhotos->isNotEmpty()) {
+            return $loadedPhotos;
+        }
+
+        if (!empty($this->photo_path)) {
+            return collect([
+                new ProjectTaskPhoto([
+                    'id' => 0,
+                    'project_task_id' => $this->id,
+                    'photo_path' => $this->photo_path,
+                    'caption' => $this->photo_caption,
+                ])
+            ]);
+        }
+
+        return collect();
+    }
+
+    public function getPhotosCountAttribute(): int
+    {
+        if ($this->relationLoaded('photos')) {
+            $count = $this->photos->count();
+            return $count > 0 ? $count : (!empty($this->photo_path) ? 1 : 0);
+        }
+        $count = $this->exists ? $this->photos()->count() : 0;
+        return $count > 0 ? $count : (!empty($this->photo_path) ? 1 : 0);
+    }
+
     public function getIsCompletedAttribute(): bool
     {
         return $this->progress >= 100 || $this->status === 'completed';

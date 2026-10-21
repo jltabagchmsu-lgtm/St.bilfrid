@@ -69,28 +69,64 @@
 
                     <!-- 4. Proof of Work (Attach Photo & Thumbnail) -->
                     <td style="text-align: center; vertical-align: middle; border-right: 1px solid #f1f5f9; padding: 8px;" class="cell-proof">
-                        @if($task->photo_path)
+                        @php
+                            $taskPhotos = $task->all_photos_list;
+                            $photosCount = $task->photos_count;
+                            $taskPhotosJson = htmlspecialchars(json_encode($taskPhotos->map(function($p) {
+                                return [
+                                    'id' => $p->id,
+                                    'url' => $p->url,
+                                    'caption' => $p->caption ?? ''
+                                ];
+                            })->values()), ENT_QUOTES, 'UTF-8');
+                        @endphp
+
+                        @if($photosCount > 0)
                             <div style="display: inline-flex; flex-direction: column; align-items: center; gap: 4px;">
-                                <div style="position: relative; width: 44px; height: 44px; border-radius: 6px; overflow: hidden; border: 1.5px solid #059669; box-shadow: 0 1px 3px rgba(0,0,0,0.12); cursor: pointer; background: #0f172a;" title="Click to view full-size proof photo" onclick="openTaskPhotoPreviewModal('{{ asset($task->photo_path) }}', '{{ addslashes($task->task_name) }}', '{{ addslashes($task->category) }}', '{{ addslashes($task->photo_caption ?? '') }}', '{{ $task->updated_at ? $task->updated_at->format('M d, Y') : '' }}')">
-                                    <img src="{{ asset($task->photo_path) }}" alt="Proof" style="width: 100%; height: 100%; object-fit: cover;">
-                                    <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0'">
-                                        <span style="color: #fff; font-size: 0.65rem; font-weight: 800;">VIEW</span>
+                                @if($photosCount >= 2)
+                                    <!-- Multi-Photo Stacked Thumbnail Preview for 2 or more images -->
+                                    <div style="display: flex; align-items: center; justify-content: center; cursor: pointer;" title="Click to view {{ $photosCount }} photos in gallery lightbox" onclick='openTaskMultiPhotoPreviewModal({{ $taskPhotosJson }}, "{{ addslashes($task->task_name) }}", "{{ addslashes($task->category) }}", "{{ $task->updated_at ? $task->updated_at->format('M d, Y') : '' }}")'>
+                                        <div style="position: relative; width: 38px; height: 38px; border-radius: 6px; overflow: hidden; border: 1.5px solid #059669; box-shadow: 0 1px 3px rgba(0,0,0,0.15); z-index: 2; background: #0f172a;">
+                                            <img src="{{ $taskPhotos[0]->url }}" alt="Proof 1" style="width: 100%; height: 100%; object-fit: cover;">
+                                        </div>
+                                        <div style="position: relative; width: 34px; height: 34px; border-radius: 6px; overflow: hidden; border: 1.5px solid #0284c7; box-shadow: 0 1px 3px rgba(0,0,0,0.15); margin-left: -12px; z-index: 1; background: #0f172a;">
+                                            <img src="{{ $taskPhotos[1]->url }}" alt="Proof 2" style="width: 100%; height: 100%; object-fit: cover;">
+                                            @if($photosCount > 2)
+                                                <div style="position: absolute; inset: 0; background: rgba(15,23,42,0.7); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.65rem; font-weight: 800;">
+                                                    +{{ $photosCount - 2 }}
+                                                </div>
+                                            @endif
+                                        </div>
                                     </div>
-                                </div>
+                                    <div style="margin-top: 1px;">
+                                        <span style="font-size: 0.675rem; font-weight: 800; color: #059669; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 1px 6px; border-radius: 10px; cursor: pointer;" onclick='openTaskMultiPhotoPreviewModal({{ $taskPhotosJson }}, "{{ addslashes($task->task_name) }}", "{{ addslashes($task->category) }}", "{{ $task->updated_at ? $task->updated_at->format('M d, Y') : '' }}")'>
+                                            📸 {{ $photosCount }} Photos
+                                        </span>
+                                    </div>
+                                @else
+                                    <!-- Single Photo Thumbnail Preview -->
+                                    <div style="position: relative; width: 44px; height: 44px; border-radius: 6px; overflow: hidden; border: 1.5px solid #059669; box-shadow: 0 1px 3px rgba(0,0,0,0.12); cursor: pointer; background: #0f172a;" title="Click to view full-size proof photo" onclick='openTaskMultiPhotoPreviewModal({{ $taskPhotosJson }}, "{{ addslashes($task->task_name) }}", "{{ addslashes($task->category) }}", "{{ $task->updated_at ? $task->updated_at->format('M d, Y') : '' }}")'>
+                                        <img src="{{ $taskPhotos[0]->url }}" alt="Proof" style="width: 100%; height: 100%; object-fit: cover;">
+                                        <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0'">
+                                            <span style="color: #fff; font-size: 0.65rem; font-weight: 800;">VIEW</span>
+                                        </div>
+                                    </div>
+                                @endif
+
                                 <div style="display: flex; gap: 4px; align-items: center; margin-top: 2px;">
-                                    <button type="button" style="font-size: 0.7rem; color: #0284c7; background: none; border: none; padding: 0; cursor: pointer; font-weight: 600; text-decoration: underline;" onclick="openAttachTaskPhotoModal({{ $task->id }}, '{{ addslashes($task->task_name) }}', '{{ addslashes($task->category) }}', '{{ asset($task->photo_path) }}', '{{ addslashes($task->photo_caption ?? '') }}', {{ $isDone ? 1 : 0 }})">
-                                        Change
+                                    <button type="button" style="font-size: 0.7rem; color: #0284c7; background: none; border: none; padding: 0; cursor: pointer; font-weight: 600; text-decoration: underline;" onclick='openAttachTaskPhotoModal({{ $task->id }}, "{{ addslashes($task->task_name) }}", "{{ addslashes($task->category) }}", {{ $taskPhotosJson }}, {{ $isDone ? 1 : 0 }})' title="Add more images or manage current proof photos">
+                                        + Add/Manage
                                     </button>
                                     <span style="color: #cbd5e1; font-size: 0.65rem;">|</span>
-                                    <button type="button" style="font-size: 0.7rem; color: #dc2626; background: none; border: none; padding: 0; cursor: pointer; font-weight: 600; text-decoration: underline;" onclick="removeTaskPhotoAjax({{ $task->id }}, '{{ addslashes($task->task_name) }}')">
-                                        Remove
+                                    <button type="button" style="font-size: 0.7rem; color: #dc2626; background: none; border: none; padding: 0; cursor: pointer; font-weight: 600; text-decoration: underline;" onclick='removeTaskPhotoAjax({{ $task->id }}, "{{ addslashes($task->task_name) }}")' title="Remove all attached proof photos">
+                                        Clear
                                     </button>
                                 </div>
                             </div>
                         @else
-                            <button type="button" class="btn-attach-photo" onclick="openAttachTaskPhotoModal({{ $task->id }}, '{{ addslashes($task->task_name) }}', '{{ addslashes($task->category) }}', '', '', {{ $isDone ? 1 : 0 }})" style="display: inline-flex; align-items: center; justify-content: center; gap: 5px; font-size: 0.75rem; font-weight: 700; padding: 6px 10px; border-radius: 6px; border: 1.5px dashed #0284c7; background: #f0f9ff; color: #0284c7; cursor: pointer; transition: all 0.2s; white-space: nowrap;" onmouseover="this.style.background='#e0f2fe'; this.style.borderColor='#0369a1';" onmouseout="this.style.background='#f0f9ff'; this.style.borderColor='#0284c7';" title="Attach photo proof of completion">
+                            <button type="button" class="btn-attach-photo" onclick='openAttachTaskPhotoModal({{ $task->id }}, "{{ addslashes($task->task_name) }}", "{{ addslashes($task->category) }}", [], {{ $isDone ? 1 : 0 }})' style="display: inline-flex; align-items: center; justify-content: center; gap: 5px; font-size: 0.75rem; font-weight: 700; padding: 6px 10px; border-radius: 6px; border: 1.5px dashed #0284c7; background: #f0f9ff; color: #0284c7; cursor: pointer; transition: all 0.2s; white-space: nowrap;" onmouseover="this.style.background='#e0f2fe'; this.style.borderColor='#0369a1';" onmouseout="this.style.background='#f0f9ff'; this.style.borderColor='#0284c7';" title="Attach photo proof of completion (supports 2 or more images)">
                                 <svg style="width: 14px; height: 14px; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                                Attach Photo
+                                Attach Photo(s)
                             </button>
                         @endif
                     </td>

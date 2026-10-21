@@ -9,6 +9,7 @@ Welcome to **St. Bilfrid Development Corporation** (Construction Project Monitor
 | Role | Email | Password | Access Level |
 |---|---|---|---|
 | **Master Administrator** | `admin@newconstuc.firm` | `admin123` | **Full Master System Access** (All Hubs, Reports, Costs, Estimates, Project Deletions) |
+| **Site Project Engineer** | `engineer@newconstuc.firm` | `engineer123` | **Active Project Tracker & Site Updates** (Can access project tracker like Admin, but can only modify projects where the selected engineer is assigned) |
 | **Roofing Transfer Officer** | `roofing@newconstuc.firm` | `roofing123` | **Dedicated Roofing Transfer Hub** (Stock Dispatch, Site Transfers, Excess Return) |
 | **Windows & Doors Officer** | `windows.doors@newconstuc.firm` | `windows123` | **Dedicated Windows & Doors Transfer Hub** (Stock Dispatch, Site Transfers, Excess Return) |
 
@@ -40,6 +41,7 @@ Open your browser at 👉 **[http://localhost:8000](http://localhost:8000)** or 
 
 ## 🧭 3. Complete Feature Modules & Capabilities
 
+hat 
 ```
 📁 St. Bilfrid Development Corporation System Architecture
 ├── 🔐 User Gateway (/login) ────────────────── Role-Based Multi-Account Portal (Admin, Roofing, Windows/Doors)
@@ -59,18 +61,62 @@ Open your browser at 👉 **[http://localhost:8000](http://localhost:8000)** or 
 
 ---
 
-### 🎨 1. Project Blueprints, 3D Renders & Site Photo Gallery
-- **Categorized Visual Gallery**:
-  - 📐 **Technical Blueprints & CAD Plans**: Foundation grids, elevator shear walls, and floor elevation plans.
-  - 🎨 **3D Architectural Concept Renders**: High-fidelity renders showing what the client wants / target design.
-  - 💡 **Client Design Inspiration**: Client mood boards and design references.
-  - 📸 **Actual On-Site Progress Photos**: Live progress photographs of concrete pouring, tower cranes, rebar, and scaffolding.
-  - 🏗️ **Structural & Foundation Works**
-  - ✨ **Turnkey Architectural Finishes**
-- **Features**:
-  - Direct file upload (JPG, PNG, WebP up to 10MB) or media URL.
-  - Set any photo as the project's primary hero banner image.
-  - Interactive full-screen Lightbox Modal for side-by-side design comparison.
+### 📋 0. Master Project Workspace Layout (BOM First, Schedule Second)
+- **Top Priority Tab Order**:
+  - 🥇 **Tab 1: Bill of Materials & Detailed Unit Price Analysis (DUPA)** (`/projects/{id}#bom`):
+    - Set as the **primary default view** on page load.
+    - Displays full Philippine standard breakdown: Materials (A) + Labor (B) + Equipment (C) + 15% Contingency + 6% Taxes + 10% Profit.
+  - 🥈 **Tab 2: Master Schedule & Execution Timeline** (`/projects/{id}#scheduling`):
+    - Positioned second immediately after BOM.
+    - Displays scheduled duration window, elapsed site days, days to target handover, and milestone progress.
+  - **Remaining Tabs**: Executive Summary, Design & Blueprints, Trade Progression, Scheduled Tasks, Workforce & Manpower, Financials & Payments, Milestone Audit.
+- **Fixed Baseline BOM with Dynamic Additions**:
+  - **Fixed Baseline**: Every project is automatically seeded on creation or viewing with a calibrated baseline BOM template (18 standard engineering items spanning Foundation, Structural Framing, Masonry, Roofing, Electrical, Plumbing, and Architectural Finishes).
+  - **Project & Task Additions**:
+    - **"+ Add Scope Item / Addition"** button allows adding change orders or new scope items directly to the BOM.
+    - **"+ Add Line"** on each scope item allows inserting additional Material, Labor, or Equipment entries anytime.
+    - **Scheduled Tasks Auto-Sync**: Entering materials when scheduling a new task (`+ Add Checklist Task`) automatically creates a synchronized Scope Item (`ADDITIONAL TASK: [TASK NAME]`) in the master BOM and recalculates the grand project cost dynamically.
+
+---
+
+### 🎨 1. Project Blueprints, Engineering Plans & Progress Photo Gallery
+- **Categorized Technical Blueprints & Plans**:
+  - 🏛️ **Architectural Blueprints**: Floor plans, elevations, building sections, reflected ceiling layouts.
+  - 🏗️ **Civil & Structural Blueprints**: Footing & foundation grids, column schedules, structural framing, shear walls, retaining walls.
+  - ⚡ **Electrical CAD Plans**: Power distribution, lighting layouts, auxiliary lines, single-line diagrams, panelboard schedules.
+  - 🚰 **Plumbing & Sanitary Blueprints**: Potable water lines, sanitary drainage, storm drain systems, septic tank details.
+  - 📐 **Other Related Engineering Plans**: HVAC mechanical layouts, fire suppression & sprinkler networks, specialized engineering drawings.
+  - 🎨 **3D Architectural Concept Renders**: High-fidelity 3D visual renders defining client expectations and target finishes.
+  - 💡 **Client Design Inspiration**: Client mood boards, material palettes, and architectural references.
+  - 📸 **Actual On-Site Progress Photos**: Field photos of concrete pouring, rebar assembly, masonry, and equipment operations.
+- **Strict JPEG Blueprint Format Standard**:
+  - Technical CAD Blueprints **must strictly be uploaded in JPEG format (`.jpg`, `.jpeg`)**.
+  - **PNG files are strictly rejected** by both browser-level checks and server-side validation with explicit error advisories.
+  - Non-blueprint categories (3D renders, site progress) continue to support general image formats (JPG, PNG, WebP up to 10MB).
+- **Gallery Organization & Discipline Filter Tabs**:
+  - Filter tabs allow 1-click filtering by discipline (`Architectural`, `Civil`, `Electrical`, `Plumbing`, `Other Plans`, `All Blueprints`, `3D Renders`, `Site Progress`).
+  - Set any photo/blueprint as the project's primary hero banner.
+  - High-resolution Lightbox modal for technical inspection and side-by-side design reviews.
+
+---
+
+### 📸 2. Progress Checklist Tasks Multi-Photo Verification (2 or More Images)
+- **Multi-Image Proof of Completion**:
+  - Checklist tasks support attaching **2 or more images** per task for comprehensive verification of field milestones.
+  - Hold **Ctrl** or **Shift** to select multiple photo files simultaneously in the upload modal.
+  - Live interactive thumbnail grid previews all selected images before submission.
+- **Visual Task Table Indicators**:
+  - Dual-stacked thumbnail cards with `+X more` badges for tasks with 2 or more attached photos.
+  - `📸 X Photos` badge with quick-click access to view the multi-photo gallery.
+- **Interactive Lightbox Carousel**:
+  - Full-screen lightbox with `❮ Previous` and `❯ Next` controls, keyboard navigation (Left/Right arrow keys, Escape).
+  - Top-right counter badge displaying current photo index (e.g. `Photo 2 of 4`).
+  - Bottom clickable thumbnail strip for quick jumping between proof photos.
+- **Individual Photo Management**:
+  - **"+ Add/Manage"** modal displays all currently attached photos in a management grid.
+  - Individual **"× Del"** buttons allow removing a single photo without deleting the rest of the task's proofs.
+  - **"Delete All Photos"** option for full reset.
+  - Primary photo synchronization keeps backward compatibility with master progress and reports.
 
 ---
 
@@ -133,6 +179,20 @@ Open your browser at 👉 **[http://localhost:8000](http://localhost:8000)** or 
 - **Tasks Tracker**: Real-time tracking of tasks with assigned engineers, trade disciplines, start/due dates, allocated budget vs actual cost, and progress sliders.
 - **Service Estimator**: Land & floor area pricing estimator (`/estimation`) with 1-click project initialization.
 - **Budget Health Control**: Cost variance analysis across 7 cost heads with automatic budget overrun warnings (> 85% near ceiling, > 100% overrun).
+
+---
+
+### 👷 8. Site Project Engineer Portal & Acting Engineer Authorization Control
+- **Purpose**: A dedicated site account (`engineer@newconstuc.firm` / `engineer123`) engineered specifically for site progress reporting, checklist management, material tracking, and field updates.
+- **Access Scope**:
+  - Full visibility into the **Active Project Tracker** (`/projects` & `/projects/{id}`), Central Inventory (`/inventory`), Bill of Materials (`/bom`), and Engineers Roster (`/personnel`), identical to administrative viewing capability.
+  - Destructive project deletion (`DELETE /projects/{id}`) remains strictly locked to the Master Administrator.
+- **Acting Site Engineer Selector & Assignment Enforcement**:
+  - **Operating Engineer Bar**: A prominent indicator at the top of the project matrix and project details displays the currently active site engineer session.
+  - **Pre-Update Engineer Selection**: Before submitting updates to tasks, trade progression, schedule, manpower, BOM scope items, or site photos, the user can choose which registered engineer is authorizing the changes (`selectActingEngineerModal`).
+  - **Project Assignment Rule**: Only if the selected engineer is assigned to that specific project (`$project->personnel`) are modifications permitted.
+  - **Read-Only Mode for Unassigned Projects**: If an engineer is selected who is not assigned to the site, all project data remains visible, but modifications are blocked both client-side (advisory modal/toast) and server-side (HTTP 403 Forbidden with helpful assignment instructions).
+  - **Master Admin Override**: The Master Administrator (`admin@newconstuc.firm`) retains full unrestricted editing capability across all active projects regardless of engineer assignments.
 
 ---
 

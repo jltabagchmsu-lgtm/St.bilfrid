@@ -62,6 +62,17 @@ class ConstructionSystemSeeder extends Seeder
             ]
         );
 
+        // 0.4 Project Site Engineer Account (Active Project Tracker)
+        User::updateOrCreate(
+            ['email' => 'engineer@newconstuc.firm'],
+            [
+                'name' => 'Project Site Engineer',
+                'role' => 'project_engineer',
+                'password' => Hash::make('engineer123'),
+                'email_verified_at' => now(),
+            ]
+        );
+
         // 1. Personnel (Licensed Engineers, Architects & Developers)
         $pLonzaga = Personnel::create([
             'name' => 'Engr. Ignacio S. Lonzaga',

@@ -112,27 +112,16 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // =========================================================================
-    // 4. Master Administrator Full Access Routes (Admin Role Only)
     // =========================================================================
-    Route::middleware(['role:admin'])->group(function () {
+    // 4. Project Operations & Monitoring (Admin & Project Site Engineer Roles)
+    // =========================================================================
+    Route::middleware(['role:admin,project_engineer'])->group(function () {
 
-        // Executive Dashboard
-        Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-
-        // Centralized Supplier Hub & Management
-        Route::prefix('suppliers')->group(function () {
-            Route::get('/', [AdminSupplierController::class, 'index'])->name('admin.suppliers.index');
-            Route::get('/materials', [AdminSupplierController::class, 'materials'])->name('admin.suppliers.materials');
-            Route::get('/orders', [AdminSupplierController::class, 'orders'])->name('admin.suppliers.orders');
-            Route::post('/orders/store', [AdminSupplierController::class, 'storeOrder'])->name('admin.suppliers.orders.store');
-            Route::post('/orders/{id}/status', [AdminSupplierController::class, 'updateOrderStatus'])->name('admin.suppliers.orders.updateStatus');
-            Route::post('/orders/{id}/receive', [AdminSupplierController::class, 'receiveOrder'])->name('admin.suppliers.orders.receive');
-            Route::post('/orders/{id}/messages', [AdminSupplierController::class, 'sendMessage'])->name('admin.suppliers.orders.sendMessage');
-            Route::get('/orders/{id}/messages', [AdminSupplierController::class, 'getMessages'])->name('admin.suppliers.orders.getMessages');
-            Route::post('/inquiries/store', [AdminSupplierController::class, 'storeInquiry'])->name('admin.suppliers.inquiries.store');
-            Route::post('/{id}/update', [AdminSupplierController::class, 'updateSupplier'])->name('admin.suppliers.update');
-            Route::post('/{id}/toggle-status', [AdminSupplierController::class, 'toggleSupplierStatus'])->name('admin.suppliers.toggleStatus');
-        });
+        // Acting Engineer Session Switcher
+        Route::post('/acting-engineer/set', [ProjectController::class, 'setActingEngineer'])->name('actingEngineer.set');
+        Route::get('/acting-engineer/clear', [ProjectController::class, 'clearActingEngineer'])->name('actingEngineer.clear');
+        Route::post('/acting-engineer/select', [ProjectController::class, 'setActingEngineer'])->name('acting-engineer.set');
+        Route::get('/acting-engineer/reset', [ProjectController::class, 'clearActingEngineer'])->name('acting-engineer.clear');
 
         // Active Project Tracker & Monitoring
         Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
@@ -141,8 +130,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/projects/{id}', [ProjectController::class, 'show'])->name('projects.show');
         Route::put('/projects/{id}', [ProjectController::class, 'update'])->name('projects.update');
         Route::post('/projects/{id}/update-details', [ProjectController::class, 'update'])->name('projects.updateDetails');
-        Route::delete('/projects/{id}', [ProjectController::class, 'destroy'])->name('projects.destroy');
-        Route::post('/projects/{id}/delete', [ProjectController::class, 'destroy'])->name('projects.deletePost');
         Route::post('/projects/{id}/update-progress', [ProjectController::class, 'updateProgress'])->name('projects.updateProgress');
         Route::post('/projects/{id}/update-progression-bases', [ProjectController::class, 'updateProgressionBases'])->name('projects.updateProgressionBases');
         Route::post('/projects/{id}/update-schedule', [ProjectController::class, 'updateSchedule'])->name('projects.updateSchedule');
@@ -159,6 +146,7 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/projects/tasks/{taskId}', [ProjectController::class, 'destroyTask'])->name('projects.tasks.destroy');
         Route::post('/projects/tasks/{taskId}/attach-photo', [ProjectController::class, 'attachTaskPhoto'])->name('projects.tasks.attachPhoto');
         Route::post('/projects/tasks/{taskId}/remove-photo', [ProjectController::class, 'removeTaskPhoto'])->name('projects.tasks.removePhoto');
+        Route::post('/projects/tasks/{taskId}/photos/{photoId}/delete', [ProjectController::class, 'deleteTaskPhoto'])->name('projects.tasks.deletePhoto');
         Route::post('/projects/{id}/reset-checklist', [ProjectController::class, 'resetChecklist'])->name('projects.resetChecklist');
         Route::post('/projects/{id}/assign-personnel', [ProjectController::class, 'assignPersonnel'])->name('projects.assignPersonnel');
         Route::post('/projects/{id}/return-excess-materials', [ProjectController::class, 'returnExcessMaterialsBatch'])->name('projects.returnExcessBatch');
@@ -188,17 +176,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/projects/{id}/load-duplex-template', [ProjectScopeController::class, 'loadDuplexHousingTemplate'])->name('projects.loadDuplexTemplate');
         Route::get('/projects/{id}/print-bom', [ProjectScopeController::class, 'printBom'])->name('projects.printBom');
 
-        // Project Costing & Expenditure Control for Individual Projects
-        Route::get('/costing', [ProjectCostController::class, 'index'])->name('costing.index');
-        Route::post('/projects/{id}/costs', [ProjectCostController::class, 'store'])->name('projects.costs.store');
-        Route::post('/projects/costs/{costId}/update', [ProjectCostController::class, 'update'])->name('projects.costs.update');
-        Route::delete('/projects/costs/{costId}', [ProjectCostController::class, 'destroy'])->name('projects.costs.destroy');
-        Route::post('/projects/{id}/costs/auto-sync', [ProjectCostController::class, 'autoSync'])->name('projects.costs.autoSync');
-
-        // Separated Materials Inventory (INV)
+        // Separated Materials Inventory (INV) - View
         Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
-        Route::post('/inventory/store', [InventoryController::class, 'store'])->name('inventory.store');
-        Route::post('/inventory/{id}/update-stock', [InventoryController::class, 'updateStock'])->name('inventory.updateStock');
 
         // Separated Bill of Materials (BOM) per Project
         Route::get('/bom', [BomController::class, 'index'])->name('bom.index');
@@ -213,6 +192,49 @@ Route::middleware(['auth'])->group(function () {
         // Separated Project History
         Route::get('/history', [ProjectHistoryController::class, 'index'])->name('history.index');
 
+        // Engineers & Architects Roster
+        Route::get('/personnel', [PersonnelController::class, 'index'])->name('personnel.index');
+
+    });
+
+    // =========================================================================
+    // 5. Master Administrator Dedicated Access (Admin Role Only)
+    // =========================================================================
+    Route::middleware(['role:admin'])->group(function () {
+
+        // Executive Dashboard
+        Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
+        // Project Permanent Deletion (Strictly Admin Only)
+        Route::delete('/projects/{id}', [ProjectController::class, 'destroy'])->name('projects.destroy');
+        Route::post('/projects/{id}/delete', [ProjectController::class, 'destroy'])->name('projects.deletePost');
+
+        // Centralized Supplier Hub & Management
+        Route::prefix('suppliers')->group(function () {
+            Route::get('/', [AdminSupplierController::class, 'index'])->name('admin.suppliers.index');
+            Route::get('/materials', [AdminSupplierController::class, 'materials'])->name('admin.suppliers.materials');
+            Route::get('/orders', [AdminSupplierController::class, 'orders'])->name('admin.suppliers.orders');
+            Route::post('/orders/store', [AdminSupplierController::class, 'storeOrder'])->name('admin.suppliers.orders.store');
+            Route::post('/orders/{id}/status', [AdminSupplierController::class, 'updateOrderStatus'])->name('admin.suppliers.orders.updateStatus');
+            Route::post('/orders/{id}/receive', [AdminSupplierController::class, 'receiveOrder'])->name('admin.suppliers.orders.receive');
+            Route::post('/orders/{id}/messages', [AdminSupplierController::class, 'sendMessage'])->name('admin.suppliers.orders.sendMessage');
+            Route::get('/orders/{id}/messages', [AdminSupplierController::class, 'getMessages'])->name('admin.suppliers.orders.getMessages');
+            Route::post('/inquiries/store', [AdminSupplierController::class, 'storeInquiry'])->name('admin.suppliers.inquiries.store');
+            Route::post('/{id}/update', [AdminSupplierController::class, 'updateSupplier'])->name('admin.suppliers.update');
+            Route::post('/{id}/toggle-status', [AdminSupplierController::class, 'toggleSupplierStatus'])->name('admin.suppliers.toggleStatus');
+        });
+
+        // Project Costing & Expenditure Control for Individual Projects
+        Route::get('/costing', [ProjectCostController::class, 'index'])->name('costing.index');
+        Route::post('/projects/{id}/costs', [ProjectCostController::class, 'store'])->name('projects.costs.store');
+        Route::post('/projects/costs/{costId}/update', [ProjectCostController::class, 'update'])->name('projects.costs.update');
+        Route::delete('/projects/costs/{costId}', [ProjectCostController::class, 'destroy'])->name('projects.costs.destroy');
+        Route::post('/projects/{id}/costs/auto-sync', [ProjectCostController::class, 'autoSync'])->name('projects.costs.autoSync');
+
+        // Inventory Stock Catalog Updates
+        Route::post('/inventory/store', [InventoryController::class, 'store'])->name('inventory.store');
+        Route::post('/inventory/{id}/update-stock', [InventoryController::class, 'updateStock'])->name('inventory.updateStock');
+
         // Internal Financial Payments & Billing Ledger
         Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index');
         Route::post('/payments/store', [PaymentController::class, 'store'])->name('payments.store');
@@ -226,8 +248,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/estimation/{id}/initialize', [EstimationController::class, 'initializeProject'])->name('estimation.initialize');
         Route::delete('/estimation/{id}', [EstimationController::class, 'destroy'])->name('estimation.destroy');
 
-        // Engineers & Architects Roster
-        Route::get('/personnel', [PersonnelController::class, 'index'])->name('personnel.index');
+        // Engineers & Architects Personnel Creation
         Route::post('/personnel/store', [PersonnelController::class, 'store'])->name('personnel.store');
 
     });

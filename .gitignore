@@ -4,6 +4,7 @@
 
 # Environment files & Secrets
 .env
+.env.*
 .env.backup
 .env.production
 *.env

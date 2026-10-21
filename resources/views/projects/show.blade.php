@@ -271,6 +271,7 @@
     <a href="{{ route('projects.printBom', $project->id) }}" target="_blank" class="btn-secondary" style="font-size: 0.825rem; color: #10b981; border-color: rgba(16, 185, 129, 0.4);">
         Print 8-Page BOM (DUPA)
     </a>
+    @if(auth()->user()->isAdmin())
     <form action="{{ route('projects.destroy', $project->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this?');" style="display:inline;">
         @csrf
         @method('DELETE')
@@ -279,9 +280,76 @@
             Delete
         </button>
     </form>
+    @endif
 @endsection
 
 @section('content')
+
+<!-- Operating Site Engineer Authorization & Selection Bar -->
+<div style="background: #ffffff; border: 1.5px solid {{ $userCanEditProject ? '#10b981' : '#f59e0b' }}; border-left: 6px solid {{ $userCanEditProject ? '#10b981' : '#f59e0b' }}; border-radius: 12px; padding: 16px 22px; margin-bottom: 22px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
+    <div style="display: flex; align-items: center; gap: 16px;">
+        <div style="width: 48px; height: 48px; border-radius: 12px; background: {{ $userCanEditProject ? 'rgba(16, 185, 129, 0.12)' : 'rgba(245, 158, 11, 0.12)' }}; color: {{ $userCanEditProject ? '#10b981' : '#d97706' }}; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; flex-shrink: 0; border: 1px solid {{ $userCanEditProject ? 'rgba(16, 185, 129, 0.25)' : 'rgba(245, 158, 11, 0.25)' }};">
+            👷
+        </div>
+        <div>
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <span style="font-weight: 800; font-size: 1.05rem; color: var(--text-primary);">
+                    Operating Engineer:
+                    @if(auth()->user()->isAdmin())
+                        <span style="color: #ef4444;">{{ auth()->user()->name }} (Administrator)</span>
+                    @elseif($actingEngineer)
+                        <span style="color: {{ $isActingEngineerAssigned ? '#059669' : '#d97706' }};">{{ $actingEngineer->name }}</span>
+                    @else
+                        <span style="color: #d97706;">None Selected</span>
+                    @endif
+                </span>
+
+                @if(auth()->user()->isAdmin())
+                    <span class="badge" style="background: rgba(239, 68, 68, 0.1); color: #dc2626; border: 1px solid rgba(239, 68, 68, 0.25); font-size: 0.72rem; font-weight: 700;">
+                        👑 Master Admin (Full Edit Authority)
+                    </span>
+                @elseif($actingEngineer && $isActingEngineerAssigned)
+                    <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #059669; border: 1px solid rgba(16, 185, 129, 0.35); font-size: 0.75rem; font-weight: 800; letter-spacing: 0.02em;">
+                        ✓ ASSIGNED &bull; AUTHORIZED TO EDIT
+                    </span>
+                @elseif($actingEngineer)
+                    <span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #d97706; border: 1px solid rgba(245, 158, 11, 0.35); font-size: 0.75rem; font-weight: 800; letter-spacing: 0.02em;">
+                        🔒 READ-ONLY MODE (UNASSIGNED)
+                    </span>
+                @else
+                    <span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #d97706; border: 1px solid rgba(245, 158, 11, 0.35); font-size: 0.75rem; font-weight: 800; letter-spacing: 0.02em;">
+                        ⚠️ EDITING LOCKED &bull; SELECT ENGINEER
+                    </span>
+                @endif
+            </div>
+
+            <div style="font-size: 0.835rem; color: var(--text-muted); margin-top: 4px; line-height: 1.4;">
+                @if(auth()->user()->isAdmin())
+                    You have unrestricted administrative authority across all active project trackers and cost estimations.
+                @elseif($actingEngineer && $isActingEngineerAssigned)
+                    You are verified as an assigned site engineer on <strong>{{ $project->title }}</strong>. All task completions, BOM modifications, schedule adjustments, and site photos are enabled.
+                @elseif($actingEngineer)
+                    <span style="color: #b45309; font-weight: 600;">Notice:</span> <strong>{{ $actingEngineer->name }}</strong> is not assigned to this project. Modifications are locked. Assigned engineers for this project: 
+                    <strong style="color: var(--text-primary);">{{ $project->personnel->pluck('name')->implode(', ') ?: 'No engineers currently assigned' }}</strong>.
+                @else
+                    <span style="color: #b45309; font-weight: 600;">Action Required:</span> Before making changes to tasks, progress, schedule, BOM, or materials, please choose who is making the updates. Only assigned engineers can save changes.
+                @endif
+            </div>
+        </div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <button type="button" class="btn-primary" style="font-size: 0.825rem; padding: 8px 16px; background: #0f172a; border-color: #0f172a; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" onclick="openModal('selectActingEngineerModal')">
+            <span>{{ $actingEngineer ? '🔄 Switch Engineer' : '👷 Choose Operating Engineer' }}</span>
+        </button>
+        @if($actingEngineer)
+            <a href="{{ route('actingEngineer.clear') }}" class="btn-secondary" style="font-size: 0.825rem; padding: 8px 14px; color: #64748b;" title="Clear acting engineer selection">
+                Clear
+            </a>
+        @endif
+    </div>
+</div>
+
 
 @php
     $projRemainingExcessUnits = $project->projectMaterials->sum('remaining_qty');
@@ -507,7 +575,17 @@
 
 <div class="project-master-tabs-container">
     <div class="project-master-tabs-scroll">
-        <button type="button" id="masterTabBtn_executive" class="master-project-tab-btn active" onclick="switchMasterProjectTab('executive', this)">
+        <button type="button" id="masterTabBtn_bom" class="master-project-tab-btn active" onclick="switchMasterProjectTab('bom', this)">
+            <span class="master-tab-dot" style="background: #8b5cf6;"></span>
+            <span>BOM & Cost Estimates</span>
+            <span class="master-tab-badge">{{ $project->scopeItems->count() }} items</span>
+        </button>
+        <button type="button" id="masterTabBtn_scheduling" class="master-project-tab-btn" onclick="switchMasterProjectTab('scheduling', this)">
+            <span class="master-tab-dot" style="background: #f59e0b;"></span>
+            <span>Master Schedule</span>
+            <span class="master-tab-badge">{{ $remainingDays }}d left</span>
+        </button>
+        <button type="button" id="masterTabBtn_executive" class="master-project-tab-btn" onclick="switchMasterProjectTab('executive', this)">
             <span class="master-tab-dot" style="background: #ef4444;"></span>
             <span>Executive Summary</span>
             <span class="master-tab-badge">Briefing</span>
@@ -517,30 +595,20 @@
             <span>Design & Blueprints</span>
             <span class="master-tab-badge">{{ $project->photos->count() }}</span>
         </button>
-        <button type="button" id="masterTabBtn_scheduling" class="master-project-tab-btn" onclick="switchMasterProjectTab('scheduling', this)">
-            <span class="master-tab-dot" style="background: #f59e0b;"></span>
-            <span>Master Schedule</span>
-            <span class="master-tab-badge">{{ $remainingDays }}d left</span>
-        </button>
         <button type="button" id="masterTabBtn_monitoring" class="master-project-tab-btn" onclick="switchMasterProjectTab('monitoring', this)">
             <span class="master-tab-dot" style="background: #10b981;"></span>
             <span>Trade Progression</span>
             <span class="master-tab-badge">{{ $project->overall_progress }}%</span>
         </button>
-        <button type="button" id="masterTabBtn_workforce" class="master-project-tab-btn" onclick="switchMasterProjectTab('workforce', this)">
-            <span class="master-tab-dot" style="background: #3b82f6;"></span>
-            <span>Workforce & Manpower</span>
-            <span class="master-tab-badge">{{ $totalDeployedManpower }}</span>
-        </button>
-        <button type="button" id="masterTabBtn_bom" class="master-project-tab-btn" onclick="switchMasterProjectTab('bom', this)">
-            <span class="master-tab-dot" style="background: #8b5cf6;"></span>
-            <span>BOM & Cost Estimates</span>
-            <span class="master-tab-badge">{{ $project->scopeItems->count() }}</span>
-        </button>
         <button type="button" id="masterTabBtn_tasks" class="master-project-tab-btn" onclick="switchMasterProjectTab('tasks', this)">
             <span class="master-tab-dot" style="background: #6366f1;"></span>
             <span>Scheduled Tasks</span>
             <span class="master-tab-badge">{{ $completedTasksCount }}/{{ $totalTasksCount }}</span>
+        </button>
+        <button type="button" id="masterTabBtn_workforce" class="master-project-tab-btn" onclick="switchMasterProjectTab('workforce', this)">
+            <span class="master-tab-dot" style="background: #3b82f6;"></span>
+            <span>Workforce & Manpower</span>
+            <span class="master-tab-badge">{{ $totalDeployedManpower }}</span>
         </button>
         <button type="button" id="masterTabBtn_financials" class="master-project-tab-btn" onclick="switchMasterProjectTab('financials', this)">
             <span class="master-tab-dot" style="background: #14b8a6;"></span>
@@ -555,10 +623,392 @@
     </div>
 </div>
 
+
+
+<!-- ====================================================
+     SECTION 6B: ITEMIZED BILL OF MATERIALS & DETAILED COST ESTIMATES (DUPA ENGINE)
+     ==================================================== -->
+<div id="projectTabPane_bom" class="project-tab-pane active-pane" data-tab-pane="bom">
+<div class="glass-panel" style="border: 1px solid var(--border-color); margin-bottom: 28px;">
+    <div class="panel-header" style="margin-bottom: 18px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <h3 class="panel-title" style="font-size: 1.15rem;">Itemized Bill of Materials & Detailed Unit Price Analysis (DUPA)</h3>
+                    <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #059669; border: 1px solid rgba(16, 185, 129, 0.3); font-weight: 700; font-size: 0.75rem;">
+                        <i class="fas fa-check-circle"></i> Fixed Baseline BOM Ready
+                    </span>
+                    <span class="badge" style="background: rgba(139, 92, 246, 0.15); color: #7c3aed; border: 1px solid rgba(139, 92, 246, 0.3); font-weight: 700; font-size: 0.75rem;">
+                        <i class="fas fa-plus-circle"></i> Additions & Task Extensions Enabled
+                    </span>
+                    <span class="badge badge-paid" style="background: var(--primary-red-light); color: var(--primary-red); border-color: var(--primary-red-border);">
+                        {{ $project->scopeItems->count() }} Scope Items
+                    </span>
+                </div>
+                <span style="font-size: 0.85rem; color: var(--text-muted);">
+                    Official Philippine engineering breakdown: Materials (A) + Labor (B) + Equipment (C) &bull; Direct Cost + 15% Contingency + 6% Taxes + 10% Profit
+                </span>
+            </div>
+        </div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <a href="{{ route('projects.printBom', $project->id) }}" target="_blank" class="btn-secondary" style="font-size: 0.8rem; color: #059669; border-color: rgba(16, 185, 129, 0.3);" title="Print official multi-page engineering document">
+                Print Official BOM Document
+            </a>
+            <button class="btn-primary" style="font-size: 0.8rem;" onclick="openModal('addScopeItemModal')">
+                + Add Scope Item
+            </button>
+        </div>
+    </div>
+
+    <!-- DUPA Financial Metrics Summary Cards -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 22px;">
+        <div class="summary-block" style="border-left: 4px solid var(--primary-red);">
+            <div class="summary-block-label">A. Materials Subtotal</div>
+            <div class="summary-block-val" style="color: var(--primary-red);">₱{{ number_format($project->total_scope_materials_cost, 2) }}</div>
+            <div class="summary-block-sub">Itemized Materials Sum</div>
+        </div>
+
+        <div class="summary-block" style="border-left: 4px solid #f59e0b;">
+            <div class="summary-block-label">B. Labor Subtotal</div>
+            <div class="summary-block-val" style="color: #d97706;">₱{{ number_format($project->total_scope_labor_cost, 2) }}</div>
+            <div class="summary-block-sub">Excavation, Formwork, Trades</div>
+        </div>
+
+        <div class="summary-block" style="border-left: 4px solid #ec4899;">
+            <div class="summary-block-label">C. Equipment Expense</div>
+            <div class="summary-block-val" style="color: #db2777;">₱{{ number_format($project->total_scope_equipment_cost, 2) }}</div>
+            <div class="summary-block-sub">Machinery & Tools Overhead</div>
+        </div>
+
+        <div class="summary-block" style="border-left: 4px solid #64748b;">
+            <div class="summary-block-label">Total Direct Cost (A+B+C)</div>
+            <div class="summary-block-val">₱{{ number_format($project->total_scope_direct_cost, 2) }}</div>
+            <div class="summary-block-sub">Base Project Expenditure</div>
+        </div>
+
+        <div class="summary-block" style="border-left: 4px solid #10b981;">
+            <div class="summary-block-label">Grand Total Scope Cost</div>
+            <div class="summary-block-val" style="color: #059669; font-size: 1.3rem;">
+                ₱{{ number_format($project->grand_scope_cost ?: $project->contract_budget, 2) }}
+            </div>
+            <div class="summary-block-sub">With Contingency + Taxes + Profit</div>
+        </div>
+    </div>
+
+    <!-- All Scope Items / DUPA Scope Chips Matrix (Naturally Wrapping Multi-Row Grid) -->
+    @if($project->scopeItems->count() > 0)
+        <div class="scope-breakdown-card">
+            <div class="scope-breakdown-header">
+                <div class="scope-breakdown-title-wrap">
+                    <div>
+                        <h4 class="scope-breakdown-title">Scope Items Breakdown</h4>
+                        <div class="scope-breakdown-subtitle">Filter by individual scope phase or view consolidated project breakdown</div>
+                    </div>
+                    <span class="scope-breakdown-badge">{{ $project->scopeItems->count() }} {{ \Illuminate\Support\Str::plural('Item', $project->scopeItems->count()) }}</span>
+                </div>
+
+                <div class="scope-breakdown-total-pill">
+                    <span class="total-pill-label">Total DUPA Cost:</span>
+                    <span class="total-pill-amount col-num">₱{{ number_format($project->grand_scope_cost ?: $project->contract_budget, 2) }}</span>
+                </div>
+            </div>
+
+            <div class="scope-matrix-grid" id="dupaScopeTabsBar">
+                <!-- All Scope Items Chip -->
+                <button type="button" class="scope-chip-card active" onclick="switchDupaScopeTab('all', this)" id="dupaTabBtn_all">
+                    <div class="scope-chip-left">
+                        <span class="scope-chip-tag tag-all">ALL</span>
+                        <span class="scope-chip-name">All Scope Items</span>
+                    </div>
+                    <span class="scope-chip-metric metric-count">{{ $project->scopeItems->count() }} Items</span>
+                </button>
+
+                <!-- Individual Scope Items Chips -->
+                @foreach($project->scopeItems as $item)
+                    <button type="button" class="scope-chip-card" onclick="switchDupaScopeTab({{ $item->id }}, this)" id="dupaTabBtn_{{ $item->id }}" data-item-id="{{ $item->id }}">
+                        <div class="scope-chip-left">
+                            <span class="scope-chip-tag tag-item">Item {{ $item->item_number }}</span>
+                            <span class="scope-chip-name" title="{{ $item->item_name }}">{{ Str::title($item->item_name) }}</span>
+                        </div>
+                        <span class="scope-chip-metric metric-price">₱{{ number_format($item->total_item_cost, 0) }}</span>
+                    </button>
+                @endforeach
+            </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+            @foreach($project->scopeItems as $item)
+                <div class="dupa-scope-card" id="dupaScopeItem_{{ $item->id }}" data-item-id="{{ $item->id }}" style="background: #fafbfc; border: 1px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--card-shadow); transition: all 0.2s ease;">
+                    <!-- Scope Item Header -->
+                    <div style="padding: 14px 18px; background: #f8fafc; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-weight: 800; color: var(--primary-red); font-family: var(--font-mono); font-size: 1rem;">ITEM {{ $item->item_number }}.</span>
+                                <span style="font-weight: 800; font-size: 1.05rem; color: var(--text-primary); text-transform: uppercase;">{{ $item->item_name }}</span>
+                                @if($item->volume_or_area)
+                                    <span class="spec-chip" style="font-size: 0.75rem; color: var(--text-secondary);">{{ $item->volume_or_area }}</span>
+                                @endif
+                            </div>
+                            @if($item->notes)
+                                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">{{ $item->notes }}</div>
+                            @endif
+                        </div>
+
+                        <div style="display: flex; align-items: center; gap: 14px;">
+                            <div style="text-align: right;">
+                                <div style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">Total Item Cost (with Markups)</div>
+                                <div style="font-family: var(--font-mono); font-weight: 800; font-size: 1.15rem; color: #059669;">
+                                    ₱{{ number_format($item->total_item_cost, 2) }}
+                                </div>
+                            </div>
+                            <div style="display: inline-flex; gap: 6px;">
+                                <button class="btn-primary" style="font-size: 0.75rem; padding: 5px 10px;" onclick="openAddScopeLineModal({{ $item->id }}, {{ $item->item_number }}, '{{ addslashes($item->item_name) }}')">
+                                    + Add Line
+                                </button>
+                                <form action="{{ route('projects.scopeItems.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Delete Item {{ $item->item_number }} ({{ $item->item_name }}) and all its line items?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn-secondary" style="font-size: 0.75rem; padding: 5px 8px; color: var(--primary-red); border-color: var(--primary-red-border);" title="Delete Item">
+                                        &times;
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="padding: 16px;">
+                        <!-- A. Materials Table -->
+                        @if($item->materials->count() > 0)
+                            <div style="font-weight: 700; font-size: 0.85rem; color: var(--primary-red); margin-bottom: 6px; display: flex; justify-content: space-between;">
+                                <span>A. Materials Breakdown</span>
+                                <span style="font-family: var(--font-mono);">Subtotal: ₱{{ number_format($item->materials_subtotal, 2) }}</span>
+                            </div>
+                            <table class="data-table custom-table" style="margin-bottom: 14px; font-size: 0.825rem;">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 80px;">Qty</th>
+                                        <th style="width: 80px;">Unit</th>
+                                        <th>Material Item Description</th>
+                                        <th style="width: 120px; text-align: right;">Unit Price (@ ₱)</th>
+                                        <th style="width: 130px; text-align: right;">Total Amount (₱)</th>
+                                        <th style="width: 60px; text-align: right;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($item->materials as $mat)
+                                        <tr>
+                                            <td style="font-family: var(--font-mono); font-weight: 700;">{{ $mat->quantity }}</td>
+                                            <td style="color: var(--text-secondary);">{{ $mat->unit }}</td>
+                                            <td><strong style="color: var(--text-primary);">{{ $mat->description }}</strong></td>
+                                            <td style="font-family: var(--font-mono); text-align: right;">₱{{ number_format($mat->unit_price, 2) }}</td>
+                                            <td style="font-family: var(--font-mono); font-weight: 700; text-align: right; color: var(--primary-red);">₱{{ number_format($mat->total_cost, 2) }}</td>
+                                            <td style="text-align: right;">
+                                                <div style="display: inline-flex; gap: 4px; justify-content: flex-end;">
+                                                    <button type="button" style="background:none; border:none; color:var(--text-secondary); cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Edit Line" onclick="openEditScopeLineModal({{ $mat->id }}, 'material', '{{ addslashes($mat->description) }}', {{ $mat->quantity }}, '{{ addslashes($mat->unit) }}', {{ $mat->unit_price }})"><i class="icon-edit">Edit</i></button>
+                                                    <form action="{{ route('projects.scopeLines.destroy', $mat->id) }}" method="POST" onsubmit="return confirm('Delete this material line?');" style="display:inline;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" style="background:none; border:none; color:var(--primary-red); cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Delete Line">&times;</button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        @endif
+
+                        <!-- B. Labors Table -->
+                        @if($item->labors->count() > 0)
+                            <div style="font-weight: 700; font-size: 0.85rem; color: #f59e0b; margin-bottom: 6px; display: flex; justify-content: space-between;">
+                                <span>B. Labor Breakdown</span>
+                                <span style="font-family: var(--font-mono);">Subtotal: ₱{{ number_format($item->labor_subtotal, 2) }}</span>
+                            </div>
+                            <table class="data-table" style="margin-bottom: 14px; font-size: 0.825rem;">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 80px;">Qty</th>
+                                        <th style="width: 80px;">Unit</th>
+                                        <th>Labor Sub-activity Description</th>
+                                        <th style="width: 120px; text-align: right;">Unit Rate (@ ₱)</th>
+                                        <th style="width: 130px; text-align: right;">Total Amount (₱)</th>
+                                        <th style="width: 60px; text-align: right;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($item->labors as $lab)
+                                        <tr>
+                                            <td style="font-family: var(--font-mono);">{{ $lab->quantity > 1 ? $lab->quantity : '' }}</td>
+                                            <td style="color: var(--text-secondary);">{{ $lab->unit }}</td>
+                                            <td><strong style="color: var(--text-primary);">{{ $lab->description }}</strong></td>
+                                            <td style="font-family: var(--font-mono); text-align: right;">{{ $lab->unit_price > 0 ? '₱' . number_format($lab->unit_price, 2) : '-' }}</td>
+                                            <td style="font-family: var(--font-mono); font-weight: 700; text-align: right; color: #d97706;">₱{{ number_format($lab->total_cost, 2) }}</td>
+                                            <td style="text-align: right;">
+                                                <div style="display: inline-flex; gap: 4px; justify-content: flex-end;">
+                                                    <button type="button" style="background:none; border:none; color:var(--primary-red); cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Edit Line" onclick="openEditScopeLineModal({{ $lab->id }}, 'labor', '{{ addslashes($lab->description) }}', {{ $lab->quantity }}, '{{ addslashes($lab->unit) }}', {{ $lab->unit_price }})"><i class="icon-edit">Edit</i></button>
+                                                    <form action="{{ route('projects.scopeLines.destroy', $lab->id) }}" method="POST" onsubmit="return confirm('Delete this labor line?');" style="display:inline;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Delete Line">&times;</button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        @endif
+
+                        <!-- C. Equipment Expenses Table -->
+                        @if($item->equipments->count() > 0)
+                            <div style="font-weight: 700; font-size: 0.85rem; color: #7c3aed; margin-bottom: 6px; display: flex; justify-content: space-between;">
+                                <span>C. Equipment Expense</span>
+                                <span style="font-family: var(--font-mono);">Subtotal: ₱{{ number_format($item->equipment_subtotal, 2) }}</span>
+                            </div>
+                            <table class="data-table" style="margin-bottom: 14px; font-size: 0.825rem;">
+                                <thead>
+                                    <tr>
+                                        <th>Equipment / Machinery Description</th>
+                                        <th style="width: 130px; text-align: right;">Total Amount (₱)</th>
+                                        <th style="width: 60px; text-align: right;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($item->equipments as $eq)
+                                        <tr>
+                                            <td><strong style="color: var(--text-primary);">{{ $eq->description }}</strong></td>
+                                            <td style="font-family: var(--font-mono); font-weight: 700; text-align: right; color: #7c3aed;">₱{{ number_format($eq->total_cost, 2) }}</td>
+                                            <td style="text-align: right;">
+                                                <div style="display: inline-flex; gap: 4px; justify-content: flex-end;">
+                                                    <button type="button" style="background:none; border:none; color:var(--primary-red); cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Edit Line" onclick="openEditScopeLineModal({{ $eq->id }}, 'equipment', '{{ addslashes($eq->description) }}', {{ $eq->quantity }}, '{{ addslashes($eq->unit) }}', {{ $eq->unit_price }})"><i class="icon-edit">Edit</i></button>
+                                                    <form action="{{ route('projects.scopeLines.destroy', $eq->id) }}" method="POST" onsubmit="return confirm('Delete this equipment line?');" style="display:inline;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Delete Line">&times;</button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        @endif
+
+                        <!-- Direct Cost & Markups Formula Calculation Strip -->
+                        <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+                            <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 12px 18px; min-width: 320px; font-size: 0.825rem; color: var(--text-primary);">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
+                                    <strong>DIRECT COST (A+B+C):</strong>
+                                    <strong style="font-family: var(--font-mono); color: var(--text-primary);">₱{{ number_format($item->direct_cost, 2) }}</strong>
+                                </div>
+                                @if($item->contingency_percent > 0)
+                                <div style="display: flex; justify-content: space-between; color: var(--text-muted); margin-bottom: 2px;">
+                                    <span>Plus: Contingency ({{ (int)$item->contingency_percent }}%):</span>
+                                    <span style="font-family: var(--font-mono);">₱{{ number_format($item->contingency_amount, 2) }}</span>
+                                </div>
+                                @endif
+                                @if($item->taxes_percent > 0)
+                                <div style="display: flex; justify-content: space-between; color: var(--text-muted); margin-bottom: 2px;">
+                                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Taxes ({{ (int)$item->taxes_percent }}%):</span>
+                                    <span style="font-family: var(--font-mono);">₱{{ number_format($item->taxes_amount, 2) }}</span>
+                                </div>
+                                @endif
+                                @if($item->profit_percent > 0)
+                                <div style="display: flex; justify-content: space-between; color: var(--text-muted); margin-bottom: 4px;">
+                                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Profit ({{ (int)$item->profit_percent }}%):</span>
+                                    <span style="font-family: var(--font-mono);">₱{{ number_format($item->profit_amount, 2) }}</span>
+                                </div>
+                                @endif
+                                <div style="display: flex; justify-content: space-between; border-top: 1px solid #10b981; padding-top: 4px; font-weight: 800; color: #059669; font-size: 0.95rem;">
+                                    <span>TOTAL ITEM COST:</span>
+                                    <span style="font-family: var(--font-mono);">₱{{ number_format($item->total_item_cost, 2) }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    @else
+        <div style="text-align: center; padding: 36px 20px; background: #f8fafc; border-radius: var(--radius-md); border: 1px dashed var(--border-color);">
+            <div style="font-size: 2.5rem; margin-bottom: 10px; display:none;"></div>
+            <div style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">No Scope of Work Bill of Materials Items Created Yet</div>
+            <div style="font-size: 0.85rem; color: var(--text-muted); max-width: 540px; margin: 0 auto 16px auto;">
+                Generate an itemized Scope of Work Bill of Materials tailored specifically for <strong>{{ $project->title ?: $project->project_code }}</strong> (Foundation, Columns, Beams, Walls, Roofing, Plumbing, Electrical, Finishes) with itemized Materials (A), Labor (B), Equipment (C), and official Philippine markups.
+            </div>
+            <div style="display: inline-flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+                <button class="btn-primary" onclick="openModal('addScopeItemModal')">
+                    + Add Scope Item
+                </button>
+            </div>
+        </div>
+    @endif
+</div>
+</div>
+
+
+
+<!-- ====================================================
+     SECTION 3: CLARIFIED PROJECT SCHEDULING & PHASE MATRIX PLANNER
+     ==================================================== -->
+<div id="projectTabPane_scheduling" class="project-tab-pane" data-tab-pane="scheduling">
+<div class="glass-panel" style="border: 1px solid var(--border-color); margin-bottom: 28px;">
+    <div class="panel-header" style="margin-bottom: 18px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <h3 class="panel-title" style="font-size: 1.15rem;">Project Master Scheduling & Execution Timeline</h3>
+                    <span class="spec-chip" style="background: {{ $scheduleHealth['bg'] }}; color: {{ $scheduleHealth['color'] }}; border-color: {{ $scheduleHealth['border'] }};">
+                        {{ $scheduleHealth['icon'] }} {{ $scheduleHealth['label'] }}
+                    </span>
+                </div>
+                <span style="font-size: 0.85rem; color: var(--text-muted);">
+                    Clarified schedule planning, calendar duration, and elapsed vs remaining days
+                </span>
+            </div>
+        </div>
+        <button class="btn-primary" style="font-size: 0.825rem; padding: 6px 14px;" onclick="openModal('updateScheduleModal')">
+            Set / Adjust Project Schedule
+        </button>
+    </div>
+
+    <!-- 4 Schedule Metrics Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+        <div class="summary-block" style="border-left: 4px solid var(--primary-red);">
+            <div class="summary-block-label">Total Scheduled Window</div>
+            <div class="summary-block-val">{{ $totalScheduleDays }} Days</div>
+            <div class="summary-block-sub">{{ $project->start_date->format('M d, Y') }} &rarr; {{ $project->end_date->format('M d, Y') }}</div>
+        </div>
+
+        <div class="summary-block" style="border-left: 4px solid #f59e0b;">
+            <div class="summary-block-label">Elapsed Site Days</div>
+            <div class="summary-block-val" style="color: #d97706;">{{ $elapsedDays }} Days</div>
+            <div class="summary-block-sub">{{ $scheduleProgressRatio }}% Timeline Consumed</div>
+        </div>
+
+        <div class="summary-block" style="border-left: 4px solid #10b981;">
+            <div class="summary-block-label">Days to Target Handover</div>
+            <div class="summary-block-val" style="color: #059669;">{{ $remainingDays }} Days Left</div>
+            <div class="summary-block-sub">Target: {{ $project->end_date->format('M d, Y') }}</div>
+        </div>
+
+        <div class="summary-block" style="border-left: 4px solid #6366f1;">
+            <div class="summary-block-label">Tasks & Milestones Progress</div>
+            <div class="summary-block-val" style="color: #4f46e5; font-size: 1.1rem; line-height: 1.3;" id="schedTasksDoneVal">
+                {{ $completedTasksCount }} / {{ $totalTasksCount }} Tasks Completed
+            </div>
+            <div class="summary-block-sub" id="schedOverallProgSub">{{ $project->overall_progress }}% Accomplished</div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+
 <!-- ====================================================
      SECTION 1: COMPREHENSIVE PROJECT EXECUTIVE MASTER SUMMARY
      ==================================================== -->
-<div id="projectTabPane_executive" class="project-tab-pane active-pane" data-tab-pane="executive">
+<div id="projectTabPane_executive" class="project-tab-pane" data-tab-pane="executive">
 <div class="summary-briefing-card" style="margin-bottom: 28px;">
     <div class="summary-header-row">
         <div>
@@ -672,14 +1122,29 @@
             <button type="button" class="spec-chip active-gallery-filter" onclick="filterGalleryCategory('all', this)" style="cursor: pointer; font-size: 0.775rem; padding: 5px 12px; background: var(--primary-red); color: #ffffff; border-color: var(--primary-red);">
                 All Media ({{ $project->photos->count() }})
             </button>
-            <button type="button" class="spec-chip" onclick="filterGalleryCategory('blueprint', this)" style="cursor: pointer; font-size: 0.775rem; padding: 5px 12px;">
-                Blueprints ({{ $project->photos->where('photo_type', 'blueprint')->count() }})
+            <button type="button" class="spec-chip" onclick="filterGalleryCategory('blueprint', this)" style="cursor: pointer; font-size: 0.775rem; padding: 5px 12px;" title="View all CAD Blueprints across all disciplines">
+                All Blueprints ({{ $project->photos->filter->is_blueprint->count() }})
+            </button>
+            <button type="button" class="spec-chip" onclick="filterGalleryCategory('architectural', this)" style="cursor: pointer; font-size: 0.775rem; padding: 5px 12px; border-color: #93c5fd; color: #1d4ed8;" title="Architectural Plans">
+                🏛️ Architectural ({{ $project->photos->filter(fn($p) => $p->effective_discipline === 'architectural' || $p->photo_type === 'blueprint_architectural')->count() }})
+            </button>
+            <button type="button" class="spec-chip" onclick="filterGalleryCategory('civil', this)" style="cursor: pointer; font-size: 0.775rem; padding: 5px 12px; border-color: #fdba74; color: #c2410c;" title="Civil & Structural Plans">
+                🏗️ Civil ({{ $project->photos->filter(fn($p) => $p->effective_discipline === 'civil' || $p->photo_type === 'blueprint_civil')->count() }})
+            </button>
+            <button type="button" class="spec-chip" onclick="filterGalleryCategory('electrical', this)" style="cursor: pointer; font-size: 0.775rem; padding: 5px 12px; border-color: #fde047; color: #854d0e;" title="Electrical Plans">
+                ⚡ Electrical ({{ $project->photos->filter(fn($p) => $p->effective_discipline === 'electrical' || $p->photo_type === 'blueprint_electrical')->count() }})
+            </button>
+            <button type="button" class="spec-chip" onclick="filterGalleryCategory('plumbing', this)" style="cursor: pointer; font-size: 0.775rem; padding: 5px 12px; border-color: #67e8f9; color: #0e7490;" title="Plumbing & Sanitary Plans">
+                🚰 Plumbing ({{ $project->photos->filter(fn($p) => $p->effective_discipline === 'plumbing' || $p->photo_type === 'blueprint_plumbing')->count() }})
+            </button>
+            <button type="button" class="spec-chip" onclick="filterGalleryCategory('other', this)" style="cursor: pointer; font-size: 0.775rem; padding: 5px 12px; border-color: #c4b5fd; color: #6d28d9;" title="Other Related Plans">
+                📐 Other Plans ({{ $project->photos->filter(fn($p) => $p->effective_discipline === 'other' || $p->photo_type === 'blueprint_other')->count() }})
             </button>
             <button type="button" class="spec-chip" onclick="filterGalleryCategory('3d_render', this)" style="cursor: pointer; font-size: 0.775rem; padding: 5px 12px;">
-                3D Renders ({{ $project->photos->where('photo_type', '3d_render')->count() }})
+                🎨 3D Renders ({{ $project->photos->where('photo_type', '3d_render')->count() }})
             </button>
             <button type="button" class="spec-chip" onclick="filterGalleryCategory('actual_site', this)" style="cursor: pointer; font-size: 0.775rem; padding: 5px 12px;">
-                Site Progress ({{ $project->photos->where('photo_type', 'actual_site')->count() }})
+                📸 Site Progress ({{ $project->photos->where('photo_type', 'actual_site')->count() }})
             </button>
             <button type="button" class="spec-chip" onclick="filterGalleryCategory('structural', this)" style="cursor: pointer; font-size: 0.775rem; padding: 5px 12px;">
                 Structural ({{ $project->photos->where('photo_type', 'structural')->count() }})
@@ -695,12 +1160,12 @@
         <div id="projectPhotosGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px;">
             @foreach($project->photos as $photo)
                 @php $badge = $photo->type_badge; @endphp
-                <div class="gallery-photo-card" data-category="{{ $photo->photo_type }}" style="background: #fafbfc; border: 1px solid {{ $photo->is_primary ? 'var(--primary-red)' : 'var(--border-color)' }}; border-radius: var(--radius-md); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s; box-shadow: var(--card-shadow);">
+                <div class="gallery-photo-card" data-category="{{ $photo->photo_type }}" data-is-blueprint="{{ $photo->is_blueprint ? 1 : 0 }}" data-discipline="{{ $photo->effective_discipline ?? '' }}" style="background: #fafbfc; border: 1px solid {{ $photo->is_primary ? 'var(--primary-red)' : 'var(--border-color)' }}; border-radius: var(--radius-md); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s; box-shadow: var(--card-shadow);">
                     <!-- Photo Image Preview Container -->
                     <div style="position: relative; height: 175px; background: #f1f5f9; cursor: pointer; overflow: hidden;" onclick="openLightbox('{{ $photo->file_path }}', '{{ addslashes($photo->title) }}', '{{ $badge['label'] }}', {{ $photo->id }}, '{{ $photo->photo_type }}', '{{ addslashes($photo->description ?? '') }}', '{{ $photo->taken_at ? $photo->taken_at->format('Y-m-d') : '' }}', {{ $photo->is_primary ? 1 : 0 }})">
                         <img src="{{ $photo->file_path }}" alt="{{ $photo->title }}" style="width: 100%; height: 100%; object-fit: cover;">
                         <span style="position: absolute; top: 8px; left: 8px; font-size: 0.65rem; background: {{ $badge['bg'] }}; color: {{ $badge['color'] }}; border: 1px solid {{ $badge['border'] }}; padding: 3px 8px; border-radius: 4px; font-weight: 700;">
-                            {{ $badge['icon'] }} {{ strtoupper(str_replace('_', ' ', $photo->photo_type)) }}
+                            {{ $badge['icon'] }} {{ $badge['label'] }}
                         </span>
                         @if($photo->is_primary)
                             <span style="position: absolute; top: 8px; right: 8px; font-size: 0.65rem; background: var(--primary-red); color: #fff; padding: 3px 8px; border-radius: 4px; font-weight: 800; box-shadow: 0 2px 8px rgba(220,38,38,0.4);">
@@ -761,61 +1226,6 @@
             </button>
         </div>
     @endif
-</div>
-</div>
-
-<!-- ====================================================
-     SECTION 3: CLARIFIED PROJECT SCHEDULING & PHASE MATRIX PLANNER
-     ==================================================== -->
-<div id="projectTabPane_scheduling" class="project-tab-pane" data-tab-pane="scheduling">
-<div class="glass-panel" style="border: 1px solid var(--border-color); margin-bottom: 28px;">
-    <div class="panel-header" style="margin-bottom: 18px;">
-        <div style="display: flex; align-items: center; gap: 12px;">
-            <div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <h3 class="panel-title" style="font-size: 1.15rem;">Project Master Scheduling & Execution Timeline</h3>
-                    <span class="spec-chip" style="background: {{ $scheduleHealth['bg'] }}; color: {{ $scheduleHealth['color'] }}; border-color: {{ $scheduleHealth['border'] }};">
-                        {{ $scheduleHealth['icon'] }} {{ $scheduleHealth['label'] }}
-                    </span>
-                </div>
-                <span style="font-size: 0.85rem; color: var(--text-muted);">
-                    Clarified schedule planning, calendar duration, and elapsed vs remaining days
-                </span>
-            </div>
-        </div>
-        <button class="btn-primary" style="font-size: 0.825rem; padding: 6px 14px;" onclick="openModal('updateScheduleModal')">
-            Set / Adjust Project Schedule
-        </button>
-    </div>
-
-    <!-- 4 Schedule Metrics Grid -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
-        <div class="summary-block" style="border-left: 4px solid var(--primary-red);">
-            <div class="summary-block-label">Total Scheduled Window</div>
-            <div class="summary-block-val">{{ $totalScheduleDays }} Days</div>
-            <div class="summary-block-sub">{{ $project->start_date->format('M d, Y') }} &rarr; {{ $project->end_date->format('M d, Y') }}</div>
-        </div>
-
-        <div class="summary-block" style="border-left: 4px solid #f59e0b;">
-            <div class="summary-block-label">Elapsed Site Days</div>
-            <div class="summary-block-val" style="color: #d97706;">{{ $elapsedDays }} Days</div>
-            <div class="summary-block-sub">{{ $scheduleProgressRatio }}% Timeline Consumed</div>
-        </div>
-
-        <div class="summary-block" style="border-left: 4px solid #10b981;">
-            <div class="summary-block-label">Days to Target Handover</div>
-            <div class="summary-block-val" style="color: #059669;">{{ $remainingDays }} Days Left</div>
-            <div class="summary-block-sub">Target: {{ $project->end_date->format('M d, Y') }}</div>
-        </div>
-
-        <div class="summary-block" style="border-left: 4px solid #6366f1;">
-            <div class="summary-block-label">Tasks & Milestones Progress</div>
-            <div class="summary-block-val" style="color: #4f46e5; font-size: 1.1rem; line-height: 1.3;" id="schedTasksDoneVal">
-                {{ $completedTasksCount }} / {{ $totalTasksCount }} Tasks Completed
-            </div>
-            <div class="summary-block-sub" id="schedOverallProgSub">{{ $project->overall_progress }}% Accomplished</div>
-        </div>
-    </div>
 </div>
 </div>
 
@@ -1411,321 +1821,6 @@
 </div>
 
 <!-- ====================================================
-     SECTION 6B: ITEMIZED BILL OF MATERIALS & DETAILED COST ESTIMATES (DUPA ENGINE)
-     ==================================================== -->
-<div id="projectTabPane_bom" class="project-tab-pane" data-tab-pane="bom">
-<div class="glass-panel" style="border: 1px solid var(--border-color); margin-bottom: 28px;">
-    <div class="panel-header" style="margin-bottom: 18px;">
-        <div style="display: flex; align-items: center; gap: 12px;">
-            <div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <h3 class="panel-title" style="font-size: 1.15rem;">Itemized Bill of Materials & Detailed Unit Price Analysis (DUPA)</h3>
-                    <span class="badge badge-paid" style="background: var(--primary-red-light); color: var(--primary-red); border-color: var(--primary-red-border);">
-                        {{ $project->scopeItems->count() }} Scope Items
-                    </span>
-                </div>
-                <span style="font-size: 0.85rem; color: var(--text-muted);">
-                    Official Philippine engineering breakdown: Materials (A) + Labor (B) + Equipment (C) &bull; Direct Cost + 15% Contingency + 6% Taxes + 10% Profit
-                </span>
-            </div>
-        </div>
-        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-            <a href="{{ route('projects.printBom', $project->id) }}" target="_blank" class="btn-secondary" style="font-size: 0.8rem; color: #059669; border-color: rgba(16, 185, 129, 0.3);" title="Print official multi-page engineering document">
-                Print Official BOM Document
-            </a>
-            <button class="btn-primary" style="font-size: 0.8rem;" onclick="openModal('addScopeItemModal')">
-                + Add Scope Item
-            </button>
-        </div>
-    </div>
-
-    <!-- DUPA Financial Metrics Summary Cards -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 22px;">
-        <div class="summary-block" style="border-left: 4px solid var(--primary-red);">
-            <div class="summary-block-label">A. Materials Subtotal</div>
-            <div class="summary-block-val" style="color: var(--primary-red);">₱{{ number_format($project->total_scope_materials_cost, 2) }}</div>
-            <div class="summary-block-sub">Itemized Materials Sum</div>
-        </div>
-
-        <div class="summary-block" style="border-left: 4px solid #f59e0b;">
-            <div class="summary-block-label">B. Labor Subtotal</div>
-            <div class="summary-block-val" style="color: #d97706;">₱{{ number_format($project->total_scope_labor_cost, 2) }}</div>
-            <div class="summary-block-sub">Excavation, Formwork, Trades</div>
-        </div>
-
-        <div class="summary-block" style="border-left: 4px solid #ec4899;">
-            <div class="summary-block-label">C. Equipment Expense</div>
-            <div class="summary-block-val" style="color: #db2777;">₱{{ number_format($project->total_scope_equipment_cost, 2) }}</div>
-            <div class="summary-block-sub">Machinery & Tools Overhead</div>
-        </div>
-
-        <div class="summary-block" style="border-left: 4px solid #64748b;">
-            <div class="summary-block-label">Total Direct Cost (A+B+C)</div>
-            <div class="summary-block-val">₱{{ number_format($project->total_scope_direct_cost, 2) }}</div>
-            <div class="summary-block-sub">Base Project Expenditure</div>
-        </div>
-
-        <div class="summary-block" style="border-left: 4px solid #10b981;">
-            <div class="summary-block-label">Grand Total Scope Cost</div>
-            <div class="summary-block-val" style="color: #059669; font-size: 1.3rem;">
-                ₱{{ number_format($project->grand_scope_cost ?: $project->contract_budget, 2) }}
-            </div>
-            <div class="summary-block-sub">With Contingency + Taxes + Profit</div>
-        </div>
-    </div>
-
-    <!-- All Scope Items / DUPA Scope Chips Matrix (Naturally Wrapping Multi-Row Grid) -->
-    @if($project->scopeItems->count() > 0)
-        <div class="scope-breakdown-card">
-            <div class="scope-breakdown-header">
-                <div class="scope-breakdown-title-wrap">
-                    <div>
-                        <h4 class="scope-breakdown-title">Scope Items Breakdown</h4>
-                        <div class="scope-breakdown-subtitle">Filter by individual scope phase or view consolidated project breakdown</div>
-                    </div>
-                    <span class="scope-breakdown-badge">{{ $project->scopeItems->count() }} {{ \Illuminate\Support\Str::plural('Item', $project->scopeItems->count()) }}</span>
-                </div>
-
-                <div class="scope-breakdown-total-pill">
-                    <span class="total-pill-label">Total DUPA Cost:</span>
-                    <span class="total-pill-amount col-num">₱{{ number_format($project->grand_scope_cost ?: $project->contract_budget, 2) }}</span>
-                </div>
-            </div>
-
-            <div class="scope-matrix-grid" id="dupaScopeTabsBar">
-                <!-- All Scope Items Chip -->
-                <button type="button" class="scope-chip-card active" onclick="switchDupaScopeTab('all', this)" id="dupaTabBtn_all">
-                    <div class="scope-chip-left">
-                        <span class="scope-chip-tag tag-all">ALL</span>
-                        <span class="scope-chip-name">All Scope Items</span>
-                    </div>
-                    <span class="scope-chip-metric metric-count">{{ $project->scopeItems->count() }} Items</span>
-                </button>
-
-                <!-- Individual Scope Items Chips -->
-                @foreach($project->scopeItems as $item)
-                    <button type="button" class="scope-chip-card" onclick="switchDupaScopeTab({{ $item->id }}, this)" id="dupaTabBtn_{{ $item->id }}" data-item-id="{{ $item->id }}">
-                        <div class="scope-chip-left">
-                            <span class="scope-chip-tag tag-item">Item {{ $item->item_number }}</span>
-                            <span class="scope-chip-name" title="{{ $item->item_name }}">{{ Str::title($item->item_name) }}</span>
-                        </div>
-                        <span class="scope-chip-metric metric-price">₱{{ number_format($item->total_item_cost, 0) }}</span>
-                    </button>
-                @endforeach
-            </div>
-        </div>
-
-        <div style="display: flex; flex-direction: column; gap: 16px;">
-            @foreach($project->scopeItems as $item)
-                <div class="dupa-scope-card" id="dupaScopeItem_{{ $item->id }}" data-item-id="{{ $item->id }}" style="background: #fafbfc; border: 1px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--card-shadow); transition: all 0.2s ease;">
-                    <!-- Scope Item Header -->
-                    <div style="padding: 14px 18px; background: #f8fafc; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-                        <div>
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                <span style="font-weight: 800; color: var(--primary-red); font-family: var(--font-mono); font-size: 1rem;">ITEM {{ $item->item_number }}.</span>
-                                <span style="font-weight: 800; font-size: 1.05rem; color: var(--text-primary); text-transform: uppercase;">{{ $item->item_name }}</span>
-                                @if($item->volume_or_area)
-                                    <span class="spec-chip" style="font-size: 0.75rem; color: var(--text-secondary);">{{ $item->volume_or_area }}</span>
-                                @endif
-                            </div>
-                            @if($item->notes)
-                                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">{{ $item->notes }}</div>
-                            @endif
-                        </div>
-
-                        <div style="display: flex; align-items: center; gap: 14px;">
-                            <div style="text-align: right;">
-                                <div style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">Total Item Cost (with Markups)</div>
-                                <div style="font-family: var(--font-mono); font-weight: 800; font-size: 1.15rem; color: #059669;">
-                                    ₱{{ number_format($item->total_item_cost, 2) }}
-                                </div>
-                            </div>
-                            <div style="display: inline-flex; gap: 6px;">
-                                <button class="btn-primary" style="font-size: 0.75rem; padding: 5px 10px;" onclick="openAddScopeLineModal({{ $item->id }}, {{ $item->item_number }}, '{{ addslashes($item->item_name) }}')">
-                                    + Add Line
-                                </button>
-                                <form action="{{ route('projects.scopeItems.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Delete Item {{ $item->item_number }} ({{ $item->item_name }}) and all its line items?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn-secondary" style="font-size: 0.75rem; padding: 5px 8px; color: var(--primary-red); border-color: var(--primary-red-border);" title="Delete Item">
-                                        &times;
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div style="padding: 16px;">
-                        <!-- A. Materials Table -->
-                        @if($item->materials->count() > 0)
-                            <div style="font-weight: 700; font-size: 0.85rem; color: var(--primary-red); margin-bottom: 6px; display: flex; justify-content: space-between;">
-                                <span>A. Materials Breakdown</span>
-                                <span style="font-family: var(--font-mono);">Subtotal: ₱{{ number_format($item->materials_subtotal, 2) }}</span>
-                            </div>
-                            <table class="data-table custom-table" style="margin-bottom: 14px; font-size: 0.825rem;">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 80px;">Qty</th>
-                                        <th style="width: 80px;">Unit</th>
-                                        <th>Material Item Description</th>
-                                        <th style="width: 120px; text-align: right;">Unit Price (@ ₱)</th>
-                                        <th style="width: 130px; text-align: right;">Total Amount (₱)</th>
-                                        <th style="width: 60px; text-align: right;">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($item->materials as $mat)
-                                        <tr>
-                                            <td style="font-family: var(--font-mono); font-weight: 700;">{{ $mat->quantity }}</td>
-                                            <td style="color: var(--text-secondary);">{{ $mat->unit }}</td>
-                                            <td><strong style="color: var(--text-primary);">{{ $mat->description }}</strong></td>
-                                            <td style="font-family: var(--font-mono); text-align: right;">₱{{ number_format($mat->unit_price, 2) }}</td>
-                                            <td style="font-family: var(--font-mono); font-weight: 700; text-align: right; color: var(--primary-red);">₱{{ number_format($mat->total_cost, 2) }}</td>
-                                            <td style="text-align: right;">
-                                                <div style="display: inline-flex; gap: 4px; justify-content: flex-end;">
-                                                    <button type="button" style="background:none; border:none; color:var(--text-secondary); cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Edit Line" onclick="openEditScopeLineModal({{ $mat->id }}, 'material', '{{ addslashes($mat->description) }}', {{ $mat->quantity }}, '{{ addslashes($mat->unit) }}', {{ $mat->unit_price }})"><i class="icon-edit">Edit</i></button>
-                                                    <form action="{{ route('projects.scopeLines.destroy', $mat->id) }}" method="POST" onsubmit="return confirm('Delete this material line?');" style="display:inline;">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" style="background:none; border:none; color:var(--primary-red); cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Delete Line">&times;</button>
-                                                    </form>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        @endif
-
-                        <!-- B. Labors Table -->
-                        @if($item->labors->count() > 0)
-                            <div style="font-weight: 700; font-size: 0.85rem; color: #f59e0b; margin-bottom: 6px; display: flex; justify-content: space-between;">
-                                <span>B. Labor Breakdown</span>
-                                <span style="font-family: var(--font-mono);">Subtotal: ₱{{ number_format($item->labor_subtotal, 2) }}</span>
-                            </div>
-                            <table class="data-table" style="margin-bottom: 14px; font-size: 0.825rem;">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 80px;">Qty</th>
-                                        <th style="width: 80px;">Unit</th>
-                                        <th>Labor Sub-activity Description</th>
-                                        <th style="width: 120px; text-align: right;">Unit Rate (@ ₱)</th>
-                                        <th style="width: 130px; text-align: right;">Total Amount (₱)</th>
-                                        <th style="width: 60px; text-align: right;">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($item->labors as $lab)
-                                        <tr>
-                                            <td style="font-family: var(--font-mono);">{{ $lab->quantity > 1 ? $lab->quantity : '' }}</td>
-                                            <td style="color: var(--text-secondary);">{{ $lab->unit }}</td>
-                                            <td><strong style="color: var(--text-primary);">{{ $lab->description }}</strong></td>
-                                            <td style="font-family: var(--font-mono); text-align: right;">{{ $lab->unit_price > 0 ? '₱' . number_format($lab->unit_price, 2) : '-' }}</td>
-                                            <td style="font-family: var(--font-mono); font-weight: 700; text-align: right; color: #d97706;">₱{{ number_format($lab->total_cost, 2) }}</td>
-                                            <td style="text-align: right;">
-                                                <div style="display: inline-flex; gap: 4px; justify-content: flex-end;">
-                                                    <button type="button" style="background:none; border:none; color:var(--primary-red); cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Edit Line" onclick="openEditScopeLineModal({{ $lab->id }}, 'labor', '{{ addslashes($lab->description) }}', {{ $lab->quantity }}, '{{ addslashes($lab->unit) }}', {{ $lab->unit_price }})"><i class="icon-edit">Edit</i></button>
-                                                    <form action="{{ route('projects.scopeLines.destroy', $lab->id) }}" method="POST" onsubmit="return confirm('Delete this labor line?');" style="display:inline;">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Delete Line">&times;</button>
-                                                    </form>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        @endif
-
-                        <!-- C. Equipment Expenses Table -->
-                        @if($item->equipments->count() > 0)
-                            <div style="font-weight: 700; font-size: 0.85rem; color: #7c3aed; margin-bottom: 6px; display: flex; justify-content: space-between;">
-                                <span>C. Equipment Expense</span>
-                                <span style="font-family: var(--font-mono);">Subtotal: ₱{{ number_format($item->equipment_subtotal, 2) }}</span>
-                            </div>
-                            <table class="data-table" style="margin-bottom: 14px; font-size: 0.825rem;">
-                                <thead>
-                                    <tr>
-                                        <th>Equipment / Machinery Description</th>
-                                        <th style="width: 130px; text-align: right;">Total Amount (₱)</th>
-                                        <th style="width: 60px; text-align: right;">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($item->equipments as $eq)
-                                        <tr>
-                                            <td><strong style="color: var(--text-primary);">{{ $eq->description }}</strong></td>
-                                            <td style="font-family: var(--font-mono); font-weight: 700; text-align: right; color: #7c3aed;">₱{{ number_format($eq->total_cost, 2) }}</td>
-                                            <td style="text-align: right;">
-                                                <div style="display: inline-flex; gap: 4px; justify-content: flex-end;">
-                                                    <button type="button" style="background:none; border:none; color:var(--primary-red); cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Edit Line" onclick="openEditScopeLineModal({{ $eq->id }}, 'equipment', '{{ addslashes($eq->description) }}', {{ $eq->quantity }}, '{{ addslashes($eq->unit) }}', {{ $eq->unit_price }})"><i class="icon-edit">Edit</i></button>
-                                                    <form action="{{ route('projects.scopeLines.destroy', $eq->id) }}" method="POST" onsubmit="return confirm('Delete this equipment line?');" style="display:inline;">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:0.8rem; padding: 2px 4px;" title="Delete Line">&times;</button>
-                                                    </form>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        @endif
-
-                        <!-- Direct Cost & Markups Formula Calculation Strip -->
-                        <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
-                            <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 12px 18px; min-width: 320px; font-size: 0.825rem; color: var(--text-primary);">
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
-                                    <strong>DIRECT COST (A+B+C):</strong>
-                                    <strong style="font-family: var(--font-mono); color: var(--text-primary);">₱{{ number_format($item->direct_cost, 2) }}</strong>
-                                </div>
-                                @if($item->contingency_percent > 0)
-                                <div style="display: flex; justify-content: space-between; color: var(--text-muted); margin-bottom: 2px;">
-                                    <span>Plus: Contingency ({{ (int)$item->contingency_percent }}%):</span>
-                                    <span style="font-family: var(--font-mono);">₱{{ number_format($item->contingency_amount, 2) }}</span>
-                                </div>
-                                @endif
-                                @if($item->taxes_percent > 0)
-                                <div style="display: flex; justify-content: space-between; color: var(--text-muted); margin-bottom: 2px;">
-                                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Taxes ({{ (int)$item->taxes_percent }}%):</span>
-                                    <span style="font-family: var(--font-mono);">₱{{ number_format($item->taxes_amount, 2) }}</span>
-                                </div>
-                                @endif
-                                @if($item->profit_percent > 0)
-                                <div style="display: flex; justify-content: space-between; color: var(--text-muted); margin-bottom: 4px;">
-                                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Profit ({{ (int)$item->profit_percent }}%):</span>
-                                    <span style="font-family: var(--font-mono);">₱{{ number_format($item->profit_amount, 2) }}</span>
-                                </div>
-                                @endif
-                                <div style="display: flex; justify-content: space-between; border-top: 1px solid #10b981; padding-top: 4px; font-weight: 800; color: #059669; font-size: 0.95rem;">
-                                    <span>TOTAL ITEM COST:</span>
-                                    <span style="font-family: var(--font-mono);">₱{{ number_format($item->total_item_cost, 2) }}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    @else
-        <div style="text-align: center; padding: 36px 20px; background: #f8fafc; border-radius: var(--radius-md); border: 1px dashed var(--border-color);">
-            <div style="font-size: 2.5rem; margin-bottom: 10px; display:none;"></div>
-            <div style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">No Scope of Work Bill of Materials Items Created Yet</div>
-            <div style="font-size: 0.85rem; color: var(--text-muted); max-width: 540px; margin: 0 auto 16px auto;">
-                Generate an itemized Scope of Work Bill of Materials tailored specifically for <strong>{{ $project->title ?: $project->project_code }}</strong> (Foundation, Columns, Beams, Walls, Roofing, Plumbing, Electrical, Finishes) with itemized Materials (A), Labor (B), Equipment (C), and official Philippine markups.
-            </div>
-            <div style="display: inline-flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
-                <button class="btn-primary" onclick="openModal('addScopeItemModal')">
-                    + Add Scope Item
-                </button>
-            </div>
-        </div>
-    @endif
-</div>
-</div>
-
-<!-- ====================================================
      SECTION 7: SCHEDULED TASKS & MILESTONES TIMELINE
      ==================================================== -->
 <div id="projectTabPane_tasks" class="project-tab-pane" data-tab-pane="tasks">
@@ -1788,12 +1883,26 @@
                             </div>
                         </td>
                         <td style="text-align: center; vertical-align: middle;">
-                            @if($task->photo_path)
-                                <div style="position: relative; width: 36px; height: 36px; border-radius: 6px; overflow: hidden; border: 1.5px solid #059669; display: inline-block; cursor: pointer; background: #0f172a;" title="Click to view full-size proof photo" onclick="openTaskPhotoPreviewModal('{{ asset($task->photo_path) }}', '{{ addslashes($task->task_name) }}', '{{ addslashes($task->category) }}', '{{ addslashes($task->photo_caption ?? '') }}', '{{ $task->updated_at ? $task->updated_at->format('M d, Y') : '' }}')">
-                                    <img src="{{ asset($task->photo_path) }}" alt="Proof" style="width: 100%; height: 100%; object-fit: cover;">
+                            @php
+                                $tPhotos = $task->all_photos_list;
+                                $tCount = $task->photos_count;
+                                $tPhotosJson = htmlspecialchars(json_encode($tPhotos->map(function($p) {
+                                    return ['id' => $p->id, 'url' => $p->url, 'caption' => $p->caption ?? ''];
+                                })->values()), ENT_QUOTES, 'UTF-8');
+                            @endphp
+                            @if($tCount > 0)
+                                <div style="display: inline-flex; align-items: center; justify-content: center; cursor: pointer; gap: 4px;" title="Click to view {{ $tCount }} proof photo(s)" onclick='openTaskMultiPhotoPreviewModal({{ $tPhotosJson }}, "{{ addslashes($task->task_name) }}", "{{ addslashes($task->category) }}", "{{ $task->updated_at ? $task->updated_at->format('M d, Y') : '' }}")'>
+                                    <div style="position: relative; width: 34px; height: 34px; border-radius: 6px; overflow: hidden; border: 1.5px solid #059669; display: inline-block; background: #0f172a;">
+                                        <img src="{{ $tPhotos[0]->url }}" alt="Proof" style="width: 100%; height: 100%; object-fit: cover;">
+                                    </div>
+                                    @if($tCount >= 2)
+                                        <span style="font-size: 0.7rem; font-weight: 800; color: #0284c7; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 4px; padding: 2px 4px;">
+                                            +{{ $tCount }}
+                                        </span>
+                                    @endif
                                 </div>
                             @else
-                                <button type="button" class="btn-secondary" style="font-size: 0.7rem; padding: 3px 6px; border: 1px dashed #0284c7; color: #0284c7; background: #f0f9ff;" onclick="openAttachTaskPhotoModal({{ $task->id }}, '{{ addslashes($task->task_name) }}', '{{ addslashes($task->category) }}', '', '', {{ $task->progress >= 100 ? 1 : 0 }})">
+                                <button type="button" class="btn-secondary" style="font-size: 0.7rem; padding: 3px 6px; border: 1px dashed #0284c7; color: #0284c7; background: #f0f9ff;" onclick='openAttachTaskPhotoModal({{ $task->id }}, "{{ addslashes($task->task_name) }}", "{{ addslashes($task->category) }}", [], {{ $task->progress >= 100 ? 1 : 0 }})'>
                                     + Photo
                                 </button>
                             @endif
@@ -2008,20 +2117,23 @@
      ==================================================== -->
 
 <!-- Modal 1: Upload Blueprint / Design Photo -->
+<!-- Modal 1: Upload Blueprint / Design Photo -->
 <div class="modal-overlay" id="uploadPhotoModal">
     <div class="modal-box modal-box-large" style="max-width: 680px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
             <div style="display: flex; align-items: center; gap: 10px;">
-                
+                <div style="width: 36px; height: 36px; border-radius: 8px; background: #eff6ff; border: 1px solid #bfdbfe; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #2563eb;">
+                    📐
+                </div>
                 <div>
                     <h3 style="font-weight: 700; margin: 0; font-size: 1.15rem; color: var(--text-primary);">Upload Blueprint, 3D Render or Progress Photo</h3>
-                    <span style="font-size: 0.775rem; color: var(--text-muted);">Add technical CAD drawings, architectural renders, or on-site photographs</span>
+                    <span style="font-size: 0.775rem; color: var(--text-muted);">Supports Civil, Plumbing, Electrical, Architectural CAD blueprints & on-site photos</span>
                 </div>
             </div>
             <button onclick="closeModal('uploadPhotoModal')" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer;">&times;</button>
         </div>
 
-        <form action="{{ route('projects.photos.upload', $project->id) }}" method="POST" enctype="multipart/form-data">
+        <form id="uploadPhotoForm" action="{{ route('projects.photos.upload', $project->id) }}" method="POST" enctype="multipart/form-data" onsubmit="return validatePhotoUploadForm('uploadPhotoType', 'uploadPhotoFileInput')">
             @csrf
 
             <!-- Live Upload Preview Container -->
@@ -2035,21 +2147,38 @@
                 </div>
             </div>
 
+            <!-- Dynamic Blueprint Format Alert Badge -->
+            <div id="uploadBlueprintNotice" style="display: none; align-items: center; gap: 10px; padding: 10px 14px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius-sm); margin-bottom: 16px;">
+                <span style="font-size: 1.1rem;">🔒</span>
+                <div style="font-size: 0.8rem; color: #1e40af; line-height: 1.4;">
+                    <strong>Strict Format Rule for Blueprints:</strong> Technical CAD blueprints must be uploaded in <strong>JPEG format (.jpg, .jpeg)</strong>. PNG files are strictly not accepted.
+                </div>
+            </div>
+
             <div class="form-group">
                 <label class="form-label">Media Title / Subject <span style="color:#ef4444;">*</span></label>
-                <input type="text" name="title" class="form-input" placeholder="e.g. Master Floor Plan Blueprint (Level 1-5)" required>
+                <input type="text" name="title" class="form-input" placeholder="e.g. Architectural Ground Floor Plan or Civil Foundation Layout" required>
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                 <div class="form-group">
                     <label class="form-label">Media Classification Category <span style="color:#ef4444;">*</span></label>
-                    <select name="photo_type" class="form-select" required>
-                        <option value="blueprint">Technical Blueprint / CAD Plan</option>
-                        <option value="3d_render">3D Architectural Render (Target Design)</option>
-                        <option value="client_want">Client Design Inspiration / Request</option>
-                        <option value="actual_site" selected>Actual On-Site Progress Photo</option>
-                        <option value="structural">Structural & Foundation Works</option>
-                        <option value="finishing">Turnkey Architectural Finishing</option>
+                    <select name="photo_type" id="uploadPhotoType" class="form-select" required onchange="handlePhotoTypeChange(this.value, 'uploadPhotoFileInput', 'uploadBlueprintNotice', 'uploadFileHelpText')">
+                        <optgroup label="📐 Technical Blueprints & Engineering Plans">
+                            <option value="blueprint_architectural">🏛️ Architectural Blueprint (Floor Plans, Elevations, Sections)</option>
+                            <option value="blueprint_civil">🏗️ Civil & Structural Blueprint (Foundation, Framing, Retaining Walls)</option>
+                            <option value="blueprint_electrical">⚡ Electrical Plan (Power, Lighting, Single-Line Diagrams)</option>
+                            <option value="blueprint_plumbing">🚰 Plumbing & Sanitary Plan (Water Lines, Drainage, Septic)</option>
+                            <option value="blueprint_other">📐 Other Related Engineering Plan (HVAC, Fire Suppression, Mechanical)</option>
+                            <option value="blueprint">General Technical Blueprint / CAD Plan</option>
+                        </optgroup>
+                        <optgroup label="🎨 Architectural Concept & Progress Media">
+                            <option value="3d_render">🎨 3D Architectural Render (Target Design)</option>
+                            <option value="client_want">💡 Client Design Inspiration / Request</option>
+                            <option value="actual_site" selected>📸 Actual On-Site Progress Photo</option>
+                            <option value="structural">🏗️ Structural & Foundation Works</option>
+                            <option value="finishing">✨ Turnkey Architectural Finishing</option>
+                        </optgroup>
                     </select>
                 </div>
 
@@ -2061,8 +2190,13 @@
 
             <div style="background: #f8fafc; padding: 14px; border: 1px dashed var(--border-color); border-radius: var(--radius-sm); margin-bottom: 16px;">
                 <div class="form-group" style="margin-bottom: 10px;">
-                    <label class="form-label" style="font-size: 0.8rem;">Upload Image File (JPG, PNG, WebP up to 10MB)</label>
-                    <input type="file" name="photo_file" class="form-input" accept="image/*" onchange="previewUploadPhotoFile(this)">
+                    <label class="form-label" style="font-size: 0.8rem; font-weight: 700; color: var(--text-primary);">
+                        Upload Media File <span id="uploadFileRequirementBadge" style="font-size: 0.75rem; font-weight: 600; color: #2563eb;"></span>
+                    </label>
+                    <input type="file" name="photo_file" id="uploadPhotoFileInput" class="form-input" accept="image/*" onchange="handlePhotoFileSelected(this, 'uploadPhotoType', 'uploadPhotoPreviewImg', 'uploadPreviewWrap')">
+                    <span id="uploadFileHelpText" style="font-size: 0.725rem; color: var(--text-muted); display: block; margin-top: 4px;">
+                        Supported: JPG, PNG, WebP up to 10MB. (Note: Blueprints require JPEG format only; PNG is rejected).
+                    </span>
                 </div>
 
                 <div class="form-group" style="margin-bottom: 0;">
@@ -2098,7 +2232,9 @@
     <div class="modal-box modal-box-large" style="max-width: 680px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
             <div style="display: flex; align-items: center; gap: 10px;">
-                
+                <div style="width: 36px; height: 36px; border-radius: 8px; background: #eff6ff; border: 1px solid #bfdbfe; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #2563eb;">
+                    ✏️
+                </div>
                 <div>
                     <h3 style="font-weight: 700; margin: 0; font-size: 1.15rem; color: var(--text-primary);">Edit Project Image & Blueprint Media</h3>
                     <span style="font-size: 0.775rem; color: var(--text-muted);">Update specifications, change classification category, or replace the image/URL</span>
@@ -2107,7 +2243,7 @@
             <button onclick="closeModal('editPhotoModal')" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer;">&times;</button>
         </div>
 
-        <form id="editPhotoForm" action="" method="POST" enctype="multipart/form-data">
+        <form id="editPhotoForm" action="" method="POST" enctype="multipart/form-data" onsubmit="return validatePhotoUploadForm('editPhotoType', 'editPhotoFile')">
             @csrf
             <input type="hidden" name="is_primary_submitted" value="1">
 
@@ -2125,21 +2261,38 @@
                 </div>
             </div>
 
+            <!-- Dynamic Blueprint Format Alert Badge for Edit Modal -->
+            <div id="editBlueprintNotice" style="display: none; align-items: center; gap: 10px; padding: 10px 14px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius-sm); margin-bottom: 16px;">
+                <span style="font-size: 1.1rem;">🔒</span>
+                <div style="font-size: 0.8rem; color: #1e40af; line-height: 1.4;">
+                    <strong>Strict Format Rule for Blueprints:</strong> Blueprints must be uploaded in <strong>JPEG format (.jpg, .jpeg)</strong>. PNG files are strictly not accepted.
+                </div>
+            </div>
+
             <div class="form-group">
                 <label class="form-label">Media Title / Subject <span style="color:#ef4444;">*</span></label>
-                <input type="text" id="editPhotoTitle" name="title" class="form-input" placeholder="e.g. Master Floor Plan Blueprint (Level 1-5)" required>
+                <input type="text" id="editPhotoTitle" name="title" class="form-input" placeholder="e.g. Architectural Ground Floor Plan or Civil Foundation Layout" required>
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                 <div class="form-group">
                     <label class="form-label">Media Classification Category <span style="color:#ef4444;">*</span></label>
-                    <select id="editPhotoType" name="photo_type" class="form-select" required>
-                        <option value="blueprint">Technical Blueprint / CAD Plan</option>
-                        <option value="3d_render">3D Architectural Render (Target Design)</option>
-                        <option value="client_want">Client Design Inspiration / Request</option>
-                        <option value="actual_site">Actual On-Site Progress Photo</option>
-                        <option value="structural">Structural & Foundation Works</option>
-                        <option value="finishing">Turnkey Architectural Finishing</option>
+                    <select id="editPhotoType" name="photo_type" class="form-select" required onchange="handlePhotoTypeChange(this.value, 'editPhotoFile', 'editBlueprintNotice', 'editFileHelpText')">
+                        <optgroup label="📐 Technical Blueprints & Engineering Plans">
+                            <option value="blueprint_architectural">🏛️ Architectural Blueprint (Floor Plans, Elevations, Sections)</option>
+                            <option value="blueprint_civil">🏗️ Civil & Structural Blueprint (Foundation, Framing, Retaining Walls)</option>
+                            <option value="blueprint_electrical">⚡ Electrical Plan (Power, Lighting, Single-Line Diagrams)</option>
+                            <option value="blueprint_plumbing">🚰 Plumbing & Sanitary Plan (Water Lines, Drainage, Septic)</option>
+                            <option value="blueprint_other">📐 Other Related Engineering Plan (HVAC, Fire Suppression, Mechanical)</option>
+                            <option value="blueprint">General Technical Blueprint / CAD Plan</option>
+                        </optgroup>
+                        <optgroup label="🎨 Architectural Concept & Progress Media">
+                            <option value="3d_render">🎨 3D Architectural Render (Target Design)</option>
+                            <option value="client_want">💡 Client Design Inspiration / Request</option>
+                            <option value="actual_site">📸 Actual On-Site Progress Photo</option>
+                            <option value="structural">🏗️ Structural & Foundation Works</option>
+                            <option value="finishing">✨ Turnkey Architectural Finishing</option>
+                        </optgroup>
                     </select>
                 </div>
 
@@ -2156,8 +2309,11 @@
                 </div>
 
                 <div class="form-group" style="margin-bottom: 10px;">
-                    <label class="form-label" style="font-size: 0.8rem;">Upload New File (JPG, PNG, WebP up to 10MB)</label>
-                    <input type="file" id="editPhotoFile" name="photo_file" class="form-input" accept="image/*" onchange="previewEditPhotoFile(this)">
+                    <label class="form-label" style="font-size: 0.8rem; font-weight: 700;">Upload New File</label>
+                    <input type="file" id="editPhotoFile" name="photo_file" class="form-input" accept="image/*" onchange="handlePhotoFileSelected(this, 'editPhotoType', 'editPhotoPreviewImg')">
+                    <span id="editFileHelpText" style="font-size: 0.725rem; color: var(--text-muted); display: block; margin-top: 4px;">
+                        Supported: JPG, PNG, WebP up to 10MB. (Note: Blueprints require JPEG format only; PNG is rejected).
+                    </span>
                 </div>
 
                 <div class="form-group" style="margin-bottom: 0;">
@@ -2693,16 +2849,16 @@
     </div>
 </div>
 
-<!-- Modal: Attach Task Completion Photo Proof -->
+<!-- Modal: Attach Task Completion Photo Proof (Multi-Photo Support: 2 or more images) -->
 <div class="modal-overlay" id="attachTaskPhotoModal">
-    <div class="modal-box modal-box-large" style="max-width: 580px; background: #ffffff; border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.25);">
+    <div class="modal-box modal-box-large" style="max-width: 650px; background: #ffffff; border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.25);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
             <div style="display: flex; align-items: center; gap: 10px;">
                 <div style="width: 36px; height: 36px; border-radius: 8px; background: #f0f9ff; border: 1px solid #bae6fd; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #0284c7;">
-                    📷
+                    📸
                 </div>
                 <div>
-                    <h3 style="font-weight: 800; color: #0f172a; margin: 0; font-size: 1.15rem;">Attach Task Proof Photo</h3>
+                    <h3 style="font-weight: 800; color: #0f172a; margin: 0; font-size: 1.15rem;">Attach Task Proof Photos</h3>
                     <span id="attachTaskCategoryBadge" style="font-size: 0.75rem; color: #0284c7; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Structural</span>
                 </div>
             </div>
@@ -2712,42 +2868,56 @@
         <form id="attachTaskPhotoForm" action="" method="POST" enctype="multipart/form-data">
             @csrf
             
-            <!-- Task Info Card -->
+            <!-- Target Task Milestone Info -->
             <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 14px; margin-bottom: 16px;">
                 <div style="font-size: 0.75rem; color: #64748b; text-transform: uppercase; font-weight: 700; letter-spacing: 0.04em;">Target Task / Milestone</div>
                 <div id="attachTaskNameDisplay" style="font-size: 0.95rem; font-weight: 800; color: #0f172a; margin-top: 2px;">Footing & Foundation Concrete Pouring</div>
             </div>
 
-            <!-- Current Photo Preview (if already exists) -->
+            <!-- Existing Attached Photos Container (supports 2 or more images) -->
             <div id="attachTaskExistingPhotoBox" style="display: none; margin-bottom: 16px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 12px;">
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-                    <span style="font-size: 0.775rem; font-weight: 700; color: #166534;">✓ Current Attached Proof</span>
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                    <span style="font-size: 0.8rem; font-weight: 700; color: #166534; display: flex; align-items: center; gap: 6px;">
+                        <span>✓</span> Currently Attached Proof Photos (<span id="attachTaskExistingCount">0</span>)
+                    </span>
                     <button type="button" id="btnRemoveExistingTaskPhoto" style="font-size: 0.725rem; color: #dc2626; background: none; border: none; cursor: pointer; text-decoration: underline; font-weight: 700;">
-                        Delete This Photo
+                        Delete All Photos
                     </button>
                 </div>
-                <div style="width: 100%; height: 160px; border-radius: 6px; overflow: hidden; background: #0f172a; display: flex; align-items: center; justify-content: center;">
-                    <img id="attachTaskExistingImg" src="" alt="Proof Preview" style="width: 100%; height: 100%; object-fit: contain;">
+                
+                <!-- Existing Photos Grid -->
+                <div id="attachTaskExistingPhotosGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; max-height: 220px; overflow-y: auto; padding: 2px;">
+                    <!-- Dynamically populated via JS -->
                 </div>
             </div>
 
-            <!-- File Upload & Live Preview Area -->
+            <!-- Multi-File Upload & Instructions -->
             <div class="form-group" style="margin-bottom: 14px;">
-                <label class="form-label" style="font-weight: 700; color: #0f172a;">Upload Proof Photo File</label>
-                <input type="file" name="photo_file" id="attachTaskFileInput" class="form-input" accept="image/*" capture="environment" onchange="previewAttachTaskPhotoFile(event)" style="padding: 8px;">
-                <span style="font-size: 0.725rem; color: #64748b;">Supported: JPG, PNG, WEBP up to 10MB. Automatically opens camera on supported mobile/tablets.</span>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <label class="form-label" style="font-weight: 700; color: #0f172a; margin-bottom: 0;">Upload Proof Photos (Select 1, 2, or more files)</label>
+                    <span style="font-size: 0.725rem; font-weight: 700; color: #0284c7; background: #f0f9ff; padding: 2px 8px; border-radius: 4px; border: 1px solid #bae6fd;">Multi-Image Allowed</span>
+                </div>
+                <input type="file" name="photo_files[]" id="attachTaskFileInput" class="form-input" accept="image/*" multiple onchange="previewAttachTaskPhotoFiles(event)" style="padding: 8px;">
+                <span style="font-size: 0.725rem; color: #64748b; display: block; margin-top: 4px;">
+                    💡 Hold <strong>Ctrl</strong> (or <strong>Shift</strong>) to select <strong>2 or more images</strong> at once. Supported: JPG, PNG, WebP up to 10MB per image.
+                </span>
             </div>
 
-            <!-- New Image Live Preview -->
-            <div id="attachTaskNewPhotoPreviewBox" style="display: none; margin-bottom: 14px; text-align: center;">
-                <div style="font-size: 0.75rem; color: #0284c7; font-weight: 700; margin-bottom: 4px;">Selected New Image Preview:</div>
-                <img id="attachTaskNewPhotoImg" src="" style="max-height: 180px; max-width: 100%; border-radius: 6px; border: 1.5px solid #0284c7; box-shadow: 0 4px 12px rgba(0,0,0,0.1); object-fit: contain;">
+            <!-- New Multi-Image Live Preview Grid -->
+            <div id="attachTaskNewPhotoPreviewBox" style="display: none; margin-bottom: 16px; background: #f8fafc; border: 1px solid #bae6fd; border-radius: 8px; padding: 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <div id="attachTaskNewCountBadge" style="font-size: 0.775rem; color: #0284c7; font-weight: 700;">Selected New Photos Preview:</div>
+                    <span style="font-size: 0.7rem; color: #64748b;">Ready to upload</span>
+                </div>
+                <div id="attachTaskNewPreviewsContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 8px; max-height: 180px; overflow-y: auto;">
+                    <!-- Dynamically generated previews -->
+                </div>
             </div>
 
             <!-- Optional Image URL -->
             <div class="form-group" style="margin-bottom: 14px;">
-                <label class="form-label" style="font-weight: 700; color: #0f172a;">Or Image URL / Cloud Link (Optional)</label>
-                <input type="url" name="photo_url" id="attachTaskUrlInput" class="form-input" placeholder="https://example.com/site-photo.jpg">
+                <label class="form-label" style="font-weight: 700; color: #0f172a;">Or Enter Image URL / Cloud Media Link (Optional)</label>
+                <input type="url" name="photo_url" id="attachTaskUrlInput" class="form-input" placeholder="https://example.com/site-verification-photo.jpg">
             </div>
 
             <!-- Proof Notes / Caption -->
@@ -2768,34 +2938,61 @@
                 <button type="button" class="btn-secondary" onclick="closeModal('attachTaskPhotoModal')">Cancel</button>
                 <button type="submit" class="btn-primary" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); border-color: #0284c7; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
                     <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                    Save & Attach Proof Photo
+                    Save & Attach Proof Photos
                 </button>
             </div>
         </form>
     </div>
 </div>
 
-<!-- Modal: Fullscreen Task Proof Lightbox Preview -->
+<!-- Modal: Fullscreen Task Proof Lightbox Preview (Multi-Photo Carousel Support) -->
 <div class="modal-overlay" id="previewTaskPhotoModal" onclick="closeModal('previewTaskPhotoModal')">
-    <div style="max-width: 90vw; max-height: 92vh; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;" onclick="event.stopPropagation();">
-        <button onclick="closeModal('previewTaskPhotoModal')" style="position: absolute; top: -40px; right: 0; background: none; border: none; color: #fff; font-size: 2rem; cursor: pointer;">&times;</button>
-        <div style="position: relative; max-width: 100%; text-align: center;">
-            <img id="taskLightboxImg" src="" style="max-width: 100%; max-height: 72vh; border-radius: 8px; border: 2px solid rgba(255,255,255,0.2); box-shadow: 0 15px 50px rgba(0,0,0,0.85); object-fit: contain; background: #000;">
-            <div style="position: absolute; top: 12px; left: 12px; background: rgba(5, 150, 105, 0.9); color: #fff; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.05em; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 2px 8px rgba(0,0,0,0.4);">
+    <div style="max-width: 90vw; max-height: 94vh; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;" onclick="event.stopPropagation();">
+        <button onclick="closeModal('previewTaskPhotoModal')" style="position: absolute; top: -40px; right: 0; background: none; border: none; color: #fff; font-size: 2rem; cursor: pointer; z-index: 10;">&times;</button>
+        
+        <!-- Main Image Area with Prev / Next Navigation -->
+        <div style="position: relative; max-width: 100%; text-align: center; display: flex; align-items: center; justify-content: center;">
+            <!-- Prev Photo Button (visible when 2 or more photos) -->
+            <button type="button" id="taskLightboxPrevBtn" onclick="prevTaskPhoto()" style="display: none; position: absolute; left: 12px; background: rgba(15,23,42,0.8); color: #fff; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; width: 44px; height: 44px; font-size: 1.3rem; cursor: pointer; z-index: 5; transition: all 0.2s; align-items: center; justify-content: center;" title="Previous Photo (Left Arrow)">
+                ❮
+            </button>
+
+            <!-- Main Image -->
+            <img id="taskLightboxImg" src="" style="max-width: 100%; max-height: 68vh; border-radius: 8px; border: 2px solid rgba(255,255,255,0.2); box-shadow: 0 15px 50px rgba(0,0,0,0.85); object-fit: contain; background: #000;">
+
+            <!-- Next Photo Button (visible when 2 or more photos) -->
+            <button type="button" id="taskLightboxNextBtn" onclick="nextTaskPhoto()" style="display: none; position: absolute; right: 12px; background: rgba(15,23,42,0.8); color: #fff; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; width: 44px; height: 44px; font-size: 1.3rem; cursor: pointer; z-index: 5; transition: all 0.2s; align-items: center; justify-content: center;" title="Next Photo (Right Arrow)">
+                ❯
+            </button>
+
+            <!-- Top Left Status Badge -->
+            <div style="position: absolute; top: 12px; left: 12px; background: rgba(5, 150, 105, 0.95); color: #fff; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.05em; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 2px 8px rgba(0,0,0,0.4);">
                 <span>✓</span> VERIFIED PROOF OF COMPLETION
             </div>
+
+            <!-- Top Right Photo Index Counter (e.g. Photo 2 of 4) -->
+            <div id="taskLightboxCounterBadge" style="display: none; position: absolute; top: 12px; right: 12px; background: rgba(2, 132, 199, 0.95); color: #fff; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.05em; box-shadow: 0 2px 8px rgba(0,0,0,0.4);">
+                Photo 1 of 1
+            </div>
         </div>
-        <div style="margin-top: 14px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6px; width: 100%; max-width: 650px;">
+
+        <!-- Thumbnails Strip for 2 or more photos -->
+        <div id="taskLightboxThumbnailsStrip" style="display: none; gap: 8px; justify-content: center; margin-top: 10px; max-width: 90vw; overflow-x: auto; padding: 4px;">
+            <!-- Clickable thumbnails generated via JS -->
+        </div>
+
+        <!-- Metadata & Captions -->
+        <div style="margin-top: 12px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6px; width: 100%; max-width: 650px;">
             <div style="display: flex; align-items: center; gap: 8px;">
                 <span id="taskLightboxCategory" style="display: inline-block; font-size: 0.75rem; font-weight: 800; color: #38bdf8; background: rgba(56,189,248,0.15); padding: 3px 8px; border-radius: 4px; text-transform: uppercase;"></span>
                 <span id="taskLightboxDate" style="font-size: 0.75rem; color: #94a3b8; font-family: var(--font-mono);"></span>
             </div>
             <div id="taskLightboxTitle" style="font-size: 1.15rem; font-weight: 800; color: #ffffff;"></div>
             <div id="taskLightboxCaption" style="font-size: 0.85rem; color: #cbd5e1; background: rgba(15, 23, 42, 0.6); padding: 8px 14px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); width: 100%;"></div>
-            <div style="display: flex; gap: 10px; margin-top: 8px;">
+            <div style="display: flex; gap: 10px; margin-top: 6px;">
                 <a id="taskLightboxDownloadLink" href="#" target="_blank" download class="btn-primary" style="font-size: 0.8rem; padding: 6px 14px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
                     <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                    Open Full Resolution Photo
+                    Open Current Photo Full Resolution
                 </a>
                 <button type="button" class="btn-secondary" onclick="closeModal('previewTaskPhotoModal')" style="font-size: 0.8rem; padding: 6px 14px;">
                     Close
@@ -3262,8 +3459,8 @@
     <div class="modal-box modal-box-large">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
             <div>
-                <h3 style="font-weight: 700;">Add New Scope of Work Item (DUPA Header)</h3>
-                <span style="font-size: 0.8rem; color: var(--text-muted);">Defines an engineering item block (e.g. Item 1. Foundation and Footing)</span>
+                <h3 style="font-weight: 700;">Add Scope Item / Project Addition (DUPA Header)</h3>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">Defines baseline scope or new project/task addition (e.g. Item 19. Additional Outlets, Perimeter Fence Addition)</span>
             </div>
             <button onclick="closeModal('addScopeItemModal')" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer;">&times;</button>
         </div>
@@ -3570,13 +3767,228 @@
     </div>
 </div>
 
+<!-- Modal: Select Acting Site Engineer for this Project -->
+<div class="modal-overlay" id="selectActingEngineerModal">
+    <div class="modal-box" style="max-width: 720px; width: 95vw; max-height: 90vh; display: flex; flex-direction: column; padding: 24px 28px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 14px; border-bottom: 1px solid var(--border-color); margin-bottom: 16px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 42px; height: 42px; border-radius: 10px; background: rgba(16, 185, 129, 0.15); color: #10b981; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">
+                    👷
+                </div>
+                <div>
+                    <h3 style="font-weight: 800; font-size: 1.25rem; color: var(--text-primary); margin: 0;">
+                        Choose Operating Site Engineer
+                    </h3>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin: 2px 0 0 0;">
+                        Target Site: <strong style="color: var(--text-primary);">{{ $project->title }} ({{ $project->project_code }})</strong>
+                    </p>
+                </div>
+            </div>
+            <button type="button" onclick="closeModal('selectActingEngineerModal')" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer; line-height: 1;">&times;</button>
+        </div>
+
+        @if(!$userCanEditProject)
+        <div style="background: rgba(245, 158, 11, 0.08); border-left: 4px solid #f59e0b; border-radius: 6px; padding: 10px 14px; margin-bottom: 16px; font-size: 0.825rem; color: #92400e;">
+            <strong>Authorization Guard:</strong> Only engineers assigned to <em>{{ $project->title }}</em> can make changes. Choose one of the assigned engineers below to unlock editing permissions.
+        </div>
+        @endif
+
+        <div style="margin-bottom: 14px;">
+            <input type="text" id="projectEngineerSearchFilter" placeholder="Search engineer by name or specialty..." onkeyup="filterProjectEngineerList(this.value)" style="width: 100%; padding: 9px 14px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.85rem; outline: none; box-sizing: border-box;">
+        </div>
+
+        <div style="flex: 1; overflow-y: auto; max-height: 52vh; padding-right: 4px; display: flex; flex-direction: column; gap: 14px;" id="projectEngineerModalList">
+            
+            <!-- SECTION 1: Assigned to this Project -->
+            <div>
+                <div style="font-size: 0.75rem; text-transform: uppercase; font-weight: 800; color: #059669; letter-spacing: 0.05em; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                    <span>✓ Assigned Engineers on this Project (Full Edit Authorized)</span>
+                    <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #059669; font-size: 0.65rem;">{{ $project->personnel->count() }} Available</span>
+                </div>
+
+                @if($project->personnel->isNotEmpty())
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        @foreach($project->personnel as $assignedEngr)
+                            @php
+                                $isCurrentActive = $actingEngineer && $actingEngineer->id === $assignedEngr->id;
+                            @endphp
+                            <div class="project-engr-card" data-name="{{ strtolower($assignedEngr->name) }}" data-title="{{ strtolower($assignedEngr->title ?? '') }}" style="border: 2px solid {{ $isCurrentActive ? '#10b981' : 'rgba(16, 185, 129, 0.4)' }}; border-radius: 10px; padding: 12px 16px; background: {{ $isCurrentActive ? 'rgba(16, 185, 129, 0.08)' : 'rgba(16, 185, 129, 0.02)' }}; display: flex; align-items: center; justify-content: space-between; gap: 14px;">
+                                <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
+                                    <div style="width: 40px; height: 40px; border-radius: 50%; background: #10b981; color: #ffffff; font-weight: 800; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                        {{ strtoupper(substr($assignedEngr->name, 0, 2)) }}
+                                    </div>
+                                    <div>
+                                        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                            <strong style="font-size: 0.95rem; color: var(--text-primary);">{{ $assignedEngr->name }}</strong>
+                                            <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #059669; font-size: 0.68rem; font-weight: 800;">
+                                                ASSIGNED &bull; EDIT READY
+                                            </span>
+                                            @if($isCurrentActive)
+                                                <span class="badge" style="background: #059669; color: #ffffff; font-size: 0.65rem; font-weight: 800;">
+                                                    CURRENTLY OPERATING
+                                                </span>
+                                            @endif
+                                        </div>
+                                        <div style="font-size: 0.775rem; color: #64748b; margin-top: 2px;">
+                                            {{ $assignedEngr->title ?? 'Site Engineer' }} &bull; {{ $assignedEngr->email ?? $assignedEngr->phone ?? 'Personnel ID #' . $assignedEngr->id }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="flex-shrink: 0;">
+                                    @if($isCurrentActive)
+                                        <a href="{{ route('actingEngineer.clear') }}" class="btn-secondary" style="font-size: 0.75rem; padding: 6px 12px; color: #ef4444;">
+                                            Deactivate
+                                        </a>
+                                    @else
+                                        <form action="{{ route('actingEngineer.set') }}" method="POST" style="margin: 0;">
+                                            @csrf
+                                            <input type="hidden" name="personnel_id" value="{{ $assignedEngr->id }}">
+                                            <input type="hidden" name="project_id" value="{{ $project->id }}">
+                                            <button type="submit" class="btn-primary" style="font-size: 0.775rem; padding: 7px 14px; background: #059669; border-color: #059669;">
+                                                Select & Authorize
+                                            </button>
+                                        </form>
+                                    @endif
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div style="padding: 14px; border: 1px dashed var(--border-color); border-radius: 8px; text-align: center; color: var(--text-muted); font-size: 0.8rem;">
+                        No engineers have been assigned to this project yet. Please assign personnel in the Workforce & Manpower tab.
+                    </div>
+                @endif
+            </div>
+
+            <!-- SECTION 2: Other Company Engineers (Read-Only Mode) -->
+            @php
+                $unassignedEngineers = $allPersonnel->diff($project->personnel);
+            @endphp
+            @if($unassignedEngineers->isNotEmpty())
+            <div style="margin-top: 8px;">
+                <div style="font-size: 0.75rem; text-transform: uppercase; font-weight: 800; color: #64748b; letter-spacing: 0.05em; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                    <span>🔒 Other Company Engineers (Unassigned to this Site &bull; Read-Only)</span>
+                    <span class="badge" style="background: rgba(100, 116, 139, 0.15); color: #64748b; font-size: 0.65rem;">{{ $unassignedEngineers->count() }}</span>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    @foreach($unassignedEngineers as $otherEngr)
+                        @php
+                            $isCurrentActive = $actingEngineer && $actingEngineer->id === $otherEngr->id;
+                        @endphp
+                        <div class="project-engr-card" data-name="{{ strtolower($otherEngr->name) }}" data-title="{{ strtolower($otherEngr->title ?? '') }}" style="border: 1px solid var(--border-color); border-radius: 10px; padding: 12px 16px; background: #ffffff; display: flex; align-items: center; justify-content: space-between; gap: 14px; opacity: 0.85;">
+                            <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
+                                <div style="width: 40px; height: 40px; border-radius: 50%; background: #f1f5f9; color: #64748b; font-weight: 800; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    {{ strtoupper(substr($otherEngr->name, 0, 2)) }}
+                                </div>
+                                <div>
+                                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                        <strong style="font-size: 0.95rem; color: var(--text-primary);">{{ $otherEngr->name }}</strong>
+                                        <span class="badge" style="background: rgba(100, 116, 139, 0.1); color: #64748b; font-size: 0.68rem; font-weight: 700;">
+                                            Unassigned
+                                        </span>
+                                        @if($isCurrentActive)
+                                            <span class="badge" style="background: #f59e0b; color: #ffffff; font-size: 0.65rem; font-weight: 800;">
+                                                OPERATING (READ-ONLY)
+                                            </span>
+                                        @endif
+                                    </div>
+                                    <div style="font-size: 0.775rem; color: #64748b; margin-top: 2px;">
+                                        {{ $otherEngr->title ?? 'Site Engineer' }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="flex-shrink: 0;">
+                                @if($isCurrentActive)
+                                    <a href="{{ route('actingEngineer.clear') }}" class="btn-secondary" style="font-size: 0.75rem; padding: 6px 12px; color: #ef4444;">
+                                        Deactivate
+                                    </a>
+                                @else
+                                    <form action="{{ route('actingEngineer.set') }}" method="POST" style="margin: 0;">
+                                        @csrf
+                                        <input type="hidden" name="personnel_id" value="{{ $otherEngr->id }}">
+                                        <input type="hidden" name="project_id" value="{{ $project->id }}">
+                                        <button type="submit" class="btn-secondary" style="font-size: 0.75rem; padding: 6px 12px;">
+                                            Select (View Only)
+                                        </button>
+                                    </form>
+                                @endif
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 14px; margin-top: 14px;">
+            @if($actingEngineer)
+                <a href="{{ route('actingEngineer.clear') }}" class="btn-secondary" style="font-size: 0.78rem; padding: 6px 12px; color: #ef4444;">
+                    Clear Acting Selection
+                </a>
+            @else
+                <span style="font-size: 0.75rem; color: var(--text-muted);">
+                    Select an engineer assigned to this site to unlock modifications.
+                </span>
+            @endif
+            <button type="button" class="btn-secondary" onclick="closeModal('selectActingEngineerModal')" style="font-size: 0.8rem; padding: 6px 16px;">
+                Close
+            </button>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('scripts')
 <script>
+    window.userCanEditProject = @json($userCanEditProject);
+    window.isActingEngineerAssigned = @json($isActingEngineerAssigned);
+    window.actingEngineerName = @json($actingEngineer ? $actingEngineer->name : null);
+    window.assignedEngineersList = @json($project->personnel->pluck('name')->implode(', '));
+
+    const PROJECT_EDIT_ACTION_MODALS = [
+        'uploadPhotoModal', 'editPhotoModal', 'updateScheduleModal', 'returnExcessModal',
+        'addProjectPaymentModal', 'updateManpowerModal', 'addTaskModal', 'editTaskModal',
+        'assignPersonnelModal', 'attachTaskPhotoModal', 'addProjectBomModal', 'updateUsageModal',
+        'addCostItemModal', 'editProjectModal', 'addScopeItemModal', 'addScopeLineModal',
+        'editScopeLineModal', 'logDailyUsageModal', 'transferMaterialModal', 'reconcileExcessModal'
+    ];
+
     function openModal(id) { 
+        if (PROJECT_EDIT_ACTION_MODALS.includes(id) && !window.userCanEditProject) {
+            promptEngineerAuthorizationModal(id);
+            return;
+        }
         const el = document.getElementById(id);
         if (el) el.classList.add('active'); 
+    }
+
+    function promptEngineerAuthorizationModal(intendedModalId) {
+        const modal = document.getElementById('selectActingEngineerModal');
+        if (modal) {
+            modal.classList.add('active');
+        }
+        if (typeof showChecklistToast === 'function') {
+            showChecklistToast('Editing Locked: Only an assigned engineer on this project can make changes.', true);
+        } else {
+            alert('Editing Locked: Only an assigned engineer on this project can make changes. Please choose an assigned engineer.');
+        }
+    }
+
+    function filterProjectEngineerList(query) {
+        const q = (query || '').toLowerCase().trim();
+        const cards = document.querySelectorAll('#projectEngineerModalList .project-engr-card');
+        cards.forEach(card => {
+            const name = card.getAttribute('data-name') || '';
+            const title = card.getAttribute('data-title') || '';
+            if (!q || name.includes(q) || title.includes(q)) {
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
+            }
+        });
     }
 
     function closeModal(id) { 
@@ -3653,7 +4065,10 @@
         if (titleInput) titleInput.value = title || '';
 
         const typeSelect = document.getElementById('editPhotoType');
-        if (typeSelect) typeSelect.value = photo_type || 'actual_site';
+        if (typeSelect) {
+            typeSelect.value = photo_type || 'actual_site';
+            handlePhotoTypeChange(typeSelect.value, 'editPhotoFile', 'editBlueprintNotice', 'editFileHelpText');
+        }
 
         const descInput = document.getElementById('editPhotoDescription');
         if (descInput) descInput.value = description || '';
@@ -3726,6 +4141,90 @@
         }
     }
 
+    function isBlueprintType(type) {
+        if (!type) return false;
+        return type.startsWith('blueprint') || ['civil', 'plumbing', 'electrical', 'architectural', 'other'].includes(type);
+    }
+
+    function handlePhotoTypeChange(photoType, fileInputId, noticeId, helpTextId) {
+        const noticeEl = document.getElementById(noticeId);
+        const fileInput = document.getElementById(fileInputId);
+        const helpText = document.getElementById(helpTextId);
+
+        const isBp = isBlueprintType(photoType);
+
+        if (isBp) {
+            if (noticeEl) noticeEl.style.display = 'flex';
+            if (fileInput) fileInput.setAttribute('accept', '.jpg,.jpeg,image/jpeg');
+            if (helpText) {
+                helpText.innerHTML = '<strong style="color: #1e40af;">🔒 Strict Blueprint Requirement:</strong> Blueprints must be uploaded in <strong>JPEG format (.jpg, .jpeg)</strong>. PNG files are strictly not accepted.';
+            }
+            // If file is already selected and is PNG, warn & reject
+            if (fileInput && fileInput.files && fileInput.files[0]) {
+                const f = fileInput.files[0];
+                const fname = f.name.toLowerCase();
+                if (fname.endsWith('.png') || f.type === 'image/png') {
+                    alert('Strict Format Rule: Technical CAD Blueprints must be uploaded in JPEG (.jpg, .jpeg) format. PNG files are strictly not accepted.');
+                    fileInput.value = '';
+                }
+            }
+        } else {
+            if (noticeEl) noticeEl.style.display = 'none';
+            if (fileInput) fileInput.setAttribute('accept', 'image/*');
+            if (helpText) {
+                helpText.innerHTML = 'Supported: JPG, PNG, WebP up to 10MB. (Note: Blueprints require JPEG format only; PNG is rejected).';
+            }
+        }
+    }
+
+    function handlePhotoFileSelected(input, typeSelectId, previewImgId, previewWrapId) {
+        if (!input.files || !input.files[0]) return;
+        const file = input.files[0];
+        const fname = file.name.toLowerCase();
+        const typeSelect = document.getElementById(typeSelectId);
+        const selectedType = typeSelect ? typeSelect.value : '';
+
+        if (isBlueprintType(selectedType)) {
+            if (fname.endsWith('.png') || file.type === 'image/png') {
+                alert('Strict Format Rule: Technical CAD Blueprints must be uploaded in JPEG (.jpg, .jpeg) format. PNG files are strictly not accepted.');
+                input.value = '';
+                if (previewWrapId) {
+                    const wrap = document.getElementById(previewWrapId);
+                    if (wrap) wrap.style.display = 'none';
+                }
+                return false;
+            }
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const previewImg = document.getElementById(previewImgId);
+            if (previewImg) previewImg.src = e.target.result;
+            if (previewWrapId) {
+                const wrap = document.getElementById(previewWrapId);
+                if (wrap) wrap.style.display = 'flex';
+            }
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function validatePhotoUploadForm(typeSelectId, fileInputId) {
+        const typeSelect = document.getElementById(typeSelectId);
+        const fileInput = document.getElementById(fileInputId);
+        const selectedType = typeSelect ? typeSelect.value : '';
+
+        if (isBlueprintType(selectedType) && fileInput && fileInput.files && fileInput.files[0]) {
+            const file = fileInput.files[0];
+            const fname = file.name.toLowerCase();
+            if (fname.endsWith('.png') || file.type === 'image/png') {
+                alert('Strict Format Rule: Technical CAD Blueprints must be uploaded in JPEG (.jpg, .jpeg) format. PNG files are strictly not accepted.');
+                fileInput.focus();
+                return false;
+            }
+        }
+        return true;
+    }
+
     function filterGalleryCategory(cat, btn) {
         // Toggle active button style
         document.querySelectorAll('.active-gallery-filter').forEach(b => {
@@ -3736,18 +4235,26 @@
         });
         if (btn) {
             btn.classList.add('active-gallery-filter');
-            btn.style.background = 'rgba(236, 72, 153, 0.2)';
-            btn.style.color = '#ec4899';
-            btn.style.borderColor = '#ec4899';
+            btn.style.background = 'var(--primary-red)';
+            btn.style.color = '#ffffff';
+            btn.style.borderColor = 'var(--primary-red)';
         }
 
         const cards = document.querySelectorAll('.gallery-photo-card');
         cards.forEach(card => {
-            const cardCat = card.getAttribute('data-category');
-            if (cat === 'all' || cardCat === cat) {
+            const cardCat = card.getAttribute('data-category') || '';
+            const isBlueprint = card.getAttribute('data-is-blueprint') === '1';
+            const discipline = card.getAttribute('data-discipline') || '';
+
+            if (cat === 'all') {
                 card.style.display = 'flex';
+            } else if (cat === 'blueprint') {
+                card.style.display = (isBlueprint || cardCat.startsWith('blueprint')) ? 'flex' : 'none';
+            } else if (['architectural', 'civil', 'electrical', 'plumbing', 'other'].includes(cat)) {
+                const match = discipline === cat || cardCat === ('blueprint_' + cat) || cardCat === cat;
+                card.style.display = match ? 'flex' : 'none';
             } else {
-                card.style.display = 'none';
+                card.style.display = (cardCat === cat) ? 'flex' : 'none';
             }
         });
     }
@@ -3906,9 +4413,9 @@
 
     // Auto-restore tab on load
     document.addEventListener('DOMContentLoaded', function() {
-        let targetTab = 'executive';
+        let targetTab = 'bom';
         const hash = window.location.hash ? window.location.hash.substring(1) : '';
-        const validTabs = ['executive', 'blueprints', 'scheduling', 'monitoring', 'workforce', 'bom', 'tasks', 'financials', 'audit'];
+        const validTabs = ['bom', 'scheduling', 'executive', 'blueprints', 'monitoring', 'tasks', 'workforce', 'financials', 'audit'];
 
         if (hash && validTabs.includes(hash)) {
             targetTab = hash;
@@ -4177,89 +4684,348 @@
         openModal('editTaskModal');
     }
 
-    // Task Proof Photo Modal Handlers
-    function openAttachTaskPhotoModal(taskId, taskName, category, existingPhotoUrl, caption, isCompleted) {
+    // Task Proof Photo Modal Handlers (Multi-Photo Support: 2 or more images)
+    function openAttachTaskPhotoModal(taskId, taskName, category, existingPhotosOrUrl, captionOrCompleted, isCompletedFallback) {
         const form = document.getElementById('attachTaskPhotoForm');
         form.action = '/projects/tasks/' + taskId + '/attach-photo';
         form.reset();
 
         document.getElementById('attachTaskNameDisplay').innerText = taskName;
         document.getElementById('attachTaskCategoryBadge').innerText = category || 'Trade Task';
-        document.getElementById('attachTaskCaptionInput').value = caption || '';
-        
-        // Hide new preview
-        document.getElementById('attachTaskNewPhotoPreviewBox').style.display = 'none';
-        document.getElementById('attachTaskNewPhotoImg').src = '';
 
-        // Handle existing photo
-        const existingBox = document.getElementById('attachTaskExistingPhotoBox');
-        const existingImg = document.getElementById('attachTaskExistingImg');
-        const removeBtn = document.getElementById('btnRemoveExistingTaskPhoto');
+        let existingPhotos = [];
+        let isCompleted = false;
 
-        if (existingPhotoUrl && existingPhotoUrl.trim() !== '') {
-            existingBox.style.display = 'block';
-            existingImg.src = existingPhotoUrl;
-            removeBtn.onclick = function() {
-                removeTaskPhotoAjax(taskId, taskName);
-                closeModal('attachTaskPhotoModal');
-            };
+        if (Array.isArray(existingPhotosOrUrl)) {
+            existingPhotos = existingPhotosOrUrl;
+            isCompleted = Boolean(captionOrCompleted);
+            const captionInput = document.getElementById('attachTaskCaptionInput');
+            if (captionInput) captionInput.value = '';
+        } else if (typeof existingPhotosOrUrl === 'string' && existingPhotosOrUrl.trim() !== '') {
+            existingPhotos = [{
+                id: null,
+                url: existingPhotosOrUrl,
+                caption: typeof captionOrCompleted === 'string' ? captionOrCompleted : ''
+            }];
+            isCompleted = Boolean(isCompletedFallback);
+            const captionInput = document.getElementById('attachTaskCaptionInput');
+            if (captionInput) captionInput.value = (typeof captionOrCompleted === 'string' ? captionOrCompleted : '');
         } else {
-            existingBox.style.display = 'none';
-            existingImg.src = '';
+            isCompleted = Boolean(captionOrCompleted || isCompletedFallback);
+            const captionInput = document.getElementById('attachTaskCaptionInput');
+            if (captionInput) captionInput.value = '';
+        }
+
+        // Hide new preview
+        const newPreviewBox = document.getElementById('attachTaskNewPhotoPreviewBox');
+        if (newPreviewBox) newPreviewBox.style.display = 'none';
+        const newPreviewsContainer = document.getElementById('attachTaskNewPreviewsContainer');
+        if (newPreviewsContainer) newPreviewsContainer.innerHTML = '';
+        const fileInput = document.getElementById('attachTaskFileInput');
+        if (fileInput) fileInput.value = '';
+
+        // Handle existing photos (supports 2 or more images)
+        const existingBox = document.getElementById('attachTaskExistingPhotoBox');
+        const existingCountEl = document.getElementById('attachTaskExistingCount');
+        const existingGrid = document.getElementById('attachTaskExistingPhotosGrid');
+        const removeAllBtn = document.getElementById('btnRemoveExistingTaskPhoto');
+
+        if (existingPhotos && existingPhotos.length > 0) {
+            if (existingBox) existingBox.style.display = 'block';
+            if (existingCountEl) existingCountEl.innerText = existingPhotos.length;
+
+            if (existingGrid) {
+                existingGrid.innerHTML = '';
+                existingPhotos.forEach((photo, idx) => {
+                    const card = document.createElement('div');
+                    card.style.cssText = 'position: relative; border-radius: 6px; overflow: hidden; border: 1px solid #bbf7d0; background: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.08); display: flex; flex-direction: column;';
+
+                    const imgWrap = document.createElement('div');
+                    imgWrap.style.cssText = 'position: relative; height: 75px; background: #0f172a; cursor: pointer;';
+                    imgWrap.onclick = function() {
+                        openTaskMultiPhotoPreviewModal(existingPhotos, taskName, category, '', idx);
+                    };
+
+                    const img = document.createElement('img');
+                    img.src = photo.url;
+                    img.alt = 'Proof ' + (idx + 1);
+                    img.style.cssText = 'width: 100%; height: 100%; object-fit: cover;';
+                    imgWrap.appendChild(img);
+
+                    const badge = document.createElement('span');
+                    badge.innerText = '#' + (idx + 1);
+                    badge.style.cssText = 'position: absolute; top: 4px; left: 4px; background: rgba(15,23,42,0.75); color: #fff; font-size: 0.65rem; font-weight: 800; padding: 1px 5px; border-radius: 3px;';
+                    imgWrap.appendChild(badge);
+
+                    card.appendChild(imgWrap);
+
+                    const actionRow = document.createElement('div');
+                    actionRow.style.cssText = 'padding: 4px 6px; display: flex; align-items: center; justify-content: space-between; background: #f8fafc; font-size: 0.7rem;';
+
+                    const viewSpan = document.createElement('span');
+                    viewSpan.innerText = 'Photo ' + (idx + 1);
+                    viewSpan.style.cssText = 'color: #64748b; font-weight: 600; font-size: 0.68rem;';
+                    actionRow.appendChild(viewSpan);
+
+                    if (photo.id) {
+                        const delBtn = document.createElement('button');
+                        delBtn.type = 'button';
+                        delBtn.innerHTML = '&times; Del';
+                        delBtn.style.cssText = 'background: #fee2e2; border: 1px solid #fca5a5; color: #dc2626; font-size: 0.65rem; font-weight: 700; border-radius: 3px; padding: 1px 5px; cursor: pointer;';
+                        delBtn.title = 'Delete this specific photo';
+                        delBtn.onclick = function(e) {
+                            e.stopPropagation();
+                            deleteTaskSinglePhotoAjax(taskId, photo.id, taskName);
+                        };
+                        actionRow.appendChild(delBtn);
+                    }
+                    card.appendChild(actionRow);
+                    existingGrid.appendChild(card);
+                });
+            }
+
+            if (removeAllBtn) {
+                removeAllBtn.onclick = function() {
+                    removeTaskPhotoAjax(taskId, taskName);
+                    closeModal('attachTaskPhotoModal');
+                };
+            }
+        } else {
+            if (existingBox) existingBox.style.display = 'none';
+            if (existingGrid) existingGrid.innerHTML = '';
         }
 
         // Checkbox for mark completed
         const markCompletedChk = document.getElementById('attachTaskMarkCompleted');
-        if (isCompleted) {
-            markCompletedChk.checked = true;
-            markCompletedChk.disabled = true;
-        } else {
-            markCompletedChk.checked = true;
-            markCompletedChk.disabled = false;
+        if (markCompletedChk) {
+            if (isCompleted) {
+                markCompletedChk.checked = true;
+                markCompletedChk.disabled = true;
+            } else {
+                markCompletedChk.checked = true;
+                markCompletedChk.disabled = false;
+            }
         }
 
         openModal('attachTaskPhotoModal');
     }
 
-    function previewAttachTaskPhotoFile(event) {
-        const file = event.target.files[0];
+    function previewAttachTaskPhotoFiles(event) {
+        const files = event.target.files;
         const previewBox = document.getElementById('attachTaskNewPhotoPreviewBox');
-        const previewImg = document.getElementById('attachTaskNewPhotoImg');
-        
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                previewImg.src = e.target.result;
-                previewBox.style.display = 'block';
-            };
-            reader.readAsDataURL(file);
-        } else {
-            previewBox.style.display = 'none';
-            previewImg.src = '';
+        const container = document.getElementById('attachTaskNewPreviewsContainer');
+        const countBadge = document.getElementById('attachTaskNewCountBadge');
+
+        if (!files || files.length === 0) {
+            if (previewBox) previewBox.style.display = 'none';
+            if (container) container.innerHTML = '';
+            return;
+        }
+
+        if (previewBox) previewBox.style.display = 'block';
+        if (countBadge) {
+            countBadge.innerHTML = files.length >= 2
+                ? '<strong>📸 ' + files.length + ' Photos Selected</strong> (Multi-photo upload ready):'
+                : 'Selected New Photo Preview (1 file):';
+        }
+        if (container) {
+            container.innerHTML = '';
+            Array.from(files).forEach((file, index) => {
+                const card = document.createElement('div');
+                card.style.cssText = 'position: relative; border-radius: 6px; overflow: hidden; border: 1px solid #bae6fd; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.06); display: flex; flex-direction: column;';
+
+                const imgWrap = document.createElement('div');
+                imgWrap.style.cssText = 'position: relative; height: 75px; background: #f1f5f9; overflow: hidden;';
+
+                const img = document.createElement('img');
+                img.style.cssText = 'width: 100%; height: 100%; object-fit: cover;';
+                img.alt = file.name;
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+
+                imgWrap.appendChild(img);
+
+                const badge = document.createElement('span');
+                badge.innerText = '#' + (index + 1);
+                badge.style.cssText = 'position: absolute; top: 3px; left: 3px; background: rgba(2,132,199,0.85); color: #fff; font-size: 0.65rem; font-weight: 800; padding: 1px 5px; border-radius: 3px;';
+                imgWrap.appendChild(badge);
+
+                card.appendChild(imgWrap);
+
+                const info = document.createElement('div');
+                info.style.cssText = 'padding: 3px 5px; font-size: 0.65rem; color: #475569; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; background: #f8fafc; border-top: 1px solid #e2e8f0;';
+                info.innerText = file.name;
+                info.title = file.name;
+                card.appendChild(info);
+
+                container.appendChild(card);
+            });
         }
     }
 
-    function openTaskPhotoPreviewModal(photoUrl, taskName, category, caption, date) {
-        document.getElementById('taskLightboxImg').src = photoUrl;
-        document.getElementById('taskLightboxTitle').innerText = taskName;
-        document.getElementById('taskLightboxCategory').innerText = category || 'Trade Task';
-        document.getElementById('taskLightboxDate').innerText = date ? 'Recorded: ' + date : '';
-        
-        const captionEl = document.getElementById('taskLightboxCaption');
-        if (caption && caption.trim() !== '') {
-            captionEl.innerText = caption;
-            captionEl.style.display = 'block';
-        } else {
-            captionEl.innerText = 'Proof of completion photo verified on site.';
-            captionEl.style.display = 'block';
+    function deleteTaskSinglePhotoAjax(taskId, photoId, taskName) {
+        if (!confirm('Are you sure you want to delete this specific proof photo from "' + taskName + '"?')) return;
+
+        fetch('/projects/tasks/' + taskId + '/photos/' + photoId + '/delete', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                showChecklistToast('Photo removed from task "' + taskName + '"', false);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 400);
+            } else {
+                alert(data.error || 'Failed to remove photo.');
+            }
+        })
+        .catch(err => {
+            console.error('Error removing photo:', err);
+            alert('Network error removing photo: ' + err.message);
+        });
+    }
+
+    let currentTaskLightboxPhotos = [];
+    let currentTaskLightboxIndex = 0;
+    let currentTaskLightboxTaskName = '';
+    let currentTaskLightboxCategory = '';
+    let currentTaskLightboxDate = '';
+
+    function openTaskMultiPhotoPreviewModal(photos, taskName, category, date, initialIndex = 0) {
+        if (typeof photos === 'string') {
+            try {
+                photos = JSON.parse(photos);
+            } catch (e) {
+                photos = [{ url: photos, caption: '' }];
+            }
+        }
+        if (!Array.isArray(photos)) {
+            photos = photos ? [photos] : [];
         }
 
-        document.getElementById('taskLightboxDownloadLink').href = photoUrl;
+        currentTaskLightboxPhotos = photos;
+        currentTaskLightboxIndex = Math.max(0, Math.min(initialIndex, photos.length - 1));
+        currentTaskLightboxTaskName = taskName || '';
+        currentTaskLightboxCategory = category || 'Trade Task';
+        currentTaskLightboxDate = date || '';
+
+        renderTaskLightboxCurrentPhoto();
         openModal('previewTaskPhotoModal');
     }
 
+    function openTaskPhotoPreviewModal(photoUrl, taskName, category, caption, date) {
+        const photos = [{ url: photoUrl, caption: caption || '' }];
+        openTaskMultiPhotoPreviewModal(photos, taskName, category, date, 0);
+    }
+
+    function renderTaskLightboxCurrentPhoto() {
+        if (!currentTaskLightboxPhotos || currentTaskLightboxPhotos.length === 0) return;
+
+        const photo = currentTaskLightboxPhotos[currentTaskLightboxIndex];
+        const photoUrl = photo.url || photo.photo_path || photo;
+        const caption = photo.caption || '';
+
+        const imgEl = document.getElementById('taskLightboxImg');
+        if (imgEl) imgEl.src = photoUrl;
+
+        const titleEl = document.getElementById('taskLightboxTitle');
+        if (titleEl) titleEl.innerText = currentTaskLightboxTaskName;
+
+        const catEl = document.getElementById('taskLightboxCategory');
+        if (catEl) catEl.innerText = currentTaskLightboxCategory;
+
+        const dateEl = document.getElementById('taskLightboxDate');
+        if (dateEl) dateEl.innerText = currentTaskLightboxDate ? 'Recorded: ' + currentTaskLightboxDate : '';
+
+        const captionEl = document.getElementById('taskLightboxCaption');
+        if (captionEl) {
+            captionEl.innerText = (caption && caption.trim() !== '') ? caption : 'Proof of completion photo verified on site.';
+            captionEl.style.display = 'block';
+        }
+
+        const dlLink = document.getElementById('taskLightboxDownloadLink');
+        if (dlLink) dlLink.href = photoUrl;
+
+        const prevBtn = document.getElementById('taskLightboxPrevBtn');
+        const nextBtn = document.getElementById('taskLightboxNextBtn');
+        const counterBadge = document.getElementById('taskLightboxCounterBadge');
+        const thumbsStrip = document.getElementById('taskLightboxThumbnailsStrip');
+
+        const total = currentTaskLightboxPhotos.length;
+        if (total >= 2) {
+            if (prevBtn) prevBtn.style.display = 'flex';
+            if (nextBtn) nextBtn.style.display = 'flex';
+            if (counterBadge) {
+                counterBadge.innerText = 'Photo ' + (currentTaskLightboxIndex + 1) + ' of ' + total;
+                counterBadge.style.display = 'block';
+            }
+            if (thumbsStrip) {
+                thumbsStrip.style.display = 'flex';
+                thumbsStrip.innerHTML = '';
+                currentTaskLightboxPhotos.forEach((p, idx) => {
+                    const thumb = document.createElement('div');
+                    const isActive = idx === currentTaskLightboxIndex;
+                    thumb.style.cssText = 'width: 48px; height: 48px; border-radius: 4px; overflow: hidden; cursor: pointer; flex-shrink: 0; border: 2px solid ' + (isActive ? '#38bdf8' : 'rgba(255,255,255,0.3)') + '; opacity: ' + (isActive ? '1' : '0.6') + '; transition: all 0.2s;';
+                    thumb.onclick = function() { goToTaskPhoto(idx); };
+
+                    const tImg = document.createElement('img');
+                    tImg.src = p.url || p.photo_path || p;
+                    tImg.style.cssText = 'width: 100%; height: 100%; object-fit: cover;';
+                    thumb.appendChild(tImg);
+                    thumbsStrip.appendChild(thumb);
+                });
+            }
+        } else {
+            if (prevBtn) prevBtn.style.display = 'none';
+            if (nextBtn) nextBtn.style.display = 'none';
+            if (counterBadge) counterBadge.style.display = 'none';
+            if (thumbsStrip) thumbsStrip.style.display = 'none';
+        }
+    }
+
+    function prevTaskPhoto() {
+        if (!currentTaskLightboxPhotos || currentTaskLightboxPhotos.length <= 1) return;
+        currentTaskLightboxIndex = (currentTaskLightboxIndex - 1 + currentTaskLightboxPhotos.length) % currentTaskLightboxPhotos.length;
+        renderTaskLightboxCurrentPhoto();
+    }
+
+    function nextTaskPhoto() {
+        if (!currentTaskLightboxPhotos || currentTaskLightboxPhotos.length <= 1) return;
+        currentTaskLightboxIndex = (currentTaskLightboxIndex + 1) % currentTaskLightboxPhotos.length;
+        renderTaskLightboxCurrentPhoto();
+    }
+
+    function goToTaskPhoto(idx) {
+        if (!currentTaskLightboxPhotos || idx < 0 || idx >= currentTaskLightboxPhotos.length) return;
+        currentTaskLightboxIndex = idx;
+        renderTaskLightboxCurrentPhoto();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        const modal = document.getElementById('previewTaskPhotoModal');
+        if (modal && modal.classList.contains('active')) {
+            if (e.key === 'ArrowLeft') {
+                prevTaskPhoto();
+            } else if (e.key === 'ArrowRight') {
+                nextTaskPhoto();
+            } else if (e.key === 'Escape') {
+                closeModal('previewTaskPhotoModal');
+            }
+        }
+    });
+
     function removeTaskPhotoAjax(taskId, taskName) {
-        if (!confirm('Remove the attached proof photo from "' + taskName + '"?')) return;
+        if (!confirm('Remove all attached proof photos from "' + taskName + '"?')) return;
 
         fetch('/projects/tasks/' + taskId + '/remove-photo', {
             method: 'POST',
@@ -4272,7 +5038,7 @@
         .then(res => res.json())
         .then(data => {
             if (data.success) {
-                showChecklistToast('Proof photo removed from task "' + taskName + '"', false);
+                showChecklistToast('All proof photos removed from task "' + taskName + '"', false);
                 setTimeout(() => {
                     window.location.reload();
                 }, 500);
@@ -4406,6 +5172,11 @@
 
     // Anti-Jump AJAX Checkbox Toggle
     function toggleChecklistAjax(taskId, inputEl) {
+        if (!window.userCanEditProject) {
+            inputEl.checked = !inputEl.checked;
+            promptEngineerAuthorizationModal('checklist');
+            return;
+        }
         inputEl.disabled = true;
         fetch('/projects/tasks/' + taskId + '/toggle', {
             method: 'POST',
@@ -4465,6 +5236,10 @@
 
     // Anti-Jump AJAX Task Status Selector (Forward-Only Monotonic)
     function updateTaskStatusAjax(taskId, newStatus, selectEl) {
+        if (!window.userCanEditProject) {
+            promptEngineerAuthorizationModal('taskStatus');
+            return;
+        }
         selectEl.disabled = true;
         fetch('/projects/tasks/' + taskId + '/status', {
             method: 'POST',

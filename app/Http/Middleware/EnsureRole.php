@@ -50,6 +50,11 @@ class EnsureRole
                 ->with('error', 'Notice: Your account is dedicated solely to Windows & Doors Materials Transfer operations.');
         }
 
+        if ($userRole === 'project_engineer') {
+            return redirect()->route('projects.index')
+                ->with('error', 'Notice: Your account is dedicated to the Active Project Tracker & Field Operations.');
+        }
+
         if ($userRole === 'supplier' || $user->isSupplier()) {
             return redirect()->route('supplier.dashboard')
                 ->with('error', 'Notice: Access restricted to your dedicated Supplier Operations Dashboard.');

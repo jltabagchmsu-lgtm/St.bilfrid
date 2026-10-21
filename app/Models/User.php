@@ -77,6 +77,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Check if user is Project Site Engineer.
+     */
+    public function isProjectEngineer(): bool
+    {
+        return $this->role === 'project_engineer';
+    }
+
+    /**
      * Check if user is a Supplier Account.
      */
     public function isSupplier(): bool
@@ -96,6 +104,7 @@ class User extends Authenticatable
         return match ($this->role) {
             'roofing_transfer' => 'Roofing Transfer Officer',
             'windows_doors_transfer' => 'Windows & Doors Transfer Officer',
+            'project_engineer' => 'Site Project Engineer',
             default => 'Master Administrator',
         };
     }
@@ -112,6 +121,7 @@ class User extends Authenticatable
         return match ($this->role) {
             'roofing_transfer' => route('roofing.index'),
             'windows_doors_transfer' => route('windowsDoors.index'),
+            'project_engineer' => route('projects.index'),
             default => route('dashboard'),
         };
     }

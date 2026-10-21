@@ -1,0 +1,283 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1380 960" width="100%" height="100%" style="background:#ffffff; font-family:'Segoe UI', -apple-system, Arial, sans-serif;">
+  <defs>
+    <!-- Arrowhead marker -->
+    <marker id="open-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 1 2 L 7 5 L 1 8" fill="none" stroke="#000000" stroke-width="1.5" stroke-linecap="round" />
+    </marker>
+  </defs>
+
+  <!-- Main Document Titles -->
+  <text x="690" y="36" text-anchor="middle" font-size="16" font-weight="bold" fill="#000000" letter-spacing="1">
+    INTEGRATED INVENTORY AND SALES MANAGEMENT SYSTEM
+  </text>
+  <text x="690" y="58" text-anchor="middle" font-size="13" font-weight="600" fill="#333333">
+    [ SYSTEM-WIDE MASTER UML USE CASE DIAGRAM ]
+  </text>
+
+  <!-- ================= SYSTEM BOUNDARY ================= -->
+  <rect x="250" y="80" width="860" height="850" rx="8" fill="#ffffff" stroke="#000000" stroke-width="2" />
+  <text x="275" y="108" font-size="13" font-weight="bold" fill="#000000">System Boundary: St. Bilfrid ERP Solution</text>
+
+  <!-- ================= ACTOR 1: OWNER (MASTER ADMIN) [LEFT] ================= -->
+  <g transform="translate(100, 430)">
+    <!-- Head -->
+    <circle cx="25" cy="0" r="17" fill="#ffffff" stroke="#000000" stroke-width="2.5"/>
+    <!-- Body -->
+    <line x1="25" y1="17" x2="25" y2="70" stroke="#000000" stroke-width="2.5"/>
+    <!-- Arms -->
+    <line x1="-8" y1="38" x2="58" y2="38" stroke="#000000" stroke-width="2.5"/>
+    <!-- Legs -->
+    <line x1="25" y1="70" x2="-2" y2="120" stroke="#000000" stroke-width="2.5"/>
+    <line x1="25" y1="70" x2="52" y2="120" stroke="#000000" stroke-width="2.5"/>
+    <!-- Label -->
+    <text x="25" y="144" text-anchor="middle" font-size="12" font-weight="bold" fill="#000000">OWNER</text>
+    <text x="25" y="160" text-anchor="middle" font-size="11" font-weight="bold" fill="#000000">(MASTER ADMIN)</text>
+  </g>
+
+  <!-- ================= ACTOR 2: SUPPLIER 1 [RIGHT] ================= -->
+  <g transform="translate(1220, 270)">
+    <circle cx="25" cy="0" r="17" fill="#ffffff" stroke="#000000" stroke-width="2.5"/>
+    <line x1="25" y1="17" x2="25" y2="70" stroke="#000000" stroke-width="2.5"/>
+    <line x1="-8" y1="38" x2="58" y2="38" stroke="#000000" stroke-width="2.5"/>
+    <line x1="25" y1="70" x2="-2" y2="120" stroke="#000000" stroke-width="2.5"/>
+    <line x1="25" y1="70" x2="52" y2="120" stroke="#000000" stroke-width="2.5"/>
+    <text x="25" y="144" text-anchor="middle" font-size="12" font-weight="bold" fill="#000000">SUPPLIER 1</text>
+    <text x="25" y="160" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#333333">(WINDOWS &amp; DOORS)</text>
+  </g>
+
+  <!-- ================= ACTOR 3: SUPPLIER 2 [RIGHT] ================= -->
+  <g transform="translate(1220, 620)">
+    <circle cx="25" cy="0" r="17" fill="#ffffff" stroke="#000000" stroke-width="2.5"/>
+    <line x1="25" y1="17" x2="25" y2="70" stroke="#000000" stroke-width="2.5"/>
+    <line x1="-8" y1="38" x2="58" y2="38" stroke="#000000" stroke-width="2.5"/>
+    <line x1="25" y1="70" x2="-2" y2="120" stroke="#000000" stroke-width="2.5"/>
+    <line x1="25" y1="70" x2="52" y2="120" stroke="#000000" stroke-width="2.5"/>
+    <text x="25" y="144" text-anchor="middle" font-size="12" font-weight="bold" fill="#000000">SUPPLIER 2</text>
+    <text x="25" y="160" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#333333">(ROOFING SUPPLIES)</text>
+  </g>
+
+  <!-- ================= COLUMN 1: PRIMARY HUBS (LEFT SIDE OF BOUNDARY) ================= -->
+
+  <!-- 1. Authentication -->
+  <g transform="translate(430, 140)">
+    <ellipse cx="0" cy="0" rx="110" ry="24" fill="#ffffff" stroke="#000000" stroke-width="1.8"/>
+    <text x="0" y="5" text-anchor="middle" font-size="11" font-weight="600" fill="#000000">Authentication</text>
+  </g>
+
+  <!-- 2. Executive KPI Dashboard -->
+  <g transform="translate(430, 240)">
+    <ellipse cx="0" cy="0" rx="120" ry="26" fill="#ffffff" stroke="#000000" stroke-width="1.8"/>
+    <text x="0" y="-3" text-anchor="middle" font-size="11" font-weight="600" fill="#000000">Executive KPI</text>
+    <text x="0" y="11" text-anchor="middle" font-size="11" font-weight="600" fill="#000000">Dashboard</text>
+  </g>
+
+  <!-- 3. Inventory Management -->
+  <g transform="translate(430, 345)">
+    <ellipse cx="0" cy="0" rx="120" ry="26" fill="#ffffff" stroke="#000000" stroke-width="1.8"/>
+    <text x="0" y="-3" text-anchor="middle" font-size="11" font-weight="600" fill="#000000">Inventory</text>
+    <text x="0" y="11" text-anchor="middle" font-size="11" font-weight="600" fill="#000000">Management</text>
+  </g>
+
+  <!-- 4. Supplier Procurement -->
+  <g transform="translate(430, 455)">
+    <ellipse cx="0" cy="0" rx="120" ry="26" fill="#ffffff" stroke="#000000" stroke-width="1.8"/>
+    <text x="0" y="-3" text-anchor="middle" font-size="11" font-weight="600" fill="#000000">Supplier</text>
+    <text x="0" y="11" text-anchor="middle" font-size="11" font-weight="600" fill="#000000">Procurement</text>
+  </g>
+
+  <!-- 5. Project Monitoring & Checklists -->
+  <g transform="translate(430, 565)">
+    <ellipse cx="0" cy="0" rx="120" ry="26" fill="#ffffff" stroke="#000000" stroke-width="1.8"/>
+    <text x="0" y="-3" text-anchor="middle" font-size="11" font-weight="600" fill="#000000">Project Monitoring</text>
+    <text x="0" y="11" text-anchor="middle" font-size="11" font-weight="600" fill="#000000">&amp; Checklists</text>
+  </g>
+
+  <!-- 6. Bill of Materials (BOM) -->
+  <g transform="translate(430, 675)">
+    <ellipse cx="0" cy="0" rx="120" ry="26" fill="#ffffff" stroke="#000000" stroke-width="1.8"/>
+    <text x="0" y="-3" text-anchor="middle" font-size="11" font-weight="600" fill="#000000">Bill of Materials</text>
+    <text x="0" y="11" text-anchor="middle" font-size="11" font-weight="600" fill="#000000">(BOM)</text>
+  </g>
+
+  <!-- 7. Billing & Payments -->
+  <g transform="translate(430, 785)">
+    <ellipse cx="0" cy="0" rx="120" ry="26" fill="#ffffff" stroke="#000000" stroke-width="1.8"/>
+    <text x="0" y="-3" text-anchor="middle" font-size="11" font-weight="600" fill="#000000">Billing &amp;</text>
+    <text x="0" y="11" text-anchor="middle" font-size="11" font-weight="600" fill="#000000">Payments</text>
+  </g>
+
+  <!-- 8. Product Catalog -->
+  <g transform="translate(430, 875)">
+    <ellipse cx="0" cy="0" rx="120" ry="23" fill="#ffffff" stroke="#000000" stroke-width="1.8"/>
+    <text x="0" y="4" text-anchor="middle" font-size="11" font-weight="600" fill="#000000">Product Catalog</text>
+  </g>
+
+  <!-- ================= COLUMN 2: SECONDARY & EXTENDED USE CASES (RIGHT SIDE) ================= -->
+
+  <!-- Extended 1: Login / Logout -->
+  <g transform="translate(740, 120)">
+    <ellipse cx="0" cy="0" rx="65" ry="17" fill="#ffffff" stroke="#000000" stroke-width="1.4"/>
+    <text x="0" y="4" text-anchor="middle" font-size="9.5" fill="#000000">Login</text>
+  </g>
+  <g transform="translate(740, 160)">
+    <ellipse cx="0" cy="0" rx="65" ry="17" fill="#ffffff" stroke="#000000" stroke-width="1.4"/>
+    <text x="0" y="4" text-anchor="middle" font-size="9.5" fill="#000000">Logout</text>
+  </g>
+
+  <!-- Extended 2: Sales Analytics & Manpower -->
+  <g transform="translate(780, 220)">
+    <ellipse cx="0" cy="0" rx="110" ry="20" fill="#ffffff" stroke="#000000" stroke-width="1.4"/>
+    <text x="0" y="4" text-anchor="middle" font-size="10" fill="#000000">Multi-Year Sales Analytics</text>
+  </g>
+  <g transform="translate(780, 265)">
+    <ellipse cx="0" cy="0" rx="115" ry="20" fill="#ffffff" stroke="#000000" stroke-width="1.4"/>
+    <text x="0" y="4" text-anchor="middle" font-size="10" fill="#000000">Manpower Deployment</text>
+  </g>
+
+  <!-- Extended 3: Stock Movement Logs & Reconcile Excess -->
+  <g transform="translate(780, 325)">
+    <ellipse cx="0" cy="0" rx="105" ry="20" fill="#ffffff" stroke="#000000" stroke-width="1.4"/>
+    <text x="0" y="4" text-anchor="middle" font-size="10" fill="#000000">Audit Stock Logs</text>
+  </g>
+  <g transform="translate(780, 370)">
+    <ellipse cx="0" cy="0" rx="115" ry="20" fill="#ffffff" stroke="#000000" stroke-width="1.4"/>
+    <text x="0" y="4" text-anchor="middle" font-size="10" fill="#000000">Reconcile Site Excess</text>
+  </g>
+
+  <!-- Extended 4: Track PO & 1-Click Receive Stock -->
+  <g transform="translate(780, 435)">
+    <ellipse cx="0" cy="0" rx="110" ry="22" fill="#ffffff" stroke="#000000" stroke-width="1.4"/>
+    <text x="0" y="4" text-anchor="middle" font-size="10" fill="#000000">Track PO Lifecycle</text>
+  </g>
+  <g transform="translate(990, 435)">
+    <ellipse cx="0" cy="0" rx="95" ry="22" fill="#ffffff" stroke="#000000" stroke-width="1.4"/>
+    <text x="0" y="4" text-anchor="middle" font-size="9.5" font-weight="600" fill="#000000">1-Click Receive Stock</text>
+  </g>
+  <g transform="translate(780, 480)">
+    <ellipse cx="0" cy="0" rx="110" ry="20" fill="#ffffff" stroke="#000000" stroke-width="1.4"/>
+    <text x="0" y="4" text-anchor="middle" font-size="10" fill="#000000">Create Purchase Order</text>
+  </g>
+
+  <!-- Extended 5: Site Task Checklists & Photo Proof -->
+  <g transform="translate(780, 545)">
+    <ellipse cx="0" cy="0" rx="110" ry="20" fill="#ffffff" stroke="#000000" stroke-width="1.4"/>
+    <text x="0" y="4" text-anchor="middle" font-size="10" fill="#000000">Site Task Checklists</text>
+  </g>
+  <g transform="translate(990, 545)">
+    <ellipse cx="0" cy="0" rx="90" ry="20" fill="#ffffff" stroke="#000000" stroke-width="1.4"/>
+    <text x="0" y="4" text-anchor="middle" font-size="9.5" fill="#000000">Attach Photo Proof</text>
+  </g>
+  <g transform="translate(780, 590)">
+    <ellipse cx="0" cy="0" rx="120" ry="20" fill="#ffffff" stroke="#000000" stroke-width="1.4"/>
+    <text x="0" y="4" text-anchor="middle" font-size="10" fill="#000000">Accomplishment Report</text>
+  </g>
+
+  <!-- Extended 6: Scope DUPA & Daily Usage -->
+  <g transform="translate(780, 655)">
+    <ellipse cx="0" cy="0" rx="110" ry="20" fill="#ffffff" stroke="#000000" stroke-width="1.4"/>
+    <text x="0" y="4" text-anchor="middle" font-size="10" fill="#000000">Scope DUPA Lines</text>
+  </g>
+  <g transform="translate(990, 655)">
+    <ellipse cx="0" cy="0" rx="90" ry="20" fill="#ffffff" stroke="#000000" stroke-width="1.4"/>
+    <text x="0" y="4" text-anchor="middle" font-size="9.5" fill="#000000">Load Templates</text>
+  </g>
+  <g transform="translate(780, 700)">
+    <ellipse cx="0" cy="0" rx="110" ry="20" fill="#ffffff" stroke="#000000" stroke-width="1.4"/>
+    <text x="0" y="4" text-anchor="middle" font-size="10" fill="#000000">Record Daily Usage</text>
+  </g>
+
+  <!-- Extended 7: Official Receipts & Cost Sync -->
+  <g transform="translate(780, 765)">
+    <ellipse cx="0" cy="0" rx="110" ry="20" fill="#ffffff" stroke="#000000" stroke-width="1.4"/>
+    <text x="0" y="4" text-anchor="middle" font-size="10" fill="#000000">Official Receipts</text>
+  </g>
+  <g transform="translate(780, 810)">
+    <ellipse cx="0" cy="0" rx="110" ry="20" fill="#ffffff" stroke="#000000" stroke-width="1.4"/>
+    <text x="0" y="4" text-anchor="middle" font-size="10" fill="#000000">Cost Auto-Sync</text>
+  </g>
+
+  <!-- Extended 8: Order Fulfillment (Shared with Suppliers) -->
+  <g transform="translate(780, 875)">
+    <ellipse cx="0" cy="0" rx="120" ry="24" fill="#ffffff" stroke="#000000" stroke-width="1.8"/>
+    <text x="0" y="-3" text-anchor="middle" font-size="11" font-weight="600" fill="#000000">Order Fulfillment</text>
+    <text x="0" y="11" text-anchor="middle" font-size="11" font-weight="600" fill="#000000">&amp; Delivery</text>
+  </g>
+
+  <!-- ================= ZERO-OVERLAP ASSOCIATION LINES: OWNER -> COLUMN 1 ================= -->
+  <!-- Every line connects cleanly to the left apex of each Column 1 bubble -->
+  <line x1="160" y1="450" x2="320" y2="140" stroke="#000000" stroke-width="1.8"/>
+  <line x1="160" y1="460" x2="310" y2="240" stroke="#000000" stroke-width="1.8"/>
+  <line x1="160" y1="470" x2="310" y2="345" stroke="#000000" stroke-width="1.8"/>
+  <line x1="160" y1="480" x2="310" y2="455" stroke="#000000" stroke-width="1.8"/>
+  <line x1="160" y1="490" x2="310" y2="565" stroke="#000000" stroke-width="1.8"/>
+  <line x1="160" y1="500" x2="310" y2="675" stroke="#000000" stroke-width="1.8"/>
+  <line x1="160" y1="510" x2="310" y2="785" stroke="#000000" stroke-width="1.8"/>
+  <line x1="160" y1="520" x2="310" y2="875" stroke="#000000" stroke-width="1.8"/>
+
+  <!-- ================= ZERO-OVERLAP ASSOCIATION LINES: SUPPLIERS -> RIGHT NODES ================= -->
+  <!-- Supplier 1 (Windows & Doors) -->
+  <line x1="1215" y1="300" x2="900" y2="435" stroke="#000000" stroke-width="1.8"/>
+  <line x1="1215" y1="320" x2="905" y2="875" stroke="#000000" stroke-width="1.8"/>
+
+  <!-- Supplier 2 (Roofing Supplies) -->
+  <line x1="1215" y1="650" x2="900" y2="445" stroke="#000000" stroke-width="1.8"/>
+  <line x1="1215" y1="670" x2="905" y2="880" stroke="#000000" stroke-width="1.8"/>
+
+  <!-- ================= HORIZONTAL & CLEAN DASHED RELATIONSHIPS (<<include>> / <<extend>>) ================= -->
+  <!-- Auth -> Login / Logout -->
+  <line x1="540" y1="135" x2="672" y2="122" stroke="#000000" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#open-arrow)"/>
+  <text x="590" y="122" font-size="8.5" fill="#333333">&lt;&lt;include&gt;&gt;</text>
+  <line x1="540" y1="145" x2="672" y2="158" stroke="#000000" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#open-arrow)"/>
+  <text x="590" y="160" font-size="8.5" fill="#333333">&lt;&lt;include&gt;&gt;</text>
+
+  <!-- Dash -> Sales Analytics / Manpower -->
+  <line x1="550" y1="235" x2="668" y2="225" stroke="#000000" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#open-arrow)"/>
+  <text x="595" y="222" font-size="8.5" fill="#333333">&lt;&lt;include&gt;&gt;</text>
+  <line x1="550" y1="245" x2="663" y2="260" stroke="#000000" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#open-arrow)"/>
+  <text x="595" y="262" font-size="8.5" fill="#333333">&lt;&lt;include&gt;&gt;</text>
+
+  <!-- Inventory -> Stock Logs / Reconcile Excess -->
+  <line x1="550" y1="340" x2="673" y2="330" stroke="#000000" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#open-arrow)"/>
+  <text x="595" y="328" font-size="8.5" fill="#333333">&lt;&lt;include&gt;&gt;</text>
+  <line x1="550" y1="350" x2="663" y2="365" stroke="#000000" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#open-arrow)"/>
+  <text x="595" y="367" font-size="8.5" fill="#333333">&lt;&lt;include&gt;&gt;</text>
+
+  <!-- Procurement -> Track PO / Create PO / 1-Click Receive Stock -->
+  <line x1="550" y1="450" x2="668" y2="440" stroke="#000000" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#open-arrow)"/>
+  <text x="595" y="438" font-size="8.5" fill="#333333">&lt;&lt;include&gt;&gt;</text>
+  <line x1="550" y1="460" x2="668" y2="475" stroke="#000000" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#open-arrow)"/>
+  <text x="595" y="477" font-size="8.5" fill="#333333">&lt;&lt;include&gt;&gt;</text>
+  <line x1="892" y1="435" x2="893" y2="435" stroke="#000000" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#open-arrow)"/>
+  <line x1="892" y1="435" x2="893" y2="435"/>
+  <line x1="892" y1="435" x2="893" y2="435"/>
+  <line x1="892" y1="435" x2="893" y2="435"/>
+  <line x1="892" y1="435" x2="894" y2="435" stroke="#000000" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#open-arrow)"/>
+  <text x="918" y="428" font-size="8.5" fill="#333333">&lt;&lt;extend&gt;&gt;</text>
+
+  <!-- Project Monitoring -> Tasks -> Photos / Report -->
+  <line x1="550" y1="560" x2="668" y2="550" stroke="#000000" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#open-arrow)"/>
+  <text x="595" y="548" font-size="8.5" fill="#333333">&lt;&lt;include&gt;&gt;</text>
+  <line x1="892" y1="545" x2="898" y2="545" stroke="#000000" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#open-arrow)"/>
+  <text x="922" y="538" font-size="8.5" fill="#333333">&lt;&lt;include&gt;&gt;</text>
+  <line x1="550" y1="570" x2="658" y2="585" stroke="#000000" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#open-arrow)"/>
+  <text x="592" y="587" font-size="8.5" fill="#333333">&lt;&lt;extend&gt;&gt;</text>
+
+  <!-- BOM -> Scope DUPA -> Templates / Daily Usage -->
+  <line x1="550" y1="670" x2="668" y2="660" stroke="#000000" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#open-arrow)"/>
+  <text x="595" y="658" font-size="8.5" fill="#333333">&lt;&lt;include&gt;&gt;</text>
+  <line x1="892" y1="655" x2="898" y2="655" stroke="#000000" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#open-arrow)"/>
+  <text x="922" y="648" font-size="8.5" fill="#333333">&lt;&lt;include&gt;&gt;</text>
+  <line x1="550" y1="680" x2="668" y2="695" stroke="#000000" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#open-arrow)"/>
+  <text x="595" y="697" font-size="8.5" fill="#333333">&lt;&lt;extend&gt;&gt;</text>
+
+  <!-- Billing -> Receipts / Cost Auto-Sync -->
+  <line x1="550" y1="780" x2="668" y2="770" stroke="#000000" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#open-arrow)"/>
+  <text x="595" y="768" font-size="8.5" fill="#333333">&lt;&lt;include&gt;&gt;</text>
+  <line x1="550" y1="790" x2="668" y2="805" stroke="#000000" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#open-arrow)"/>
+  <text x="595" y="807" font-size="8.5" fill="#333333">&lt;&lt;extend&gt;&gt;</text>
+
+  <!-- Product Catalog -> Order Fulfillment -->
+  <line x1="550" y1="875" x2="658" y2="875" stroke="#000000" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#open-arrow)"/>
+  <text x="595" y="868" font-size="8.5" fill="#333333">&lt;&lt;include&gt;&gt;</text>
+
+</svg>

@@ -11,6 +11,57 @@
 
 @section('content')
 
+<!-- Acting Site Engineer Operating Bar -->
+<div style="background: #ffffff; border: 1px solid {{ $actingEngineer ? '#10b981' : '#f59e0b' }}; border-left: 5px solid {{ $actingEngineer ? '#10b981' : '#f59e0b' }}; border-radius: 12px; padding: 16px 22px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; box-shadow: 0 4px 14px rgba(0,0,0,0.03);">
+    <div style="display: flex; align-items: center; gap: 16px;">
+        <div style="width: 46px; height: 46px; border-radius: 12px; background: {{ $actingEngineer ? 'rgba(16, 185, 129, 0.12)' : 'rgba(245, 158, 11, 0.12)' }}; color: {{ $actingEngineer ? '#10b981' : '#d97706' }}; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; border: 1px solid {{ $actingEngineer ? 'rgba(16, 185, 129, 0.25)' : 'rgba(245, 158, 11, 0.25)' }};">
+            👷
+        </div>
+        <div>
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <span style="font-weight: 800; font-size: 1rem; color: var(--text-primary);">
+                    Operating Site Engineer:
+                    @if($actingEngineer)
+                        <span style="color: #059669;">{{ $actingEngineer->name }}</span>
+                    @else
+                        <span style="color: #d97706;">No Engineer Selected</span>
+                    @endif
+                </span>
+                @if(auth()->user()->isAdmin())
+                    <span class="badge" style="background: rgba(239, 68, 68, 0.1); color: #dc2626; border: 1px solid rgba(239, 68, 68, 0.25); font-size: 0.72rem; font-weight: 700;">
+                        👑 Master Admin (Full Unrestricted Access)
+                    </span>
+                @elseif($actingEngineer)
+                    <span class="badge" style="background: rgba(16, 185, 129, 0.12); color: #059669; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 0.72rem; font-weight: 700;">
+                        Active Session
+                    </span>
+                @else
+                    <span class="badge" style="background: rgba(245, 158, 11, 0.12); color: #d97706; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 0.72rem; font-weight: 700;">
+                        ⚠️ Choose Engineer to Unlock Site Modifications
+                    </span>
+                @endif
+            </div>
+            <div style="font-size: 0.825rem; color: var(--text-muted); margin-top: 4px;">
+                @if($actingEngineer)
+                    Operating as <strong>{{ $actingEngineer->name }}</strong> ({{ $actingEngineer->title }}). You can modify tasks, progress, schedule, BOM, and materials on your <strong>assigned projects</strong>.
+                @else
+                    Before modifying project tasks, progress, schedule, BOM, or materials, select which company engineer is making the changes.
+                @endif
+            </div>
+        </div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <button type="button" class="btn-primary" style="font-size: 0.825rem; padding: 8px 16px; background: #0f172a; border-color: #0f172a; display: flex; align-items: center; gap: 6px;" onclick="openModal('selectActingEngineerModal')">
+            <span>{{ $actingEngineer ? '🔄 Switch Engineer' : '👷 Choose Engineer' }}</span>
+        </button>
+        @if($actingEngineer)
+            <a href="{{ route('actingEngineer.clear') }}" class="btn-secondary" style="font-size: 0.825rem; padding: 8px 14px; color: #64748b;" title="Clear acting engineer selection">
+                Clear
+            </a>
+        @endif
+    </div>
+</div>
+
 <div class="glass-panel">
     <div class="panel-header">
         <div>
@@ -40,6 +91,7 @@
                 $heroPhoto = $prj->primaryPhoto ?? $prj->photos->first();
                 $completedTasks = $prj->tasks()->where(function($q) { $q->where('progress', '>=', 100)->orWhere('status', 'completed'); })->count();
                 $totalTasks = $prj->tasks()->count();
+                $isUserAssigned = $actingEngineer ? $prj->personnel->contains('id', $actingEngineer->id) : false;
             @endphp
             <tr>
                 <td>
@@ -57,6 +109,31 @@
                             <strong style="font-size: 1rem; color: var(--text-primary);">{{ $prj->title }}</strong>
                             <div style="font-family: var(--font-mono); font-size: 0.775rem; color: #ef4444; margin-top: 2px;">{{ $prj->project_code }}</div>
                             <div style="font-size: 0.75rem; color: var(--text-muted);">{{ $prj->project_type }} &bull; {{ $prj->location }}</div>
+                            <div style="margin-top: 6px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                                @if(auth()->user()->isAdmin())
+                                    <span class="badge" style="background: rgba(239, 68, 68, 0.08); color: #dc2626; border: 1px solid rgba(239, 68, 68, 0.2); font-size: 0.68rem; font-weight: 700;">
+                                        👑 Admin Full Access
+                                    </span>
+                                @elseif($actingEngineer && $isUserAssigned)
+                                    <span class="badge" style="background: rgba(16, 185, 129, 0.12); color: #059669; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 0.68rem; font-weight: 700;" title="You are assigned to this project and authorized to update it">
+                                        ✓ Assigned (Can Edit)
+                                    </span>
+                                @elseif($actingEngineer)
+                                    <span class="badge" style="background: rgba(100, 116, 139, 0.1); color: #64748b; border: 1px solid rgba(100, 116, 139, 0.25); font-size: 0.68rem; font-weight: 600;" title="You are not assigned to this project (Read-Only Mode)">
+                                        🔒 Read-Only (Unassigned)
+                                    </span>
+                                @else
+                                    <span class="badge" style="background: rgba(245, 158, 11, 0.1); color: #d97706; border: 1px solid rgba(245, 158, 11, 0.25); font-size: 0.68rem; font-weight: 600;" title="Select an engineer above to unlock editing on assigned projects">
+                                        ⚠️ Select Engineer
+                                    </span>
+                                @endif
+                                
+                                @if($prj->personnel->isNotEmpty())
+                                    <span style="font-size: 0.7rem; color: #64748b; font-weight: 600;" title="Assigned Engineers: {{ $prj->personnel->pluck('name')->implode(', ') }}">
+                                        👥 {{ $prj->personnel->count() }} Assigned
+                                    </span>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </td>
@@ -145,9 +222,11 @@
                         <a href="{{ route('projects.printReport', $prj->id) }}" target="_blank" class="btn-secondary" style="font-size: 0.725rem; padding: 3px 6px; text-align: center; color: #ef4444;">
                             Report
                         </a>
+                        @if(auth()->user()->isAdmin())
                         <button type="button" class="btn-secondary" style="font-size: 0.725rem; padding: 3px 6px; text-align: center; color: #f87171; width: 100%; border-color: rgba(239,68,68,0.35); cursor: pointer;" onclick="openDeleteProjectModal({{ $prj->id }}, '{{ addslashes($prj->project_code) }}', '{{ addslashes($prj->title) }}')">
                             Delete
                         </button>
+                        @endif
                     </div>
                 </td>
             </tr>
@@ -878,6 +957,108 @@
     </div>
 </div>
 
+<!-- Modal: Select Acting Site Engineer -->
+<div class="modal-overlay" id="selectActingEngineerModal">
+    <div class="modal-box" style="max-width: 680px; width: 95vw; max-height: 90vh; display: flex; flex-direction: column; padding: 24px 28px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 14px; border-bottom: 1px solid var(--border-color); margin-bottom: 16px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(16, 185, 129, 0.15); color: #10b981; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
+                    👷
+                </div>
+                <div>
+                    <h3 style="font-weight: 800; font-size: 1.2rem; color: var(--text-primary); margin: 0;">
+                        Choose Operating Site Engineer
+                    </h3>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin: 2px 0 0 0;">
+                        Select which registered company engineer is about to make updates to the active project tracker.
+                    </p>
+                </div>
+            </div>
+            <button type="button" onclick="closeModal('selectActingEngineerModal')" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer; line-height: 1;">&times;</button>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+            <input type="text" id="engineerSearchFilter" placeholder="Search engineer by name or specialization..." onkeyup="filterEngineerList(this.value)" style="width: 100%; padding: 9px 14px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.85rem; outline: none; box-sizing: border-box;">
+        </div>
+
+        <div style="flex: 1; overflow-y: auto; max-height: 55vh; padding-right: 4px; display: flex; flex-direction: column; gap: 10px;" id="engineerModalList">
+            @forelse($personnelList as $engr)
+                @php
+                    $isCurrentActive = $actingEngineer && $actingEngineer->id === $engr->id;
+                    $assignedCount = $engr->projects->count();
+                @endphp
+                <div class="engineer-select-card" data-name="{{ strtolower($engr->name) }}" data-title="{{ strtolower($engr->title ?? '') }}" style="border: 1.5px solid {{ $isCurrentActive ? '#10b981' : 'var(--border-color)' }}; border-radius: 10px; padding: 14px 16px; background: {{ $isCurrentActive ? 'rgba(16, 185, 129, 0.04)' : '#ffffff' }}; display: flex; align-items: center; justify-content: space-between; gap: 14px; transition: all 0.15s ease;">
+                    <div style="display: flex; align-items: center; gap: 14px; flex: 1;">
+                        <div style="width: 42px; height: 42px; border-radius: 50%; background: {{ $isCurrentActive ? '#10b981' : '#f1f5f9' }}; color: {{ $isCurrentActive ? '#ffffff' : '#334155' }}; font-weight: 800; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            {{ strtoupper(substr($engr->name, 0, 2)) }}
+                        </div>
+                        <div style="flex: 1;">
+                            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                <strong style="font-size: 0.95rem; color: var(--text-primary);">{{ $engr->name }}</strong>
+                                @if($isCurrentActive)
+                                    <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #059669; border: 1px solid rgba(16, 185, 129, 0.4); font-size: 0.68rem; font-weight: 800;">
+                                        ● CURRENTLY ACTIVE
+                                    </span>
+                                @endif
+                            </div>
+                            <div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">
+                                {{ $engr->title ?? 'Site Engineer' }} &bull; {{ $engr->email ?? $engr->phone ?? 'Personnel ID #' . $engr->id }}
+                            </div>
+                            <div style="font-size: 0.72rem; color: #475569; margin-top: 4px; display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">
+                                <span style="font-weight: 700;">Assigned Sites ({{ $assignedCount }}):</span>
+                                @if($assignedCount > 0)
+                                    @foreach($engr->projects->take(3) as $pr)
+                                        <span class="spec-chip" style="font-size: 0.65rem; padding: 1px 6px;">{{ $pr->title }}</span>
+                                    @endforeach
+                                    @if($assignedCount > 3)
+                                        <span style="font-size: 0.68rem; color: var(--text-muted);">+{{ $assignedCount - 3 }} more</span>
+                                    @endif
+                                @else
+                                    <span style="color: #94a3b8; font-style: italic;">No active projects assigned yet</span>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    <div style="flex-shrink: 0;">
+                        @if($isCurrentActive)
+                            <a href="{{ route('actingEngineer.clear') }}" class="btn-secondary" style="font-size: 0.775rem; padding: 6px 12px; color: #ef4444; border-color: rgba(239, 68, 68, 0.3);">
+                                Deactivate
+                            </a>
+                        @else
+                            <form action="{{ route('actingEngineer.set') }}" method="POST" style="margin: 0;">
+                                @csrf
+                                <input type="hidden" name="personnel_id" value="{{ $engr->id }}">
+                                <button type="submit" class="btn-primary" style="font-size: 0.775rem; padding: 7px 14px; background: #059669; border-color: #059669;">
+                                    Select as Acting
+                                </button>
+                            </form>
+                        @endif
+                    </div>
+                </div>
+            @empty
+                <div style="text-align: center; padding: 30px; color: var(--text-muted);">
+                    No engineers found in the personnel roster.
+                </div>
+            @endforelse
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 14px; margin-top: 14px;">
+            @if($actingEngineer)
+                <a href="{{ route('actingEngineer.clear') }}" class="btn-secondary" style="font-size: 0.78rem; padding: 6px 12px; color: #ef4444;">
+                    Clear Acting Selection
+                </a>
+            @else
+                <span style="font-size: 0.75rem; color: var(--text-muted);">
+                    Only assigned engineers can make project modifications.
+                </span>
+            @endif
+            <button type="button" class="btn-secondary" onclick="closeModal('selectActingEngineerModal')" style="font-size: 0.8rem; padding: 6px 16px;">
+                Close
+            </button>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('scripts')
@@ -1522,6 +1703,20 @@
             contractBudgetInput.style.boxShadow = '0 0 12px rgba(56, 189, 248, 0.8)';
             setTimeout(() => contractBudgetInput.style.boxShadow = 'none', 1000);
         }
+    }
+
+    function filterEngineerList(query) {
+        const q = (query || '').toLowerCase().trim();
+        const cards = document.querySelectorAll('#engineerModalList .engineer-select-card');
+        cards.forEach(card => {
+            const name = card.getAttribute('data-name') || '';
+            const title = card.getAttribute('data-title') || '';
+            if (!q || name.includes(q) || title.includes(q)) {
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
+            }
+        });
     }
 
     document.addEventListener('DOMContentLoaded', function() {
