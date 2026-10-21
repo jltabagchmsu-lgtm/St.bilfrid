@@ -1,6 +1,6 @@
 -- ========================================================
 -- St. Bilfrid Development Corporation - Master Database Backup
--- Generated: 2026-10-21 09:22:18
+-- Generated: 2026-09-29 15:05:58
 -- ========================================================
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -115,7 +115,7 @@ CREATE TABLE `migrations` (
   `migration` varchar(255) NOT NULL,
   `batch` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (1, '2019_12_14_000001_create_personal_access_tokens_table', 1),
@@ -140,8 +140,7 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (20, '2026_09_12_000001_add_unique_index_to_payments_official_receipt_no', 1),
 (21, '2026_09_12_000002_add_license_expiry_fields_to_personnel_table', 1),
 (22, '2026_09_21_000001_add_photo_proof_to_project_tasks_table', 1),
-(23, '2026_09_23_000001_unify_material_category_names', 1),
-(24, '2026_10_21_000001_enhance_blueprints_and_task_multi_photos', 2);
+(23, '2026_09_23_000001_unify_material_category_names', 1);
 
 DROP TABLE IF EXISTS `password_reset_tokens`;
 CREATE TABLE `password_reset_tokens` (
@@ -227,7 +226,7 @@ CREATE TABLE `personnel` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `personnel_email_unique` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `personnel` (`id`, `name`, `title`, `email`, `phone`, `license_no`, `license_expiry_date`, `license_status`, `specialization`, `created_at`, `updated_at`) VALUES
 (1, 'Engr. Ignacio S. Lonzaga', 'Registered Civil Engineer', 'i.lonzaga@newconstuc.firm', '+63 (34) 495-2019', '0042019', NULL, 'active', 'Residential Build, Structural Design & Subdivision Development (PTR: 2901354, Silay City)', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
@@ -357,8 +356,7 @@ DROP TABLE IF EXISTS `project_photos`;
 CREATE TABLE `project_photos` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `project_id` bigint(20) unsigned NOT NULL,
-  `photo_type` varchar(50) NOT NULL DEFAULT 'actual_site',
-  `plan_discipline` varchar(50) DEFAULT NULL,
+  `photo_type` enum('blueprint','3d_render','actual_site','client_want','structural','finishing') NOT NULL DEFAULT 'actual_site',
   `title` varchar(255) NOT NULL,
   `description` text DEFAULT NULL,
   `file_path` varchar(255) NOT NULL,
@@ -371,19 +369,19 @@ CREATE TABLE `project_photos` (
   CONSTRAINT `project_photos_project_id_foreign` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `project_photos` (`id`, `project_id`, `photo_type`, `plan_discipline`, `title`, `description`, `file_path`, `is_primary`, `taken_at`, `created_at`, `updated_at`) VALUES
-(1, 1, 'blueprint', NULL, 'Structural Framing & Column Grid CAD Drawing', 'Approved Level 1-15 structural framing plan showing shear wall core and 56m grid layout.', '/uploads/projects/blueprint_tower_cad.svg', 0, '2026-01-10', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
-(2, 1, '3d_render', NULL, '3D Architectural Exterior Glass Facade Concept Render', 'Client target design with glassmorphic curtain wall, rooftop crown spire, and pedestrian entrance.', '/uploads/projects/render_tower_3d.svg', 1, '2026-01-12', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
-(3, 1, 'actual_site', NULL, 'Level 8 Concrete Slab Pouring & Tower Crane In-Progress', 'Active site photograph showing 55m jib tower crane, rebar formwork, and green safety netting.', '/uploads/projects/site_progress_concrete.svg', 0, '2026-05-18', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
-(4, 2, 'blueprint', NULL, 'Approved 3BR Bungalow Architectural & Structural Plan', 'Official structural layout, foundation footing plan, and 3-bedroom interior partitions blueprint.', '/uploads/projects/blueprint_villa_floorplan.svg', 0, '2024-05-25', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
-(5, 2, '3d_render', NULL, '3D Architectural Exterior Concept Render', '3D render of 3-bedroom single detached bungalow with perimeter fencing, porch, and long span roofing.', '/uploads/projects/render_villa_luxury.svg', 0, '2024-05-28', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
-(6, 2, 'actual_site', NULL, 'Turned Over 3BR Bungalow As-Built Residence', 'Completed and turned over single detached residential unit at Block 15 Lot 1, Villa Romeo Subd., Silay City.', '/uploads/projects/site_progress_concrete.svg', 1, '2025-01-07', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
-(7, 3, 'blueprint', NULL, 'Architectural Ground Floor Plan & Elevation Blueprint', 'Approved 2-bedroom floor plan showing master bedroom, bedroom 2, 2 CRs, kitchen counter, and porch.', '/uploads/projects/blueprint_villa_floorplan.svg', 0, '2024-06-25', '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
-(8, 3, '3d_render', NULL, '3D Architectural Exterior Concept Render', 'Photorealistic render showing travertine stone accent wall, front canopy molding, and sliding aluminum windows.', '/uploads/projects/render_villa_luxury.svg', 0, '2024-06-28', '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
-(9, 3, 'actual_site', NULL, 'Turned Over 2BR Bungalow As-Built Residence', 'Completed and turned over single-detached 2-bedroom residence at Block 16 Lot 8, Villa Romeo Subdivision.', '/uploads/projects/site_progress_concrete.svg', 1, '2025-01-07', '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
-(10, 4, 'blueprint', NULL, '31m² Residential Duplex Floor Plan & Elevation CAD Drawing', 'Approved 31 sq.m duplex blueprint showing living/dining area, bedroom, toilet & bath, kitchen counter and setback perimeter fencing.', '/uploads/projects/blueprint_villa_floorplan.svg', 0, '2023-07-20', '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
-(11, 4, '3d_render', NULL, '3D Architectural Duplex Housing Concept Render', '3D exterior perspective showing contemporary modern duplex housing with perimeter fence and entry gate.', '/uploads/projects/render_villa_luxury.svg', 0, '2023-07-25', '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
-(12, 4, 'actual_site', NULL, 'Turned Over 31m² Duplex Unit As-Built Residence', 'Completed and delivered duplex housing unit at Block 12 Lot 2, Villa Romeo Subdivision.', '/uploads/projects/site_progress_concrete.svg', 1, '2024-01-10', '2026-09-29 14:56:41', '2026-09-29 14:56:41');
+INSERT INTO `project_photos` (`id`, `project_id`, `photo_type`, `title`, `description`, `file_path`, `is_primary`, `taken_at`, `created_at`, `updated_at`) VALUES
+(1, 1, 'blueprint', 'Structural Framing & Column Grid CAD Drawing', 'Approved Level 1-15 structural framing plan showing shear wall core and 56m grid layout.', '/uploads/projects/blueprint_tower_cad.svg', 0, '2026-01-10', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(2, 1, '3d_render', '3D Architectural Exterior Glass Facade Concept Render', 'Client target design with glassmorphic curtain wall, rooftop crown spire, and pedestrian entrance.', '/uploads/projects/render_tower_3d.svg', 1, '2026-01-12', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(3, 1, 'actual_site', 'Level 8 Concrete Slab Pouring & Tower Crane In-Progress', 'Active site photograph showing 55m jib tower crane, rebar formwork, and green safety netting.', '/uploads/projects/site_progress_concrete.svg', 0, '2026-05-18', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(4, 2, 'blueprint', 'Approved 3BR Bungalow Architectural & Structural Plan', 'Official structural layout, foundation footing plan, and 3-bedroom interior partitions blueprint.', '/uploads/projects/blueprint_villa_floorplan.svg', 0, '2024-05-25', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(5, 2, '3d_render', '3D Architectural Exterior Concept Render', '3D render of 3-bedroom single detached bungalow with perimeter fencing, porch, and long span roofing.', '/uploads/projects/render_villa_luxury.svg', 0, '2024-05-28', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(6, 2, 'actual_site', 'Turned Over 3BR Bungalow As-Built Residence', 'Completed and turned over single detached residential unit at Block 15 Lot 1, Villa Romeo Subd., Silay City.', '/uploads/projects/site_progress_concrete.svg', 1, '2025-01-07', '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(7, 3, 'blueprint', 'Architectural Ground Floor Plan & Elevation Blueprint', 'Approved 2-bedroom floor plan showing master bedroom, bedroom 2, 2 CRs, kitchen counter, and porch.', '/uploads/projects/blueprint_villa_floorplan.svg', 0, '2024-06-25', '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(8, 3, '3d_render', '3D Architectural Exterior Concept Render', 'Photorealistic render showing travertine stone accent wall, front canopy molding, and sliding aluminum windows.', '/uploads/projects/render_villa_luxury.svg', 0, '2024-06-28', '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(9, 3, 'actual_site', 'Turned Over 2BR Bungalow As-Built Residence', 'Completed and turned over single-detached 2-bedroom residence at Block 16 Lot 8, Villa Romeo Subdivision.', '/uploads/projects/site_progress_concrete.svg', 1, '2025-01-07', '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(10, 4, 'blueprint', '31m² Residential Duplex Floor Plan & Elevation CAD Drawing', 'Approved 31 sq.m duplex blueprint showing living/dining area, bedroom, toilet & bath, kitchen counter and setback perimeter fencing.', '/uploads/projects/blueprint_villa_floorplan.svg', 0, '2023-07-20', '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(11, 4, '3d_render', '3D Architectural Duplex Housing Concept Render', '3D exterior perspective showing contemporary modern duplex housing with perimeter fence and entry gate.', '/uploads/projects/render_villa_luxury.svg', 0, '2023-07-25', '2026-09-29 14:56:41', '2026-09-29 14:56:41'),
+(12, 4, 'actual_site', 'Turned Over 31m² Duplex Unit As-Built Residence', 'Completed and delivered duplex housing unit at Block 12 Lot 2, Villa Romeo Subdivision.', '/uploads/projects/site_progress_concrete.svg', 1, '2024-01-10', '2026-09-29 14:56:41', '2026-09-29 14:56:41');
 
 DROP TABLE IF EXISTS `project_scope_items`;
 CREATE TABLE `project_scope_items` (
@@ -409,7 +407,7 @@ CREATE TABLE `project_scope_items` (
   PRIMARY KEY (`id`),
   KEY `project_scope_items_project_id_foreign` (`project_id`),
   CONSTRAINT `project_scope_items_project_id_foreign` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=77 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `project_scope_items` (`id`, `project_id`, `item_number`, `item_name`, `volume_or_area`, `notes`, `materials_subtotal`, `labor_subtotal`, `equipment_subtotal`, `direct_cost`, `contingency_percent`, `contingency_amount`, `taxes_percent`, `taxes_amount`, `profit_percent`, `profit_amount`, `total_item_cost`, `created_at`, `updated_at`) VALUES
 (1, 2, 1, 'Foundation and Footings', 'V=9.4m³', 'Layout, excavation, footings rebar, formwork and concrete pour', 56225.00, 25301.25, 8433.75, 89960.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 89960.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
@@ -470,25 +468,7 @@ INSERT INTO `project_scope_items` (`id`, `project_id`, `item_number`, `item_name
 (55, 4, 17, 'Painting', 'Duplex Painting Finishes', 'Flat white, concrete primer, brushes, rollers, skim coat, epoxy primer, thinner, Gibson compound, mortaflex & vulca seal', 16305.00, 7337.25, 2445.75, 26088.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 26088.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
 (56, 4, 18, 'Stairs', 'N/A (Single Storey Duplex)', 'Not applicable for single-storey unit', 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
 (57, 4, 19, 'Septic Tank', 'Precast Sanitary Septic Tank & Casing', 'Septic tank set, precast casing, rough plumbing installation to catch basin', 12600.00, 5670.00, 1890.00, 20160.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 20160.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
-(58, 4, 20, 'Others (Fencing & 5% Taxes)', 'Perimeter Fencing & Taxes', '20.1 Fencing (₱117,300.80) + 20.2 Taxes @ 5% (₱32,199.14)', 105512.14, 32990.85, 10996.95, 149499.94, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 149499.94, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
-(59, 1, 1, 'FOUNDATION AND FOOTING', 'Concrete: 64.12 cu.m', 'Apex Horizon Commercial Tower - Structural excavation, footing rebar, formwork, and concrete pour.', 842168.75, 489792.00, 85989.74, 1417950.49, 15.00, 212693.00, 6.00, 85077.00, 10.00, 141795.00, 1857515.49, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(60, 1, 2, 'COLUMNS', 'Volume: 85.01 cu.m', 'Apex Horizon Commercial Tower - Reinforced concrete columns, ties, formworks and pouring.', 1509697.00, 683081.80, 151047.13, 2343825.93, 15.00, 351574.00, 6.00, 140630.00, 10.00, 234383.00, 3070412.93, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(61, 1, 3, 'BEAMS', 'Volume: 50.86 cu.m', 'Apex Horizon Commercial Tower - Roof beams, tie beams framing, formworks and concrete.', 927050.75, 446494.90, 92696.94, 1466242.59, 15.00, 219936.00, 6.00, 87975.00, 10.00, 146624.00, 1920777.59, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(62, 1, 4, 'SLAB ON FILL', 'Volume: 95.82 cu.m (8200 sq.m footprint)', 'Apex Horizon Commercial Tower - Earth fill, gravel bedding, rebar mesh, and slab topping.', 963920.00, 411526.60, 96406.79, 1471853.39, 15.00, 220778.00, 6.00, 88311.00, 10.00, 147185.00, 1928127.39, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(63, 1, 5, 'CHB WALLS', 'Total Area: 4825.3 sq.m', 'Apex Horizon Commercial Tower - 4" Concrete Hollow Blocks for exterior and interior masonry partitions.', 2687199.00, 1154129.10, 230624.49, 4071952.59, 15.00, 610793.00, 6.00, 244317.00, 10.00, 407195.00, 5334257.59, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(64, 1, 6, 'ROOF TRUSSES', 'Roof Span: 2702.5 sq.m coverage', 'Apex Horizon Commercial Tower - Structural steel roof framing, angle bars, and C-purlins.', 2824210.00, 1031876.92, 208832.23, 4064919.15, 15.00, 609738.00, 6.00, 243895.00, 10.00, 406492.00, 5325044.15, '2026-10-21 09:22:17', '2026-10-21 09:22:18'),
-(65, 1, 7, 'ROOFING & FLASHING', 'Area: 2948.2 sq.m', 'Apex Horizon Commercial Tower - 0.40mm Prepainted Longspan Rib-Type roofing, ridge rolls, and gutter.', 1715577.50, 530679.60, 103187.69, 2349444.79, 15.00, 352417.00, 6.00, 140967.00, 10.00, 234944.00, 3077772.79, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(66, 1, 8, 'CEILING SYSTEM', 'Area: 2088.3 sq.m', 'Apex Horizon Commercial Tower - 4.5mm Hardiflex fiber cement board on metal furring ceiling joists.', 985539.50, 501196.80, 117928.79, 1604665.09, 15.00, 240700.00, 6.00, 96280.00, 10.00, 160467.00, 2102112.09, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(67, 1, 9, 'FLOOR FINISHES', 'Area: 1842.6 sq.m', 'Apex Horizon Commercial Tower - 60x60cm Polished Granite Tiles and 30x30cm Non-Skid Bath Tiles.', 1379965.00, 515939.20, 93360.29, 1989264.49, 15.00, 298390.00, 6.00, 119356.00, 10.00, 198926.00, 2605936.49, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(68, 1, 10, 'WALL FINISHES & PLASTERING', 'Area: 4815.4 sq.m', 'Apex Horizon Commercial Tower - Two-coat cement plastering, grooving and accent stonework.', 1095630.00, 818623.10, 78619.19, 1992872.29, 15.00, 298931.00, 6.00, 119572.00, 10.00, 199287.00, 2610662.29, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(69, 1, 11, 'DOORS & HARDWARE', 'Doors: 147 Total Sets', 'Apex Horizon Commercial Tower - Main entrance panel door, flush interior doors, PVC toilet doors.', 597450.00, 176400.00, 61421.25, 835271.25, 15.00, 125291.00, 6.00, 50116.00, 10.00, 83527.00, 1094205.25, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(70, 1, 12, 'WINDOWS & GLAZING', 'Windows: 197 Units', 'Apex Horizon Commercial Tower - Powder-coated aluminum frame sliding and awning glass windows.', 980000.00, 187150.00, 49137.00, 1216287.00, 15.00, 182443.00, 6.00, 72977.00, 10.00, 121629.00, 1593336.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(71, 1, 13, 'KITCHEN COUNTER', 'Counter: 59 ln.m', 'Apex Horizon Commercial Tower - Reinforced concrete slab with polished granite counter, stainless sink and base cabinets.', 581159.71, 233400.73, 54050.70, 868611.14, 15.00, 130292.00, 6.00, 52117.00, 10.00, 86861.00, 1137881.14, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(72, 1, 14, 'PLUMBING & SANITARY SYSTEM', 'Complete Rough-in & Fixtures', 'Apex Horizon Commercial Tower - PVC sanitary/drain lines, PPR waterline distribution, water closet, and bathroom fixtures.', 848120.00, 589643.95, 93360.29, 1531124.24, 15.00, 229669.00, 6.00, 91867.00, 10.00, 153112.00, 2005772.24, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(73, 1, 15, 'ELECTRICAL SYSTEM', 'Complete Rough-in, Panel & Fixtures', 'Apex Horizon Commercial Tower - PVC conduits, THHN copper wires, 8-branch panelboard, LED fixtures, and convenience outlets.', 1027450.00, 687917.94, 85989.74, 1801357.68, 15.00, 270204.00, 6.00, 108081.00, 10.00, 180136.00, 2359778.68, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(74, 1, 16, 'PAINTING WORKS', 'Total Area: 7861.9 sq.m', 'Apex Horizon Commercial Tower - Concrete primer sealer, skimcoat putty, 2-coat acrylic latex topcoats.', 1175780.00, 864811.20, 78619.19, 2119210.39, 15.00, 317882.00, 6.00, 127153.00, 10.00, 211921.00, 2776166.39, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(75, 1, 17, 'SEPTIC TANK & DRAINAGE', '1 Complete Sanitary Vault Unit', 'Apex Horizon Commercial Tower - 3-Chamber reinforced septic vault with heavy-duty inspection manholes.', 490238.00, 405380.22, 68791.79, 964410.01, 15.00, 144662.00, 6.00, 57865.00, 10.00, 96441.00, 1263378.01, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(76, 1, 18, 'MISCELLANEOUS & ENGINEERING OVERHEAD', 'Project Duration Provision', 'Apex Horizon Commercial Tower - Temporary site facilities, water/power utilities, safety gear, and final turnover cleaning.', 454517.22, 343958.97, 110558.24, 909034.43, 15.00, 136355.00, 6.00, 54542.00, 10.00, 90903.00, 1190834.43, '2026-10-21 09:22:18', '2026-10-21 09:22:18');
+(58, 4, 20, 'Others (Fencing & 5% Taxes)', 'Perimeter Fencing & Taxes', '20.1 Fencing (₱117,300.80) + 20.2 Taxes @ 5% (₱32,199.14)', 105512.14, 32990.85, 10996.95, 149499.94, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 149499.94, '2026-09-29 14:56:42', '2026-09-29 14:56:42');
 
 DROP TABLE IF EXISTS `project_scope_lines`;
 CREATE TABLE `project_scope_lines` (
@@ -510,7 +490,7 @@ CREATE TABLE `project_scope_lines` (
   KEY `project_scope_lines_material_id_foreign` (`material_id`),
   CONSTRAINT `project_scope_lines_material_id_foreign` FOREIGN KEY (`material_id`) REFERENCES `materials` (`id`) ON DELETE SET NULL,
   CONSTRAINT `project_scope_lines_project_scope_item_id_foreign` FOREIGN KEY (`project_scope_item_id`) REFERENCES `project_scope_items` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=757 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=624 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `project_scope_lines` (`id`, `project_scope_item_id`, `category`, `description`, `quantity`, `unit`, `unit_price`, `total_cost`, `material_id`, `used_quantity`, `excess_returned_quantity`, `created_at`, `updated_at`) VALUES
 (1, 1, 'material', 'Layout & Excavation', 25.00, 'm³', 600.00, 15000.00, NULL, 0.00, 0.00, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
@@ -1147,143 +1127,7 @@ INSERT INTO `project_scope_lines` (`id`, `project_scope_item_id`, `category`, `d
 (620, 58, 'material', '20.1 Fencing - 1" GI Pipe', 7.00, 'pcs', 1300.00, 9100.00, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
 (621, 58, 'material', '20.2 Taxes @ 5%', 1.00, 'lot', 32199.14, 32199.14, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
 (622, 58, 'labor', '20.1 Fencing Labor', 1.00, 'Lump Sum', 32990.85, 32990.85, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
-(623, 58, 'equipment', '20.1 Fencing Contingencies and Price Escalation', 1.00, 'Lump Sum', 10996.95, 10996.95, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42'),
-(624, 59, 'material', 'Apex Horizon Commercial Tower - 16mmx6m Corr. Steel bar', 442.00, 'lghts', 430.00, 190060.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(625, 59, 'material', 'Apex Horizon Commercial Tower - 10mmx6m Corr. Steel Bars', 762.00, 'lghts', 168.00, 128016.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(626, 59, 'material', 'Apex Horizon Commercial Tower - 9mmx6m Corr. Steel Bars', 270.00, 'lghts', 120.00, 32400.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(627, 59, 'material', '#18 G.I Tie Wire', 147.00, 'kls', 70.00, 10290.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(628, 59, 'material', '2x2x10 Coco Lumber', 1474.00, 'pcs', 100.00, 147400.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(629, 59, 'material', 'Assorted sizes Nails', 123.00, 'kls', 70.00, 8610.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(630, 59, 'material', 'Premix Concrete (3/4in Aggregate 3000 psi)', 64.12, 'cu.m', 4500.00, 288540.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(631, 59, 'material', 'Apex Horizon Commercial Tower Consumables', 1.00, 'Lump Sum', 36852.75, 36852.75, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(632, 59, 'labor', 'Foundation Excavation & Earthworks', 587.19, 'cu.m', 420.00, 246619.80, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(633, 59, 'labor', 'Footing Rebar Installation & Bending', 7861.92, 'kgs', 10.00, 78619.20, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(634, 59, 'labor', 'Staking, Batterboards & Layout', 1.00, 'Lump Sum', 49137.00, 49137.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(635, 59, 'labor', 'Foundation Concrete Pouring & Tamping', 64.12, 'cu.m', 1800.00, 115416.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(636, 59, 'equipment', 'Concrete Vibrator & Compactor Rental', 1.00, 'Lump Sum', 85989.74, 85989.74, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(637, 60, 'material', 'Apex Horizon Commercial Tower - 16mmx6m Corr. Steel bar', 393.00, 'lghts', 430.00, 168990.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(638, 60, 'material', 'Apex Horizon Commercial Tower - 12mmx6m Corr. Steel bar', 491.00, 'lghts', 240.00, 117840.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(639, 60, 'material', 'Apex Horizon Commercial Tower - 10mmx6m Corr. Steel Bars', 344.00, 'lghts', 168.00, 57792.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(640, 60, 'material', 'Apex Horizon Commercial Tower - 9mmx6m Corr. Steel Bars', 2457.00, 'lghts', 120.00, 294840.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(641, 60, 'material', '#18 G.I Tie Wire', 369.00, 'kls', 70.00, 25830.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(642, 60, 'material', 'Premix Concrete (3000 psi)', 85.99, 'cu.m', 4500.00, 386955.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(643, 60, 'material', 'Phenolic board 3/8x4x8', 147.00, 'sheets', 1300.00, 191100.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(644, 60, 'material', '2x2x10 Coco Lumber', 2457.00, 'pcs', 100.00, 245700.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(645, 60, 'material', 'Assorted sizes Nails', 295.00, 'kls', 70.00, 20650.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(646, 60, 'labor', 'Column Formworks Fabrication & Stripping', 1088.38, 'sq.m', 350.00, 380933.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(647, 60, 'labor', 'Column Rebar Assembly & Ties', 14913.08, 'kgs', 10.00, 149130.80, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(648, 60, 'labor', 'Column Concrete Pouring & Scaffolding', 85.01, 'cu.m', 1800.00, 153018.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(649, 60, 'equipment', 'Column Scaffoldings & Support Equipment', 1.00, 'Lump Sum', 151047.13, 151047.13, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(650, 61, 'material', 'Apex Horizon Commercial Tower - 10mmx6m Corr. Steel Bars', 1056.00, 'lghts', 168.00, 177408.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17');
-INSERT INTO `project_scope_lines` (`id`, `project_scope_item_id`, `category`, `description`, `quantity`, `unit`, `unit_price`, `total_cost`, `material_id`, `used_quantity`, `excess_returned_quantity`, `created_at`, `updated_at`) VALUES
-(651, 61, 'material', 'Apex Horizon Commercial Tower - 9mmx6m Corr. Steel Bars', 1228.00, 'lghts', 120.00, 147360.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(652, 61, 'material', '#18 G.I Tie Wire', 221.00, 'kls', 70.00, 15470.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(653, 61, 'material', 'Premix Concrete (3000 psi)', 50.86, 'cu.m', 4500.00, 228870.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(654, 61, 'material', 'Phenolic board 3/8x4x8', 123.00, 'sheets', 1300.00, 159900.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(655, 61, 'material', '2x2x10 Coco Lumber', 1474.00, 'pcs', 100.00, 147400.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(656, 61, 'material', 'Assorted sizes Nails', 197.00, 'kls', 70.00, 13790.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(657, 61, 'material', 'Beam Shoring Consumables', 1.00, 'Lump Sum', 36852.75, 36852.75, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(658, 61, 'labor', 'Beam Formworks & Shoring', 778.08, 'sq.m', 350.00, 272328.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(659, 61, 'labor', 'Beam Rebar Assembly & Stirrups', 8261.89, 'kgs', 10.00, 82618.90, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(660, 61, 'labor', 'Beam Concrete Pouring', 50.86, 'cu.m', 1800.00, 91548.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(661, 61, 'equipment', 'Beam Equipment Expense', 1.00, 'Lump Sum', 92696.94, 92696.94, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(662, 62, 'material', 'Base Coarse / Backfill Bedding', 614.00, 'cu.m', 700.00, 429800.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(663, 62, 'material', 'Premix Concrete (3000 psi)', 95.82, 'cu.m', 4500.00, 431190.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(664, 62, 'material', 'Apex Horizon Commercial Tower - 9mmx6m Corr. Steel Bars', 786.00, 'lghts', 120.00, 94320.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(665, 62, 'material', '#18 G.I Tie Wire', 123.00, 'kls', 70.00, 8610.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(666, 62, 'labor', 'Backfilling, Leveling & Compaction', 614.21, 'cu.m', 350.00, 214973.50, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(667, 62, 'labor', 'Slab Rebar Mesh Laying', 2407.71, 'kgs', 10.00, 24077.10, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(668, 62, 'labor', 'Slab Pouring, Screeding & Trowel Finish', 95.82, 'cu.m', 1800.00, 172476.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(669, 62, 'equipment', 'Plate Compactor & Power Trowel Rental', 1.00, 'Lump Sum', 96406.79, 96406.79, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(670, 63, 'material', '4" Concrete Hollow Blocks (CHB)', 61421.00, 'pcs', 15.00, 921315.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(671, 63, 'material', '10mmx6m Corr. Steel Bars', 2948.00, 'lghts', 168.00, 495264.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(672, 63, 'material', '#18 G.I Tie Wire', 246.00, 'kls', 70.00, 17220.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(673, 63, 'material', 'Portland Cement (Type 1)', 3685.00, 'bags', 240.00, 884400.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(674, 63, 'material', 'Fine Washed Sand', 369.00, 'cu.m', 1000.00, 369000.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(675, 63, 'labor', 'CHB Laying, Mortar Filling & Jointing', 4825.25, 'sq.m', 220.00, 1061555.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(676, 63, 'labor', 'Wall Horizontal & Vertical Reinforcements', 9257.41, 'kgs', 10.00, 92574.10, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(677, 63, 'equipment', 'Masonry Scaffolding & Tools', 1.00, 'Lump Sum', 230624.49, 230624.49, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(678, 64, 'material', '2"x2"x1/4" Angle Bar', 1106.00, 'lghts', 950.00, 1050700.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(679, 64, 'material', '1 1/2"x1 1/2"x3/16" Angle Bar', 860.00, 'lghts', 680.00, 584800.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(680, 64, 'material', '2"x4"x1.5mm C-Purlins', 1597.00, 'lghts', 520.00, 830440.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(681, 64, 'material', 'Welding Rod E6013', 614.00, 'boxes', 380.00, 233320.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(682, 64, 'material', 'Red Oxide / Epoxy Primer', 147.00, 'gal', 850.00, 124950.00, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(683, 64, 'labor', 'Steel Truss Fabrication & Erection Labor', 1.00, 'Lump Sum', 1031876.92, 1031876.92, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(684, 64, 'equipment', 'Inverter Welding Machine & Cutting Rig', 1.00, 'Lump Sum', 208832.23, 208832.23, NULL, 0.00, 0.00, '2026-10-21 09:22:17', '2026-10-21 09:22:17'),
-(685, 65, 'material', '0.40mm Longspan Rib-Type Roof Sheets', 2948.00, 'ln.m', 450.00, 1326600.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(686, 65, 'material', '0.40mm Prepainted Ridge Roll', 442.00, 'pcs', 380.00, 167960.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(687, 65, 'material', '0.40mm Prepainted Valley & End Flashing', 344.00, 'pcs', 380.00, 130720.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(688, 65, 'material', '2 1/2" Tekscrew for Metal', 19655.00, 'pcs', 2.50, 49137.50, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(689, 65, 'material', 'Elastomeric Sealant / Vulca Seal', 147.00, 'tubes', 280.00, 41160.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(690, 65, 'labor', 'Roofing Installation & Flashing Sealing Labor', 2948.22, 'sq.m', 180.00, 530679.60, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(691, 65, 'equipment', 'Fall Protection & Roofing Equipment', 1.00, 'Lump Sum', 103187.69, 103187.69, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(692, 66, 'material', '4.5mm x 4ft x 8ft Hardiflex Fiber Cement Board', 786.00, 'sheets', 480.00, 377280.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(693, 66, 'material', '0.50mm x 19mm x 50mm Metal Furring', 2703.00, 'pcs', 150.00, 405450.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(694, 66, 'material', '0.60mm x 12mm x 38mm Carrying Channel', 541.00, 'pcs', 180.00, 97380.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(695, 66, 'material', 'Wall Angle 25mm x 25mm', 590.00, 'pcs', 85.00, 50150.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(696, 66, 'material', 'Blind Rivets & Drywall Screws', 36853.00, 'pcs', 1.50, 55279.50, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(697, 66, 'labor', 'Ceiling Framing & Board Installation Labor', 2088.32, 'sq.m', 240.00, 501196.80, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(698, 66, 'equipment', 'Ceiling Scaffoldings & Power Tools', 1.00, 'Lump Sum', 117928.79, 117928.79, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(699, 67, 'material', '60cm x 60cm Polished Vitrified Floor Tiles', 4422.00, 'pcs', 240.00, 1061280.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(700, 67, 'material', '30cm x 30cm Non-Skid Bathroom Tiles', 2211.00, 'pcs', 45.00, 99495.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18');
-INSERT INTO `project_scope_lines` (`id`, `project_scope_item_id`, `category`, `description`, `quantity`, `unit`, `unit_price`, `total_cost`, `material_id`, `used_quantity`, `excess_returned_quantity`, `created_at`, `updated_at`) VALUES
-(701, 67, 'material', 'Heavy-Duty Tile Adhesive (25kg)', 688.00, 'bags', 280.00, 192640.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(702, 67, 'material', 'Tile Grout (2kg)', 295.00, 'bags', 90.00, 26550.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(703, 67, 'labor', 'Tile Setting, Cutting & Grouting Labor', 1842.64, 'sq.m', 280.00, 515939.20, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(704, 67, 'equipment', 'Tile Cutter & Leveling Spacers', 1.00, 'Lump Sum', 93360.29, 93360.29, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(705, 68, 'material', 'Portland Cement (Type 1P)', 2088.00, 'bags', 235.00, 490680.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(706, 68, 'material', 'Fine Sifted Plaster Sand', 295.00, 'cu.m', 1050.00, 309750.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(707, 68, 'material', 'Apex Horizon Commercial Tower Accent Wall Cladding / Grooving', 246.00, 'sq.m', 1200.00, 295200.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(708, 68, 'labor', 'Interior & Exterior Wall Plastering Labor', 4815.43, 'sq.m', 170.00, 818623.10, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(709, 68, 'equipment', 'Plastering Platform & Finishing Tools', 1.00, 'Lump Sum', 78619.19, 78619.19, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(710, 69, 'material', 'Apex Horizon Commercial Tower Main Entrance Solid Panel Door (0.90x2.10m) with Jamb', 1.00, 'set', 9500.00, 9500.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(711, 69, 'material', 'Bedroom Flush Wood Doors (0.80x2.10m) with Jamb', 74.00, 'sets', 4800.00, 355200.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(712, 69, 'material', 'PVC Bathroom Doors with Louvers (0.60x2.10m)', 49.00, 'sets', 2200.00, 107800.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(713, 69, 'material', 'Heavy-Duty Cylindrical Locksets & Hinges', 147.00, 'sets', 850.00, 124950.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(714, 69, 'labor', 'Door Jamb Alignment & Hanging Labor', 147.00, 'sets', 1200.00, 176400.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(715, 69, 'equipment', 'Carpentry Installation Tools', 1.00, 'Lump Sum', 61421.25, 61421.25, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(716, 70, 'material', '1.20m x 1.50m Sliding Glass Window (Aluminum Frame)', 49.00, 'sets', 6800.00, 333200.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(717, 70, 'material', '1.20m x 1.20m Sliding Glass Window (Aluminum Frame)', 98.00, 'sets', 5400.00, 529200.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(718, 70, 'material', '0.60m x 0.60m Awning Bath Window (Aluminum Frame)', 49.00, 'sets', 2400.00, 117600.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(719, 70, 'labor', 'Window Installation & Silicone Caulking Labor', 197.00, 'sets', 950.00, 187150.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(720, 70, 'equipment', 'Glazing Alignment Equipment', 1.00, 'Lump Sum', 49137.00, 49137.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(721, 71, 'material', 'Apex Horizon Commercial Tower Natural Granite Countertop Slab', 1.00, 'lot', 307106.23, 307106.23, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(722, 71, 'material', 'Single Bowl Stainless Steel Kitchen Sink with Gooseneck Faucet', 1.00, 'set', 3800.00, 3800.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(723, 71, 'material', 'Marine Plywood Under-Counter Cabinets with Concealed Hinges', 1.00, 'lot', 270253.48, 270253.48, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(724, 71, 'labor', 'Kitchen Counter Masonry & Cabinetry Labor', 1.00, 'Lump Sum', 233400.73, 233400.73, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(725, 71, 'equipment', 'Granite Cutting & Polishing Equipment', 1.00, 'Lump Sum', 54050.70, 54050.70, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(726, 72, 'material', '4" x 10ft PVC Sanitary Pipe (Series 1000)', 295.00, 'pcs', 450.00, 132750.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(727, 72, 'material', '2" x 10ft PVC Sanitary Pipe', 246.00, 'pcs', 240.00, 59040.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(728, 72, 'material', '1/2" PPR Hot/Cold Waterline Pipes', 344.00, 'pcs', 220.00, 75680.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(729, 72, 'material', 'Dual-Flush Water Closet with Tank & Fittings', 49.00, 'sets', 6800.00, 333200.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(730, 72, 'material', 'Wall-Hung Ceramic Lavatory with Chrome Faucet', 49.00, 'sets', 3200.00, 156800.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(731, 72, 'material', 'Stainless Shower Set with Valve', 49.00, 'sets', 1850.00, 90650.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(732, 72, 'labor', 'Plumbing Rough-in & Fixture Installation Labor', 1.00, 'Lump Sum', 589643.95, 589643.95, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(733, 72, 'equipment', 'PPR Fusion Machine & Hydrotesting Pump', 1.00, 'Lump Sum', 93360.29, 93360.29, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(734, 73, 'material', '1/2" x 10ft Electrical PVC Conduit Pipes', 983.00, 'pcs', 110.00, 108130.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(735, 73, 'material', '3.5mm² (AWG #12) THHN Stranded Copper Wire (150m)', 98.00, 'boxes', 4600.00, 450800.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(736, 73, 'material', '2.0mm² (AWG #14) THHN Stranded Copper Wire (150m)', 74.00, 'boxes', 3200.00, 236800.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(737, 73, 'material', 'Apex Horizon Commercial Tower 8-Branch Main Breaker Panelboard (Plug-in)', 1.00, 'set', 4500.00, 4500.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(738, 73, 'material', '9W LED Recessed Downlights & Switches/Outlets', 541.00, 'sets', 420.00, 227220.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(739, 73, 'labor', 'Electrical Roughing-in, Wiring & Testing Labor', 1.00, 'Lump Sum', 687917.94, 687917.94, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(740, 73, 'equipment', 'Multi-Tester, Insulation Megger & Pulling Gear', 1.00, 'Lump Sum', 85989.74, 85989.74, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(741, 74, 'material', 'Acrylic Concrete Primer Sealer (16L)', 147.00, 'pails', 2600.00, 382200.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(742, 74, 'material', 'Semi-Gloss Latex Topcoat Paint (16L)', 197.00, 'pails', 3100.00, 610700.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(743, 74, 'material', 'Skimcoat Masonry Finishing Powder (20kg)', 295.00, 'bags', 480.00, 141600.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(744, 74, 'material', 'Paint Rollers, Brushes & Sanding Paper', 344.00, 'pcs', 120.00, 41280.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(745, 74, 'labor', 'Surface Preparation, Sanding & 3-Coat Paint Application', 7861.92, 'sq.m', 110.00, 864811.20, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(746, 74, 'equipment', 'Painters Scaffolding & Drop Cloths', 1.00, 'Lump Sum', 78619.19, 78619.19, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(747, 75, 'material', '5" Heavy-Duty CHB for Septic Vault', 8599.00, 'pcs', 18.00, 154782.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(748, 75, 'material', 'Waterproofed Cement Mix', 590.00, 'bags', 260.00, 153400.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(749, 75, 'material', '10mm Deformed Steel Rebar', 442.00, 'lghts', 168.00, 74256.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(750, 75, 'material', 'Cast Iron / Concrete Manhole Covers', 49.00, 'sets', 2200.00, 107800.00, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18');
-INSERT INTO `project_scope_lines` (`id`, `project_scope_item_id`, `category`, `description`, `quantity`, `unit`, `unit_price`, `total_cost`, `material_id`, `used_quantity`, `excess_returned_quantity`, `created_at`, `updated_at`) VALUES
-(751, 75, 'labor', 'Septic Vault Excavation, Masonry & Waterproofing Labor', 1.00, 'Lump Sum', 405380.22, 405380.22, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(752, 75, 'equipment', 'Submersible De-watering Pump & Excavation Tools', 1.00, 'Lump Sum', 68791.79, 68791.79, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(753, 76, 'material', 'Apex Horizon Commercial Tower Personal Protective Equipment (PPE) & First Aid', 1.00, 'lot', 159695.24, 159695.24, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(754, 76, 'material', 'Temporary Site Bunkhouse, Storage Enclosure & Signage', 1.00, 'lot', 294821.98, 294821.98, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(755, 76, 'labor', 'Site Security, Waste Hauling & Final Turnover Deep Cleaning', 1.00, 'Lump Sum', 343958.97, 343958.97, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18'),
-(756, 76, 'equipment', 'Safety Harnesses, Barricades & Site Utilities Provision', 1.00, 'Lump Sum', 110558.24, 110558.24, NULL, 0.00, 0.00, '2026-10-21 09:22:18', '2026-10-21 09:22:18');
+(623, 58, 'equipment', '20.1 Fencing Contingencies and Price Escalation', 1.00, 'Lump Sum', 10996.95, 10996.95, NULL, 0.00, 0.00, '2026-09-29 14:56:42', '2026-09-29 14:56:42');
 
 DROP TABLE IF EXISTS `project_task_materials`;
 CREATE TABLE `project_task_materials` (
@@ -1304,20 +1148,6 @@ CREATE TABLE `project_task_materials` (
   KEY `project_task_materials_material_id_foreign` (`material_id`),
   CONSTRAINT `project_task_materials_material_id_foreign` FOREIGN KEY (`material_id`) REFERENCES `materials` (`id`) ON DELETE SET NULL,
   CONSTRAINT `project_task_materials_project_task_id_foreign` FOREIGN KEY (`project_task_id`) REFERENCES `project_tasks` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-DROP TABLE IF EXISTS `project_task_photos`;
-CREATE TABLE `project_task_photos` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `project_task_id` bigint(20) unsigned NOT NULL,
-  `photo_path` varchar(1000) NOT NULL,
-  `caption` varchar(500) DEFAULT NULL,
-  `sort_order` int(11) NOT NULL DEFAULT 0,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `project_task_photos_project_task_id_foreign` (`project_task_id`),
-  CONSTRAINT `project_task_photos_project_task_id_foreign` FOREIGN KEY (`project_task_id`) REFERENCES `project_tasks` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `project_tasks`;
@@ -1404,7 +1234,7 @@ CREATE TABLE `projects` (
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `projects` (`id`, `project_code`, `title`, `client_name`, `location`, `project_type`, `finish_tier`, `land_area_sqm`, `floor_area_sqm`, `status`, `contract_budget`, `client_budget`, `estimated_cost`, `financing_type`, `financing_institution`, `loan_account_no`, `approved_loan_amount`, `client_equity_amount`, `payment_first_policy`, `spent_budget`, `start_date`, `end_date`, `actual_completion_date`, `structural_progress`, `electrical_progress`, `piping_progress`, `finishing_progress`, `structural_weight`, `electrical_weight`, `piping_weight`, `finishing_weight`, `overall_progress`, `current_phase`, `description`, `schedule_notes`, `created_at`, `updated_at`, `deployed_workers`, `deployed_skilled_workers`, `deployed_engineers`, `deployed_architects`, `deployed_foremen`, `deployed_operators`, `deployed_safety_officers`) VALUES
-(1, 'PRJ-2026-001', 'Apex Horizon Commercial Tower', 'Apex Global Holdings', 'Financial District, Block 4', 'Commercial Construction', 'standard', 1450.00, 8200.00, 'in_progress', 43253970.94, NULL, NULL, 'bank_loan', 'BDO Unibank - Commercial Loan Division', 'BDO-LOG-2026-8812', 34603176.75, 8650794.19, 1, 20640000.00, '2026-01-15', '2026-11-30', NULL, 85, 60, 55, 30, 40, 25, 20, 15, 65, 'Phase 3: MEP Rough-in & Conduits', '15-story modern commercial tower with underground parking, HVAC chillers, and energy-efficient glass facade.', 'Financed via BDO Letter of Guaranty. Payment First policy active: Tranche 2 released. Tranche 3 pending bank inspection.', '2026-09-29 14:56:40', '2026-10-21 09:22:18', 45, 22, 6, 2, 3, 4, 2),
+(1, 'PRJ-2026-001', 'Apex Horizon Commercial Tower', 'Apex Global Holdings', 'Financial District, Block 4', 'Commercial Construction', 'standard', 1450.00, 8200.00, 'in_progress', 45000000.00, NULL, NULL, 'bank_loan', 'BDO Unibank - Commercial Loan Division', 'BDO-LOG-2026-8812', 36000000.00, 9000000.00, 1, 20640000.00, '2026-01-15', '2026-11-30', NULL, 85, 60, 55, 30, 40, 25, 20, 15, 65, 'Phase 3: MEP Rough-in & Conduits', '15-story modern commercial tower with underground parking, HVAC chillers, and energy-efficient glass facade.', 'Financed via BDO Letter of Guaranty. Payment First policy active: Tranche 2 released. Tranche 3 pending bank inspection.', '2026-09-29 14:56:40', '2026-09-29 14:56:40', 45, 22, 6, 2, 3, 4, 2),
 (2, 'PRJ-2025-VR15', '3 Bedroom Bungalow Single Detached Residential Unit', 'MC HIRO Realty Corp.', 'Block 15 Lot 1, Villa Romeo Subd., Brgy. 5, Silay City, Neg. Occ.', 'Residential Build', 'standard', 150.00, 75.00, 'completed', 1778062.08, NULL, NULL, 'bank_loan', 'BDO Unibank / Residential Financing Division', 'BDO-VR-2024-1501', 1422449.66, 355612.42, 1, 1546819.20, '2024-06-01', '2025-01-15', '2025-01-07', 100, 100, 100, 100, 40, 25, 20, 15, 100, 'Phase 5: Completed & Turned Over', '3-Bedroom single detached bungalow residential unit located at Block 15 Lot 1, Villa Romeo Subdivision, Brgy. 5, Silay City, Negros Occidental. Developer: MC HIRO Realty Corp., Certified by Engr. Esabyl B. Mitra (PRC License No. 0180490, PTR No. 4531999) and approved by Engr. Ignacio S. Lonzaga (Owner / MC HIRO Realty Corp.).', 'Construction successfully completed, inspected, and turned over to owner on January 7, 2025. All warranties, as-built plans, and certificates issued.', '2026-09-29 14:56:40', '2026-09-29 14:56:40', 10, 5, 2, 1, 1, 1, 1),
 (3, 'PRJ-2025-VR16', '2 Bedroom Bungalow, Single Detached Residential Building', 'Engr. Ignacio S. Lonzaga / Villa Romeo Subdivision', 'Block 16 Lot 8, Villa Romeo Subdivision, Brgy. V, Silay City, Negros Occidental', 'Residential Build', 'standard', 135.00, 50.00, 'completed', 1831613.80, NULL, NULL, 'pagibig_loan', 'Pag-IBIG Fund (HDMF) - Housing Loan Division', 'HDMF-VR-2024-1608', 1465291.04, 366322.76, 1, 1617478.80, '2024-07-01', '2025-01-20', '2025-01-07', 100, 100, 100, 100, 40, 25, 20, 15, 100, 'Phase 5: Completed & Turned Over', '2-Bedroom single-detached residential bungalow (50 sq.m floor area on 135 sq.m lot) at Block 16 Lot 8, Villa Romeo Subdivision, Brgy. V, Silay City, Negros Occidental. Certified by Engr. Esabyl B. Mitra (PRC No. 0180490, PTR No. 4531999) and approved by Engr. Ignacio S. Lonzaga (Owner / Developer).', 'All 18 scope milestones completed. HDMF loan take-out finalized. As-built plans and occupancy permit released January 7, 2025.', '2026-09-29 14:56:41', '2026-09-29 14:56:41', 8, 5, 2, 1, 1, 1, 1),
 (4, 'PRJ-2024-VR12', '31 m² Housing Unit (1 Side of Residential Duplex)', 'MC HIRO Realty Corp.', 'Block 12 Lot 2, Villa Romeo Subd., Brgy. 5, Silay City, Neg. Occ.', 'Residential Build', 'standard', 90.00, 31.00, 'completed', 742800.74, NULL, NULL, 'client_equity', 'MC HIRO Realty Corp. Developer Financing', 'MCH-VR-2023-1202', 594240.59, 148560.15, 1, 650000.00, '2023-08-01', '2024-01-20', '2024-01-10', 100, 100, 100, 100, 40, 25, 20, 15, 100, 'Phase 5: Completed & Turned Over', '31 sq.m 1-side residential duplex housing unit constructed at Block 12 Lot 2, Villa Romeo Subd., Brgy. 5, Silay City, Neg. Occ. Developer: MC HIRO Realty Corp., Certified and Approved by Engr. Ignacio S. Lonzaga (PRC License No. 0042019, PTR No. 2901354).', 'Duplex unit delivered 10 days ahead of schedule on January 10, 2024. Full settlement cleared and client accepted.', '2026-09-29 14:56:41', '2026-09-29 14:56:41', 7, 3, 1, 0, 1, 0, 0);
@@ -1690,16 +1520,15 @@ CREATE TABLE `users` (
   UNIQUE KEY `users_email_unique` (`email`),
   KEY `users_supplier_id_foreign` (`supplier_id`),
   CONSTRAINT `users_supplier_id_foreign` FOREIGN KEY (`supplier_id`) REFERENCES `suppliers` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `users` (`id`, `name`, `email`, `role`, `supplier_id`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Master Administrator', 'admin@newconstuc.firm', 'admin', NULL, '2026-10-21 09:17:10', '$2y$12$2R6CF4lfXCP1jPixvIHH6OFYlgOnXuMx6nrOmaOjrQVrhRVNlRqWe', NULL, '2026-09-29 14:56:39', '2026-10-21 09:17:10'),
-(2, 'Roofing Materials Transfer Officer', 'roofing@newconstuc.firm', 'roofing_transfer', NULL, '2026-10-21 09:17:10', '$2y$12$xruOTSwXH8ORIiq8zUaR1OwE0e0L.m8Glry090NhaP9VXM2XIb0Vq', NULL, '2026-09-29 14:56:40', '2026-10-21 09:17:10'),
-(3, 'Windows & Doors Materials Transfer Officer', 'windows.doors@newconstuc.firm', 'windows_doors_transfer', NULL, '2026-10-21 09:17:10', '$2y$12$p383/K1BLQvMDFxqiKvq2.Eti1powtqXO/eEQxYDkOCztW4wAmExO', NULL, '2026-09-29 14:56:40', '2026-10-21 09:17:10'),
+(1, 'Master Administrator', 'admin@newconstuc.firm', 'admin', NULL, '2026-09-29 14:56:39', '$2y$12$QpNZTFS0Y9zQG6nLxQA1F.IVgO4ocGj7COsFGzQ1LiK0W4hHGop6m', NULL, '2026-09-29 14:56:39', '2026-09-29 14:56:39'),
+(2, 'Roofing Materials Transfer Officer', 'roofing@newconstuc.firm', 'roofing_transfer', NULL, '2026-09-29 14:56:40', '$2y$12$M8m05BuRZ4aG6/oFYpXISe2tKif6GfKCtdM8iuteWgVVe9.9Dvi7K', NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
+(3, 'Windows & Doors Materials Transfer Officer', 'windows.doors@newconstuc.firm', 'windows_doors_transfer', NULL, '2026-09-29 14:56:40', '$2y$12$Jm37Vnj5FD2.LjPZrSk9aup1XKLy0lhcnUYPYr./qb1V7W/zQgMU6', NULL, '2026-09-29 14:56:40', '2026-09-29 14:56:40'),
 (4, 'Mils Glass and Aluminum Works Portal', 'windows.doors.supplier@stbilfrid.com', 'supplier', 1, '2026-09-29 14:56:43', '$2y$12$ws6J7uSBgOaJWI7fBdkfqudDBSJc0O66FhMJJ7qtU5dp9s.A.0tRC', NULL, '2026-09-29 14:56:42', '2026-09-29 14:56:43'),
 (5, 'Colorsteel Supplier Portal', 'roofing.supplier@stbilfrid.com', 'supplier', 2, '2026-09-29 14:56:43', '$2y$12$7tHA1qgVU08kVQeAvs77g..2Q5wHFvBGQwfytJZkUsljBswilQN5y', NULL, '2026-09-29 14:56:42', '2026-09-29 14:56:43'),
-(6, 'Titan Structural Portal', 'structural.supplier@stbilfrid.com', 'supplier', 3, '2026-09-29 14:56:43', '$2y$12$GVzbN4sUyEErUlbmPdV.0eV90ezoFt6qZoBIS969zzoDffVXPZ1Ou', NULL, '2026-09-29 14:56:42', '2026-09-29 14:56:43'),
-(7, 'Project Site Engineer', 'engineer@newconstuc.firm', 'project_engineer', NULL, '2026-10-21 09:17:11', '$2y$12$c5w/M/cmpomx3ulnH.ow7.E3lAM/TPYmpiPHI4iv0Kst4VVX1b1JC', 'SZr2uMjEl3r7jAyOzXxQezeytpkD9uGBUpgXA8AbSfYmRgEsDSDqeOQoqHjJ', '2026-10-21 09:17:11', '2026-10-21 09:17:11');
+(6, 'Titan Structural Portal', 'structural.supplier@stbilfrid.com', 'supplier', 3, '2026-09-29 14:56:43', '$2y$12$GVzbN4sUyEErUlbmPdV.0eV90ezoFt6qZoBIS969zzoDffVXPZ1Ou', NULL, '2026-09-29 14:56:42', '2026-09-29 14:56:43');
 
 SET FOREIGN_KEY_CHECKS=1;
 COMMIT;
