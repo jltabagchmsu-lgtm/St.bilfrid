@@ -73,69 +73,109 @@ class ConstructionSystemSeeder extends Seeder
             ]
         );
 
+        // Also seed engineer aliases
+        foreach (['engineer@stbilfrid.site', 'engineer@stbilfrid.com'] as $aliasEmail) {
+            User::updateOrCreate(
+                ['email' => $aliasEmail],
+                [
+                    'name' => 'Project Site Engineer',
+                    'role' => 'project_engineer',
+                    'password' => Hash::make('engineer123'),
+                    'email_verified_at' => now(),
+                ]
+            );
+        }
+
         // 1. Personnel (Licensed Engineers, Architects & Developers)
-        $pLonzaga = Personnel::create([
-            'name' => 'Engr. Ignacio S. Lonzaga',
-            'title' => 'Registered Civil Engineer',
-            'email' => 'i.lonzaga@newconstuc.firm',
-            'phone' => '+63 (34) 495-2019',
-            'license_no' => '0042019',
-            'specialization' => 'Residential Build, Structural Design & Subdivision Development (PTR: 2901354, Silay City)',
-        ]);
+        $pLonzaga = Personnel::updateOrCreate(
+            ['email' => 'i.lonzaga@newconstuc.firm'],
+            [
+                'name' => 'Engr. Ignacio S. Lonzaga',
+                'title' => 'Registered Civil Engineer',
+                'phone' => '+63 (34) 495-2019',
+                'license_no' => '0042019',
+                'specialization' => 'Residential Build, Structural Design & Subdivision Development (PTR: 2901354, Silay City)',
+            ]
+        );
 
-        $pMitra = Personnel::create([
-            'name' => 'Engr. Esabyl B. Mitra',
-            'title' => 'Registered Civil Engineer',
-            'email' => 'e.mitra@newconstuc.firm',
-            'phone' => '+63 (34) 495-3199',
-            'license_no' => '0180490',
-            'specialization' => 'Civil Engineering, Bill of Materials & Cost Estimation (PTR: 4531999, Silay City)',
-        ]);
+        $pMitra = Personnel::updateOrCreate(
+            ['email' => 'e.mitra@newconstuc.firm'],
+            [
+                'name' => 'Engr. Esabyl B. Mitra',
+                'title' => 'Registered Civil Engineer',
+                'phone' => '+63 (34) 495-3199',
+                'license_no' => '0180490',
+                'specialization' => 'Civil Engineering, Bill of Materials & Cost Estimation (PTR: 4531999, Silay City)',
+            ]
+        );
 
-        $p1 = Personnel::create([
-            'name' => 'Arch. Marcus Vance',
-            'title' => 'Lead Principal Architect',
-            'email' => 'm.vance@newconstuc.firm',
-            'phone' => '+63 (2) 8892-1090',
-            'license_no' => 'ARC-991204',
-            'specialization' => 'Commercial High-Rise & Modern Glassmorphic Structures',
-        ]);
+        $p1 = Personnel::updateOrCreate(
+            ['email' => 'm.vance@newconstuc.firm'],
+            [
+                'name' => 'Arch. Marcus Vance',
+                'title' => 'Lead Principal Architect',
+                'phone' => '+63 (2) 8892-1090',
+                'license_no' => 'ARC-991204',
+                'specialization' => 'Commercial High-Rise & Modern Glassmorphic Structures',
+            ]
+        );
 
-        $p2 = Personnel::create([
-            'name' => 'Engr. Elena Rostova',
-            'title' => 'Chief Structural Engineer',
-            'email' => 'e.rostova@newconstuc.firm',
-            'phone' => '+63 (2) 8892-3412',
-            'license_no' => 'PE-330412',
-            'specialization' => 'Seismic & Heavy Steel Foundation Design',
-        ]);
+        $p2 = Personnel::updateOrCreate(
+            ['email' => 'e.rostova@newconstuc.firm'],
+            [
+                'name' => 'Engr. Elena Rostova',
+                'title' => 'Chief Structural Engineer',
+                'phone' => '+63 (2) 8892-3412',
+                'license_no' => 'PE-330412',
+                'specialization' => 'Seismic & Heavy Steel Foundation Design',
+            ]
+        );
 
-        $p3 = Personnel::create([
-            'name' => 'Engr. Carlos Rodriguez',
-            'title' => 'Lead Electrical Engineer',
-            'email' => 'c.rodriguez@newconstuc.firm',
-            'phone' => '+63 (2) 8892-5501',
-            'license_no' => 'EE-771029',
-            'specialization' => 'HVAC, Transformers & High-Voltage Grid Systems',
-        ]);
+        $p3 = Personnel::updateOrCreate(
+            ['email' => 'c.rodriguez@newconstuc.firm'],
+            [
+                'name' => 'Engr. Carlos Rodriguez',
+                'title' => 'Lead Electrical Engineer',
+                'phone' => '+63 (2) 8892-5501',
+                'license_no' => 'EE-771029',
+                'specialization' => 'HVAC, Transformers & High-Voltage Grid Systems',
+            ]
+        );
 
-        $p4 = Personnel::create([
-            'name' => 'Engr. David Kim',
-            'title' => 'Senior Plumbing & Piping Engineer',
-            'email' => 'd.kim@newconstuc.firm',
-            'phone' => '+63 (2) 8892-8877',
-            'license_no' => 'ME-445109',
-            'specialization' => 'Hydraulic Risers & Wastewater Treatment',
-        ]);
+        $p4 = Personnel::updateOrCreate(
+            ['email' => 'd.kim@newconstuc.firm'],
+            [
+                'name' => 'Engr. David Kim',
+                'title' => 'Senior Plumbing & Piping Engineer',
+                'phone' => '+63 (2) 8892-8877',
+                'license_no' => 'ME-445109',
+                'specialization' => 'Hydraulic Risers & Wastewater Treatment',
+            ]
+        );
 
-        $p5 = Personnel::create([
-            'name' => 'Engr. Sophia Martinez',
-            'title' => 'Project Director & Financial Controller',
-            'email' => 's.martinez@newconstuc.firm',
-            'phone' => '+63 (2) 8892-9900',
-            'license_no' => 'PMP-882190',
-            'specialization' => 'Project Operations & Financial Auditing',
-        ]);
+        $p5 = Personnel::updateOrCreate(
+            ['email' => 's.martinez@newconstuc.firm'],
+            [
+                'name' => 'Engr. Sophia Martinez',
+                'title' => 'Project Director & Financial Controller',
+                'phone' => '+63 (2) 8892-9900',
+                'license_no' => 'PMP-882190',
+                'specialization' => 'Project Operations & Financial Auditing',
+            ]
+        );
+
+        // Ensure each individual personnel engineer has a matching login user account
+        foreach ([$pLonzaga, $pMitra, $p1, $p2, $p3, $p4, $p5] as $engrPerson) {
+            User::updateOrCreate(
+                ['email' => $engrPerson->email],
+                [
+                    'name' => $engrPerson->name,
+                    'role' => 'project_engineer',
+                    'password' => Hash::make('engineer123'),
+                    'email_verified_at' => now(),
+                ]
+            );
+        }
 
         // 2. Master Materials Catalog in Warehouse
         $m1 = Material::create(['material_code' => 'MAT-CEM-01', 'name' => 'Portland Cement (Type I)', 'category' => 'Structural & Masonry', 'unit' => 'bags', 'unit_cost' => 225.00, 'stock_quantity' => 15000]);

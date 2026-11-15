@@ -28,16 +28,20 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// 1-Click Live Web Migration & Supplier Seeding Trigger
+// 1-Click Live Web Migration & System Seeding Trigger
 Route::get('/setup-suppliers', function () {
     try {
         \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
         (new \Database\Seeders\SupplierManagementSeeder())->run();
+        (new \Database\Seeders\ConstructionSystemSeeder())->run();
         \Illuminate\Support\Facades\Artisan::call('optimize:clear');
-        return response('<div style="font-family:sans-serif;background:#0b0f17;color:#10b981;padding:40px;min-height:100vh;"><h2>Database Sync Successful!</h2><p style="color:#f8fafc;">All supplier tables migrated and 3 supplier accounts created successfully on live server.</p><p><a href="/login" style="color:#38bdf8;text-decoration:none;font-weight:bold;">&rarr; Go to Login Page</a></p></div>');
+        return response('<div style="font-family:sans-serif;background:#0b0f17;color:#10b981;padding:40px;min-height:100vh;"><h2>Database Sync Successful!</h2><p style="color:#f8fafc;">All database migrations, supplier tables, and engineer accounts created successfully on live server.</p><p><a href="/login" style="color:#38bdf8;text-decoration:none;font-weight:bold;">&rarr; Go to Login Page</a></p></div>');
     } catch (\Throwable $e) {
         return response('<div style="font-family:sans-serif;background:#0b0f17;color:#ef4444;padding:40px;min-height:100vh;"><h2>Setup Error</h2><pre style="color:#f8fafc;">' . htmlspecialchars($e->getMessage()) . '</pre></div>', 500);
     }
+});
+Route::get('/setup-system', function () {
+    return redirect('/setup-suppliers');
 });
 
 // Authenticated Routes
@@ -145,6 +149,20 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/projects/{id}/checklist-state', [ProjectController::class, 'getChecklistStateJson'])->name('projects.checklistState');
         Route::delete('/projects/tasks/{taskId}', [ProjectController::class, 'destroyTask'])->name('projects.tasks.destroy');
         Route::post('/projects/tasks/{taskId}/attach-photo', [ProjectController::class, 'attachTaskPhoto'])->name('projects.tasks.attachPhoto');
+        Route::get('/projects/tasks/{taskId}/attach-photo', function ($taskId) {
+            $task = \App\Models\ProjectTask::find($taskId);
+            if ($task && $task->project_id) {
+                return redirect()->route('projects.show', $task->project_id)->with('info', 'Please use the project task checklist to view or attach photos.');
+            }
+            return redirect()->route('projects.index');
+        })->name('projects.tasks.attachPhotoGet');
+        Route::get('/projects/tasks/{taskId}/remove-photo', function ($taskId) {
+            $task = \App\Models\ProjectTask::find($taskId);
+            if ($task && $task->project_id) {
+                return redirect()->route('projects.show', $task->project_id);
+            }
+            return redirect()->route('projects.index');
+        });
         Route::post('/projects/tasks/{taskId}/remove-photo', [ProjectController::class, 'removeTaskPhoto'])->name('projects.tasks.removePhoto');
         Route::post('/projects/tasks/{taskId}/photos/{photoId}/delete', [ProjectController::class, 'deleteTaskPhoto'])->name('projects.tasks.deletePhoto');
         Route::post('/projects/{id}/reset-checklist', [ProjectController::class, 'resetChecklist'])->name('projects.resetChecklist');

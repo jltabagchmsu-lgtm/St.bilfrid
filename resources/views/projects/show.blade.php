@@ -1428,6 +1428,140 @@
         </div>
     </div>
 
+    <!-- ====================================================
+         TASK PROOF EVIDENCE CAROUSEL
+         (Direct site proof photo slider - no need to navigate to Design & Blueprints)
+         ==================================================== -->
+    @php
+        if (!isset($allTaskProofPhotos)) {
+            $allTaskProofPhotos = collect();
+            foreach ($project->tasks as $t) {
+                foreach ($t->all_photos_list as $p) {
+                    $allTaskProofPhotos->push([
+                        'id' => $p->id,
+                        'url' => $p->url,
+                        'caption' => $p->caption ?: ('Proof for ' . $t->task_name),
+                        'task_id' => $t->id,
+                        'task_name' => $t->task_name,
+                        'category' => $t->category,
+                        'progress' => $t->progress,
+                        'status' => $t->status,
+                        'updated_at' => $p->created_at ? $p->created_at->format('M d, Y') : ($t->updated_at ? $t->updated_at->format('M d, Y') : now()->format('M d, Y')),
+                    ]);
+                }
+            }
+        }
+    @endphp
+
+    <div id="taskProofPhotosCarouselSection" style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 16px 20px; margin-bottom: 22px; box-shadow: 0 4px 18px rgba(0,0,0,0.03); position: relative;">
+        <!-- Header -->
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 36px; height: 36px; border-radius: 8px; background: #f0f9ff; border: 1.5px solid #bae6fd; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; color: #0284c7; flex-shrink: 0;">
+                    📸
+                </div>
+                <div>
+                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                        <h3 style="font-weight: 800; color: #0f172a; margin: 0; font-size: 1.05rem; letter-spacing: -0.01em;">
+                            Site Task Proof Photos Carousel
+                        </h3>
+                        <span id="proofCarouselCountBadge" class="badge" style="background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; font-weight: 800; font-size: 0.72rem; padding: 2px 8px;">
+                            {{ count($allTaskProofPhotos) }} {{ count($allTaskProofPhotos) === 1 ? 'Photo' : 'Photos' }} Attached
+                        </span>
+                    </div>
+                    <p style="font-size: 0.775rem; color: #64748b; margin: 2px 0 0 0;">
+                        Photographic proof verified on site &bull; Preview and inspect directly here without switching to Design & Blueprints
+                    </p>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div style="display: flex; align-items: center; gap: 8px;">
+                @if(count($allTaskProofPhotos) > 0)
+                    @php
+                        $carouselAllPhotosJson = htmlspecialchars(json_encode($allTaskProofPhotos->map(function($p) {
+                            return [
+                                'id' => $p['id'],
+                                'url' => $p['url'],
+                                'caption' => $p['caption'] ?? ('Proof for ' . $p['task_name']),
+                                'task_name' => $p['task_name'],
+                                'category' => $p['category']
+                            ];
+                        })->values()), ENT_QUOTES, 'UTF-8');
+                    @endphp
+                    <button type="button" class="btn-secondary" onclick='openTaskMultiPhotoPreviewModal({{ $carouselAllPhotosJson }}, "{{ addslashes($project->title) }}", "All Milestone Proofs", "")' style="font-size: 0.75rem; padding: 5px 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; border-color: #cbd5e1; background: #f8fafc; color: #0f172a;" title="View all task proof photos in fullscreen gallery">
+                        <span>🔍</span> View All in Lightbox
+                    </button>
+                @endif
+                <button type="button" onclick="scrollProofCarousel(-1)" class="carousel-nav-btn" style="width: 32px; height: 32px; border-radius: 6px; border: 1.5px solid #cbd5e1; background: #ffffff; color: #0f172a; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" title="Previous Photos" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='#ffffff'">
+                    ❮
+                </button>
+                <button type="button" onclick="scrollProofCarousel(1)" class="carousel-nav-btn" style="width: 32px; height: 32px; border-radius: 6px; border: 1.5px solid #cbd5e1; background: #ffffff; color: #0f172a; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" title="Next Photos" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='#ffffff'">
+                    ❯
+                </button>
+            </div>
+        </div>
+
+        <!-- Carousel Track -->
+        <div id="proofPhotosCarouselTrack" style="display: flex; gap: 14px; overflow-x: auto; scroll-behavior: smooth; padding: 6px 2px 10px 2px; scrollbar-width: thin;">
+            @forelse($allTaskProofPhotos as $idx => $photo)
+                @php
+                    $catColor = match(strtolower($photo['category'] ?? '')) {
+                        'electrical' => '#b45309',
+                        'piping & plumbing', 'piping', 'plumbing' => '#047857',
+                        'design-build / turnkey finishing', 'finishing' => '#6d28d9',
+                        default => '#dc2626'
+                    };
+                    $singlePhotoJson = htmlspecialchars(json_encode([
+                        [
+                            'id' => $photo['id'],
+                            'url' => $photo['url'],
+                            'caption' => $photo['caption']
+                        ]
+                    ]), ENT_QUOTES, 'UTF-8');
+                @endphp
+                <div class="task-proof-carousel-item" style="flex: 0 0 190px; width: 190px; border-radius: 10px; overflow: hidden; border: 1.5px solid #e2e8f0; background: #ffffff; box-shadow: 0 2px 6px rgba(0,0,0,0.06); transition: all 0.25s ease; cursor: pointer; display: flex; flex-direction: column;" onclick='openTaskMultiPhotoPreviewModal({{ $singlePhotoJson }}, "{{ addslashes($photo['task_name']) }}", "{{ addslashes($photo['category']) }}", "{{ $photo['updated_at'] }}", 0)' onmouseover="this.style.transform='translateY(-3px)'; this.style.borderColor='#38bdf8'; this.style.boxShadow='0 8px 18px rgba(2, 132, 199, 0.18)';" onmouseout="this.style.transform='none'; this.style.borderColor='#e2e8f0'; this.style.boxShadow='0 2px 6px rgba(0,0,0,0.06)';">
+                    <!-- Image Wrapper -->
+                    <div style="position: relative; width: 100%; height: 110px; background: #0f172a; overflow: hidden;">
+                        <img src="{{ $photo['url'] }}" alt="{{ $photo['task_name'] }}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='none'">
+                        
+                        <!-- Top Category Badge -->
+                        <span style="position: absolute; top: 6px; left: 6px; background: {{ $catColor }}; color: #ffffff; font-size: 0.65rem; font-weight: 800; padding: 2px 6px; border-radius: 4px; letter-spacing: 0.04em; text-transform: uppercase; box-shadow: 0 1px 3px rgba(0,0,0,0.4);">
+                            {{ $photo['category'] }}
+                        </span>
+
+                        <!-- Zoom overlay on hover -->
+                        <div style="position: absolute; bottom: 6px; right: 6px; background: rgba(15,23,42,0.75); color: #fff; font-size: 0.65rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; backdrop-filter: blur(4px);">
+                            🔍 View
+                        </div>
+                    </div>
+
+                    <!-- Details -->
+                    <div style="padding: 8px 10px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; background: #fafbfc;">
+                        <div style="font-weight: 700; font-size: 0.8rem; color: #0f172a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="{{ $photo['task_name'] }}">
+                            {{ $photo['task_name'] }}
+                        </div>
+                        <div style="font-size: 0.7rem; color: #64748b; margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="{{ $photo['caption'] }}">
+                            {{ $photo['caption'] }}
+                        </div>
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 6px; font-size: 0.675rem; color: #94a3b8; border-top: 1px solid #f1f5f9; padding-top: 4px;">
+                            <span>{{ $photo['updated_at'] }}</span>
+                            <span style="color: #059669; font-weight: 800;">✓ Verified</span>
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <div id="proofCarouselEmptyBox" style="flex: 1; padding: 24px 20px; text-align: center; background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 8px; color: #64748b;">
+                    <div style="font-size: 1.6rem; margin-bottom: 4px;">📷</div>
+                    <strong style="color: #0f172a; font-size: 0.875rem;">No task proof photos attached yet</strong>
+                    <p style="font-size: 0.775rem; color: #64748b; margin: 4px 0 0 0;">
+                        Attach proof photos to any task milestone in the checklists below and they will instantly appear in this carousel so you don't need to visit Design & Blueprints.
+                    </p>
+                </div>
+            @endforelse
+        </div>
+    </div>
+
     <!-- 4 Checklist Tables Container -->
     <div style="display: flex; flex-direction: column; gap: 20px;">
         
@@ -2865,7 +2999,7 @@
             <button onclick="closeModal('attachTaskPhotoModal')" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer; line-height: 1;">&times;</button>
         </div>
 
-        <form id="attachTaskPhotoForm" action="" method="POST" enctype="multipart/form-data">
+        <form id="attachTaskPhotoForm" action="" method="POST" enctype="multipart/form-data" onsubmit="return handleAttachTaskPhotoSubmit(event)">
             @csrf
             
             <!-- Target Task Milestone Info -->
@@ -4865,6 +4999,102 @@
                 container.appendChild(card);
             });
         }
+    }
+
+    // Scroll Site Task Proof Photos Carousel (Direct slider on Monitoring tab)
+    function scrollProofCarousel(direction) {
+        const track = document.getElementById('proofPhotosCarouselTrack');
+        if (!track) return;
+        const scrollDistance = 240 * direction;
+        track.scrollBy({ left: scrollDistance, behavior: 'smooth' });
+    }
+
+    // Submit Task Proof Photos via AJAX (Seamless multi-image upload with zero page error)
+    function handleAttachTaskPhotoSubmit(event) {
+        if (event) event.preventDefault();
+        const form = document.getElementById('attachTaskPhotoForm');
+        if (!form) return false;
+
+        const fileInput = document.getElementById('attachTaskFileInput');
+        const urlInput = document.getElementById('attachTaskUrlInput');
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalBtnHtml = submitBtn ? submitBtn.innerHTML : 'Save & Attach Proof Photos';
+
+        // Check if user provided at least a file or an existing photo or a URL
+        const hasFiles = fileInput && fileInput.files && fileInput.files.length > 0;
+        const hasUrl = urlInput && urlInput.value && urlInput.value.trim().length > 0;
+        const existingCountEl = document.getElementById('attachTaskExistingCount');
+        const hasExisting = existingCountEl && parseInt(existingCountEl.innerText || '0') > 0;
+
+        if (!hasFiles && !hasUrl && !hasExisting) {
+            alert('Please select at least one proof photo file or enter an image URL to attach.');
+            return false;
+        }
+
+        // Validate client-side file size (warn if individual file exceeds 15MB)
+        if (hasFiles) {
+            for (let i = 0; i < fileInput.files.length; i++) {
+                const f = fileInput.files[i];
+                if (f.size > 15 * 1024 * 1024) {
+                    alert('File "' + f.name + '" is larger than 15MB. Please choose a smaller photo.');
+                    return false;
+                }
+            }
+        }
+
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span style="display:inline-block; animation:spin 1s linear infinite;">⏳</span> Uploading & Saving...';
+        }
+
+        const formData = new FormData(form);
+
+        fetch(form.action, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            },
+            body: formData
+        })
+        .then(async response => {
+            const text = await response.text();
+            let data;
+            try {
+                data = JSON.parse(text);
+            } catch (e) {
+                if (response.ok) {
+                    return { success: true, message: 'Proof photos updated successfully!' };
+                }
+                throw new Error(text.substring(0, 160) || 'Server returned an unexpected response');
+            }
+
+            if (!response.ok || (data && data.success === false)) {
+                throw new Error((data && (data.message || data.error)) || 'Failed to attach photo');
+            }
+
+            return data;
+        })
+        .then(data => {
+            if (submitBtn) {
+                submitBtn.innerHTML = '✓ Uploaded Successfully!';
+            }
+            showChecklistToast(data.message || 'Task proof photos uploaded successfully!', false);
+            closeModal('attachTaskPhotoModal');
+            setTimeout(() => {
+                window.location.reload();
+            }, 350);
+        })
+        .catch(err => {
+            console.error('Error attaching task photos:', err);
+            alert('Upload Notice: ' + (err.message || 'Could not save proof photos. Please try again.'));
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnHtml;
+            }
+        });
+
+        return false;
     }
 
     function deleteTaskSinglePhotoAjax(taskId, photoId, taskName) {

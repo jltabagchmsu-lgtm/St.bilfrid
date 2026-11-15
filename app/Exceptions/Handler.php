@@ -26,5 +26,15 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+
+        $this->renderable(function (\Illuminate\Http\Exceptions\PostTooLargeException $e, $request) {
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'error' => 'The total upload size of your selected images exceeds the server limit. Please upload fewer or smaller images.',
+                ], 422);
+            }
+            return redirect()->back()->with('error', 'The total upload size exceeds the server limit. Please upload smaller images.');
+        });
     }
 }

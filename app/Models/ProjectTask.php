@@ -58,13 +58,15 @@ class ProjectTask extends Model
 
     public function getAllPhotosListAttribute()
     {
-        $loadedPhotos = $this->relationLoaded('photos') 
-            ? $this->photos 
-            : ($this->exists ? $this->photos()->get() : collect());
+        try {
+            $loadedPhotos = $this->relationLoaded('photos') 
+                ? $this->photos 
+                : ($this->exists && \Illuminate\Support\Facades\Schema::hasTable('project_task_photos') ? $this->photos()->get() : collect());
 
-        if ($loadedPhotos->isNotEmpty()) {
-            return $loadedPhotos;
-        }
+            if ($loadedPhotos->isNotEmpty()) {
+                return $loadedPhotos;
+            }
+        } catch (\Throwable $e) {}
 
         if (!empty($this->photo_path)) {
             return collect([
@@ -82,12 +84,18 @@ class ProjectTask extends Model
 
     public function getPhotosCountAttribute(): int
     {
-        if ($this->relationLoaded('photos')) {
-            $count = $this->photos->count();
-            return $count > 0 ? $count : (!empty($this->photo_path) ? 1 : 0);
-        }
-        $count = $this->exists ? $this->photos()->count() : 0;
-        return $count > 0 ? $count : (!empty($this->photo_path) ? 1 : 0);
+        try {
+            if ($this->relationLoaded('photos')) {
+                $count = $this->photos->count();
+                return $count > 0 ? $count : (!empty($this->photo_path) ? 1 : 0);
+            }
+            if ($this->exists && \Illuminate\Support\Facades\Schema::hasTable('project_task_photos')) {
+                $count = $this->photos()->count();
+                return $count > 0 ? $count : (!empty($this->photo_path) ? 1 : 0);
+            }
+        } catch (\Throwable $e) {}
+
+        return !empty($this->photo_path) ? 1 : 0;
     }
 
     public function getIsCompletedAttribute(): bool

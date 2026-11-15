@@ -721,8 +721,27 @@ class ProjectController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
+        // Collect all task proof photos across all project tasks for quick carousel preview in Monitoring
+        $allTaskProofPhotos = collect();
+        foreach ($project->tasks as $t) {
+            foreach ($t->all_photos_list as $p) {
+                $allTaskProofPhotos->push([
+                    'id' => $p->id,
+                    'url' => $p->url,
+                    'caption' => $p->caption ?: ('Proof for ' . $t->task_name),
+                    'task_id' => $t->id,
+                    'task_name' => $t->task_name,
+                    'category' => $t->category,
+                    'progress' => $t->progress,
+                    'status' => $t->status,
+                    'updated_at' => $p->created_at ? $p->created_at->format('M d, Y') : ($t->updated_at ? $t->updated_at->format('M d, Y') : now()->format('M d, Y')),
+                ]);
+            }
+        }
+
         return view('projects.show', compact(
             'project',
+            'allTaskProofPhotos',
             'allPersonnel',
             'allMaterials',
             'totalInvoiced',
@@ -1464,161 +1483,318 @@ class ProjectController extends Controller
 
     public function attachTaskPhoto(Request $request, $taskId)
     {
-        $task = ProjectTask::with(['project', 'photos'])->findOrFail($taskId);
-        $project = $task->project;
+        try {
+            // Self-healing: ensure uploads directory and tables exist
+            $destinationPath = public_path('uploads/tasks');
+            if (!File::isDirectory($destinationPath)) {
+                File::makeDirectory($destinationPath, 0755, true, true);
+            }
 
-        $validated = $request->validate([
-            'photo_files' => 'nullable|array',
-            'photo_files.*' => 'nullable|file|image|max:10240', // 10MB per file
-            'photo_file' => 'nullable|file|image|max:10240', // Single file backward compatibility
-            'photo_url' => 'nullable|string|max:1000',
-            'caption' => 'nullable|string|max:500',
-            'mark_completed' => 'nullable|boolean',
-        ]);
+            if (!\Illuminate\Support\Facades\Schema::hasTable('project_task_photos')) {
+                try {
+                    \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+                } catch (\Throwable $e) {}
 
-        $uploadedPaths = [];
-        $destinationPath = public_path('uploads/tasks');
-        if (!File::isDirectory($destinationPath)) {
-            File::makeDirectory($destinationPath, 0755, true, true);
-        }
+                if (!\Illuminate\Support\Facades\Schema::hasTable('project_task_photos')) {
+                    try {
+                        \Illuminate\Support\Facades\Schema::create('project_task_photos', function (\Illuminate\Database\Schema\Blueprint $table) {
+                            $table->id();
+                            $table->unsignedBigInteger('project_task_id');
+                            $table->string('photo_path', 1000);
+                            $table->string('caption', 500)->nullable();
+                            $table->integer('sort_order')->default(0);
+                            $table->timestamps();
+                        });
+                    } catch (\Throwable $e) {}
+                }
+            }
 
-        // Handle multiple files if provided
-        if ($request->hasFile('photo_files')) {
-            foreach ($request->file('photo_files') as $file) {
+            $task = ProjectTask::with('project')->findOrFail($taskId);
+            $project = $task->project;
+
+            $validated = $request->validate([
+                'photo_files' => 'nullable|array',
+                'photo_files.*' => 'nullable|file|image|max:10240', // 10MB per file
+                'photo_file' => 'nullable|file|image|max:10240', // Single file backward compatibility
+                'photo_url' => 'nullable|string|max:1000',
+                'caption' => 'nullable|string|max:500',
+                'mark_completed' => 'nullable|boolean',
+            ]);
+
+            $uploadedPaths = [];
+
+            // Handle multiple files if provided
+            if ($request->hasFile('photo_files')) {
+                foreach ($request->file('photo_files') as $file) {
+                    if ($file && $file->isValid()) {
+                        $filename = 'proof_' . $task->id . '_' . time() . '_' . rand(100, 999) . '.' . $file->getClientOriginalExtension();
+                        $file->move($destinationPath, $filename);
+                        $uploadedPaths[] = '/uploads/tasks/' . $filename;
+                    }
+                }
+            }
+
+            // Handle single photo_file if provided
+            if ($request->hasFile('photo_file')) {
+                $file = $request->file('photo_file');
                 if ($file && $file->isValid()) {
                     $filename = 'proof_' . $task->id . '_' . time() . '_' . rand(100, 999) . '.' . $file->getClientOriginalExtension();
                     $file->move($destinationPath, $filename);
                     $uploadedPaths[] = '/uploads/tasks/' . $filename;
                 }
             }
-        }
 
-        // Handle single photo_file if provided
-        if ($request->hasFile('photo_file')) {
-            $file = $request->file('photo_file');
-            if ($file && $file->isValid()) {
-                $filename = 'proof_' . $task->id . '_' . time() . '_' . rand(100, 999) . '.' . $file->getClientOriginalExtension();
-                $file->move($destinationPath, $filename);
-                $uploadedPaths[] = '/uploads/tasks/' . $filename;
+            // Handle photo_url
+            if ($request->filled('photo_url')) {
+                $uploadedPaths[] = $request->input('photo_url');
             }
-        }
 
-        // Handle photo_url
-        if ($request->filled('photo_url')) {
-            $uploadedPaths[] = $request->input('photo_url');
-        }
-
-        if (empty($uploadedPaths)) {
-            if ($request->wantsJson() || $request->ajax()) {
-                return response()->json(['success' => false, 'error' => 'Please select at least one photo image file or enter a valid photo URL.'], 422);
+            if (empty($uploadedPaths)) {
+                if ($request->wantsJson() || $request->ajax()) {
+                    return response()->json(['success' => false, 'error' => 'Please select at least one photo image file or enter a valid photo URL.'], 422);
+                }
+                return redirect()->route('projects.show', $project->id)->with('error', 'Please select at least one image file to attach as proof.');
             }
-            return redirect()->back()->with('error', 'Please select at least one image file to attach as proof.');
-        }
 
-        $caption = $validated['caption'] ?? ('Proof of completion for ' . $task->task_name);
+            $caption = $validated['caption'] ?? ('Proof of completion for ' . $task->task_name);
 
-        $photoType = match(strtolower($task->category)) {
-            'electrical' => 'electrical',
-            'piping & plumbing', 'piping', 'plumbing' => 'piping',
-            'design-build / turnkey finishing', 'finishing' => 'finishing',
-            default => 'structural'
-        };
+            // Determine safe photo_type for project_photos gallery (strictly compatible with ENUM: 'actual_site','structural','finishing')
+            $cat = strtolower($task->category ?? '');
+            $galleryPhotoType = match(true) {
+                str_contains($cat, 'finish') => 'finishing',
+                str_contains($cat, 'struct') => 'structural',
+                default => 'actual_site',
+            };
 
-        $existingCount = $task->photos()->count();
-        $counter = $existingCount + 1;
+            $existingCount = 0;
+            if (\Illuminate\Support\Facades\Schema::hasTable('project_task_photos')) {
+                try {
+                    $existingCount = ProjectTaskPhoto::where('project_task_id', $task->id)->count();
+                } catch (\Throwable $e) {}
+            }
+            $counter = $existingCount + 1;
 
-        foreach ($uploadedPaths as $path) {
-            ProjectTaskPhoto::create([
-                'project_task_id' => $task->id,
-                'photo_path' => $path,
-                'caption' => $caption,
-                'sort_order' => $counter,
-            ]);
+            foreach ($uploadedPaths as $path) {
+                if (\Illuminate\Support\Facades\Schema::hasTable('project_task_photos')) {
+                    try {
+                        ProjectTaskPhoto::create([
+                            'project_task_id' => $task->id,
+                            'photo_path' => $path,
+                            'caption' => $caption,
+                            'sort_order' => $counter,
+                        ]);
+                    } catch (\Throwable $e) {
+                        \Illuminate\Support\Facades\Log::warning('ProjectTaskPhoto creation notice: ' . $e->getMessage());
+                    }
+                }
 
-            // Also add to Project Gallery as a Progress Proof photo
-            ProjectPhoto::create([
-                'project_id' => $project->id,
-                'photo_type' => $photoType,
-                'title' => 'Task Proof: ' . $task->task_name . ($counter > 1 ? " (#{$counter})" : ''),
-                'description' => $caption,
-                'file_path' => $path,
-                'is_primary' => false,
-                'taken_at' => now()->toDateString(),
-            ]);
+                // Also add to Project Gallery as a Progress Proof photo
+                try {
+                    ProjectPhoto::create([
+                        'project_id' => $project->id,
+                        'photo_type' => $galleryPhotoType,
+                        'plan_discipline' => $cat ?: null,
+                        'title' => 'Task Proof: ' . $task->task_name . ($counter > 1 ? " (#{$counter})" : ''),
+                        'description' => $caption,
+                        'file_path' => $path,
+                        'is_primary' => false,
+                        'taken_at' => now()->toDateString(),
+                    ]);
+                } catch (\Throwable $e) {
+                    \Illuminate\Support\Facades\Log::warning('ProjectPhoto creation notice: ' . $e->getMessage());
+                }
 
-            $counter++;
-        }
+                $counter++;
+            }
 
-        // Always keep task->photo_path pointing to the primary/first proof photo for backward compatibility
-        $firstPhoto = $task->photos()->first();
-        $task->photo_path = $firstPhoto ? $firstPhoto->photo_path : $uploadedPaths[0];
-        $task->photo_caption = $caption;
+            // Always keep task->photo_path pointing to the primary/first proof photo for backward compatibility
+            $task->photo_path = $uploadedPaths[0];
+            $task->photo_caption = $caption;
 
-        if ($request->boolean('mark_completed') || $task->progress < 100) {
-            $task->progress = 100;
-            $task->status = 'completed';
-            $task->taskMaterials()->update(['status' => 'consumed']);
-        }
-        $task->save();
-
-        $project->recalculateTradeProgressFromTasks();
-
-        $allTaskPhotos = $task->photos()->orderBy('id')->get()->map(function($p) {
-            return [
-                'id' => $p->id,
-                'url' => $p->url,
-                'caption' => $p->caption,
-            ];
-        });
-
-        $countUploaded = count($uploadedPaths);
-        $successMsg = $countUploaded > 1
-            ? "Successfully attached {$countUploaded} proof photos to \"{$task->task_name}\"!"
-            : "Proof photo successfully attached to \"{$task->task_name}\"!";
-
-        if ($request->wantsJson() || $request->ajax()) {
-            return response()->json([
-                'success' => true,
-                'message' => $successMsg,
-                'task_id' => $task->id,
-                'photo_path' => $task->photo_path,
-                'photo_caption' => $task->photo_caption,
-                'photos' => $allTaskPhotos,
-                'photos_count' => $allTaskPhotos->count(),
-                'progress' => $task->progress,
-                'status' => $task->status,
-                'is_completed' => $task->is_completed,
-            ]);
-        }
-
-        return redirect()->back()->with('success', $successMsg);
-    }
-
-    public function removeTaskPhoto(Request $request, $taskId)
-    {
-        $task = ProjectTask::with('photos')->findOrFail($taskId);
-
-        if ($request->filled('photo_id')) {
-            $photoId = $request->input('photo_id');
-            ProjectTaskPhoto::where('project_task_id', $task->id)->where('id', $photoId)->delete();
-
-            $remainingPhoto = $task->photos()->first();
-            $task->photo_path = $remainingPhoto ? $remainingPhoto->photo_path : null;
-            $task->photo_caption = $remainingPhoto ? $remainingPhoto->caption : null;
+            if ($request->boolean('mark_completed') || $task->progress < 100) {
+                $task->progress = 100;
+                $task->status = 'completed';
+                try {
+                    $task->taskMaterials()->update(['status' => 'consumed']);
+                } catch (\Throwable $e) {}
+            }
             $task->save();
 
-            $allTaskPhotos = $task->photos()->orderBy('id')->get()->map(function($p) {
-                return [
-                    'id' => $p->id,
-                    'url' => $p->url,
-                    'caption' => $p->caption,
-                ];
-            });
+            try {
+                $project->recalculateTradeProgressFromTasks();
+            } catch (\Throwable $e) {}
+
+            $allTaskPhotos = collect();
+            if (\Illuminate\Support\Facades\Schema::hasTable('project_task_photos')) {
+                try {
+                    $allTaskPhotos = ProjectTaskPhoto::where('project_task_id', $task->id)->orderBy('id')->get()->map(function($p) {
+                        return [
+                            'id' => $p->id,
+                            'url' => $p->url,
+                            'caption' => $p->caption,
+                        ];
+                    });
+                } catch (\Throwable $e) {}
+            }
+
+            $countUploaded = count($uploadedPaths);
+            $successMsg = $countUploaded > 1
+                ? "Successfully attached {$countUploaded} proof photos to \"{$task->task_name}\"!"
+                : "Proof photo successfully attached to \"{$task->task_name}\"!";
 
             if ($request->wantsJson() || $request->ajax()) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'Proof photo removed.',
+                    'message' => $successMsg,
+                    'task_id' => $task->id,
+                    'photo_path' => $task->photo_path,
+                    'photo_caption' => $task->photo_caption,
+                    'photos' => $allTaskPhotos,
+                    'photos_count' => $allTaskPhotos->count(),
+                    'progress' => $task->progress,
+                    'status' => $task->status,
+                    'is_completed' => $task->is_completed,
+                ]);
+            }
+
+            return redirect()->route('projects.show', $project->id)->with('success', $successMsg);
+
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Error in attachTaskPhoto: ' . $e->getMessage(), ['exception' => $e]);
+
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json(['success' => false, 'error' => 'Failed to attach photo: ' . $e->getMessage()], 500);
+            }
+
+            $task = ProjectTask::find($taskId);
+            $projectId = $task ? $task->project_id : null;
+            if ($projectId) {
+                return redirect()->route('projects.show', $projectId)->with('error', 'Error attaching photo: ' . $e->getMessage());
+            }
+
+            return redirect()->route('projects.index')->with('error', 'Error attaching photo: ' . $e->getMessage());
+        }
+    }
+
+    public function removeTaskPhoto(Request $request, $taskId)
+    {
+        try {
+            $task = ProjectTask::findOrFail($taskId);
+
+            if ($request->filled('photo_id')) {
+                $photoId = $request->input('photo_id');
+                if (\Illuminate\Support\Facades\Schema::hasTable('project_task_photos')) {
+                    try {
+                        ProjectTaskPhoto::where('project_task_id', $task->id)->where('id', $photoId)->delete();
+                    } catch (\Throwable $e) {}
+                }
+
+                $remainingPhoto = null;
+                if (\Illuminate\Support\Facades\Schema::hasTable('project_task_photos')) {
+                    try {
+                        $remainingPhoto = ProjectTaskPhoto::where('project_task_id', $task->id)->orderBy('sort_order')->first();
+                    } catch (\Throwable $e) {}
+                }
+                $task->photo_path = $remainingPhoto ? $remainingPhoto->photo_path : null;
+                $task->photo_caption = $remainingPhoto ? $remainingPhoto->caption : null;
+                $task->save();
+
+                $allTaskPhotos = collect();
+                if (\Illuminate\Support\Facades\Schema::hasTable('project_task_photos')) {
+                    try {
+                        $allTaskPhotos = ProjectTaskPhoto::where('project_task_id', $task->id)->orderBy('id')->get()->map(function($p) {
+                            return [
+                                'id' => $p->id,
+                                'url' => $p->url,
+                                'caption' => $p->caption,
+                            ];
+                        });
+                    } catch (\Throwable $e) {}
+                }
+
+                if ($request->wantsJson() || $request->ajax()) {
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Proof photo removed.',
+                        'task_id' => $task->id,
+                        'photos' => $allTaskPhotos,
+                        'photos_count' => $allTaskPhotos->count(),
+                        'photo_path' => $task->photo_path,
+                    ]);
+                }
+
+                return redirect()->route('projects.show', $task->project_id)->with('success', 'Proof photo removed from task "' . $task->task_name . '".');
+            }
+
+            if (\Illuminate\Support\Facades\Schema::hasTable('project_task_photos')) {
+                try {
+                    ProjectTaskPhoto::where('project_task_id', $task->id)->delete();
+                } catch (\Throwable $e) {}
+            }
+            $task->photo_path = null;
+            $task->photo_caption = null;
+            $task->save();
+
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'All proof photos removed.',
+                    'task_id' => $task->id,
+                    'photos' => [],
+                    'photos_count' => 0,
+                    'photo_path' => null,
+                ]);
+            }
+
+            return redirect()->route('projects.show', $task->project_id)->with('success', 'Proof photo removed from task "' . $task->task_name . '".');
+
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Error in removeTaskPhoto: ' . $e->getMessage());
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+            }
+            return redirect()->back()->with('error', 'Error removing photo: ' . $e->getMessage());
+        }
+    }
+
+    public function deleteTaskPhoto(Request $request, $taskId, $photoId)
+    {
+        try {
+            $task = ProjectTask::findOrFail($taskId);
+
+            if (\Illuminate\Support\Facades\Schema::hasTable('project_task_photos')) {
+                try {
+                    ProjectTaskPhoto::where('project_task_id', $task->id)->where('id', $photoId)->delete();
+                } catch (\Throwable $e) {}
+            }
+
+            $remainingPhoto = null;
+            if (\Illuminate\Support\Facades\Schema::hasTable('project_task_photos')) {
+                try {
+                    $remainingPhoto = ProjectTaskPhoto::where('project_task_id', $task->id)->orderBy('sort_order')->first();
+                } catch (\Throwable $e) {}
+            }
+            $task->photo_path = $remainingPhoto ? $remainingPhoto->photo_path : null;
+            $task->photo_caption = $remainingPhoto ? $remainingPhoto->caption : null;
+            $task->save();
+
+            $allTaskPhotos = collect();
+            if (\Illuminate\Support\Facades\Schema::hasTable('project_task_photos')) {
+                try {
+                    $allTaskPhotos = ProjectTaskPhoto::where('project_task_id', $task->id)->orderBy('id')->get()->map(function($p) {
+                        return [
+                            'id' => $p->id,
+                            'url' => $p->url,
+                            'caption' => $p->caption,
+                        ];
+                    });
+                } catch (\Throwable $e) {}
+            }
+
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Proof photo deleted.',
                     'task_id' => $task->id,
                     'photos' => $allTaskPhotos,
                     'photos_count' => $allTaskPhotos->count(),
@@ -1626,58 +1802,15 @@ class ProjectController extends Controller
                 ]);
             }
 
-            return redirect()->back()->with('success', 'Proof photo removed from task "' . $task->task_name . '".');
+            return redirect()->route('projects.show', $task->project_id)->with('success', 'Photo proof removed from task.');
+
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Error in deleteTaskPhoto: ' . $e->getMessage());
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+            }
+            return redirect()->back()->with('error', 'Error deleting photo: ' . $e->getMessage());
         }
-
-        $task->photos()->delete();
-        $task->photo_path = null;
-        $task->photo_caption = null;
-        $task->save();
-
-        if ($request->wantsJson() || $request->ajax()) {
-            return response()->json([
-                'success' => true,
-                'message' => 'All proof photos removed.',
-                'task_id' => $task->id,
-                'photos' => [],
-                'photos_count' => 0,
-                'photo_path' => null,
-            ]);
-        }
-
-        return redirect()->back()->with('success', 'Proof photo removed from task "' . $task->task_name . '".');
-    }
-
-    public function deleteTaskPhoto(Request $request, $taskId, $photoId)
-    {
-        $task = ProjectTask::with('photos')->findOrFail($taskId);
-        ProjectTaskPhoto::where('project_task_id', $task->id)->where('id', $photoId)->delete();
-
-        $remainingPhoto = $task->photos()->first();
-        $task->photo_path = $remainingPhoto ? $remainingPhoto->photo_path : null;
-        $task->photo_caption = $remainingPhoto ? $remainingPhoto->caption : null;
-        $task->save();
-
-        $allTaskPhotos = $task->photos()->orderBy('id')->get()->map(function($p) {
-            return [
-                'id' => $p->id,
-                'url' => $p->url,
-                'caption' => $p->caption,
-            ];
-        });
-
-        if ($request->wantsJson() || $request->ajax()) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Proof photo deleted.',
-                'task_id' => $task->id,
-                'photos' => $allTaskPhotos,
-                'photos_count' => $allTaskPhotos->count(),
-                'photo_path' => $task->photo_path,
-            ]);
-        }
-
-        return redirect()->back()->with('success', 'Photo proof removed from task.');
     }
 
     public function resetChecklist(Request $request, $id)

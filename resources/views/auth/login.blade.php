@@ -402,6 +402,47 @@
                     <span>&rarr;</span>
                 </button>
             </form>
+
+            <!-- Quick Portal Access & Demonstration Credentials -->
+            <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid rgba(15, 23, 42, 0.08);">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                    <span style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: #64748b;">
+                        Quick Portal Access
+                    </span>
+                    <span style="font-size: 0.68rem; color: #94a3b8; font-weight: 600;">1-Click Auto-Fill</span>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                    <!-- Project Site Engineer Portal -->
+                    <button type="button" onclick="fillCredentials('engineer@newconstuc.firm', 'engineer123')" class="btn-quick-cred" style="padding: 10px 12px; border-radius: 10px; border: 1.5px solid rgba(139, 92, 246, 0.35); background: rgba(139, 92, 246, 0.07); text-align: left; cursor: pointer; transition: all 0.2s ease;">
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <span style="font-weight: 800; font-size: 0.8rem; color: #7c3aed;">👷 Site Engineer</span>
+                            <span style="font-size: 0.62rem; background: #8b5cf6; color: #fff; font-weight: 800; padding: 1px 5px; border-radius: 4px;">ACTIVE</span>
+                        </div>
+                        <div style="font-size: 0.68rem; color: #64748b; margin-top: 2px;">engineer@newconstuc.firm</div>
+                    </button>
+
+                    <!-- Master Administrator -->
+                    <button type="button" onclick="fillCredentials('admin@newconstuc.firm', 'admin123')" class="btn-quick-cred" style="padding: 10px 12px; border-radius: 10px; border: 1.5px solid rgba(239, 68, 68, 0.25); background: rgba(239, 68, 68, 0.05); text-align: left; cursor: pointer; transition: all 0.2s ease;">
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <span style="font-weight: 800; font-size: 0.8rem; color: #dc2626;">👑 Master Admin</span>
+                        </div>
+                        <div style="font-size: 0.68rem; color: #64748b; margin-top: 2px;">admin@newconstuc.firm</div>
+                    </button>
+
+                    <!-- Roofing Materials Officer -->
+                    <button type="button" onclick="fillCredentials('roofing@newconstuc.firm', 'roofing123')" class="btn-quick-cred" style="padding: 8px 10px; border-radius: 8px; border: 1px solid rgba(245, 158, 11, 0.3); background: rgba(245, 158, 11, 0.05); text-align: left; cursor: pointer; transition: all 0.2s ease;">
+                        <div style="font-weight: 700; font-size: 0.75rem; color: #b45309;">🏠 Roofing Officer</div>
+                        <div style="font-size: 0.66rem; color: #78716c; margin-top: 1px;">roofing@newconstuc.firm</div>
+                    </button>
+
+                    <!-- Windows & Doors Officer -->
+                    <button type="button" onclick="fillCredentials('windows.doors@newconstuc.firm', 'windows123')" class="btn-quick-cred" style="padding: 8px 10px; border-radius: 8px; border: 1px solid rgba(56, 189, 248, 0.35); background: rgba(56, 189, 248, 0.05); text-align: left; cursor: pointer; transition: all 0.2s ease;">
+                        <div style="font-weight: 700; font-size: 0.75rem; color: #0284c7;">🪟 Windows / Doors</div>
+                        <div style="font-size: 0.66rem; color: #64748b; margin-top: 1px;">windows.doors@newconstuc.firm</div>
+                    </button>
+                </div>
+            </div>
         </div>
 
         <div class="login-footer-info">
@@ -417,6 +458,18 @@
                 pwd.type = 'text';
             } else {
                 pwd.type = 'password';
+            }
+        }
+
+        function fillCredentials(email, password) {
+            const emailInput = document.getElementById('emailInput');
+            const passInput = document.getElementById('passwordInput');
+            if (emailInput) {
+                emailInput.value = email;
+                emailInput.focus();
+            }
+            if (passInput) {
+                passInput.value = password;
             }
         }
     </script>
