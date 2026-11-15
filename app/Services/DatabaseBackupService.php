@@ -13,7 +13,7 @@ class DatabaseBackupService
     /**
      * Backup the current active database to SQL dump and SQLite backup.
      */
-    public static function createBackup(): bool
+    public static function createBackup(?string $customDumpPath = null): bool
     {
         try {
             $connection = config('database.default', 'mysql');
@@ -21,7 +21,15 @@ class DatabaseBackupService
             $pdo = $dbConn->getPdo();
             $driver = $pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
 
-            $dumpPath = database_path('mysql_full_dump.sql');
+            // Store runtime backups in storage/app/backups so git tracking is not dirtied on VPS
+            $backupDir = storage_path('app/backups');
+            if (!is_dir($backupDir)) {
+                @mkdir($backupDir, 0755, true);
+            }
+
+            $dumpPath = $customDumpPath ?: (app()->runningInConsole()
+                ? database_path('mysql_full_dump.sql')
+                : storage_path('app/backups/mysql_full_dump.sql'));
             $sqlitePath = database_path('database.sqlite');
 
             if ($driver === 'mysql') {
